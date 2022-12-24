@@ -1,7 +1,30 @@
 {% include 'index.html' %}
 
-{% block title %}Registration{% endblock title %}
+{% block title %}
+    <title>Sign Up</title>
+{% endblock  %}
+
 
 {% block content %}
-<div class='page'>Registration</div>
+<div class='page'>
+    <div class="page__form">
+        <div class="page__form__right">
+            <h1>Sign Up</h1>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input type="name" name="name" placeholder="name..." class="sign__form__input">
+                <input type="email" name="email" placeholder="email..." class="sign__form__input">
+                <input type="password" name="password" placeholder="password..." class="sign__form__input">
+                {% comment %} <input type="password" name="passwordRepeat" placeholder="repeat password..."     class="sign__form__input"> {% endcomment %}
+
+                <button type="submit" class="btn">Sign Up</button>
+                <div>Do u wanna <a class="linki" href="/sign-in">Sign In</a>?</div>
+            </form>
+        </div>
+        <div class="page__form__left">
+            <img class="page__form__left__img" src="https://images.pexels.com/photos/4065864/pexels-photo-4065864.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="keyboard">
+            <span class="page__form__left__maska"></span>
+        </div>
+    </div>
+</div>
 {% endblock content %}

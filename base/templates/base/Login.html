@@ -1,7 +1,28 @@
 {% include 'index.html' %}
 
-{% block title %}Login{% endblock title %}
+{% block title %}
+    <title>Sign In</title>
+{% endblock  %}
+
 
 {% block content %}
-<div class='page'>Login</div>
+<div class='page'>
+    <div class="page__form">
+        <div class="page__form__left">
+            <img class="page__form__left__img" src="https://images.pexels.com/photos/1772123/pexels-photo-1772123.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="keyboard">
+            <span class="page__form__left__maska"></span>
+        </div>
+        <div class="page__form__right">
+            <h1>Sign In</h1>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {% comment %} <input type="text" name="username" placeholder="username..." class="sign__form__input"> {% endcomment %}
+                <input type="text" name="email" placeholder="username..." class="sign__form__input">
+                <input type="Password" name="password" placeholder="password..." class="sign__form__input">
+                <button type="submit" class="btn">Sign In</button>
+                <div>Do u wanna <a class="linki" href="/sign-up">Sign Up</a>?</div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock content %}

@@ -4,11 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock title %}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+
+    {% block title %}{% endblock  %}
 </head>
 <body>
     
     {% include "header.html" %}
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class='message'>
+                    {{message}}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     {% block content %}{% endblock content %}
 
@@ -16,17 +30,274 @@
 
 
     <style>
+        /* ! COLORS */
+        :root {
+            --white: #fff;
+            --lightGray: #eaddcb;
+            --black: #000;
+            --primary: #202020;
+            --pink: #B19783;
+            --yellow: #7C725A;
+            --darkGreen: #333423;
+            --lightGreen: #939C7C;
+        }
+
         * {
             box-sizing: border-box;
             padding: 0;
             margin: 0;
+            text-decoration: none;
+            outline: none;
+            border: none;
+            transition: all .3s linear;
+            font-family: 'Oswald', sans-serif;
         }
         body {
-            background-color: #0a0a0a;
-            color: aliceblue;
+            background-color: var(--lightGray);
+            color: var(--primary);
             font-size: 1.2rem;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Oswald', sans-serif;
             overflow-x: hidden;
+        }
+        
+        /* ! Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: 60px;
+            position: sticky;
+            top: 0;
+            border-bottom: 1px solid var(--primary);
+            padding:  0 6%;
+        }
+        .header__logo {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .header__menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .header__menu__left {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-right: 10px;
+            gap: 12px;
+        }
+        .header__menu__block {
+            display: block;
+            content: '';
+            width: 1px;
+            height: 60px;
+            margin: 0 10px;
+            background-color: var(--primary);
+        }
+        .header__menu__right {
+            padding-left: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+        }
+        /*! ___LINK___*/
+        .link {
+            color: var(--primary);
+            position: relative; 
+            z-index: 2;
+        }
+        .link:hover {
+            color: var(--black);
+        }
+        .link:hover:after  {
+            height: 12px;   
+        }
+        .link::after {
+            display: block;
+            content: '';
+            width: 100%;
+            height: 0%;
+            background-color: var(--lightGreen);
+            position: absolute;
+            top: 60%;
+            transition: all .25s linear;
+            z-index: -1;
+        }
+        /* ! BTN */
+        .btn {
+            color: var(--primary); 
+            position: relative; 
+            background-color: var(--lightGreen);
+            width: 122px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            /*padding: 8px 20px;*/
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .btn::after {
+            display: block;
+            content: '';
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--primary);
+            z-index: 1;
+            position: absolute;
+            margin-top: -10px;
+            margin-left: -10px;
+            transition: all .25s linear;
+        }
+        .btn:hover:after {
+            margin: 0;
+            border-color: var(--black);
+        }
+        .btn:hover {
+            color: var(--black);
+            margin: 0px;
+        }
+
+        /*! PAGE */
+        .page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            padding: 2%;
+        }
+
+        /*TODO: PAGE TYPE*/
+        .page__form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1000px;
+            height: 100%;
+            border: 1px solid var(--primary);
+            max-height: 400px;
+            margin-top: 3%;
+            position: relative;
+            background-color: var(--lightGray);
+        }
+        .page__form::after {
+            display: block;
+            content: '';
+            width: 100%;
+            height: 100%;
+            background-color: var(--white);
+            z-index: -1;
+            top: 11px;
+            left: 11px;
+            position: absolute;
+            border: 1px solid var(--primary);
+        }
+        .page__form__left {
+            width: 50%;
+            height: 400px;
+            position: relative;
+            padding: 10px;
+        }
+        .page__form__left__img {
+            width: 320px;
+            height: 380px;
+            object-fit: cover;
+            filter: sepia(30%) brightness(100%);
+            position: relative;
+        }
+        .page__form__left__maska {
+            display: block;
+            content: '';
+            position: absolute;
+            top: 10px;
+            width: 320px;
+            height: 380px;
+            background-color: #e2d1b97c;
+        }
+        .page__form__right {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            width: 50%;
+            height: 100%;
+            padding: 2%     ;
+        }
+
+        .page__form__right h1 {
+            font-size: 1.8rem;
+        }
+
+        .page__form__right form {
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            flex-direction: column;
+            width: 100%;
+            min-width: 350px;
+            row-gap: 1rem;
+            margin-top: 1rem;
+        }
+        .sign__form__input {
+            width: 100%;
+            max-width: 300px;
+            font-size: 1.2rem;
+            padding: .4rem .8rem;
+            height: 50px;
+            color: var(--primary);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 0;
+            border: 1px solid var(--primary);
+        }
+        .sign__form__input:hover {
+            border-color: var(--black) ;
+            color: var(--black);
+        }
+        .sign__form__input:focus {
+            border: 3px double var(--black);
+            color: var(--black);
+        }
+        /*.sign__form__input::after {
+            display: block;
+            position: absolute;
+            content: '';
+            width: 300px;
+            height: 50px;
+            border: 1px solid var(--primary);
+            z-index: 5;
+        }*/
+
+
+        /*! LInk In Registration*/
+        .linki {
+            padding: 0 .2rem;
+            color: var(--primary);       transition: all .25 linear;
+        }
+        .linki:hover {
+            text-decoration:underline ;
+        }
+        .message {
+            border-bottom: 1px solid var(--primary);
+            padding: .4rem .8rem;
+            position: fixed;
+            width: 100%;
+            right: 0;
+            left: 0 ;
+            min-width: 300px;
+            z-index: 10000;
+            background-color: var(--pink);
         }
     </style>
 </body>

@@ -1,1 +1,22 @@
-Header
+<header>
+    <a class="header__logo" href="/">CODELEARN</a>
+    <div class="header__menu">
+        <div class="header__menu__left">
+            <a href="" class="link">Catalog</a>
+            <a href="" class="link">Community</a>
+            <a href="" class="link">Blog</a>
+        </div>
+        <span class="header__menu__block"></span>
+        {% if request.user.is_authenticated %}
+        <div class="header__menu__right">
+            <a href="" class="link">{{request.user.username}}</a>
+            <a href="{% url 'base:logout' %}" class="btn">Sign Out</a>      
+        </div>
+        {% else %}
+            <div class="header__menu__right">
+                <a href="/sign-in" class="link">Sign In</a>
+                <a href="/sign-up" class="btn">Sign Up</a>      
+            </div>
+        {% endif %}
+    </div>
+</header>
