@@ -1,3 +1,9 @@
 from django.contrib import admin
+from .models import Tag, Profile
 
-# Register your models here.
+
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', )
+
+admin.site.register(Tag)
+admin.site.register(Profile, ProfileAdmin)

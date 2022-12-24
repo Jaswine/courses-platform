@@ -1,3 +1,6 @@
+"""
+   ! DB STRUCTURE:  https://www.figma.com/community/file/1188090535052678707
+"""
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
