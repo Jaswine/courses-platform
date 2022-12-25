@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     {% block title %}{% endblock  %}
 </head>
@@ -163,6 +163,10 @@
             color: var(--black);
             margin: 0px;
         }
+        .btn-delete {
+            background-color: var(--pink);
+            width: 60px;
+        }
 
         /*! PAGE */
         .page {
@@ -298,6 +302,71 @@
             min-width: 300px;
             z-index: 10000;
             background-color: var(--pink);
+        }
+
+        /* TODO: TAGS*/
+        .page__tags {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid var(--primary);
+            padding: 4%;
+            margin-top: 3%;
+        }
+        .page__tags form {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .page__tags form input {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--white);
+            color: var(--primary);
+            padding: .4rem .8rem;
+            font-size: 1.2rem;
+            border: 1px solid var(--primary)
+        }
+        .page__tags form input:hover {
+            border-color: var(--black);
+            color: var(--black);
+        }
+        .page__tags form input:focus {
+            border-color: var(--black);
+            color: var(--black);
+            border:3px double var(--black);
+        }
+        /*! tags*/
+        .tags {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+        }
+        .tag {
+            width: 100%;
+            padding: .6rem;
+            border: 1px solid var(--primary);
+            margin: 1% 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .tag h2 {
+            font-weight: 300;
+        }
+        .tag:hover {
+            color: var(--black);
+            border-color: var(--black);
+            background-color: var(--white);
         }
     </style>
 </body>

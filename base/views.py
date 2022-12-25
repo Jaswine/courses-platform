@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import  *
+from .models import  Tag
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
@@ -60,4 +60,35 @@ def loginUser(request):
 
 def logoutUser(request):
     logout(request)
+    return redirect('/')
+
+
+#! ________________TAGS_____________
+def listTags(request):
+    tags  = Tag.objects.all()
+    
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            if request.method == 'POST':
+                tag = request.POST.get('tag')
+                
+                tagForm = Tag.objects.create(name=tag)
+                tagForm.save()
+                return redirect('/tags')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+        
+    context = {'tags': tags, 'user': request.user}
+    return render(request,'base/Tags.html', context)
+
+def deleteTag(request, id):
+    if request.user.is_authenticated:
+        tag = Tag.objects.get(id=id)
+
+        if tag:
+            tag.delete()
+        
+        return redirect('/tags')
     return redirect('/')
