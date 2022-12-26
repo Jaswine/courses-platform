@@ -5,10 +5,11 @@ from base.models import Tag
 #!: ____________COURSE_____________
 class Course(models.Model):
     title = models.CharField(max_length=100)
+    slug = models.CharField(max_length=100, unique=True, default='')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='', blank=True, null=True)
     tags = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True)
-    description = models.TextField(max_length=1000)
+    description = models.TextField(max_length=1000, blank=True)
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -76,7 +77,7 @@ class CourseVideoComment(models.Model):
 class WriteCode(models.Model):
     courseTitle = models.ForeignKey(CourseTitle, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     truethCode = models.TextField()
     
     created = models.DateTimeField(auto_now_add=True)
@@ -107,7 +108,7 @@ class WriteCodeComment(models.Model):
 #TODO: CODE QUESTIONS
 class Question(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     answer = models.TextField()
     
     def __str__(self):
@@ -117,7 +118,7 @@ class CodeTest(models.Model):
     courseTitle = models.ForeignKey(CourseTitle, on_delete=models.CASCADE)
     questions  = models.ManyToManyField(Question)
     title = models.CharField(max_length=255)
-    description = models.TextField(max_length=500)
+    description = models.TextField(max_length=500, blank=True)
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

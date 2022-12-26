@@ -1,0 +1,37 @@
+{% include 'index.html' %}
+
+{% block title %}
+<title>
+    Catalog Page
+</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page">
+    <div class="page__filters">
+        <!-- <select name="" id="">
+            <option value=""></option>
+        </select> -->
+    </div>
+    <div class="cources">
+        {% for course in cources  %}
+            <div class="course">
+                <div class="course__image">
+                    <img src="https://images.pexels.com/photos/532173/pexels-photo-532173.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" class="course__img">
+                    <div class="course__mask"></div>
+                </div>
+                <div class="course__info">
+                    <div class="course__info__desc">
+                        <a href="{% url 'cources:course' course.slug %}" class = 'course__title '>{{course.title}}</a>
+                        <p>{{course.description|truncatewords:30}}</p>
+                    </div>
+                    <div class="course__info__tables">
+                        <a href="/">{{course.user}}</a>
+                        <a href="/">#{{course.tags}}</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

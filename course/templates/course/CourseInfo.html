@@ -1,0 +1,39 @@
+{% include 'index.html' %}
+
+{% block title %}
+<title></title>
+{% endblock title %}
+
+{% block content %}
+<div class='page'>
+    <div class="page__intro">
+        <div class="page__intro__left">
+            <h1 class="page__intro__title">{{course.title}}</h1>
+            <div class="page__intro__tags">
+                <a href="">{{course.user}}</a>
+                <a href="">#{{course.tags}}</a>
+            </div>
+            <p>{{course.description}}</p>
+        </div>
+        <div class="page__intro__right">
+            <img src="https://images.pexels.com/photos/532173/pexels-photo-532173.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" class="page__right">
+            <div class="page__intro__mask"></div>
+        </div>
+    </div>
+    <div class="page__titles">
+        {% for title in titles %}
+            <div class="title">
+                <div class="title__desc">
+                    <h2 class="title__name">{{title.title}}</h2>
+                    <button class=""></button>
+                </div>  
+                <div class="title__tasks">
+                    <!-- {% for task in tasks %}
+
+                    {% endfor %} -->
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

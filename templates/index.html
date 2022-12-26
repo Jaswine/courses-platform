@@ -59,6 +59,15 @@
             font-family: 'Oswald', sans-serif;
             overflow-x: hidden;
         }
+
+        ::-webkit-scrollbar {
+            background-color: rgb(254,254,254,.1);
+            width: 12px;
+            border-left: 1px solid var(--primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--lightGreen);
+        }
         
         /* ! Header */
         header {
@@ -67,6 +76,8 @@
             align-items: center;
             width: 100%;
             height: 60px;
+            z-index: 1000000000000;
+            background-color: var(--lightGray);
             position: sticky;
             top: 0;
             border-bottom: 1px solid var(--primary);
@@ -367,6 +378,202 @@
             color: var(--black);
             border-color: var(--black);
             background-color: var(--white);
+        }
+
+        .cources {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .course {
+            width: 300px;
+            height: 340px;
+            
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-direction: column;
+            margin: .8rem;
+
+            padding: .6rem 1rem;
+            position: relative;
+            background-color: var(--white);
+            transition: all .24s linear;
+        }
+        .course__image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+            width: 100%;
+            max-height: 160px;
+            height: 100%;
+            border: 1px solid var(--primary);
+        }
+        .course__img {
+            max-width: 100%;
+            height: 100%;
+            width: 100%;
+            
+            object-fit: cover;
+            position: relative;
+        }
+        .course__mask {
+            display: block;
+            width: 100%;
+            max-height: 160px;
+            content: "";
+            top:0;
+            height: 100%;
+            position: absolute;
+            background-color: #e9cfaa5c;
+        }
+        .course__title {
+            color: var(--primary);
+            margin-bottom: .4rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1.3rem;
+        }
+        .course__title:hover{
+            color: var(--darkGreen) ;
+        }
+        .course__info {
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: column;
+            height: 100%;
+            margin-top: .4rem   ;
+        }
+        .course__info p {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            padding-bottom: 5px;;
+            font-family: serif;
+        }
+        .course__info__desc {
+            row-gap: .4rem;
+        }
+        .course__info__tables {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            border-top: 1px solid var(--primary);
+            padding-top: .2rem   ;
+        }
+        .course__info__tables a {
+            color: var(--primary);
+            font-size: 1rem;
+        }
+        .course::after {
+            content: '';
+            display: block;
+            width: 300px;
+            height: 340px;
+            border: 1px solid var(--primary);
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: all .24s linear;
+            z-index: 1;
+        }
+        .course:hover::after {
+            top: -10px;
+            left: -10px
+        }
+        .course:hover {
+            box-shadow: 10px 10px 1px var(--black);
+            background-color: #C4AC92;
+        }
+
+        /*! page__intro*/
+        .page__intro {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            gap: 1rem;
+            padding: 4% 10%;
+            border-bottom: 1px solid var(--primary);
+            border-right: 1px solid var(--primary);
+            border-left: 1px solid var(--primary);
+        }
+        .page__intro__left, .page__intro__right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .page__intro__left {
+            align-items: flex-start;
+            width: 60%;
+        }
+        .page__intro__left p {
+            font-size: 1.4rem;
+            font-family: serif;
+            margin-top: .6rem;
+        }
+        .page__intro__title {
+            font-size: 3.6rem;
+        }
+        .page__intro__right {
+            width: 30%;
+            margin: 0 5%;
+            position: relative;
+        }
+        .page__intro__right img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+        }
+        .page__intro__mask {
+            max-width: 100%;
+            border: 1px solid var(--primary);
+            width: 100%;
+            height: 100%;
+            display: block;
+            content: '';
+            position: absolute;
+            background-color: #e2d1b93d;
+        }
+        .page__intro__tags {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%; 
+            gap: 1rem
+        }
+        .page__intro__tags a {
+            color: var(--primary);
+            font-size: 1.4rem;
+            font-weight: 300;
+        }
+        .page__titles {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            margin: 5% 0 ;
+        }
+        .title {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            width: 100%;
+            border: 1px solid var(--primary);
+            padding: 0%, 3%;
+            margin: 1%;
+        }
+        .title__desc {
+            padding: 1% 3%;
+            width: 100%;
         }
     </style>
 </body>

@@ -85,10 +85,11 @@ def listTags(request):
 
 def deleteTag(request, id):
     if request.user.is_authenticated:
-        tag = Tag.objects.get(id=id)
+        if  request.user.is_superuser:
+            tag = Tag.objects.get(id=id)
 
-        if tag:
-            tag.delete()
-        
-        return redirect('/tags')
+            if tag:
+                tag.delete()
+            
+            return redirect('/tags')
     return redirect('/')
