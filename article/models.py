@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from base.models import Tag
+# from ckeditor_uploader.fields import RichTextUploadingField
+from ckeditor.fields import RichTextField
 
 
 #! ____________ARTICLE SECTION___________
@@ -8,8 +10,10 @@ from base.models import Tag
 class Article(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='articles', blank=True, null=True)
+    slug = models.CharField(max_length=255, unique=True, default='')
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    text = RichTextField(blank=True)
+    public = models.BooleanField(default=False)
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

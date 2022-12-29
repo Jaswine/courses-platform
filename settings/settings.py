@@ -29,9 +29,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    #MY APP
     'base',
     'course',
     'article',
+    
+    #INSTALLED APPS
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -111,6 +116,27 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_URL = 'media/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
+
+
+MEDIA_ROOT =  BASE_DIR / 'static/media'
+
+CKEDITOR_UPLOAD_PATH="uploads/"
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'custom',
+        'height': 400,
+        'width': '100%',
+        'codeSnippet_theme': 'monokai',
+        'toolbar': 'MyCustomToolbar',
+    },
+}
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

@@ -1,0 +1,34 @@
+{% include 'index.html' %}
+
+{% block title %}
+<title>Create Article</title>
+{% endblock  %}
+
+{% block content %}
+<div class="page">
+    <div class="page__article__form">
+        <h2>Create Article</h2>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input 
+                type="text"
+                name="title"
+                placeholder="ur title..."
+            >
+            <select name="tag">
+                <option value="" selected disabled>Select Tag</option>
+                {% for tag in tags  %}
+                  <option value="{{tag.id}}">{{tag.name}}</option>
+                {% endfor %}
+            </select>
+            <a href="{% url 'base:tags' %}" class="link">Add Another Tag!</a>
+            <textarea name="text" placeholder="ur text...."></textarea>
+            <div class="page__article__form__box">
+                <input type="checkbox" class="page__article__form__checkbox" name="public" > 
+                <div>i wanna public my work</div>
+            </div>
+            <button class="btn" type="submit">Save</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}

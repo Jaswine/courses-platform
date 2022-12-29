@@ -3,8 +3,8 @@
     <div class="header__menu">
         <div class="header__menu__left">
             <a href={% url 'cources:catalog' %} class="link">Catalog</a>
-            <a href="" class="link">Community</a>
-            <a href="" class="link">Blog</a>
+            {% comment %} <a href="" class="link">Community</a> {% endcomment %}
+            <a href="/articles" class="link">Blog</a>
         </div>
         <span class="header__menu__block"></span>
         {% if request.user.is_authenticated %}

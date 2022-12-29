@@ -1,0 +1,38 @@
+{% include 'index.html' %}
+
+{% block title %}
+<title>Article List</title>
+{% endblock  %}
+
+{% block content %}
+<div class="page page__articles">
+    {% if request.user.is_superuser %}
+    <div class="page__panel">
+        <a href="{% url 'article:create_article' %}" class="btn btn-delete">
+            {% comment %} <span>Add New Post</span> {% endcomment %}
+            <span class="material-symbols-outlined ">
+                drive_file_rename_outline
+            </span>
+        </a>
+    </div>
+    {% endif %}
+    <div class="page__item">
+        <div class="page__article__filters"></div>
+        <div class="cources page__article__articles">
+            {% for article in articles %}
+                <article>
+                    <div class="article__head ">
+                        <div class="">{{article.title}}</div>
+                        <a href="" class="material-symbols-outlined icon link">
+                            arrow_forward
+                        </a>
+                    </div>
+                    <div class="article__body">
+                        {{article.text | truncatewords:30 }}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
