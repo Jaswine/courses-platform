@@ -1,0 +1,60 @@
+{% include 'index.html' %}
+
+{% block title %}
+    <title>{{article.title}}</title>
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="page__article">
+        <div class="page__article__left">
+            <h2 class="page__article__title">{{article.title}}</h2>
+            <div class="page__article__header">
+                <a href="" class="link"><b>{{article.user}}</b></a>
+                <a class="link">#{{article.tag}}</a>
+            </div>
+            {% autoescape off %}
+                <p>{{article.text}}</p>
+            {% endautoescape %}
+            <div class="page__article__header">
+                <a></a>
+                <a>{{article.updated}}</a>
+            </div>
+        </div>
+        <div class="page__article__right">
+            <div class="page__article__right__block">
+                <h3>Latest Articles</h3>
+                {% for article in articles %}
+                <article>
+                    <div class="article__head ">
+                        <div class="">{{article.title}}</div>
+                        <a href="{% url 'article:show_article' article.slug %}" class="material-symbols-outlined icon link">
+                            arrow_forward
+                        </a>
+                    </div>
+                    <div class="article__body">
+                        {{article.text | truncatewords:30 }}
+                    </div>
+                </article>
+            {% endfor %}
+            </div>
+            <div class="page__article__right__block">
+                <h3>Articles You Might Like</h3>
+                {% for article in tag_articles %}
+                <article>
+                    <div class="article__head ">
+                        <div class="">{{article.title}}</div>
+                        <a href="{% url 'article:show_article' article.slug %}" class="material-symbols-outlined icon link">
+                            arrow_forward
+                        </a>
+                    </div>
+                    <div class="article__body">
+                        {{article.text | truncatewords:30 }}
+                    </div>
+                </article>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

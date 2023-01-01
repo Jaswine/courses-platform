@@ -79,6 +79,8 @@ def listTags(request):
             return redirect('/')
     else:
         return redirect('/')
+    
+    tags = tags.reverse() 
         
     context = {'tags': tags, 'user': request.user}
     return render(request,'base/Tags.html', context)

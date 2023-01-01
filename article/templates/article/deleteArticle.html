@@ -1,0 +1,24 @@
+{% include 'index.html' %}
+
+{% block title %}
+<title>Create Article</title>
+{% endblock  %}
+
+{% block content %}
+<div class="page">
+    <div class="page__article__form">
+        <h3>Do u wanna delete this -  <b>"{{article.title}}"</b> - post?</h3>
+
+        <form class="delete__buttons" method='POST'>
+            {% csrf_token %}
+            <a href="{% url 'article:article_list' %}" class="btn">go to blog</a>
+            <button class="btn btn-delete">
+                <span class="material-symbols-outlined">
+                    delete_forever
+                    </span>
+            </button>
+        </form>
+
+    </div>
+</div>
+{% endblock content %}

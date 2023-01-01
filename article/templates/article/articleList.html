@@ -23,13 +23,31 @@
                 <article>
                     <div class="article__head ">
                         <div class="">{{article.title}}</div>
-                        <a href="" class="material-symbols-outlined icon link">
+                        <a href="{% url 'article:show_article' article.slug %}" class="material-symbols-outlined icon link">
                             arrow_forward
                         </a>
                     </div>
                     <div class="article__body">
                         {{article.text | truncatewords:30 }}
                     </div>
+                    {% if request.user.is_authenticated %}
+                        {% if request.user.is_superuser %}
+                            {% if request.user.username == article.user.username %}
+                                <div class="article__head article__buttons">
+                                    <a href="{% url 'article:update_article' article.slug %}" class="btn btn-icon">
+                                        <span class="material-symbols-outlined">
+                                            edit_square
+                                        </span>
+                                    </a>
+                                    <a href="{% url 'article:delete_article' article.slug %}" class="btn btn-delete">
+                                        <span class="material-symbols-outlined">
+                                        delete_forever
+                                        </span>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
                 </article>
             {% endfor %}
         </div>

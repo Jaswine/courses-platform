@@ -181,6 +181,9 @@
             background-color: var(--pink);
             width: 60px;
         }
+        .btn-icon {
+            width: 60px;
+        }
 
         /*! PAGE */
         .page {
@@ -615,6 +618,9 @@
             border-bottom: 1px solid var(--primary);
             padding: .4rem 2rem;
         }
+        .article__buttons {
+            margin: .6rem 0 .2rem;
+        }
 
     /* !page__article__form */
         .page__article__form {
@@ -721,6 +727,65 @@
         }
         .icon {
             color: black;
+        }
+        /* page article */
+        .page__article {
+            display: flex;
+            justify-content: space-between;
+            /* flex-wrap: wrap; */
+            width: 100%;
+            gap: 1rem;
+        }
+        .page__article__left {
+            width: 65%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column  ;
+            border: 1px solid var(--primary);
+            padding: 1rem;
+        }
+        .page__article__title {
+            margin-bottom: .6rem;
+        }
+        .page__article__right__block {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            border: 1px solid var(--primary);
+            margin-bottom: 3%;
+        }
+        .page__article__header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        .page__article__right {
+            width: 35%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+        
+        /* delete__buttons */
+        .delete__buttons {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: row !important;
+            gap: 2rem;
+        }
+        .page__article__form h3 {
+            margin-bottom:5%;
+        }
+        .page__article__right h3 {
+            margin: 2% 14px 0
+        }
+        .page__article__right article {
+            margin: 2px 14px 14px;
         }
     </style>
 </body>
