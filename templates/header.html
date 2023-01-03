@@ -9,7 +9,7 @@
         <span class="header__menu__block"></span>
         {% if request.user.is_authenticated %}
         <div class="header__menu__right">
-            <a href="" class="link">{{request.user.username}}</a>
+            <a href="{% url 'base:profile' request.user.username %}" class="link">{{request.user.username}}</a>
             <a href="{% url 'base:logout' %}" class="btn">Sign Out</a>      
         </div>
         {% else %}

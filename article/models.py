@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from base.models import Tag
+from course.models import Tag
 # from ckeditor_uploader.fields import RichTextUploadingField
 from ckeditor.fields import RichTextField
 

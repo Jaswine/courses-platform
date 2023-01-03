@@ -1,6 +1,6 @@
 from django.contrib import admin
 # from .models import Course, CourseComment, CourseTitle, CourseVideo,  CourseVideoComment, WriteCode, WriteCodeComment, Question, CodeTest, CodeTestComment
-from .models  import Course, CourseComment, CourseTitle, CourseTask
+from .models  import Course, CourseComment, CourseTitle, CourseTask, Tag
 
 
 class CourseAdmin(admin.ModelAdmin):
@@ -9,11 +9,15 @@ class CourseAdmin(admin.ModelAdmin):
 class CourseCommentAdmin(admin.ModelAdmin):
     list_display = ('course', 'user', 'message')
 
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    
 
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseComment, CourseCommentAdmin)
 admin.site.register(CourseTitle)
 admin.site.register(CourseTask)
+admin.site.register(Tag, TagAdmin)
 # admin.site.register(CourseVideo)
 # admin.site.register(CourseVideoComment)
 # admin.site.register(WriteCode)

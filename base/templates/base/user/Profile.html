@@ -1,0 +1,39 @@
+{% include 'index.html' %}
+
+{% block title %}
+<title>{{user.username}}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page profile">
+    <div class="profile__header">
+        <div class="profile__header__right">
+            <h2>{{user.username}}</h2>
+            {% if request.user.username == user.username %}
+                <p>{{user.email}}</p>
+            {% endif %}
+        </div>
+        <div class="profile__header__left">
+            <div class="expirense">Expirense: <span>100</span></div>
+        </div>
+    </div>
+    <div class="profile__body">
+        <div class="profile__body__left">
+            <a href="" class="link">Profile</a>
+            {% if user.is_superuser %}
+            <a href="" class="link">Courses</a>
+            <a href="" class="link">Articles</a>
+            {% endif %}
+            <!-- <a href="" class="link">Certificates</a> -->
+            {% if request.user.username == user.username %}
+            <a href="{% url 'base:profile-update' user.username %}" class="link">Settings</a>
+            {% endif %}
+        </div>
+        <div class="profile__body__right">
+            {% if page == 'profile' %}
+            <p>{{profile.bio}}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

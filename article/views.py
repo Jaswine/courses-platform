@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Article, ArticleComment
-from base.models import Tag
+from course.models import Tag
 from django.contrib import messages
 
 def articleList(request):

@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from .models import  Tag
+from course.models import  Tag
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import UserAttributeSimilarityValidator, CommonPasswordValidator, NumericPasswordValidator
+from .models import Profile
 
 
 def home(request):
@@ -25,6 +26,12 @@ def registration(request):
                     user = User.objects.create_user(name, email, password)
                     if user:
                         user.save()
+                        
+                        profile = Profile.objects.create(
+                            user = user,
+                        )
+                        profile.save()
+                        
                         login(request, user)
                         return redirect('/')        
                 else:
@@ -95,3 +102,65 @@ def deleteTag(request, id):
             
             return redirect('/tags')
     return redirect('/')
+
+def profile(request, username):
+    page='profile'
+    user = User.objects.get(username=username)
+    profile = Profile.objects.get(user=user)
+    
+    context = {'user': user, 'page': page, 'profile': profile}
+    return render(request,'base/user/Profile.html', context)
+
+def profileCourses(request, username):
+    page='courses'
+    user = User.objects.get(username=username)
+    
+    context = {'user': user,  'page':page}
+    return render(request,'base/user/Profile.html', context)
+
+def profileArticles(request, username):
+    page = 'articles'
+    user = User.objects.get(username=username)
+    
+    context = {'user': user,  'page': page}
+    return render(request,'base/user/Profile.html', context)
+
+def profileUpdate(request, username):
+    user = User.objects.get(username=username)
+    profile = Profile.objects.get(user=user)
+    
+    if user:
+        if profile:
+            if request.method == 'POST':
+                email = request.POST.get('email')
+                image = request.FILES['image']
+                bio = request.POST.get('bio')
+                
+                twitter = request.POST.get('twitter')
+                github = request.POST.get('github')
+                telegram = request.POST.get('telegram')
+                website = request.POST.get('website')
+                
+                if image is not None:
+                    user.email = email
+                
+                    profile.image = image
+                    profile.bio = bio
+                    
+                    profile.twitter = twitter
+                    profile.github = github
+                    profile.telegram = telegram
+                    profile.website = website
+                
+                    user.save()
+                    profile.save()
+                    return redirect('/profile/'+request.user.username)
+                else:
+                    messages.error(request, 'Image not found')
+        else: 
+            messages.add_message(request, 'Profile not found')
+    else:
+        messages.add_message(request, 'Profile not found')     
+    
+    context = {'user': user, 'profile': profile}
+    return render(request,'base/user/ProfileUpdate.html', context)

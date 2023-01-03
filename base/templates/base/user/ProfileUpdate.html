@@ -1,0 +1,51 @@
+{% include 'index.html' %}
+
+{% block title %}
+<title>Change {{user.username}}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page profile">
+    <div class="page__article__form">
+        <h2>Update Profile</h2>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input 
+                type="text" 
+                name="email" 
+                placeholder="ur email..." 
+                value="{{user.email}}"
+            >
+            <input 
+                type="file"
+                name="image"
+                value="{{profile.image}}"
+            >
+            {% if profile.image %}
+                <img src="http://127.0.0.1:8000/static/media/{{profile.image}}" alt="{{profile.user}}" class='ava'/>
+            {% else %}
+                <div></div>
+            {% endif %}
+            <textarea
+                name="bio"
+                placeholder="U need to tell us about urself"
+            >
+            {{profile.bio}}
+            </textarea>       
+              
+            <h3>Social Media 
+                <span class="material-symbols-outlined">
+                public
+                </span>
+            </h3>
+
+            <input type="text" name="twitter" placeholder="twitter nic" value="{{profile.twitter}}">
+            <input type="text" name="github" placeholder="github nic" value="{{profile.github }}">
+            <input type="text" name="telegram" placeholder="telegram nic" value="{{profile.telegram}}">
+            <input type="text" name="website" placeholder="url ur personal website" value="{{profile.website}}">
+
+            <button class="btn" type="submit">Save</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}

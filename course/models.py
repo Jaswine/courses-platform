@@ -1,6 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
-from base.models import Tag
+
+
+#!: ______TAG FOR COURSES & ARTICLES
+class Tag(models.Model):
+    name = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.name
+
 
 #!: ____________COURSE_____________
 class Course(models.Model):
@@ -195,5 +203,4 @@ class CourseTask(models.Model):
     
     def __str__(self):
         return self.title
-    
     
