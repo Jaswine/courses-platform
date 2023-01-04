@@ -5,6 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import UserAttributeSimilarityValidator, CommonPasswordValidator, NumericPasswordValidator
 from .models import Profile
+from article.models import Article, ArticleComment
 
 
 def home(request):
@@ -111,18 +112,25 @@ def profile(request, username):
     context = {'user': user, 'page': page, 'profile': profile}
     return render(request,'base/user/Profile.html', context)
 
+#Courses
+# For admin user
 def profileCourses(request, username):
     page='courses'
     user = User.objects.get(username=username)
+    profile = Profile.objects.get(user=user)
     
-    context = {'user': user,  'page':page}
+    context = {'user': user,  'page':page, 'profile': profile}
     return render(request,'base/user/Profile.html', context)
 
+#Articles 
+#for admin user
 def profileArticles(request, username):
     page = 'articles'
     user = User.objects.get(username=username)
+    articles = Article.objects.filter(user=user)
+    profile = Profile.objects.get(user=user)
     
-    context = {'user': user,  'page': page}
+    context = {'user': user,  'page': page, 'articles': articles, 'profile': profile}
     return render(request,'base/user/Profile.html', context)
 
 def profileUpdate(request, username):

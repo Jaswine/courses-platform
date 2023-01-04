@@ -799,14 +799,23 @@
             width: 100%;
             border-bottom: 1px solid var(--primary);
             padding: 0 2%;
-            padding-bottom: 2%;
-            /* border-right: 1px solid var(--primary);
-            border-left: 1px solid var(--primary);*/
+        }
+        .profile__header__right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem
+        }
+        .profile__header__right__icon {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 1px solid var(--primary);
         }
         .profile__body {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             width: 100%;
             padding: 1% 2%;
         }
@@ -816,18 +825,59 @@
             align-items: flex-start;
             flex-direction: column;
             padding: 0 1% 1%;
+            width: 24%;
         }
         .profile__body__left .link {
             font-size: 1.6rem;
             font-weight: 400;
         }
         .profile__body__right {
-            padding: 1% 2% 3%;
+            padding: 1% 1% 3%;
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-direction: column;
         }
-
         .ava {
             max-height: 200px;
+        }
+        .profile__body__right {
 
+        }
+        .profile__body__right__icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 1% 0;
+        }
+        .profile__body__right__icons a {
+            border: 1px solid var(--primary);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: .2rem;
+        }
+        .profile__body__right__icons a img {
+            width: 24px;
+            height: 24px;
+        }
+        .profile__body__right__icons a icon {
+            width: 24px;
+            height: 24px;
+        }
+        .profile__body__right__icons a:hover {
+            border: 1px solid var(--pink);
+        }
+        .profile__body__right__icons a:hover .icon {
+            padding: .4rem;
+            color: #B19783;
+        }
+        .profile__body__right__icons a:hover img {
+            padding: .4rem;
         }
     </style>
 </body>

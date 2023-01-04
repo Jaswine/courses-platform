@@ -104,8 +104,8 @@ def updateArticle(request, slug):
         if len(title) < 4:
             messages.error(request, 'Title must be at least 4 characters')
             
-        if (int(article.tag.id)) != int(tag):
-            tag = Tag.objects.get(id = tag)    
+        # if (int(article.tag.id)) != int(tag):
+        tag = Tag.objects.get(id = tag)    
             
         article.title = title
         article.tag = tag
