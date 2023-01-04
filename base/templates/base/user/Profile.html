@@ -1,4 +1,5 @@
 {% include 'index.html' %}
+{% load static %}
 
 {% block title %}
 <title>{{user.username}}</title>
@@ -8,10 +9,17 @@
 <div class="page profile">
     <div class="profile__header">
         <div class="profile__header__right">
-            <h2>{{user.username}}</h2>
-            {% if request.user.username == user.username %}
-                <p>{{user.email}}</p>
+            {% if profile.image %}
+            <img src="http://127.0.0.1:8000/static/media/{{profile.image}}" class="profile__header__right__icon" alt="profile icon">
+            {% else %}
+            <img src="" alt="" class="profile__header__right__icon">
             {% endif %}
+            <div class="profile__header__right__info">
+                <h2>{{user.username}}</h2>
+                {% if request.user.username == user.username %}
+                    <p>{{user.email}}</p>
+                {% endif %}
+            </div>
         </div>
         <div class="profile__header__left">
             <div class="expirense">Expirense: <span>100</span></div>
@@ -19,10 +27,10 @@
     </div>
     <div class="profile__body">
         <div class="profile__body__left">
-            <a href="" class="link">Profile</a>
+            <a href="{% url 'base:profile' user.username %}" class="link">Profile</a>
             {% if user.is_superuser %}
-            <a href="" class="link">Courses</a>
-            <a href="" class="link">Articles</a>
+            <a href="{% url 'base:profile-courses' user.username %}" class="link">Courses</a>
+            <a href="{% url 'base:profile-articles' user.username %}" class="link">Articles</a>
             {% endif %}
             <!-- <a href="" class="link">Certificates</a> -->
             {% if request.user.username == user.username %}
@@ -31,7 +39,67 @@
         </div>
         <div class="profile__body__right">
             {% if page == 'profile' %}
-            <p>{{profile.bio}}</p>
+            <p><b>About:</b> {{profile.bio}}</p>
+            <p><b>Joined</b> {{profile.created}}</p>
+            <div class="profile__body__right__icons">
+                {% if profile.twitter %}
+                    <a href="https://twitter.com/{{profile.twitter}}" target="_blank">
+                        <img src="{% static 'images/twitter.png' %}" alt="twitter"/>
+                    </a>
+                {% endif %}
+                {% if profile.github %}
+                <a href="https://github.com/{{profile.github}}"  target="_blank">
+                    <img src="{% static 'images/github.png' %}"  alt="twitter"/>
+                </a>
+                {% endif %}
+                {% if profile.telegram %}
+                <a href="https://t.me/{{profile.telegram}}" target="_blank">
+                    <img src="{% static 'images/telegram.png' %}" alt="twitter"/>
+                </a>
+                {% endif %}
+                {% if profile.website %}
+                    <a href="{{profile.website}}" target="_blank">
+                        <span class="material-symbols-outlined icon icon-profile">
+                            language
+                        </span>
+                    </a>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% if page == 'articles' %}
+            <div class="cources page__article__articles">
+                {% for article in articles %}
+                    <article>
+                        <div class="article__head ">
+                            <div class="">{{article.title}}</div>
+                            <a href="{% url 'article:show_article' article.slug %}" class="material-symbols-outlined icon link">
+                                arrow_forward
+                            </a>
+                        </div>
+                        <div class="article__body">
+                            {{article.text | truncatewords:30 }}
+                        </div>
+                        {% if request.user.is_authenticated %}
+                            {% if request.user.is_superuser %}
+                                {% if request.user.username == article.user.username %}
+                                    <div class="article__head article__buttons">
+                                        <a href="{% url 'article:update_article' article.slug %}" class="btn btn-icon">
+                                            <span class="material-symbols-outlined">
+                                                edit_square
+                                            </span>
+                                        </a>
+                                        <a href="{% url 'article:delete_article' article.slug %}" class="btn btn-delete">
+                                            <span class="material-symbols-outlined">
+                                            delete_forever
+                                            </span>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </article>
+                {% endfor %}
+            </div>
             {% endif %}
         </div>
     </div>
