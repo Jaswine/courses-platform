@@ -15,8 +15,9 @@ urlpatterns = [
     path('tags', views.listTags, name='tags'),
     path('tags/<str:id>/', views.deleteTag, name='tags-delete'),
     
-    #! USER
+    #! PROFILE
     path('profile/<str:username>/', views.profile, name='profile'),
+    path('profile/<str:username>/likes', views.profileLikes, name='profile-likes'),
     path('profile/<str:username>/courses', views.profileCourses, name='profile-courses'),
     path('profile/<str:username>/articles', views.profileArticles, name='profile-articles'),
     path('profile/<str:username>/change', views.profileUpdate  , name='profile-update'),

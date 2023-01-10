@@ -70,15 +70,36 @@ def showArticle(request, slug):
     latest_articles = []
     public_articles = []
     
-    for a in articles:
+    for a in articles: #filter Articles
         if article.title != a.title:
             latest_articles.append(a)
             
-    for i in articles_filters:
+    for i in articles_filters: #Also Filter Articles
         if article.title != i.title:
             public_articles.append(i)
             
-    context =  {'article': article, 'articles': latest_articles[:4], 'tag_articles': public_articles[:4]}
+    #* Likes
+    likes = article.likesForArticle
+    likes_count = (article.likesForArticle).count()
+            
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            status = False
+            
+            for like in likes.all(): 
+                if like.username == request.user.username:
+                    status = True
+                    print(like.username)
+            
+            if status == True:
+                article.likesForArticle.remove(like)
+            if status == False:
+                article.likesForArticle.add(request.user)
+                article.save()
+                    
+            return redirect('http://127.0.0.1:8000/articles/'+ slug+'/#like')
+            
+    context =  {'article': article, 'articles': latest_articles[:4], 'tag_articles': public_articles[:4], 'likes': likes_count}
     return render(request, 'article/showArticle.html', context)
 
 def updateArticle(request, slug):

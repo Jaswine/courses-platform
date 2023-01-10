@@ -133,6 +133,26 @@ def profileArticles(request, username):
     context = {'user': user,  'page': page, 'articles': articles, 'profile': profile}
     return render(request,'base/user/Profile.html', context)
 
+def profileLikes(request, username):
+    page = 'likes'
+    user = User.objects.get(username=username)
+    profile = Profile.objects.get(user=user)
+    
+    articles = Article.objects.all()
+    like_articles = []
+    status = False
+    
+    #Filter for articles
+    for article in articles:
+        for like in article.likesForArticle.all():
+            if like.username == user.username:
+                like_articles.append(article)
+                if request.user.username == like.username:
+                    status = True
+        
+    context = {'user': user,  'page': page, 'like_articles': like_articles, 'profile': profile, 'status': status}
+    return render(request,'base/user/Profile.html', context)
+
 def profileUpdate(request, username):
     user = User.objects.get(username=username)
     profile = Profile.objects.get(user=user)

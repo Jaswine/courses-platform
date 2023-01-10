@@ -13,8 +13,15 @@ class Profile(models.Model):
     telegram = models.CharField(max_length=1000, blank=True)
     website = models.URLField(blank=True)
     
-    cources  = models.ManyToManyField(Course, blank=True)
-    tasks = models.ManyToManyField(CourseTask, blank=True)
+    #! Courses
+    courses  = models.ManyToManyField(Course)
+    tasks = models.ManyToManyField(CourseTask)
+    
+    #! Likes & Bookmarks
+    likeCourses = models.ManyToManyField(Course, blank=True, related_name='likeCourses',  default='')
+    bookmarkCourses = models.ManyToManyField(Course, blank=True, related_name='bookmarkCourses', default='')
+    likeArticle = models.ManyToManyField(Course, blank=True, related_name='likeArticle',  default='')
+    bookmarkArticle = models.ManyToManyField(Course, blank=True, related_name='likeBookmark',  default='')
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

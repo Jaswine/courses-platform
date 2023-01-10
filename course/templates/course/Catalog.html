@@ -8,6 +8,16 @@
 
 {% block content %}
 <div class="page">
+    {% if request.user.is_superuser %}
+    <div class="page__panel">
+        <a href="{% url 'cources:create-course' %}" class="btn btn-delete">
+            {% comment %} <span>Add New Post</span> {% endcomment %}
+            <span class="material-symbols-outlined ">
+                drive_file_rename_outline
+            </span>
+        </a>
+    </div>
+    {% endif %}
     <div class="page__filters">
         <!-- <select name="" id="">
             <option value=""></option>

@@ -121,6 +121,7 @@
             color: var(--primary);
             position: relative; 
             z-index: 2;
+            {% comment %} gap: 20px; {% endcomment %}
         }
         .link:hover {
             color: var(--black);
@@ -878,6 +879,26 @@
         }
         .profile__body__right__icons a:hover img {
             padding: .4rem;
+        }
+        /* like__form */
+        .like__form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .icon__love {
+            font-size: 30px !important;
+            font-weight: bold !important;
+            background-color: transparent !important;
+        }
+        .icon__love:hover {
+            color: var(--lightGreen);
+            text-shadow: 0 0 5px 5px #fff;
+            cursor: pointer;
+            background-color: transparent;
+        }
+        .icon__span {
+            font-size: 24px!important;
         }
     </style>
 </body>

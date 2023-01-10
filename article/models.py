@@ -15,6 +15,13 @@ class Article(models.Model):
     text = RichTextField(blank=True)
     public = models.BooleanField(default=False)
     
+    #TODO: LIKES
+    likesForArticle = models.ManyToManyField(User, related_name='likesForArticle', blank=True)
+    bookmarksForCourse = models.ManyToManyField(User, related_name='bookmarksForCourse', blank=True)
+    
+    #TODO: STATISTIC
+    commentsCount = models.IntegerField(default=0)
+    
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     
