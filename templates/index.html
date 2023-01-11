@@ -627,7 +627,7 @@
         .page__article__form {
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             flex-direction: column;
             width: 100%;
             max-width: 600px;
@@ -637,7 +637,7 @@
         .page__article__form form {
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             flex-direction: column;
             row-gap: 1rem;
             width: 100%;
@@ -646,7 +646,9 @@
             font-size: 2rem;
             font-weight: 400;
             margin-bottom: 3%;
-            color: var(--primary)
+            color: var(--primary);
+            width: 100%;
+            text-align: center;
         }
         .page__article__form__box {
             display: flex;
@@ -899,6 +901,19 @@
         }
         .icon__span {
             font-size: 24px!important;
+        }
+        .not-found-icon 
+        {
+            font-size: 100px !important;
+            font-weight: bold;
+        }
+        .not__found {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 60vw;
+            height: 100%
         }
     </style>
 </body>

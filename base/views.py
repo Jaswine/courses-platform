@@ -149,7 +149,7 @@ def profileLikes(request, username):
                 like_articles.append(article)
                 if request.user.username == like.username:
                     status = True
-        
+    
     context = {'user': user,  'page': page, 'like_articles': like_articles, 'profile': profile, 'status': status}
     return render(request,'base/user/Profile.html', context)
 

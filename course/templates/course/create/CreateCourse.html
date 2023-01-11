@@ -14,6 +14,12 @@
                 type="text"
                 name="title"
                 placeholder="ur title..."
+                id="title"
+                value=''
+            >
+            <input 
+                type="file"
+                name='image'
             >
             <select name="tag">
                 <option value="" selected disabled>Select Tag</option>
@@ -22,13 +28,46 @@
                 {% endfor %}
             </select>
             <a href="{% url 'base:tags' %}" class="link">Add Another Tag!</a>
-            <textarea name="text" placeholder="ur text...."></textarea>
+            <label for="">U need to talk about ur course</label>
+            <textarea name="about" placeholder="U need to talk about ur course"></textarea>
+            <label for="">What Are other people will learn on this course?</label>
+            <textarea name="WhatAreUWillLearn" placeholder="What Are other people will learn on this course? "></textarea>
+            <label for="">Task Level</label>
+            <select name="level">
+                <option value="" selected disabled>Select Level</option>
+               <option value="Beginner">Beginner</option>
+               <option value="Intermediate">Intermediate</option>
+               <option value="Expert">Expert</option>
+            </select>
+            <label for="">Initial Requirements</label>
+            <textarea name="InitialRequirements" placeholder="Initial Requirements" ></textarea>
+            <label for="">Certificate</label>
+            <input type="file" name="certificate">
             <div class="page__article__form__box">
                 <input type="checkbox" class="page__article__form__checkbox" name="public" > 
-                <div>i wanna public my work</div>
+                <div>i wanna public my course</div>
             </div>
-            <button class="btn" type="submit">Save</button>
+            <button class="btn" type="submit" id="Submit" >Save</button>
         </form>
     </div>
 </div>
+
+<script>
+    const title = document.querySelector('#title');
+    const Submit = document.querySelector('#Submit');
+
+    title.addEventListener('onchange', function () {
+        console.log(title.value);
+        localStorage.setItem('CourseTitle', title.value);
+    });
+
+    title.value = localStorage.getItem('CourseTitle');
+
+    
+
+
+    Submit.addEventListener('click', () => {
+        localStorage.clear();
+    })
+</script>
 {% endblock content %}

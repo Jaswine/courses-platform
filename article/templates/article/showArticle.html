@@ -10,7 +10,7 @@
         <div class="page__article__left">
             <h2 class="page__article__title">{{article.title}}</h2>
             <div class="page__article__header">
-                <a href="{% url 'base:profile' request.user.username %}" class="link"><b>{{request.user.username}}</b></a>
+                <a href="{% url 'base:profile' article.user.username %}" class="link"><b>{{article.user.username}}</b></a>
                 <a class="link">#{{article.tag}}</a>
             </div>
             {% autoescape off %}
@@ -18,7 +18,7 @@
             {% endautoescape %}
             <div class="page__article__header">
                 <b>
-                    <a>{{article.updated}}</a>
+                    <a>{{article.created}}</a>
                 </b>
                 <form action="" method="POST" class="like__form">
                     {% if request.user.is_authenticated %}
@@ -35,11 +35,7 @@
         <div class="page__article__right">
             <div class="page__article__right__block">
                {% if articles %}
-                     {% for article in articles  %}
-                       {% if article.public %}
-                            <h3>Latest Articles</h3>
-                       {% endif %}
-                     {% endfor %}
+                    <h3>Latest Articles</h3>
                     {% for article in articles %}
                         {% if article.public %}
                             <article>

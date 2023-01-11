@@ -17,6 +17,18 @@ def course(request, slug):
 
 def createCourse(request):
     tags = Tag.objects.all()
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        slug = "-".join(title.lower().split(' '))
+        user = request.user
+        image = request.FILES['image']
+        tag = request.POST.get('tag')
+        about  = request.POST.get('about')
+        WhatAreUWillLearn = request.POST.get('WhatAreUWillLearn')
+        level = request.POST.get('level')
+        InitialRequirements = request.POST.get('InitialRequirements')
+        certificate = request.FILES['certificate']
+        
     
     context = {'tags': tags}
     return render(request, 'course/create/CreateCourse.html', context)

@@ -40,15 +40,35 @@
                 <span class="material-symbols-outlined">favorite</span>
                 Likes
             </a>
-            <a href="{% url 'base:profile' user.username %}" class="link">
+            {% comment %} <a href="{% url 'base:profile' user.username %}" class="link">
                 <span class="material-symbols-outlined">
                     bookmark
                 </span>
                 Bookmarks
-            </a>
-            {% if user.is_superuser %}
-            <a href="{% url 'base:profile-courses' user.username %}" class="link">Courses</a>
-            <a href="{% url 'base:profile-articles' user.username %}" class="link">Articles</a>
+            </a> {% endcomment %}
+             <a href="{% url 'base:profile' user.username %}" class="link">
+                <span class="material-symbols-outlined">
+                    workspace_premium
+                    </span>
+                Sertificates
+            </a> 
+            {% if request.user.is_authenticated %}
+                {% if user.is_superuser %}
+                    {% if request.user.is_superuser %}
+                    <a href="{% url 'base:profile-courses' user.username %}" class="link">
+                        <span class="material-symbols-outlined">
+                            school  
+                        </span>
+                        Courses
+                    </a>
+                    <a href="{% url 'base:profile-articles' user.username %}" class="link">
+                        <span class="material-symbols-outlined">
+                            description
+                            </span>
+                        Articles
+                    </a>
+                    {% endif %}
+                {% endif %}
             {% endif %}
             <!-- <a href="" class="link">Certificates</a> -->
             {% if request.user.username == user.username %}
@@ -94,90 +114,114 @@
             {% endif %}
             {% if page == 'articles' %}
             {% comment %} ? IF WE CLICK ON ARTICLES {% endcomment %}
-            <div class="cources page__article__articles">
-                {% for article in articles %}
-                    <article>
-                        <div class="article__head ">
-                            <div class="">{{article.title}}</div>
-                            <a href="{% url 'article:show_article' article.slug %}" class="material-symbols-outlined icon link">
-                                arrow_forward
+                {% if request.user.is_authenticated %}
+                    {% if request.user.is_superuser %}
+                        {% if user.is_superuser %}
+                        <div class="page__panel">
+                            <a href="{% url 'article:create_article' %}" class="btn btn-delete">
+                                {% comment %} <span>Add New Post</span> {% endcomment %}
+                                <span class="material-symbols-outlined ">
+                                    drive_file_rename_outline
+                                </span>
                             </a>
                         </div>
-                        <div class="article__body">
-                            {{article.text | truncatewords:30 }}
-                        </div>
-                        {% if request.user.is_authenticated %}
-                            {% if request.user.is_superuser %}
-                                {% if request.user.username == article.user.username %}
-                                    <div class="article__head article__buttons">
-                                        <a href="{% url 'article:update_article' article.slug %}" class="btn btn-icon">
-                                            <span class="material-symbols-outlined">
-                                                edit_square
-                                            </span>
-                                        </a>
-                                        <a href="{% url 'article:delete_article' article.slug %}" class="btn btn-delete">
-                                            <span class="material-symbols-outlined">
-                                            delete_forever
-                                            </span>
+                        <div class="cources page__article__articles">
+                            {% for article in articles %}
+                                <article>
+                                    <div class="article__head ">
+                                        <div class="">{{article.title}}</div>
+                                        <a href="{% url 'article:show_article' article.slug %}" class="material-symbols-outlined icon link">
+                                            arrow_forward
                                         </a>
                                     </div>
-                                {% endif %}
-                            {% endif %}
+                                    <div class="article__body">
+                                        {{article.text | truncatewords:30 }}
+                                    </div>
+                                    {% if request.user.is_authenticated %}
+                                        {% if request.user.is_superuser %}
+                                            {% if request.user.username == article.user.username %}
+                                                <div class="article__head article__buttons">
+                                                    <a href="{% url 'article:update_article' article.slug %}" class="btn btn-icon">
+                                                        <span class="material-symbols-outlined">
+                                                            edit_square
+                                                        </span>
+                                                    </a>
+                                                    <a href="{% url 'article:delete_article' article.slug %}" class="btn btn-delete">
+                                                        <span class="material-symbols-outlined">
+                                                        delete_forever
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                </article>
+                            {% endfor %}
+                        </div>
                         {% endif %}
-                    </article>
-                {% endfor %}
-            </div>
+                    {% endif %}
+                {% endif %}
             {% endif %}
 
             {% if page == 'likes' %}
             {% comment %} TODO:  GET LIKES {% endcomment %}
             <div class="cources page__article__articles">
-                {% for article in like_articles %}
-                    <article>
-                        <div class="article__head ">
-                            <div class="">{{article.title}}</div>
-                            <a href="{% url 'article:show_article' article.slug %}" class="material-symbols-outlined icon link">
-                                arrow_forward
-                            </a>
-                        </div>
-                        <div class="article__body">
-                            {{article.text | truncatewords:30 }}
-                        </div>
-                        {% if request.user.is_authenticated %}
-                            {% if request.user.is_superuser %}
-                                {% if request.user.username == article.user.username %}
-                                    <div class="article__head article__buttons">
-                                        <a href="{% url 'article:update_article' article.slug %}" class="btn btn-icon">
-                                            <span class="material-symbols-outlined">
-                                                edit_square
-                                            </span>
-                                        </a>
-                                        <a href="{% url 'article:delete_article' article.slug %}" class="btn btn-delete">
-                                            <span class="material-symbols-outlined">
-                                            delete_forever
-                                            </span>
-                                        </a>
-                                    </div>
-                                {% endif %}
-                            {% endif %}
-                            {% if status %}
-                                    <div class=" article__head article__buttons">
-                                        <div href=""><b>#{{article.tag}}</b></div>
-                                        <form action="" method="POST" class="like__form">
-                                            {% if request.user.is_authenticated %}
-                                                {% csrf_token %}
-                                                <!-- <span>{{ likes }}</span> -->
-                                                <span class="icon icon__love icon__span">{{likes}}</span>
-                                                <button class="material-symbols-outlined icon icon__love" id = "like">
-                                                    favorite
-                                                </button>
-                                            {% endif %}
-                                        </form>
-                                    </div>
-                            {% endif %}
-                        {% endif %}
-                    </article>
-                {% endfor %}
+               {% if like_articles %}
+               {% for article in like_articles %}
+               <article>
+                   <div class="article__head ">
+                       <div class="">{{article.title}}</div>
+                       <a href="{% url 'article:show_article' article.slug %}" class="material-symbols-outlined icon link">
+                           arrow_forward
+                       </a>
+                   </div>
+                   <div class="article__body">
+                       {{article.text | truncatewords:30 }}
+                   </div>
+                   {% if request.user.is_authenticated %}
+                       {% if request.user.is_superuser %}
+                           {% if request.user.username == article.user.username %}
+                               <div class="article__head article__buttons">
+                                   <a href="{% url 'article:update_article' article.slug %}" class="btn btn-icon">
+                                       <span class="material-symbols-outlined">
+                                           edit_square
+                                       </span>
+                                   </a>
+                                   <a href="{% url 'article:delete_article' article.slug %}" class="btn btn-delete">
+                                       <span class="material-symbols-outlined">
+                                       delete_forever
+                                       </span>
+                                   </a>
+                               </div>
+                           {% endif %}
+                       {% endif %}
+                       {% if status %}
+                               <div class=" article__head article__buttons">
+                                   <div href=""><b>#{{article.tag}}</b></div>
+                                   <form action="" method="POST" class="like__form">
+                                       {% if request.user.is_authenticated %}
+                                           {% csrf_token %}
+                                           <!-- <span>{{ likes }}</span> -->
+                                           <span class="icon icon__love icon__span">{{article.likesForArticle.count}}</span>
+                                           <a href="{% url 'article:show_article' article.slug %}#like" class="material-symbols-outlined icon icon__love" id = "like">
+                                               favorite
+                                           </a>
+                                       {% endif %}
+                                   </form>
+                               </div>
+                       {% endif %}
+                   {% endif %}
+               </article>
+           {% endfor %}
+           {% else %}
+           <div class="not__found">
+                <span class="material-symbols-outlined not-found-icon">
+                    image_not_supported
+                </span>
+                <h2>Articles Not Found</h2>
+            </div>
+               {% endif %}
+
             </div>
             {% endif %}
 

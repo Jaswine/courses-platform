@@ -14,6 +14,7 @@
                 type="text"
                 name="title"
                 placeholder="ur title..."
+                id = 'ArticleTitle'
             >
             <select name="tag">
                 <option value="" selected disabled>Select Tag</option>
@@ -22,13 +23,40 @@
                 {% endfor %}
             </select>
             <a href="{% url 'base:tags' %}" class="link">Add Another Tag!</a>
-            <textarea name="text" placeholder="ur text...."></textarea>
+            <textarea name="text" placeholder="ur text...." id="ArticleText"></textarea>
             <div class="page__article__form__box">
                 <input type="checkbox" class="page__article__form__checkbox" name="public" > 
                 <div>i wanna public my work</div>
             </div>
-            <button class="btn" type="submit">Save</button>
+            <button class="btn" type="submit" id="ArticleClearSession">Save</button>
         </form>
     </div>
 </div>
+<script>
+    //TITLE in localStorage
+    ArticleTitle = document.getElementById('ArticleTitle')
+
+    ArticleTitle.addEventListener('change', () => {
+        console.log(ArticleTitle.value);
+        localStorage.setItem('ArticleTitle',ArticleTitle.value);
+    });
+    ArticleTitle.value = localStorage.getItem('ArticleTitle');
+
+    //ArticleText in localStorage
+    ArticleText = document.querySelector('#ArticleText');
+    ArticleText .addEventListener('change', () => {
+        console.log(ArticleText.value)
+        localStorage.setItem('ArticleText', ArticleText.value)
+    });
+
+    ArticleText.value = localStorage.getItem('ArticleText');
+
+    //CLEAR SESSION
+    ArticleClearSession = document.querySelector('#ArticleClearSession');
+
+    ArticleClearSession.addEventListener('click', () => {
+        sessionStorage.removeItem('ArticleTitle');
+        sessionStorage.removeItem('ArticleText');
+    });
+</script>
 {% endblock content %}
