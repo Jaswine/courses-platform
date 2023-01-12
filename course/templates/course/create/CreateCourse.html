@@ -8,13 +8,14 @@
 <div class="page">
     <div class="page__article__form">
         <h2>Create Course</h2>
-        <form action="" method="POST">
+        <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <input 
                 type="text"
                 name="title"
                 placeholder="ur title..."
                 id="title"
+                class="course_field"
                 value=''
             >
             <input 
@@ -29,9 +30,19 @@
             </select>
             <a href="{% url 'base:tags' %}" class="link">Add Another Tag!</a>
             <label for="">U need to talk about ur course</label>
-            <textarea name="about" placeholder="U need to talk about ur course"></textarea>
+            <textarea 
+                name="about" 
+                placeholder="U need to talk about ur course" 
+                id="about"
+                class="course_field"
+            ></textarea>
             <label for="">What Are other people will learn on this course?</label>
-            <textarea name="WhatAreUWillLearn" placeholder="What Are other people will learn on this course? "></textarea>
+            <textarea 
+                name="WhatAreUWillLearn" 
+                class="course_field"
+                placeholder="What Are other people will learn on this course? "
+                id = "WhatAreUWillLearn"
+            ></textarea>
             <label for="">Task Level</label>
             <select name="level">
                 <option value="" selected disabled>Select Level</option>
@@ -40,7 +51,12 @@
                <option value="Expert">Expert</option>
             </select>
             <label for="">Initial Requirements</label>
-            <textarea name="InitialRequirements" placeholder="Initial Requirements" ></textarea>
+            <input 
+                name="InitialRequirements" 
+                placeholder="Initial Requirements" 
+                class="course_field"
+                id = 'InitialRequirements'
+            />
             <label for="">Certificate</label>
             <input type="file" name="certificate">
             <div class="page__article__form__box">
@@ -53,21 +69,23 @@
 </div>
 
 <script>
-    const title = document.querySelector('#title');
-    const Submit = document.querySelector('#Submit');
-
-    title.addEventListener('onchange', function () {
-        console.log(title.value);
-        localStorage.setItem('CourseTitle', title.value);
-    });
-
-    title.value = localStorage.getItem('CourseTitle');
-
+    const course_fields = document.querySelectorAll('.course_field')
     
-
+    for (let i = 0; i < course_fields.length; i++) {
+        course_fields[i].addEventListener('change', () => {
+            for (let n = 0; n < course_fields.length;n++) {
+                console.log(course_fields[n].value); 
+                console.log(n);
+                localStorage.setItem(`LocalElement${n}`, course_fields[n].value)
+            }
+        });
+        course_fields[i].value= localStorage.getItem(`LocalElement${i}`);
+    }
 
     Submit.addEventListener('click', () => {
-        localStorage.clear();
+        for (let i = 0; i < course_fields.length; i++) {
+            course_fields[i].value= localStorage.removeItem(`LocalElement${i}`);
+        }
     })
 </script>
 {% endblock content %}
