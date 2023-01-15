@@ -8,7 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     path('', include('base.urls')), #Auth & Tags
-    path('', include('course.urls')), #Cources
+    path('', include('course.urls')), #courses
     path('', include('article.urls')), #Articles
 ]
 

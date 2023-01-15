@@ -16,7 +16,6 @@
                 placeholder="ur title..."
                 id="title"
                 class="course_field"
-                value=''
             >
             <input 
                 type="file"
@@ -57,19 +56,17 @@
                 class="course_field"
                 id = 'InitialRequirements'
             />
-            <label for="">Certificate</label>
-            <input type="file" name="certificate">
-            <div class="page__article__form__box">
+            <!-- <div class="page__article__form__box">
                 <input type="checkbox" class="page__article__form__checkbox" name="public" > 
                 <div>i wanna public my course</div>
-            </div>
+            </div> -->
             <button class="btn" type="submit" id="Submit" >Save</button>
         </form>
     </div>
 </div>
 
 <script>
-    const course_fields = document.querySelectorAll('.course_field')
+    /*const course_fields = document.querySelectorAll('.course_field')
     
     for (let i = 0; i < course_fields.length; i++) {
         course_fields[i].addEventListener('change', () => {
@@ -86,6 +83,6 @@
         for (let i = 0; i < course_fields.length; i++) {
             course_fields[i].value= localStorage.removeItem(`LocalElement${i}`);
         }
-    })
+    })*/
 </script>
 {% endblock content %}

@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
-from course.models import  Tag
+from course.models import  Tag, Course
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import UserAttributeSimilarityValidator, CommonPasswordValidator, NumericPasswordValidator
-from .models import Profile
 from article.models import Article, ArticleComment
+from .models import Profile
+import random
+from requests import get
 
 
 def home(request):
@@ -108,8 +110,34 @@ def profile(request, username):
     page='profile'
     user = User.objects.get(username=username)
     profile = Profile.objects.get(user=user)
+    ProfileImage = 'https://images.pexels.com/photos/4587958/pexels-photo-4587958.jpeg?auto=compress&cs=tinysrgb&w=800'
+    getPhoto = []
+        
+    headers = {
+        'Content-Type': 'application/json', 
+        'Authorization': '563492ad6f91700001000001cc06828fc3ab4e418257550da9b440d7',
+    }
     
-    context = {'user': user, 'page': page, 'profile': profile}
+    #TODO: Get a Photo for a Profile, If user doesn't have a photo
+    response = get('https://api.pexels.com/v1/search?query=funny_cat&curated?page=1&per_page='+str(user.id), headers=headers)
+    
+    if response.status_code == 200:
+        data = response.json()
+        if  data:
+            getPhoto = data['photos']
+            
+            for i in getPhoto:
+                getPhoto = i
+            
+            getPhoto = getPhoto['src']['small']
+            print(getPhoto)
+            
+            ProfileImage = getPhoto
+    else:
+        ProfileImage = 'https://images.pexels.com/photos/4587958/pexels-photo-4587958.jpeg?auto=compress&cs=tinysrgb&w=800'
+        print('Response error: %s' % response.status_code)
+    
+    context = {'user': user, 'page': page, 'profile': profile, 'ProfileImage': ProfileImage,'getPhoto': getPhoto}
     return render(request,'base/user/Profile.html', context)
 
 #Courses
@@ -119,7 +147,9 @@ def profileCourses(request, username):
     user = User.objects.get(username=username)
     profile = Profile.objects.get(user=user)
     
-    context = {'user': user,  'page':page, 'profile': profile}
+    courses = Course.objects.filter(user=user)
+    
+    context = {'user': user,  'page':page, 'profile': profile, 'courses': courses}
     return render(request,'base/user/Profile.html', context)
 
 #Articles 
@@ -133,6 +163,7 @@ def profileArticles(request, username):
     context = {'user': user,  'page': page, 'articles': articles, 'profile': profile}
     return render(request,'base/user/Profile.html', context)
 
+#FOR AUTH USER
 def profileLikes(request, username):
     page = 'likes'
     user = User.objects.get(username=username)
@@ -153,6 +184,7 @@ def profileLikes(request, username):
     context = {'user': user,  'page': page, 'like_articles': like_articles, 'profile': profile, 'status': status}
     return render(request,'base/user/Profile.html', context)
 
+#FOR AUTH USER
 def profileUpdate(request, username):
     user = User.objects.get(username=username)
     profile = Profile.objects.get(user=user)
@@ -161,7 +193,10 @@ def profileUpdate(request, username):
         if profile:
             if request.method == 'POST':
                 email = request.POST.get('email')
-                image = request.FILES['image']
+                
+                profileImage = profile.image
+                image = request.FILES.get('image',profileImage)
+                
                 bio = request.POST.get('bio')
                 
                 twitter = request.POST.get('twitter')
@@ -169,22 +204,20 @@ def profileUpdate(request, username):
                 telegram = request.POST.get('telegram')
                 website = request.POST.get('website')
                 
-                if image is not None:
-                    user.email = email
+                user.email = email
+            
+                profile.image = image
+                profile.bio = bio
                 
-                    profile.image = image
-                    profile.bio = bio
-                    
-                    profile.twitter = twitter
-                    profile.github = github
-                    profile.telegram = telegram
-                    profile.website = website
-                
-                    user.save()
-                    profile.save()
-                    return redirect('/profile/'+request.user.username)
-                else:
-                    messages.error(request, 'Image not found')
+                profile.twitter = twitter
+                profile.github = github
+                profile.telegram = telegram
+                profile.website = website
+            
+                user.save()
+                profile.save()
+                return redirect('/profile/'+request.user.username)
+
         else: 
             messages.add_message(request, 'Profile not found')
     else:

@@ -3,17 +3,17 @@ from .models import *
 from django.contrib import messages 
 
 def catalog(request):
-    courses = Course.objects.all()
+    courses = Course.objects.filter(public=True)
     
-    context = {'cources': courses}
+    context = {'courses': courses}
     return render(request, 'course/Catalog.html', context)
 
 def course(request, slug):
-    cource = Course.objects.get(slug=slug)
-    titles = CourseTitle.objects.filter(course=cource.id)
+    course = Course.objects.get(slug=slug)
+    titles = CourseTitle.objects.filter(course=course.id)
     # tasks = 
     
-    context = {'course': cource, 'titles': titles}
+    context = {'course': course, 'titles': titles}
     return render(request, 'course/CourseInfo.html', context)
 
 def createCourse(request):
@@ -24,59 +24,56 @@ def createCourse(request):
         title = request.POST.get('title')
         slug = "-".join(title.lower().split(' '))
         user = request.user
-        image = request.FILES['image']
+        image = request.FILES.get('image', None)
         tag = request.POST.get('tag')
         about  = request.POST.get('about')
         whatAreUWillLearn = request.POST.get('WhatAreUWillLearn')
         level = request.POST.get('level')
         initialRequirements = request.POST.get('InitialRequirements')
-        certificate = request.FILES['certificate']
-        public = request.POST['public']
-        
-        if public == 'on': #! PUBLIC & UNPUBLIC
-            public = True
-        elif public == None:
-            public = False
+                
+        print(title)
             
-        if len(about) > 5: #! VALIDATION
-            if (tag != None ): #! Tag Doesn't Selected
-                if image != None: #! Image Doesn't Selected
-                    if level != None: #!Level Doesn't Selected
-                        if len(title) > 4:
-                    
-                            for course in courses:
-                                if slug != course.slug: 
-                                    tag = Tag.objects.get(id = tag)
-                                    
-                                    form = Course.objects.create( #! Create Course
-                                        title = title,
-                                        slug = slug,
-                                        user = user,
-                                        image = image,
-                                        tags = tag,
-                                        about = about,
-                                        whatAreUWillLearn = whatAreUWillLearn,
-                                        level = level,
-                                        initialRequirements = initialRequirements,
-                                        certificate = certificate,
-                                        public = public,
-                                    )
-                                    
-                                    form.save()
-                                    return redirect('cources:catalog')
-                                else:
-                                    messages.error(request, 'This article already exists')
-                    
-                        else:
-                            messages.error(request, 'Title must be at least 4 characters')
-                    else:
-                        messages.error(request, 'Level must be selected')
-                else:
-                    messages.error(request, 'Image must be selected')
-            else: 
-                messages.error(request, 'Tag must be selected')
-        else:
+        validated = True
+            
+        if len(about) < 4: #! VALIDATION
+            validated = False
             messages.error(request, 'About must be at least 10 characters')
-    
+            
+        if (tag == None ): #! Tag Doesn't Selected
+            validated = False
+            messages.error(request, 'Tag must be selected')
+            
+        if len(title) < 4: #! Title 
+            validated = False
+            messages.error(request, 'Title must be at least 4 characters')
+                    
+        for course in courses:
+            if slug == course.slug: #! Slug
+                validated = False
+                messages.error(request, 'This article already exists')
+                       
+        if validated == True:
+            tag = Tag.objects.get(id = tag)
+                                            
+            form = Course.objects.create( #! Create Course
+                title = title,
+                slug = slug,
+                user = user,
+                image = image,
+                tags = tag,
+                about = about,
+                whatAreUWillLearn = whatAreUWillLearn,
+                level = level,
+                initialRequirements = initialRequirements,
+                public = False,
+            )
+            print("Post Has Been Created")
+        
+            form.save()
+            return redirect('profile/'+str(request.user.username)+'courses')
+        else:
+            messages.error(request, 'This article already exists')
+            print("Post doesn't created")            
+            
     context = {'tags': tags}
     return render(request, 'course/create/CreateCourse.html', context)

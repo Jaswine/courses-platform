@@ -21,10 +21,10 @@
                 name="image"
                 value="{{profile.image}}"
             >
-            {% if profile.image %}
+            {% if profile.image != '' or profile.image != None %}
                 <img src="http://127.0.0.1:8000/static/media/{{profile.image}}" alt="{{profile.user}}" class='ava'/>
             {% else %}
-                <div></div>
+                <img src="" alt="None" class="ava">
             {% endif %}
             <textarea
                 name="bio"
@@ -44,8 +44,22 @@
             <input type="text" name="telegram" placeholder="telegram nic" value="{{profile.telegram}}">
             <input type="text" name="website" placeholder="url ur personal website" value="{{profile.website}}">
 
-            <button class="btn" type="submit">Save</button>
+            <button class="btn" type="submit" id="ProfileSubmit">Save</button>
         </form>
     </div>
 </div>
+<script>
+    const textarea = document.querySelector('textarea');
+    const ProfileSubmit = document.querySelector('#ProfileSubmit');
+
+    textarea.addEventListener('change', () => { // Send in localStorage
+        localStorage.setItem('ProfileTextarea', textarea.value);
+    });
+
+    textarea.value = localStorage.getItem('ProfileTextarea'); //get data from localStorage
+
+    ProfileSubmit.addEventListener('click', () => { //Remove the tag from localStorage
+        localStorage.removeItem('ProfileTextarea');
+    });
+</script>
 {% endblock content %}

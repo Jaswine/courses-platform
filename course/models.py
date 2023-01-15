@@ -28,7 +28,7 @@ class Course(models.Model):
     whatAreUWillLearn = models.TextField(max_length=500, blank=True)
     level = models.CharField(max_length=13, choices=LEVEL, null=True)
     initialRequirements = models.TextField(max_length=500, blank=True)
-    certificate = models.FileField(upload_to='courses/certificates', blank=True, null=True)
+    # certificate = models.FileField(upload_to='courses/certificates', blank=True, null=True)
     
     #TODO: Public or Unpublic
     public = models.BooleanField(default=False)

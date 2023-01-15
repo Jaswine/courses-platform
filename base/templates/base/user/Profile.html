@@ -13,7 +13,7 @@
             {% if profile.image %}
             <img src="http://127.0.0.1:8000/static/media/{{profile.image}}" class="profile__header__right__icon" alt="profile icon">
             {% else %}
-            <img src="" alt="" class="profile__header__right__icon">
+            <img src="{{ProfileImage}}" alt="ProfileImage" class="profile__header__right__icon">
             {% endif %}
             <div class="profile__header__right__info">
                 <h2>{{user.username}}</h2>
@@ -46,15 +46,14 @@
                 </span>
                 Bookmarks
             </a> {% endcomment %}
-             <a href="{% url 'base:profile' user.username %}" class="link">
+             {% comment %} <a href="{% url 'base:profile' user.username %}" class="link">
                 <span class="material-symbols-outlined">
                     workspace_premium
                     </span>
                 Sertificates
-            </a> 
+            </a>  {% endcomment %}
             {% if request.user.is_authenticated %}
-                {% if user.is_superuser %}
-                    {% if request.user.is_superuser %}
+                {% if request.user.is_superuser %}
                     <a href="{% url 'base:profile-courses' user.username %}" class="link">
                         <span class="material-symbols-outlined">
                             school  
@@ -67,7 +66,6 @@
                             </span>
                         Articles
                     </a>
-                    {% endif %}
                 {% endif %}
             {% endif %}
             <!-- <a href="" class="link">Certificates</a> -->
@@ -125,47 +123,47 @@
                                 </span>
                             </a>
                         </div>
-                        <div class="cources page__article__articles">
-                            {% for article in articles %}
-                                <article>
-                                    <div class="article__head ">
-                                        <div class="">{{article.title}}</div>
-                                        <a href="{% url 'article:show_article' article.slug %}" class="material-symbols-outlined icon link">
-                                            arrow_forward
-                                        </a>
-                                    </div>
-                                    <div class="article__body">
-                                        {{article.text | truncatewords:30 }}
-                                    </div>
-                                    {% if request.user.is_authenticated %}
-                                        {% if request.user.is_superuser %}
-                                            {% if request.user.username == article.user.username %}
-                                                <div class="article__head article__buttons">
-                                                    <a href="{% url 'article:update_article' article.slug %}" class="btn btn-icon">
-                                                        <span class="material-symbols-outlined">
-                                                            edit_square
-                                                        </span>
-                                                    </a>
-                                                    <a href="{% url 'article:delete_article' article.slug %}" class="btn btn-delete">
-                                                        <span class="material-symbols-outlined">
-                                                        delete_forever
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endif %}
-                                </article>
-                            {% endfor %}
-                        </div>
                         {% endif %}
                     {% endif %}
-                {% endif %}
+                 {% endif %}
+                <div class="courses page__article__articles">
+                    {% for article in articles %}
+                        <article>
+                            <div class="article__head ">
+                                <div class="">{{article.title}}</div>
+                                <a href="{% url 'article:show_article' article.slug %}" class="material-symbols-outlined icon link">
+                                    arrow_forward
+                                </a>
+                            </div>
+                            <div class="article__body">
+                                {{article.text | truncatewords:30 }}
+                            </div>
+                            {% if request.user.is_authenticated %}
+                                {% if request.user.is_superuser %}
+                                    {% if request.user.username == article.user.username %}
+                                        <div class="article__head article__buttons">
+                                            <a href="{% url 'article:update_article' article.slug %}" class="btn btn-icon">
+                                                <span class="material-symbols-outlined">
+                                                    edit_square
+                                                </span>
+                                            </a>
+                                            <a href="{% url 'article:delete_article' article.slug %}" class="btn btn-delete">
+                                                <span class="material-symbols-outlined">
+                                                delete_forever
+                                                </span>
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        </article>
+                    {% endfor %}
+                </div>
             {% endif %}
 
             {% if page == 'likes' %}
             {% comment %} TODO:  GET LIKES {% endcomment %}
-            <div class="cources page__article__articles">
+            <div class="courses page__article__articles">
                {% if like_articles %}
                {% for article in like_articles %}
                <article>
@@ -225,6 +223,56 @@
             </div>
             {% endif %}
 
+            {% if page == 'courses' %}
+                {% if request.user.is_superuser %}
+                <div class="page__panel">
+                    <a href="{% url 'courses:create-course' %}" class="btn btn-delete">
+                        {% comment %} <span>Add New Post</span> {% endcomment %}
+                        <span class="material-symbols-outlined ">
+                            drive_file_rename_outline
+                        </span>
+                    </a>
+                </div>
+                {% endif %}
+                <div class="courses">
+                    {% for course in courses  %}
+                        <div class="course">
+                            <div class="course__image">
+                                <img src="http://127.0.0.1:8000/static/media/{{course.image}}" alt="" class="course__img">
+                                <div class="course__mask"></div>
+                            </div>
+                            <div class="course__info">
+                                <div class="course__info__desc">
+                                    <a href="{% url 'courses:course' course.slug %}" class = 'course__title '>{{course.title}}</a>
+                                    <p>{{course.description|truncatewords:30}}</p>
+                                </div>
+                                {% if request.user.is_authenticated %}
+                                    {% if request.user.is_superuser %}
+                                        {% if request.user.username == course.user.username %}
+                                            <div class="course__info__tables ">
+                                                <a href="" class="btn btn-icon">
+                                                    <span class="material-symbols-outlined">
+                                                        edit_square
+                                                    </span>
+                                                </a>
+                                                <a href="" class="btn btn-delete">
+                                                    <span class="material-symbols-outlined">
+                                                    delete_forever
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                                <div class="course__info__tables">
+                                    <a href="/">{{course.user}}</a>
+                                    <a href="/">#{{course.tags}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
