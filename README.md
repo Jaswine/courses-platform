@@ -1,6 +1,7 @@
 # Code-courses-Platform
 
 <h3>Database Structure: </h3><a href='https://www.figma.com/community/file/1188090535052678707'>https://www.figma.com/community/file/1188090535052678707</a>
+<h3>Page Structure: </h3><a href='https://www.figma.com/community/file/1196802917596051191'>https://www.figma.com/community/file/1196802917596051191</a>
 
 <hr>
 <h3>galery</h3>
