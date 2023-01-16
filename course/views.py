@@ -43,7 +43,7 @@ def createCourse(request):
             validated = False
             messages.error(request, 'Tag must be selected')
             
-        if len(title) < 4: #! Title 
+        if len(title) < 10: #! Title 
             validated = False
             messages.error(request, 'Title must be at least 4 characters')
                     
@@ -77,3 +77,102 @@ def createCourse(request):
             
     context = {'tags': tags}
     return render(request, 'course/create/CreateCourse.html', context)
+
+def updateInfoPanel(request, slug):
+    page = 'UpdateInfoPanel'
+    course = Course.objects.get(slug=slug)
+    courses = Course.objects.all()
+    tags = Tag.objects.all()
+    
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        
+        courseImage = course.image 
+        #if u don't choice image, we get last image or None
+        
+        if courseImage == '' or courseImage == ' ':
+            courseImage = None
+            
+        image = request.FILES.get('image', courseImage)
+        tagId = request.POST.get('tag')
+        about = request.POST.get('about')
+        WhatAreUWillLearn = request.POST.get('WhatAreUWillLearn')
+        level = request.POST.get('level')
+        initialRequirements = request.POST['InitialRequirements']
+        public = request.POST.get('public')
+        
+        if public == 'on':
+            public = True
+        else: 
+            public = False
+            
+        tag = Tag.objects.get(id = tagId) # GET TAG FOR UPDATE
+        
+        validated = True
+            
+        if len(about) < 10: #! VALIDATION
+            validated = False
+            messages.error(request, 'About must be at least 10 characters')
+            
+        if (tag == None ): #! Tag Doesn't Selected
+            validated = False
+            messages.error(request, 'Tag must be selected')
+            
+        if len(title) < 4: #! Title 
+            validated = False
+            messages.error(request, 'Title must be at least 4 characters')
+            
+        if len(WhatAreUWillLearn) < 10: 
+            validated = False
+            messages.error(request, 'WhatAreUWillLearn must be at least 10 characters')
+            
+                       
+        if validated == True:
+            if course.title != title:
+                course.title = title
+            if course.image != image:
+                course.image = image
+            if course.about != about:
+                course.about = about
+            if course.tags.id != tag.id:
+                course.tags = tag
+            if course.whatAreUWillLearn != WhatAreUWillLearn:
+                course.whatAreUWillLearn = WhatAreUWillLearn
+            if course.level != level:
+                course.level = level
+            if course.initialRequirements != initialRequirements:
+                course.initialRequirements = initialRequirements
+            if course.public != public:
+                course.public = public
+            
+            course.save()
+            return redirect('courses:course', course.slug)
+    
+    context = {
+        'page': page, 
+        'course': course, 
+        'tags': tags
+    }
+    return render(request, 'course/panel/coursePanel.html',context)  
+
+def TasksPanel(request, slug):
+    page = 'TasksPanel'
+    course = Course.objects.get(slug=slug)
+    CourseTitles = CourseTitle.objects.all()
+    
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        
+        if len(title) > 3:
+            form = CourseTitle.objects.create(
+                title=title,
+                course=course,
+                public = True,
+                place = CourseTitles.count() + 1,
+            )
+            form.save()
+            
+            return redirect('/courses/'+str(course.slug)+'/tasks-panel')
+    
+    context = {'page': page, 'course': course, 'CourseTitles': CourseTitles} 
+    return render(request, 'course/panel/coursePanel.html', context)

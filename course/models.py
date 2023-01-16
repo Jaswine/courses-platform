@@ -20,7 +20,7 @@ class Course(models.Model):
     title = models.CharField(max_length=100)
     slug = models.CharField(max_length=100, unique=True, default='')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='courses', blank=True, null=True)
+    image = models.ImageField(upload_to='courses', blank=True, null=True, default=None)
     tags = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True)
 
     #TODO: About this course
@@ -29,7 +29,7 @@ class Course(models.Model):
     level = models.CharField(max_length=13, choices=LEVEL, null=True)
     initialRequirements = models.TextField(max_length=500, blank=True)
     # certificate = models.FileField(upload_to='courses/certificates', blank=True, null=True)
-    
+      
     #TODO: Public or Unpublic
     public = models.BooleanField(default=False)
     
@@ -55,6 +55,7 @@ class Course(models.Model):
 class CourseTitle(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
+    place = models.IntegerField(default=0, blank=True)
     
     public = models.BooleanField(default=False)
     
@@ -81,35 +82,40 @@ class CourseTask(models.Model):
     codeAnswer = models.TextField(blank=True, null=True)
     text = models.TextField(blank=True, null=True)
     
+    place = models.IntegerField(default=0, blank=True) #! FOR SORTING
+    
     public = models.BooleanField(default=False)
     
     @classmethod
-    def video_task(cls, title, description, video, public):
+    def video_task(cls, title, description, video, public, place):
         return CourseTask.objects.create(
             task = "video",
             title = title,
             description = description,
             video = video,
             public = public,
+            place = place
         )
     
     @classmethod
-    def code_task(cls, title, description, codeAnswer, public):
+    def code_task(cls, title, description, codeAnswer, public, place):
         return CourseTask.objects.create(
             task = 'code', 
             title = title,
             description = description,
             codeAnswer = codeAnswer,
             public = public,
+            place = place
         )
         
     @classmethod
-    def article_task(cls, title, description, public):
+    def article_task(cls, title, description, public, place):
         return CourseTask.objects.create(
             task = 'text',
             title = title,
             description = description,
             public = public,    
+            place = place
         )
     
     created = models.DateTimeField(auto_now_add=True)

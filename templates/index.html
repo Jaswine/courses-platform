@@ -830,7 +830,9 @@
             align-items: flex-start;
             flex-direction: column;
             padding: 0 1% 1%;
-            width: 24%;
+            width: 30%;
+            margin-right: 2%;
+            border-right: 1px solid var(--primary);
         }
         .profile__body__left .link {
             font-size: 1.6rem;
@@ -917,6 +919,65 @@
             width: 60vw;
             height: 100%
         }
+
+        /* COURSE PANEL */
+        .course__panel__header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-direction: column;
+            width: 100%;
+            margin-bottom: 5%;
+        }
+        .course__panel__header__public {
+            background-color: var(--lightGreen);
+            padding: 4px 8px;
+            color: var(--white);
+            border: 1px solid var(--black);
+            font-size: 15px;
+        }
+        .course__panel__header__public__icon {
+            color: var(--white) !important;
+            font-size: 16px;
+        }
+        .course__panel__header h2 {
+            font-size: 28px;
+        }
+        .update_course {
+            border: none;
+        }
+        .update__course__header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .update__course__header h2 {
+            text-align: left;
+        }
+        .create__task {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .create__task input {
+            width: 100%;
+        }
+
+        /* tasks */
+        .tasks {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+        }
+        .task {
+            
+            width: 100%;
+            
+        }
+
     </style>
 </body>
 </html>

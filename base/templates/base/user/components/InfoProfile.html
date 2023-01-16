@@ -1,0 +1,28 @@
+{% load static %}
+{% comment %} ? IF WE CLICK ON ABOUT BUTTON {% endcomment %}
+<p><b>About:</b> {{profile.bio}}</p>
+<p><b>Joined</b> {{profile.created}}</p>
+<div class="profile__body__right__icons">
+    {% if profile.twitter %}
+        <a href="https://twitter.com/{{profile.twitter}}" target="_blank">
+            <img src="{% static 'images/twitter.png' %}" alt="twitter"/>
+        </a>
+    {% endif %}
+    {% if profile.github %}
+    <a href="https://github.com/{{profile.github}}"  target="_blank">
+        <img src="{% static 'images/github.png' %}"  alt="twitter"/>
+    </a>
+    {% endif %}
+    {% if profile.telegram %}
+    <a href="https://t.me/{{profile.telegram}}" target="_blank">
+        <img src="{% static 'images/telegram.png' %}" alt="twitter"/>
+    </a>
+    {% endif %}
+    {% if profile.website %}
+        <a href="{{profile.website}}" target="_blank">
+            <span class="material-symbols-outlined icon icon-profile">
+                language
+            </span>
+        </a>
+    {% endif %}
+</div>
