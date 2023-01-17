@@ -1,6 +1,7 @@
 # Code-courses-Platform
 
 <h3>Database Structure: </h3><a href='https://www.figma.com/community/file/1188090535052678707'>https://www.figma.com/community/file/1188090535052678707</a>
+<h3>Page Structure: </h3><a href='https://www.figma.com/community/file/1196802917596051191'>https://www.figma.com/community/file/1196802917596051191</a>
 
 <hr>
 <h3>galery</h3>
@@ -18,9 +19,10 @@
 
 ![image](https://user-images.githubusercontent.com/82625479/209559638-2a62a108-792b-4c05-ab77-d0739a281fd9.png)
 
-![image](https://user-images.githubusercontent.com/82625479/210534041-3ec609f4-75bb-4299-a72a-b5a5e7cbf822.png)
-
 ![image](https://user-images.githubusercontent.com/82625479/210534097-eac8f194-0b18-409b-a7de-ce689c83fc1d.png)
 
 ![image](https://user-images.githubusercontent.com/82625479/210534269-2b2e75a9-7149-4243-8b56-b13ac4f78723.png)
 
+![image](https://user-images.githubusercontent.com/82625479/212683727-2654380a-ec57-4cbf-acb4-58ef0c4febf6.png)
+
+![image](https://user-images.githubusercontent.com/82625479/212683879-ad3b76be-638a-4157-85d4-68cdc42e0646.png)
