@@ -1,0 +1,63 @@
+<div class="page__article__form update_course">
+    <div class="update__course__header">
+        <h2>Add New Task</h2>
+        <a href="" class=""></a>
+    </div>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input 
+            type="text"
+            name="title"
+            placeholder="title..."
+            id="titleTask"
+        >
+        <textarea 
+            name="description"
+            placeholder="description..."
+        ></textarea>
+        <select name="course_title" id="">
+            <option value="" selected disabled>Select Course Title</option>
+            {% for CourseTitle in CourseTitles  %}
+              <option value="{{CourseTitle.id}}">{{CourseTitle.title}}</option>
+            {% endfor %}
+        </select>
+
+        <select name="tag" id="typeTask">
+            <option value="" selected disabled>Choice Type Ur Task</option>
+           <option value="text">text</option>
+           <option value="video">video</option>
+        </select>
+
+        <div id="other__fields">
+            <textarea name="body" id="bodyTask" class="display_none" placeholder="Add ur text lesson"></textarea>
+            <input type="file" name="video" id="videoTask" class="display_none">
+        </div>
+
+        <button class="btn" type="submit" id="Submit" >Save</button>
+    </form>
+</div>
+
+<script>
+    console.log('Js: I Work')
+    let select  = document.getElementById('typeTask');
+    let typeTask;
+
+    //TASKS
+    let bodyTask = document.getElementById('bodyTask');
+    let videoTask = document.getElementById('videoTask');
+
+    select.addEventListener('change', () => {
+        console.log(select.value);
+        typeTask = select.value;
+
+        if (typeTask == 'text') {
+            bodyTask.style.display = 'block';
+            videoTask.style.display = 'none';
+            
+        } else if (typeTask == 'video') {
+            videoTask.style.display = 'block';
+            bodyTask.style.display = 'none';
+        }
+    });
+  
+</script>

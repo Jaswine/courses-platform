@@ -21,7 +21,7 @@ def createCourse(request):
     courses = Course.objects.all()
     
     if request.method == 'POST':
-        title = request.POST.get('title')
+        title = request.POST['title']
         slug = "-".join(title.lower().split(' '))
         user = request.user
         image = request.FILES.get('image', None)
@@ -30,9 +30,7 @@ def createCourse(request):
         whatAreUWillLearn = request.POST.get('WhatAreUWillLearn')
         level = request.POST.get('level')
         initialRequirements = request.POST.get('InitialRequirements')
-                
-        print(title)
-            
+        
         validated = True
             
         if len(about) < 4: #! VALIDATION
@@ -70,10 +68,10 @@ def createCourse(request):
             print("Post Has Been Created")
         
             form.save()
-            return redirect('profile/'+str(request.user.username)+'courses')
+            return redirect('profile/'+str(request.user.username)+'/courses')
         else:
             messages.error(request, 'This article already exists')
-            print("Post doesn't created")            
+            print("Post doesn't create")            
             
     context = {'tags': tags}
     return render(request, 'course/create/CreateCourse.html', context)
@@ -158,7 +156,9 @@ def updateInfoPanel(request, slug):
 def TasksPanel(request, slug):
     page = 'TasksPanel'
     course = Course.objects.get(slug=slug)
-    CourseTitles = CourseTitle.objects.all()
+    CourseTitles = CourseTitle.objects.filter(course=course)
+    
+    
     
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -173,6 +173,59 @@ def TasksPanel(request, slug):
             form.save()
             
             return redirect('/courses/'+str(course.slug)+'/tasks-panel')
+    
+    context = {'page': page, 'course': course, 'CourseTitles': CourseTitles} 
+    return render(request, 'course/panel/coursePanel.html', context)
+
+def createTask(request, slug):
+    page = 'create_task'
+    course = Course.objects.get(slug=slug)
+    CourseTitles = CourseTitle.objects.filter(course =course)
+    
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        course_title = request.POST.get('course_title')
+        tag = request.POST.get('tag')
+        public = True
+        
+        
+        validated = True
+        
+        if len(title) < 4:
+            validated = False
+            messages.error(request, 'Title must be at least 4 characters')
+            
+        if course_title == None or course_title == '':
+            validated = False
+            messages.error(request, 'Course Title is None')
+            
+        if course == None or course == '':
+            validated = False
+            messages.error(request, 'Course is None')
+
+        if tag == None or tag == '':
+            validated = False
+            messages.error(request, 'Tag is None')
+        
+        if tag == 'text':
+            body = request.POST.get('body')
+            
+            if validated:
+                if request.method == 'POST':
+                    form = CourseTask.objects.create(
+                        course = course,
+                        courseTitle = CourseTitle.objects.get(id=course_title),
+                        title = title,
+                        description = description,
+                        body = body,
+                        public = public
+                    )
+                    form.save()
+                    return redirect('courses:tasks-panel', course.slug)
+                
+        elif tag == 'video':
+            video = request.POST.get('video')
     
     context = {'page': page, 'course': course, 'CourseTitles': CourseTitles} 
     return render(request, 'course/panel/coursePanel.html', context)

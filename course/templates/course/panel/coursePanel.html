@@ -66,12 +66,15 @@
         </div>
 
         <div class="profile__body__right">
+
             {% if page == 'TasksPanel' %}
                 {% include "course/panel/components/TasksPanel.html" %}
-            {% endif %}
-            {% if page == 'UpdateInfoPanel' %}
+            {% elif page == 'UpdateInfoPanel' %}
                 {% include "course/panel/components/UpdateInfoPanel.html" %}
+            {% elif page == 'create_task' %}
+                {% include "course/panel/components/CreateTask.html" %}
             {% endif %}
+
         </div>
     </div>
 </div>

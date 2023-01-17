@@ -675,6 +675,7 @@
             min-height: 300px;
             height: 100%;
             max-height: 600px; 
+            margin-bottom: .2rem;
         }
         /* select */
         select {
@@ -971,13 +972,45 @@
             align-items: center;
             flex-direction: column;
             width: 100%;
+            margin: 3% 0;
         }
         .task {
-            
             width: 100%;
-            
+            margin: .4rem 0 .8rem;
         }
-
+        .task__title {
+            border: 1px solid var(--primary);
+            width: 100%;
+            padding: .4rem;
+        }
+        .task__title span {
+            font-size: 26px;
+            font-weight: 200;
+        }
+        .in__task {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            flex-direction: column;
+        }
+        .task__exercises {
+            max-width: 90%;
+            padding: .8rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .btn-big{
+            max-width: 200px;
+            width: 200px;
+        }
+        .display_none {
+            display: none;
+        }
+        #other__fields {
+            width: 100%;
+        }
     </style>
 </body>
 </html>

@@ -9,7 +9,6 @@
             type="text"
             name="title"
             placeholder="ur title..."
-            id="title"
             class="course_field"
             value="{{course.title}}"
         >
@@ -31,7 +30,6 @@
         <textarea 
             name="about" 
             placeholder="U need to talk about ur course" 
-            id="about"
             class="course_field"
         >{{course.about}}</textarea>
         <label for="">What Are other people will learn on this course?</label>
@@ -39,7 +37,6 @@
             name="WhatAreUWillLearn" 
             class="course_field"
             placeholder="What Are other people will learn on this course? "
-            id = "WhatAreUWillLearn"
         >{{course.whatAreUWillLearn}}</textarea>
         <label for="">Task Level</label>
         <select name="level">
@@ -53,7 +50,6 @@
             name="InitialRequirements" 
             placeholder="Initial Requirements" 
             class="course_field"
-            id = 'InitialRequirements'
             value="{{ course.initialRequirements }}"
         />
         <div class="page__article__form__box">

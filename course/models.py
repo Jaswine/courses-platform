@@ -51,17 +51,6 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
-#!  ____________TITLE FOR CHAPTER COURSE_____________
-class CourseTitle(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    place = models.IntegerField(default=0, blank=True)
-    
-    public = models.BooleanField(default=False)
-    
-    def __str__(self):
-        return self.title
-
 #! Course Task
 class CourseTask(models.Model):
     
@@ -71,51 +60,47 @@ class CourseTask(models.Model):
         ('test', 'test'),
         ('text','text')
     )
-    
-    courseTitle = models.ForeignKey(CourseTitle, on_delete=models.CASCADE)
-    task = models.CharField(max_length=10, choices=TASKSTYPE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, default=None)
+    # courseTitle = models.ForeignKey(CourseTitle, on_delete=models.CASCADE)
+    task = models.CharField(max_length=10, choices=TASKSTYPE, blank=True)
     title = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, max_length=500)
         
     video = models.FileField(upload_to='videos', blank=True, null=True)
     body = models.TextField(blank=True, null=True)
     codeAnswer = models.TextField(blank=True, null=True)
     text = models.TextField(blank=True, null=True)
     
-    place = models.IntegerField(default=0, blank=True) #! FOR SORTING
-    
     public = models.BooleanField(default=False)
     
     @classmethod
-    def video_task(cls, title, description, video, public, place):
+    def video_task(cls, title, description, video, public):
         return CourseTask.objects.create(
             task = "video",
             title = title,
             description = description,
             video = video,
             public = public,
-            place = place
         )
     
     @classmethod
-    def code_task(cls, title, description, codeAnswer, public, place):
+    def code_task(cls, title, description, codeAnswer, public):
         return CourseTask.objects.create(
             task = 'code', 
             title = title,
             description = description,
             codeAnswer = codeAnswer,
             public = public,
-            place = place
         )
         
     @classmethod
-    def article_task(cls, title, description, public, place):
+    def article_task(cls, title, description, body, public):
         return CourseTask.objects.create(
             task = 'text',
             title = title,
             description = description,
+            body = body,
             public = public,    
-            place = place
         )
     
     created = models.DateTimeField(auto_now_add=True)
@@ -123,6 +108,18 @@ class CourseTask(models.Model):
     
     class Meta:
         ordering = ['-updated', '-created']
+    
+    def __str__(self):
+        return self.title
+    
+#!  ____________TITLE FOR CHAPTER COURSE_____________
+class CourseTitle(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    place = models.IntegerField(default=0, blank=True)
+    tasks = models.ManyToManyField(CourseTask)
+    
+    public = models.BooleanField(default=False)
     
     def __str__(self):
         return self.title

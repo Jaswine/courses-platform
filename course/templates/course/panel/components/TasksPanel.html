@@ -1,6 +1,6 @@
 <div class="page__article__form update_course">
     <div class="update__course__header">
-        <h2>Course Content </h2>
+        <h2>Create New Title </h2>
         <a href="{% url 'courses:course' course.slug %}" class="btn">Preview</a>
     </div>
     <form 
@@ -16,11 +16,28 @@
             >
             <button type="submit" class="btn">Create</button>
     </form>
+    <div class="update__course__header">
+        <h2>Create New Task 
+            <span class="material-symbols-outlined">
+            arrow_forward_ios
+            </span>
+        </h2>
+        <a href="{% url  'courses:create-task' course.slug %}" class="btn btn-delete btn-big">Add New Task</a>
+    </div>
+
     <div class="tasks">
         {% for CourseTitle in CourseTitles  %}
-          <div class="task tag">
-            <h2>{{CourseTitle.title}}</h2>
-            <div></div>
+          <div class="task">
+            <div class="task__title">
+                <span>{{ CourseTitle.title }}</span>
+            </div>
+            <div class="in__task">
+                {% for task in  CourseTitle.CourseTask %}
+                <div class="task__title task__exercises">
+                    <h3>{{ task.title }}</h3>
+                </div>
+                {% endfor %}
+            </div>
           </div>
         {% endfor %}
     </div>
