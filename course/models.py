@@ -61,6 +61,7 @@ class CourseTask(models.Model):
         ('text','text')
     )
     course = models.ForeignKey(Course, on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     # courseTitle = models.ForeignKey(CourseTitle, on_delete=models.CASCADE)
     task = models.CharField(max_length=10, choices=TASKSTYPE, blank=True)
     title = models.CharField(max_length=100)
@@ -116,8 +117,10 @@ class CourseTask(models.Model):
 class CourseTitle(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     place = models.IntegerField(default=0, blank=True)
-    tasks = models.ManyToManyField(CourseTask)
+    
+    tasks = models.ManyToManyField(CourseTask, blank=True, default=[])
     
     public = models.BooleanField(default=False)
     

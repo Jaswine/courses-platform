@@ -97,7 +97,7 @@ def showArticle(request, slug):
                 article.likesForArticle.add(request.user)
                 article.save()
                     
-            return redirect('http://127.0.0.1:8000/articles/'+ slug+'/#like')
+            return redirect('/articles/'+ slug+'/#like')
             
     context =  {'article': article, 'articles': latest_articles[:4], 'tag_articles': public_articles[:4], 'likes': likes_count}
     return render(request, 'article/showArticle.html', context)

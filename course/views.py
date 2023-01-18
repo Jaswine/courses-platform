@@ -11,9 +11,19 @@ def catalog(request):
 def course(request, slug):
     course = Course.objects.get(slug=slug)
     titles = CourseTitle.objects.filter(course=course.id)
-    # tasks = 
     
-    context = {'course': course, 'titles': titles}
+    courseTitlesCount = titles.count()
+    courseTasksCount = CourseTask.objects.filter(course = course).count()
+    courseCommentsCount = 0
+    
+    context = {
+        'course': course, 
+        'titles': titles,
+        
+        'courseTitlesCount': courseTitlesCount,
+        'courseTasksCount': courseTasksCount,
+        'courseCommentsCount': courseCommentsCount,
+    }
     return render(request, 'course/CourseInfo.html', context)
 
 def createCourse(request):
@@ -158,8 +168,6 @@ def TasksPanel(request, slug):
     course = Course.objects.get(slug=slug)
     CourseTitles = CourseTitle.objects.filter(course=course)
     
-    
-    
     if request.method == 'POST':
         title = request.POST.get('title')
         
@@ -169,6 +177,8 @@ def TasksPanel(request, slug):
                 course=course,
                 public = True,
                 place = CourseTitles.count() + 1,
+                # tasks = []
+                user = request.user
             )
             form.save()
             
@@ -188,7 +198,6 @@ def createTask(request, slug):
         course_title = request.POST.get('course_title')
         tag = request.POST.get('tag')
         public = True
-        
         
         validated = True
         
@@ -210,22 +219,46 @@ def createTask(request, slug):
         
         if tag == 'text':
             body = request.POST.get('body')
+            oneCourseTitle = CourseTitle.objects.get(id=course_title)
             
             if validated:
                 if request.method == 'POST':
                     form = CourseTask.objects.create(
+                        user = request.user,    
                         course = course,
-                        courseTitle = CourseTitle.objects.get(id=course_title),
                         title = title,
                         description = description,
                         body = body,
                         public = public
                     )
                     form.save()
+                    
+                    oneCourseTitle.tasks.add(form)
+                    oneCourseTitle.save()
+                    
                     return redirect('courses:tasks-panel', course.slug)
                 
         elif tag == 'video':
             video = request.POST.get('video')
     
     context = {'page': page, 'course': course, 'CourseTitles': CourseTitles} 
+    return render(request, 'course/panel/coursePanel.html', context)
+
+
+def updateTitle(request, slug, course_title_id):
+    page = 'updateTitle'
+    course = Course.objects.get(slug=slug)
+    courseTitle = CourseTitle.objects.get(id=course_title_id)
+    tasks = CourseTask.objects.filter(course=course)
+    
+    if request.method == 'POST':
+        title = request.POST.get('title')
+                
+        if len(title) > 3:
+            courseTitle.title = title
+            # form.save()
+            
+            # return redirect('/courses/'+str(course.slug)+'/tasks-panel')
+    
+    context = {'page': page, 'course': course, 'courseTitle': courseTitle, 'tasks': tasks} 
     return render(request, 'course/panel/coursePanel.html', context)

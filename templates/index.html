@@ -538,18 +538,26 @@
         .page__intro__right img {
             width: 100%;
             height: 100%;
+            height: 180px;
+            width: 180px;
             object-fit: cover;
             position: relative;
+            border: 1px solid var(--primary);
         }
         .page__intro__mask {
-            max-width: 100%;
             border: 1px solid var(--primary);
             width: 100%;
             height: 100%;
+            width: 180px;
+            max-width: 100%;
+            height: 180px;
             display: block;
             content: '';
             position: absolute;
-            background-color: #e2d1b93d;
+            background-color: #000;
+            margin-top: 20px;
+            margin-right: 20px;
+            z-index: -1;
         }
         .page__intro__tags {
             display: flex;
@@ -569,16 +577,15 @@
             align-items: center;
             flex-direction: column;
             width: 100%;
-            margin: 5% 0 ;
         }
         .title {
             display: flex;
             justify-content: start;
             align-items: center;
             width: 100%;
-            border: 1px solid var(--primary);
             padding: 0%, 2%;
             margin: .5%;
+            flex-direction: column;
         }
         .title__desc {
             padding: .5% 3%;
@@ -586,8 +593,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 1px solid var(--primary);
         }
-        .title:hover {
+        .title__desc:hover {
+            background-color: var(--white);
+        }
+        .title__task:hover {
             background-color: var(--white);
         }
         .title__open {
@@ -602,6 +613,21 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            border: 1px solid var(--primary)
+        }
+        .title__tasks {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-end;
+            flex-direction: column;
+        }
+        .title__task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            padding: 1% 3%;
             border: 1px solid var(--primary)
         }
         .title__open:hover {
@@ -831,7 +857,7 @@
             align-items: flex-start;
             flex-direction: column;
             padding: 0 1% 1%;
-            width: 30%;
+            width: 25%;
             margin-right: 2%;
             border-right: 1px solid var(--primary);
         }
@@ -981,7 +1007,10 @@
         .task__title {
             border: 1px solid var(--primary);
             width: 100%;
-            padding: .4rem;
+            padding: .6rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .task__title span {
             font-size: 26px;
@@ -998,7 +1027,7 @@
             max-width: 90%;
             padding: .8rem;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
         }
         .btn-big{
@@ -1010,6 +1039,40 @@
         }
         #other__fields {
             width: 100%;
+        }
+        /*select__multiple*/
+        .select__multiple {
+            height: 200px;
+        }
+        .page__about {
+            display: grid;
+            width: 100%;
+            grid-template-columns: 2.5fr 1fr;
+            margin: 2% 0;
+        }
+        .page__about__right {
+            padding: 0 .6rem;
+        }
+        .page__about__right  p {
+            margin: 2% 0;
+            font-size: 20px;
+        }
+        .page__about__left {
+            padding: 0 .6rem;
+        }
+        .course__info__share {
+            border: 1px solid var(--primary);
+            padding: .8rem ;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+        .course__info__share span {
+            width: 100%;
+            border-bottom: 1px solid var(--primary);
+            min-width: 100%;
+        }
+        .course__info__share__icons {
+            margin: 1rem 0;
         }
     </style>
 </body>

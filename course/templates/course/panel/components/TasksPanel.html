@@ -30,11 +30,16 @@
           <div class="task">
             <div class="task__title">
                 <span>{{ CourseTitle.title }}</span>
+                <a href="{% url 'courses:course-titles-update' course.slug CourseTitle.id %}" class="material-symbols-outlined btn btn-icon">
+                    <span class="material-symbols-outlined icon">
+                        edit_square
+                    </span>
+                </a>
             </div>
-            <div class="in__task">
-                {% for task in  CourseTitle.CourseTask %}
+            <div class="in__task"   >
+                {% for task in  CourseTitle.tasks.all %}
                 <div class="task__title task__exercises">
-                    <h3>{{ task.title }}</h3>
+                    <span>{{ task.title }}</span>
                 </div>
                 {% endfor %}
             </div>

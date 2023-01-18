@@ -13,4 +13,5 @@ urlpatterns = [
     path('courses/<str:slug>/tasks-panel', views.TasksPanel, name='tasks-panel'),
     path('courses/<str:slug>/update-info-panel', views.updateInfoPanel, name='update-info-panel'),
     path('courses/<str:slug>/update-info-panel/create-task', views.createTask, name='create-task'),
+    path('courses/<str:slug>/update-info-panel/course-titles/<str:course_title_id>/update', views.updateTitle, name='course-titles-update'),
 ]
