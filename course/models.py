@@ -33,12 +33,6 @@ class Course(models.Model):
     #TODO: Public or Unpublic
     public = models.BooleanField(default=False)
     
-    #TODO: Statistics
-    lessonsCount = models.IntegerField(default=0)
-    themesCount = models.IntegerField(default=0)
-    commentsCount = models.IntegerField(default=0)
-    viewCount = models.IntegerField(default=0)
-    
     #TODO: Like & Bookmarks
     likes = models.ManyToManyField(User, blank=True, related_name='likes' )
     bookmarks = models.ManyToManyField(User, blank=True, related_name='bookmarks')
@@ -67,7 +61,7 @@ class CourseTask(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, max_length=500)
         
-    video = models.FileField(upload_to='videos', blank=True, null=True)
+    video = models.FileField(upload_to='courses/tasks/videos', blank=True, null=True)
     body = models.TextField(blank=True, null=True)
     codeAnswer = models.TextField(blank=True, null=True)
     text = models.TextField(blank=True, null=True)

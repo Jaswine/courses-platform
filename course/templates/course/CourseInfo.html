@@ -1,4 +1,6 @@
 {% include 'index.html' %}
+{% load static %}
+{% load social_share %}
 
 {% block title %}
 <title>{{course.title}}</title>
@@ -68,7 +70,7 @@
                                         movie
                                         </span>
                                     {% endif %}
-                                    <a href="" class="link">{{task.title}}</a>
+                                    <a href="{%  url 'courses:task' course.slug task.id %}" class="link">{{task.title}}</a>
                                 </div>
                             {% endfor %}
                         </div>
@@ -85,7 +87,14 @@
                     Share In Social Media
                 </span>
                 <div class="course__info__share__icons">
-
+                    <div class="form__links">
+                        <!--TODO Share on twitter, reddit, telegram and other social media -->
+                        {% post_to_facebook object_or_url '<img class="icon__img" src="../../../static/images/facebook.png">' %}
+                        <a href="https://www.instagram.com/"> <img class="icon__img" src="{% static 'images/instagram.png' %}" alt=""></a>
+                        {% post_to_twitter "Cool Course : '{{course.title}}' on CODELEARN." object_or_url '<img class="icon__img" src="../../../static/images/twitter.png" >'  %}
+                        {% post_to_reddit  "Cool Course: '{{course.title}}' on CODELEARN." object_or_url '<img class="icon__img" src="../../../static/images/reddit.png">' %}
+                        <a href="https://www.pinterest.com/"> <img class="icon__img" src="{% static 'images/pinterest.png' %}" alt=""></a>
+                    </div>
                 </div>
             </div>
             <div class="course__info__share">

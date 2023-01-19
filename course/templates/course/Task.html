@@ -1,0 +1,28 @@
+{% include "index.html" %}
+{% load static %}
+
+{% block title %}
+<title>{{task.title}}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page course__task__page">
+    <div class="page__course__menu">
+        {% for exercise in tasks %}
+          <div class="menu__component">
+            <a href="/courses/{{course.slug}}/tasks/{{exercise.id}}" class="link menu__component__title">{{exercise.title}}</a>
+            <p class="menu__component__text">{{exercise.description | truncatewords:15}}</p>
+          </div>
+        {% endfor %}
+    </div>
+    <div class="page__content">
+        {% if task.task == 'video'  %}
+          <video src="{% static 'media' %}/{{task.video}}" controls autoplay></video>
+        {% endif %}
+
+        {% if task.task == 'text' %}
+          <div>{{task.body}}</div>
+        {% endif %}
+    </div>
+</div> 
+{% endblock content %}

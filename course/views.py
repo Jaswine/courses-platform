@@ -26,6 +26,18 @@ def course(request, slug):
     }
     return render(request, 'course/CourseInfo.html', context)
 
+def task(request, slug, pk):
+    course = Course.objects.get(slug=slug)
+    tasksAll = CourseTask.objects.filter(course=course).reverse()
+    task = CourseTask.objects.get(id=pk)
+    
+    context = {
+        'course': course,
+        'tasks': tasksAll,
+        'task': task,
+    }
+    return render(request, 'course/Task.html', context)
+
 def createCourse(request):
     tags = Tag.objects.all()
     courses = Course.objects.all()
@@ -227,6 +239,7 @@ def createTask(request, slug):
                         user = request.user,    
                         course = course,
                         title = title,
+                        task = tag,
                         description = description,
                         body = body,
                         public = public
@@ -240,6 +253,25 @@ def createTask(request, slug):
                 
         elif tag == 'video':
             video = request.POST.get('video')
+            oneCourseTitle = CourseTitle.objects.get(id=course_title)
+            
+            if validated:
+                if request.method == 'POST':
+                    form = CourseTask.objects.create(
+                        user = request.user,    
+                        course = course,
+                        title = title,
+                        task = tag,
+                        description = description,
+                        video = video,
+                        public = public
+                    )
+                    form.save()
+                    
+                    oneCourseTitle.tasks.add(form)
+                    oneCourseTitle.save()
+                    
+                    return redirect('courses:tasks-panel', course.slug)
     
     context = {'page': page, 'course': course, 'CourseTitles': CourseTitles} 
     return render(request, 'course/panel/coursePanel.html', context)

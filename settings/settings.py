@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     
     #INSTALLED APPS
     'ckeditor',
-    # 'ckeditor_uploader',
+    'django_social_share'
 ]
 
 MIDDLEWARE = [
