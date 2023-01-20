@@ -276,7 +276,6 @@ def createTask(request, slug):
     context = {'page': page, 'course': course, 'CourseTitles': CourseTitles} 
     return render(request, 'course/panel/coursePanel.html', context)
 
-
 def updateTitle(request, slug, course_title_id):
     page = 'updateTitle'
     course = Course.objects.get(slug=slug)
@@ -293,4 +292,25 @@ def updateTitle(request, slug, course_title_id):
             # return redirect('/courses/'+str(course.slug)+'/tasks-panel')
     
     context = {'page': page, 'course': course, 'courseTitle': courseTitle, 'tasks': tasks} 
+    return render(request, 'course/panel/coursePanel.html', context)
+
+def updateTask(request, slug, task_id):
+    page = 'updateTask'
+    course = Course.objects.get(slug=slug)
+    task = CourseTask.objects.get(id=task_id)
+    courseTitles = CourseTitle.objects.filter(course=course)
+    TaskCourseTitle = CourseTitle.objects.filter()
+    print(TaskCourseTitle)
+    
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        taskType = request.POST.get('task')
+    
+    context = {
+        'page': page,
+        'task': task, 
+        'course': course, 
+        'CourseTitles': courseTitles,
+        # 'TaskCourseTitle': TaskCourseTitle,
+    }
     return render(request, 'course/panel/coursePanel.html', context)

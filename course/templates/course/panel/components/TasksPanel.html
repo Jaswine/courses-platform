@@ -1,7 +1,7 @@
 <div class="page__article__form update_course">
     <div class="update__course__header">
         <h2>Create New Title </h2>
-        <a href="{% url 'courses:course' course.slug %}" class="btn">Preview</a>
+        <a href="{% url 'courses:course' course.slug %}#CourseTitlesAndTasks" class="btn">Preview</a>
     </div>
     <form 
         action="" 
@@ -40,6 +40,11 @@
                 {% for task in  CourseTitle.tasks.all %}
                 <div class="task__title task__exercises">
                     <span>{{ task.title }}</span>
+                    <a href="{% url 'courses:course-update-task' course.slug task.id %}" class="icon btn btn-icon btn-icon-mini">
+                        <span class="material-symbols-outlined icon">
+                            edit_square
+                        </span>
+                    </a>
                 </div>
                 {% endfor %}
             </div>
