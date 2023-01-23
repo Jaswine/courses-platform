@@ -122,7 +122,6 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
-
 MEDIA_ROOT =  BASE_DIR / 'static/media'
 
 CKEDITOR_UPLOAD_PATH="uploads/"

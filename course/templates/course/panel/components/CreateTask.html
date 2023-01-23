@@ -1,7 +1,11 @@
 {% if page == 'create_task' or page == 'updateTask' %}
 <div class="page__article__form update_course">
     <div class="update__course__header">
-        <h2>Add New Task</h2>
+        {% if page == 'create_task' %}
+            <h2>Add New Task</h2>
+        {% else %}
+            <h2>Update Task</h2>
+        {% endif %}
         <a href="" class=""></a>
     </div>
     <form action="" method="POST" enctype="multipart/form-data">
@@ -14,26 +18,15 @@
             value="{{task.title}}"
         >
         <textarea name="description" >{{task.description}}</textarea>
-        {% if page == 'updateTask' %}
-        <select name="course_title" id="">
-            <option value="{{TaskCourseTitle.id}}" selected >{{TaskCourseTitle.title}}</option>
-            {% for CourseTitle in CourseTitles  %}
-            <option value="{{CourseTitle.id}}">{{CourseTitle.title}}</option>
-            {% endfor %}
-        </select>
-        {% else %}
-        <select name="course_title" id="">
-            <option value="" selected disabled>Select Course Title</option>
-            {% for CourseTitle in CourseTitles  %}
-            <option value="{{CourseTitle.id}}">{{CourseTitle.title}}</option>
-            {% endfor %}
-        </select>
+        {% if page == 'create_task' %}
+            <select name="course_title" id="">
+                <option value="" selected disabled>Select Course Title</option>
+                {% for CourseTitle in CourseTitles  %}
+                <option value="{{CourseTitle.id}}">{{CourseTitle.title}}</option>
+                {% endfor %}
+            </select>
         {% endif %}
-        <!-- <select name="tag" id="typeTask">
-            <option value="" selected disabled>Choice Type Ur Task</option>
-            <option value="text">text</option>
-            <option value="video">video</option>
-        </select> -->
+
         {% if page == 'updateTask' %}
         <select name="tag" id="typeTask">
             <option value="{{task.task}}" selected>{{task.task}}</option>
@@ -58,6 +51,13 @@
             <input type="file" name="video" id="videoTask" class="display_none">
         </div>
 
+        {% if page == 'updateTask' %}
+        <div class="dangerouse__place">
+            <span>Do u wanna delete this post?</span>
+            <a href="{% url 'courses:course-task-delete' course.slug task.id %}"  class="btn btn-delete">Delete </a>
+        </div>
+        {% endif %}
+        
         <button class="btn" type="submit" id="Submit" >Save</button>
     </form>
 </div>
@@ -116,7 +116,32 @@
             {% endfor %}
         </select>
 
+        <!-- <span class="little__text red">This is a dangerous place</span> -->
+        <div class="dangerouse__place">
+            <span>Do u wanna delete this post?</span>
+            <a href="{% url 'courses:course-title-delete' course.slug courseTitle.id %}"  class="btn btn-delete">Delete </a>
+        </div>
+
         <button class="btn" type="submit" id="Submit" >Save</button>
     </form>
+</div>
+{% elif page == 'deleteTitle' or page == 'deleteTask' %}
+<div class="page__article__form">
+    <h3>Do u wanna delete this -  <b>"{{courseTitle.title}}"</b> - title?</h3>
+
+    <form class="delete__buttons" method='POST'>
+        {% csrf_token %}
+        <a href="{% url 'courses:tasks-panel' course.slug %}" class="btn btn-icon"> 
+            <span class="material-symbols-outlined">
+                keyboard_return
+            </span>
+        </a>
+        <button class="btn btn-delete">
+            <span class="material-symbols-outlined">
+                delete_forever
+            </span>
+        </button>
+    </form>
+
 </div>
 {% endif %}

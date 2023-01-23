@@ -30,9 +30,11 @@ def task(request, slug, pk):
     course = Course.objects.get(slug=slug)
     tasksAll = CourseTask.objects.filter(course=course).reverse()
     task = CourseTask.objects.get(id=pk)
+    titles = CourseTitle.objects.filter(course=course.id)
     
     context = {
         'course': course,
+        'titles': titles,
         'tasks': tasksAll,
         'task': task,
     }
@@ -304,7 +306,40 @@ def updateTask(request, slug, task_id):
     
     if request.method == 'POST':
         title = request.POST.get('title')
-        taskType = request.POST.get('task')
+        description = request.POST.get('description')
+        tag = request.POST.get('tag')
+        public = True
+        
+        validated = True
+        
+        if len(title) < 4:
+            validated = False
+            messages.error(request, 'Title must be at least 4 characters')
+            
+        if course == None or course == '':
+            validated = False
+            messages.error(request, 'Course is None')
+
+        if tag == None or tag == '':
+            validated = False
+            messages.error(request, 'Tag is None')
+  
+        if validated:
+            
+            task.title = title
+            task.task = tag
+            task.description = description
+            
+            if tag == 'video':  
+                task.video = request.POST.get('video')    
+                
+            elif tag == 'text':                
+                task.body = request.POST.get('body')
+              
+            task.save()                
+            
+            return redirect('courses:tasks-panel', course.slug)
+    
     
     context = {
         'page': page,
@@ -314,3 +349,38 @@ def updateTask(request, slug, task_id):
         # 'TaskCourseTitle': TaskCourseTitle,
     }
     return render(request, 'course/panel/coursePanel.html', context)
+
+def deleteTitle(request, slug, title_id):
+    page = 'deleteTitle'
+    course = Course.objects.get(slug=slug)
+    courseTitle = CourseTitle.objects.get(id=title_id)
+    
+    if request.method == 'POST':
+        courseTitle.delete()
+        return redirect('courses:tasks-panel', course.slug)
+    
+    context = {
+        'page': page,
+        'course': course,
+        'courseTitle': courseTitle,
+        # 'TaskCourseTitle': TaskCourseTitle,
+    }
+    return render(request, 'course/panel/coursePanel.html', context)
+
+def deleteTask(request, slug, task_id):
+    page = 'deleteTask'
+    course = Course.objects.get(slug=slug)
+    task = CourseTask.objects.get(id = task_id)
+    
+    if request.method == 'POST':
+        task.delete()
+        return redirect('courses:tasks-panel', course.slug)
+    
+    context = {
+        'page': page,
+        'course': course,
+        'courseTitle': task,
+        # 'TaskCourseTitle': TaskCourseTitle,
+    }
+    return render(request, 'course/panel/coursePanel.html', context)
+

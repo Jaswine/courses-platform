@@ -8,14 +8,17 @@
 {% block content %}
 <div class="page course__task__page">
     <div class="page__course__menu">
-        {% for exercise in tasks %}
+        {% for title in titles %}
+          {% for exercise in title.tasks.all  %}
           <div class="menu__component">
             <a href="/courses/{{course.slug}}/tasks/{{exercise.id}}" class="link menu__component__title">{{exercise.title}}</a>
             <p class="menu__component__text">{{exercise.description | truncatewords:15}}</p>
           </div>
-        {% endfor %}
+          {% endfor %}
+      {% endfor %}
     </div>
     <div class="page__content">
+      <h2>{{task.title}}</h2>
         {% if task.task == 'video'  %}
           <video src="{% static 'media' %}/{{task.video}}" controls autoplay></video>
         {% endif %}
@@ -23,6 +26,18 @@
         {% if task.task == 'text' %}
           <div>{{task.body}}</div>
         {% endif %}
+        <div class="comments">
+          <h3>Comments</h3>
+          <span class="hr"></span>
+          <form action=""class='comment__form'>
+            <input type="text" name="comment" placeholder="Enter ur comment..." class="comment__field">
+            <button class="btn btn-icon" type="submit">
+              <span class="material-symbols-outlined">
+                send
+              </span>
+            </button>
+          </form>
+        </div>
     </div>
 </div> 
 {% endblock content %}
