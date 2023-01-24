@@ -64,6 +64,8 @@ def createArticle(request):
 
 def showArticle(request, slug):
     article = Article.objects.get(slug = slug)
+    comments = ArticleComment.objects.filter(article=article)
+    user = request.user
     
     articles = Article.objects.all()
     articles_filters = Article.objects.filter(tag = article.tag)
@@ -84,23 +86,52 @@ def showArticle(request, slug):
             
     if request.user.is_authenticated:
         if request.method == 'POST':
-            status = False
+            type = request.POST.get('type')
             
-            for like in likes.all(): 
-                if like.username == request.user.username:
-                    status = True
-                    print(like.username)
-            
-            if status == True:
-                article.likesForArticle.remove(like)
-            if status == False:
-                article.likesForArticle.add(request.user)
-                article.save()
+            if type == 'like':
+                status = False
+                
+                for like in likes.all(): 
+                    if like.username == request.user.username:
+                        status = True
+                        print(like.username)
+                
+                if status == True:
+                    article.likesForArticle.remove(like)
+                if status == False:
+                    article.likesForArticle.add(request.user)
+                    article.save()
+                        
+                return redirect('/articles/'+ slug+'/#like')
+            if type == 'comment':
+                message = request.POST.get('message')
+                print(message)
+                
+                if len(message) < 3:
+                    return messages.error(request, 'Message is too short')
                     
-            return redirect('/articles/'+ slug+'/#like')
+                
+                form = ArticleComment.objects.create(
+                    article=article,
+                    user=user,
+                    message=message,
+                )
+                form.save()
+                return redirect('/articles/'+ slug+'/#comments')
             
-    context =  {'article': article, 'articles': latest_articles[:4], 'tag_articles': public_articles[:4], 'likes': likes_count}
+    context =  {
+        'article': article, 
+        'articles': latest_articles[:4], 
+        'tag_articles': public_articles[:4], 
+        'likes': likes_count,
+        'comments': comments
+    }
     return render(request, 'article/showArticle.html', context)
+
+def deleteComment(request,slug, id):
+    comment =  ArticleComment.objects.get(id=id)
+    comment.delete()
+    return redirect('/articles/'+ slug+'/#comments')
 
 def updateArticle(request, slug):
     article = Article.objects.get(slug = slug)
@@ -147,3 +178,7 @@ def deleteArticle(request, slug):
         redirect('/articles')
 
     return render(request, 'article/deleteArticle.html', {'article': article})
+
+
+
+    

@@ -80,6 +80,19 @@
         </div>
         <div class="page__about__left">
             <div class="course__info__share">
+                <form action="" method="POST" class="like__form">
+                    {% if request.user.is_authenticated %}
+                        {% csrf_token %}
+                        <!-- <span>{{ likes }}</span> -->
+                        <input type="text" name="type" value="like" style="display: none;">
+                        <div class="icon icon__love icon__span">{{likes}}</div>
+                        <button class="material-symbols-outlined icon icon__love" id = "like">
+                            favorite
+                        </button>
+                    {% endif %}
+                </form>
+            </div>
+            <div class="course__info__share">
                 <span>
                     <!-- <span class="material-symbols-outlined icon">
                         groups

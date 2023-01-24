@@ -35,6 +35,7 @@ class Article(models.Model):
 class ArticleComment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # answer_on = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     message = models.TextField(max_length=500)
     
     created = models.DateTimeField(auto_now_add=True)

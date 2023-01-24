@@ -24,6 +24,7 @@
                     {% if request.user.is_authenticated %}
                         {% csrf_token %}
                         <!-- <span>{{ likes }}</span> -->
+                        <input type="text" name="type" value="like" style="display: none;">
                         <span class="icon icon__love icon__span">{{likes}}</span>
                         <button class="material-symbols-outlined icon icon__love" id = "like">
                             favorite
@@ -31,6 +32,58 @@
                     {% endif %}
                 </form>
             </div>
+            <div class="comments" id="comments">
+                <h2>Comments</h2>
+                <div class="hr"></div>
+                <form action=""class='comment__form' method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="type" value="comment" style="display: none;">
+                    <input type="text" name="message" placeholder="Enter ur comment..." class="comment__field">
+                    <button class="btn btn-icon" type="submit">
+                      <span class="material-symbols-outlined">
+                        send
+                      </span>
+                    </button>
+                  </form>
+                  <div class="comments__objects">
+                    {% for comment in comments %}
+                      <div class="comment">
+                        <div class="comment__header">
+                            <a href="{% url 'base:profile' request.user.username %}" class="link">{{comment.user.username}}</a>
+                            <div class="">
+                                <span>{{comment.updated}}</span>
+                                {% if user.is_authenticated %}
+                                  {% if request.user.id == comment.user.id %}
+                                    <a class="delete delete__form__open material-symbols-outlined">
+                                        close
+                                    </a>
+                                  {% endif %}
+                                {% endif %}
+                                <div action="" class="delete__form">
+                                    <div class="delete_form__after">
+                                        <span>Do U Wanna Delete This Comment?</span>
+                                        <div class="delete__buttons">
+                                            <a class="btn delete__form__close btn-icon">
+                                                <span class="material-symbols-outlined">
+                                                    keyboard_return
+                                                </span>
+                                            </a>
+                                            <a href="{% url 'article:delete_comment' article.slug comment.id %}" class="btn btn-delete">
+                                                <span class="material-symbols-outlined">
+                                                    delete_forever
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p>{{comment.message}}</p>
+                        <a href="" class="link">replay</a>
+                      </div>
+                    {% endfor %}
+                  </div>
+            </div>         
         </div>
         <div class="page__article__right">
             <div class="page__article__right__block">
@@ -50,7 +103,7 @@
                                 </div>
                             </article>
                         {% endif %}
-                {% endfor %}
+                    {% endfor %}
                {% endif %}
             </div>
             <div class="page__article__right__block">
@@ -80,4 +133,22 @@
         </div>
     </div>
 </div>
+<script>
+    const delete__form__closes = document.querySelectorAll('.delete__form__close');
+    const delete__forms = document.querySelectorAll('.delete__form');
+    const delete__form__opens = document.querySelectorAll('.delete__form__open');
+
+    for (let i = 0; i < delete__forms.length; i++) {
+        delete__form__opens[i].addEventListener('click', () => {
+            delete__forms[i].style.display = 'flex';
+            delete__forms[i].style.opacity = '1';
+        });
+        delete__form__closes[i].addEventListener('click', () => {
+            delete__forms[i].style.opacity = '0';
+            setTimeout(() => {
+                delete__forms[i].style.display = 'none';
+            }, 1000)
+        });
+    }
+</script>   
 {% endblock content %}

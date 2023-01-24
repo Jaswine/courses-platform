@@ -119,10 +119,11 @@ def profile(request, username):
     }
     
     #TODO: Get a Photo for a Profile, If user doesn't have a photo
-    response = get('https://api.pexels.com/v1/search?query=funny_cat&curated?page=1&per_page='+str(user.id), headers=headers)
-    
-    if response.status_code == 200:
-        data = response.json()
+    try:
+        response = get('https://api.pexels.com/v1/search?query=funny_cat&curated?page=1&per_page='+str(user.id), headers=headers)
+        
+        if response.status_code == 200:
+            data = response.json()
         if  data:
             getPhoto = data['photos']
             
@@ -133,9 +134,12 @@ def profile(request, username):
             print(getPhoto)
             
             ProfileImage = getPhoto
-    else:
-        ProfileImage = 'https://images.pexels.com/photos/4587958/pexels-photo-4587958.jpeg?auto=compress&cs=tinysrgb&w=800'
-        print('Response error: %s' % response.status_code)
+        else:
+            ProfileImage = 'https://images.pexels.com/photos/4587958/pexels-photo-4587958.jpeg?auto=compress&cs=tinysrgb&w=800'
+            print('Response error: %s' % response.status_code)
+    except:
+        print('Pexels not found, Internet is broken!')
+        messages.error(request, 'Internet is broken!   /(X_X)/ ')
     
     context = {'user': user, 'page': page, 'profile': profile, 'ProfileImage': ProfileImage,'getPhoto': getPhoto}
     return render(request,'base/user/Profile.html', context)

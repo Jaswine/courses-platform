@@ -15,6 +15,11 @@ def course(request, slug):
     courseTitlesCount = titles.count()
     courseTasksCount = CourseTask.objects.filter(course = course).count()
     courseCommentsCount = 0
+    likes = course.likes.count
+    print(likes)
+    
+    if request.method == 'POST':
+        if like.
     
     context = {
         'course': course, 
@@ -23,6 +28,7 @@ def course(request, slug):
         'courseTitlesCount': courseTitlesCount,
         'courseTasksCount': courseTasksCount,
         'courseCommentsCount': courseCommentsCount,
+        'likes': likes,
     }
     return render(request, 'course/CourseInfo.html', context)
 
