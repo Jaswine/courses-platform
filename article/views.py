@@ -96,7 +96,7 @@ def showArticle(request, slug):
                         status = True
                         print(like.username)
                 
-                if status == True:
+                if status:
                     article.likesForArticle.remove(like)
                 if status == False:
                     article.likesForArticle.add(request.user)

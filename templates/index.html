@@ -405,8 +405,9 @@
             flex-wrap: wrap;
         }
         .course {
-            width: 300px;
-            height: 340px;
+            width: 260px;
+            min-width: 260px;
+            height: 300px;
             
             display: flex;
             justify-content: flex-start;
@@ -493,8 +494,8 @@
         .course::after {
             content: '';
             display: block;
-            width: 300px;
-            height: 340px;
+            width: 260px;
+            height: 300px;
             border: 1px solid var(--primary);
             position: absolute;
             top: 0;
@@ -930,6 +931,9 @@
             justify-content: center;
             align-items: center;
         }
+        .like__form:hover .icon__love{
+            color: var(--lightGreen) !important;
+        }
         .icon__love {
             font-size: 30px !important;
             font-weight: bold !important;
@@ -942,12 +946,15 @@
             background-color: transparent;
         }
         .icon__span {
-            font-size: 24px!important;
+            font-size: 20px!important;
         }
         .not-found-icon 
         {
             font-size: 100px !important;
             font-weight: bold;
+        }
+        .like__form__text {
+            margin: 0 4%;
         }
         .not__found {
             display: flex;
@@ -1251,6 +1258,62 @@
         .delete_form__after span {
             margin-bottom: 6%;
             font-size: 26px !important;
+        }
+
+        /*Liked COurses*/
+        .liked__courses {
+            width: 90%;
+            overflow-x: scroll;
+            padding: 2% 0;
+            
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 10px ;
+            overflow-y: hidden;
+        }
+        .liked__courses .course {
+            margin: 0 0 0 10px;
+            z-index: 1000000;
+        }
+
+        /* reviews */
+        .reviews {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-direction: column;
+            width: 100%;
+            margin: 2% 0 10% 0;
+        }
+        .review__form {
+            display: flex;
+            justify-content:space-between;
+            align-items: center;
+            width: 100%;
+            min-width: 100%;
+        }
+         .review__input {
+            width: 60%;
+            min-width: 60%;
+            background-color: transparent;
+            border-bottom: 1px solid var(--primary);
+            font-size: 20px;
+            padding: .4rem;
+        }
+        .review__input:hover {
+            border-color: var(--white);
+        }
+        .review__input:focus {
+            border-color: var(--white);
+        }
+        .review__form div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .review__form div input {
+
         }
     </style>
 

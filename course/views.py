@@ -11,15 +11,31 @@ def catalog(request):
 def course(request, slug):
     course = Course.objects.get(slug=slug)
     titles = CourseTitle.objects.filter(course=course.id)
+    reviews = CourseReview.objects.filter(course=course)
     
     courseTitlesCount = titles.count()
     courseTasksCount = CourseTask.objects.filter(course = course).count()
-    courseCommentsCount = 0
+    courseCommentsCount = reviews.count
     likes = course.likes.count
     print(likes)
     
     if request.method == 'POST':
-        if like.
+        type = request.POST.get('type')
+        if type == 'like':
+            status = False
+            
+            for like in course.likes.all():
+                if like.username == request.user.username:
+                    status = True      
+            
+            if status:
+                course.likes.remove(like)
+            else:
+                course.likes.add(request.user)
+                course.save()
+        elif type == 'review':
+            message = request.POST.get('message')
+            user = request.user
     
     context = {
         'course': course, 
@@ -28,7 +44,9 @@ def course(request, slug):
         'courseTitlesCount': courseTitlesCount,
         'courseTasksCount': courseTasksCount,
         'courseCommentsCount': courseCommentsCount,
+        
         'likes': likes,
+        'reviews': reviews,
     }
     return render(request, 'course/CourseInfo.html', context)
 

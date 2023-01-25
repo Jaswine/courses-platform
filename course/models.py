@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Avg
 
 
 #!: ______TAG FOR COURSES & ARTICLES
@@ -39,6 +40,7 @@ class Course(models.Model):
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
     class Meta:
         ordering = ['-updated', '-created']
         
@@ -120,6 +122,21 @@ class CourseTitle(models.Model):
     
     def __str__(self):
         return self.title
+    
+class CourseReview(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField(default=0, blank=True)
+    message = models.TextField(blank=True, max_length=1000)
+    
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-updated', '-created']
+    
+    def __str__(self):
+        return self.course
     
 class CourseComment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)

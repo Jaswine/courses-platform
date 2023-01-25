@@ -77,6 +77,19 @@
                     </div>
                 {% endfor %}
             </div>
+            <div class="reviews">
+                <form action="" class="review__form">
+                    <input type="text" name="type" value="review" style="display: none;">
+                    
+                    <input type="text" class="review__input">
+                    <button class="btn btn-icon" type="submit">
+                        <span class="material-symbols-outlined">
+                            send
+                        </span>
+                    </button>
+                </form>
+                
+            </div>
         </div>
         <div class="page__about__left">
             <div class="course__info__share">
@@ -84,6 +97,7 @@
                     {% if request.user.is_authenticated %}
                         {% csrf_token %}
                         <!-- <span>{{ likes }}</span> -->
+                        <!-- <div class="icon__love icon icon__span like__form__text">Add To Lover</div> -->
                         <input type="text" name="type" value="like" style="display: none;">
                         <div class="icon icon__love icon__span">{{likes}}</div>
                         <button class="material-symbols-outlined icon icon__love" id = "like">

@@ -1,5 +1,46 @@
 <div class="courses page__article__articles">
     {% comment %} TODO:  GET LIKES {% endcomment %}
+
+    <div class="liked__courses">
+        {% for course in liked_courses  %}
+            <div class="course">
+            {% if course.user.username == request.user.username %}
+                <div class="course__image">
+                    <img src="http://127.0.0.1:8000/static/media/{{course.image}}" alt="" class="course__img">
+                    <div class="course__mask"></div>
+                </div>
+                <div class="course__info">
+                    <div class="course__info__desc">
+                        <a href="{% url 'courses:course' course.slug %}" class = 'course__title '>{{course.title}}</a>
+                        <p>{{course.description|truncatewords:30}}</p>
+                    </div>
+                    <div class="course__info__tables">
+                        <a href="/">{{course.user}}</a>
+                        <a href="/">#{{course.tags}}</a>
+                    </div>
+                </div> 
+            {% else %}
+                {% if course.public %}
+                    <div class="course__image">
+                        <img src="http://127.0.0.1:8000/static/media/{{course.image}}" alt="" class="course__img">
+                        <div class="course__mask"></div>
+                    </div>
+                    <div class="course__info">
+                        <div class="course__info__desc">
+                            <a href="{% url 'courses:course' course.slug %}" class = 'course__title '>{{course.title}}</a>
+                            <p>{{course.description|truncatewords:30}}</p>
+                        </div>
+                        <div class="course__info__tables">
+                            <a href="/">{{course.user}}</a>
+                            <a href="/">#{{course.tags}}</a>
+                        </div>
+                    </div> 
+                {% endif %}
+            {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
     {% if like_articles %}
     {% for article in like_articles %}
     <article>
