@@ -17,26 +17,46 @@ def course(request, slug):
     courseTasksCount = CourseTask.objects.filter(course = course).count()
     courseCommentsCount = reviews.count
     likes = course.likes.count
-    print(likes)
     
-    if request.method == 'POST':
-        type = request.POST.get('type')
-        if type == 'like':
-            status = False
-            
-            for like in course.likes.all():
-                if like.username == request.user.username:
-                    status = True      
-            
-            if status:
-                course.likes.remove(like)
+    commentPermission = True
+    for i in reviews:
+        if i.user.username == request.user.username:
+            commentPermission = False   
+    
+    if request.user.is_authenticated:
+        if request.method == 'POST': #! FOR LIKES
+            type = request.POST.get('type')
+            if type == 'like':
+                status = False
+                
+                for like in course.likes.all():
+                    if like.username == request.user.username:
+                        status = True      
+                
+                if status:
+                    course.likes.remove(like)
+                else:
+                    course.likes.add(request.user)
+                    course.save()
+            elif type == 'review': #! FOR REVIEWS
+                message = request.POST.get('message')
+                stars = request.POST.get('stars')
+                user = request.user
+                
+                print(message)
+                form = CourseReview.objects.create(
+                    course = course,
+                    user = user,
+                    rating = stars,
+                    message = message,
+                )
+                form.save()
+                return redirect('/courses/'+ str(course.slug)+'#reviews')
             else:
-                course.likes.add(request.user)
-                course.save()
-        elif type == 'review':
-            message = request.POST.get('message')
-            user = request.user
-    
+                messages.error(request, 'u need to choose some stars If u wanna send message')
+    else:
+        messages.error(request, 'u need to sign in or sign up')
+                
     context = {
         'course': course, 
         'titles': titles,
@@ -47,8 +67,17 @@ def course(request, slug):
         
         'likes': likes,
         'reviews': reviews,
+        
+        'commentPermission': commentPermission,
     }
     return render(request, 'course/CourseInfo.html', context)
+
+def deleteReview(request,slug, id):
+    if request.user.is_authenticated:
+        comment =  CourseReview.objects.get(id=id)
+        if request.user.username == comment.user.username:
+            comment.delete()
+            return redirect('/courses/'+ str(slug)+'#reviews')
 
 def task(request, slug, pk):
     course = Course.objects.get(slug=slug)
@@ -407,4 +436,3 @@ def deleteTask(request, slug, task_id):
         # 'TaskCourseTitle': TaskCourseTitle,
     }
     return render(request, 'course/panel/coursePanel.html', context)
-

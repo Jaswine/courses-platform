@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Avg
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 #!: ______TAG FOR COURSES & ARTICLES
@@ -126,7 +127,7 @@ class CourseTitle(models.Model):
 class CourseReview(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rating = models.IntegerField(default=0, blank=True)
+    rating = models.IntegerField(default=0, max_length=1)
     message = models.TextField(blank=True, max_length=1000)
     
     created = models.DateTimeField(auto_now_add=True)

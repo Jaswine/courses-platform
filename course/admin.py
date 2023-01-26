@@ -13,7 +13,7 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
 
 class CourseReviewAdmin(admin.ModelAdmin):
-    list_display = ('id', 'course', 'user', 'stars', 'message')
+    list_display = ('id', 'course', 'user', 'rating', 'message')
 
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseComment, CourseCommentAdmin)
