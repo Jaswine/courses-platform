@@ -6,6 +6,46 @@
 
 {% block content %}
 <div class="page">
+{% if page == 'create_article' %}
+    <div class="page__article__form">
+        <h2>Create Article</h2>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input 
+                type="text"
+                name="title"
+                placeholder="ur title..."
+                value = "{{article.title}}"
+            >
+            <select name="tag" >
+                <option selected value ="{{article.tag.id}}">{{article.tag.name}}</option>
+                {% for tag in tags  %}
+                    {% if tag.name != article.tag.name %}
+                    <option value="{{tag.id}}">{{tag.name}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <a href="{% url 'base:tags' %}" class="link">Add Another Tag!</a>
+            <textarea 
+                name="text" 
+                placeholder="ur text...."
+                value = "{{article.text}}"
+            >{{article.text}}</textarea>
+            <div class="page__article__form__box">
+                <input 
+                    type="checkbox" 
+                    class="page__article__form__checkbox" 
+                    name="public" 
+                    {% if article.public %}
+                        checked
+                    {% endif %}
+                > 
+                <div>i wanna public my work</div>
+            </div>
+            <button class="btn" type="submit">Save</button>
+        </form>
+    </div>
+{% elif page == 'update_article' %}
     <div class="page__article__form">
         <h2>Create Article</h2>
         <form action="" method="POST">
@@ -31,7 +71,6 @@
             <button class="btn" type="submit" id="ArticleClearSession">Save</button>
         </form>
     </div>
-</div>
 <script>
     //TITLE in localStorage
     ArticleTitle = document.getElementById('ArticleTitle')
@@ -59,4 +98,8 @@
         sessionStorage.removeItem('ArticleText');
     });
 </script>
+{% endif %}
+</div>
+
+
 {% endblock content %}

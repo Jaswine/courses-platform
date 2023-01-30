@@ -11,7 +11,7 @@ urlpatterns = [
     
     path('create-course', views.createCourse, name='create-course'),
     
-    #! PANEL FOR COURSES
+    #! PANEL FOR COURSES 
     path('courses/<str:slug>/tasks-panel', views.TasksPanel, name='tasks-panel'),
     path('courses/<str:slug>/update-info-panel', views.updateInfoPanel, name='update-info-panel'),
     path('courses/<str:slug>/create-task', views.createTask, name='create-task'),

@@ -39,11 +39,23 @@
             placeholder="What Are other people will learn on this course? "
         >{{course.whatAreUWillLearn}}</textarea>
         <label for="">Task Level</label>
+        {{course.level}}
         <select name="level">
             <option value="{{course.level}}" selected disabled>{{course.level}}</option>
-           <option value="Beginner">Beginner</option>
-           <option value="Intermediate">Intermediate</option>
-           <option value="Expert">Expert</option>
+            {% if course.level == 'Beginner' %}
+                <option value="Intermediate">Intermediate</option>
+                <option value="Expert">Expert</option>
+            {% elif course.level == 'Intermediate' %}
+                <option value="Beginner">Beginner</option>
+                <option value="Expert">Expert</option>
+            {% elif course.level == 'Expert' %}
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+            {% else %}
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Expert">Expert</option>
+            {% endif %}           
         </select>
         <label for="">Initial Requirements</label>
         <input 
@@ -53,7 +65,14 @@
             value="{{ course.initialRequirements }}"
         />
         <div class="page__article__form__box">
-            <input type="checkbox" class="page__article__form__checkbox" name="public" > 
+            <input 
+                type="checkbox" 
+                class="page__article__form__checkbox" 
+                name="public" 
+                {% if course.public %}
+                    checked
+                {% endif %}
+            > 
             <div>i wanna public my course</div>
         </div>
         <button class="btn" type="submit" id="Submit" >Save</button>

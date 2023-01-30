@@ -197,11 +197,23 @@ def updateInfoPanel(request, slug):
             validated = False
             messages.error(request, 'Title must be at least 4 characters')
             
-        if len(WhatAreUWillLearn) < 10: 
+        if len(title) > 100: # ! TITLE
+            validated = False
+            messages.error(request, 'Title must be at more than 100 symbols characters')
+            
+        if len(title) > 100: # ! TITLE
+            validated = False
+            messages.error(request, 'Title must be at more than 100 symbols characters')
+            
+        if len(WhatAreUWillLearn) < 10:  #! What Are U Will Learn
             validated = False
             messages.error(request, 'WhatAreUWillLearn must be at least 10 characters')
+        
+        if len(WhatAreUWillLearn) > 500: #! What Are U Will Learn
+            validated = False
+            messages.error(request, 'What Are U Will Learn must be at more than 500 symbols characters')
             
-                       
+        print('________________',level)             
         if validated == True:
             if course.title != title:
                 course.title = title
@@ -213,7 +225,7 @@ def updateInfoPanel(request, slug):
                 course.tags = tag
             if course.whatAreUWillLearn != WhatAreUWillLearn:
                 course.whatAreUWillLearn = WhatAreUWillLearn
-            if course.level != level:
+            if course.level != level and level != None and level != 'None':
                 course.level = level
             if course.initialRequirements != initialRequirements:
                 course.initialRequirements = initialRequirements

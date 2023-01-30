@@ -1,6 +1,8 @@
 {% load static %}
 {% comment %} ? IF WE CLICK ON ABOUT BUTTON {% endcomment %}
+{% if profile.bio %}
 <p><b>About:</b> {{profile.bio}}</p>
+{% endif %}
 <p><b>Joined</b> {{profile.created}}</p>
 <div class="profile__body__right__icons">
     {% if profile.twitter %}

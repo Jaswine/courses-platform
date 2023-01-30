@@ -17,6 +17,7 @@ def articleList(request):
     return render(request, 'article/articleList.html', context)
 
 def createArticle(request):
+    page = 'create_article'
     tags = Tag.objects.all()
     articles = Article.objects.all()
     
@@ -59,7 +60,10 @@ def createArticle(request):
         form.save()
         return redirect('/articles')
                     
-    context = {'tags': tags}
+    context = {
+        'tags': tags,
+        'page': page,
+    }
     return render(request, 'article/createArticle.html', context)
 
 def showArticle(request, slug):
@@ -134,6 +138,7 @@ def deleteComment(request,slug, id):
     return redirect('/articles/'+ slug+'/#comments')
 
 def updateArticle(request, slug):
+    page = 'update_article'
     article = Article.objects.get(slug = slug)
     articles = Article.objects.all()
     tags = Tag.objects.all()
@@ -167,8 +172,12 @@ def updateArticle(request, slug):
         article.save()
         return redirect('/articles')
         
-    context = {'article': article, 'tags': tags}
-    return render(request, 'article/updateArticle.html', context)
+    context = {
+        'article': article,
+        'tags': tags,
+        'page': page, 
+    }
+    return render(request, 'article/createArticle.html', context)
 
 def deleteArticle(request, slug):
     article = Article.objects.get(slug = slug)
