@@ -11,7 +11,7 @@ def catalog(request):
 def course(request, slug):
     course = Course.objects.get(slug=slug)
     titles = CourseTitle.objects.filter(course=course.id)
-    reviews = CourseReview.objects.filter(course=course)
+    reviews = CourseComment.objects.filter(course=course,commentType = 'review')
     
     courseTitlesCount = titles.count()
     courseTasksCount = CourseTask.objects.filter(course = course).count()
@@ -44,8 +44,9 @@ def course(request, slug):
                 user = request.user
                 
                 print(message)
-                form = CourseReview.objects.create(
+                form = CourseComment.objects.create(
                     course = course,
+                    commentType = 'review',
                     user = user,
                     rating = stars,
                     message = message,
@@ -74,7 +75,7 @@ def course(request, slug):
 
 def deleteReview(request,slug, id):
     if request.user.is_authenticated:
-        comment =  CourseReview.objects.get(id=id)
+        comment =  CourseComment.objects.get(id=id)
         if request.user.username == comment.user.username:
             comment.delete()
             return redirect('/courses/'+ str(slug)+'#reviews')
@@ -84,14 +85,44 @@ def task(request, slug, pk):
     tasksAll = CourseTask.objects.filter(course=course).reverse()
     task = CourseTask.objects.get(id=pk)
     titles = CourseTitle.objects.filter(course=course.id)
+    comments = CourseComment.objects.filter(course=course, courseTask=task)
+    
+    if request.method == 'POST':
+        comment = request.POST.get('comment')
+        
+        form = CourseComment.objects.create(
+            commentType = 'comment',
+            course = course,
+            user = request.user,
+            message = comment,
+            courseTask = task,
+        )
+        
+        form.save()
+        return redirect('courses:task', course.slug, task.id)
     
     context = {
         'course': course,
         'titles': titles,
         'tasks': tasksAll,
         'task': task,
+        'comments': comments
     }
     return render(request, 'course/Task.html', context)
+
+def courseTaskCommentDelete(request, slug, pk, comment_id):
+    course = Course.objects.get(slug=slug)
+    task = CourseTask.objects.get(id=pk)
+    courseComment = CourseComment.objects.get(id=comment_id)
+    
+    if courseComment:
+        if request.user.username == courseComment.user.username:
+            courseComment.delete()
+            return redirect('courses:task', course.slug, task.id)    
+        else: 
+            messages.error(request, 'I think, u are not the author this comment')
+    else:
+        messages.error(request, 'comment not found')
 
 def createCourse(request):
     tags = Tag.objects.all()
@@ -446,5 +477,29 @@ def deleteTask(request, slug, task_id):
         'course': course,
         'courseTitle': task,
         # 'TaskCourseTitle': TaskCourseTitle,
+    }
+    return render(request, 'course/panel/coursePanel.html', context)
+
+def ProfileComments(request, slug):
+    page = 'comments'
+    course = Course.objects.get(slug=slug)
+    comments = CourseComment.objects.filter(course=course, commentType='comment')
+    
+    context = {
+        'course': course,
+        'page': page,
+        'comments': comments,
+    }
+    return render(request, 'course/panel/coursePanel.html', context)
+
+def ProfileReviews(request, slug):
+    page = 'comments'
+    course = Course.objects.get(slug=slug)
+    comments = CourseComment.objects.filter(course=course, commentType='review')
+    
+    context = {
+        'course': course,
+        'page': page,
+        'comments': comments,
     }
     return render(request, 'course/panel/coursePanel.html', context)

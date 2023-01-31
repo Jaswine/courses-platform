@@ -124,31 +124,42 @@ class CourseTitle(models.Model):
     def __str__(self):
         return self.title
     
-class CourseReview(models.Model):
+class CourseComment(models.Model):
+    
+    COMMENT_TYPE = (
+        ('review', 'review'),
+        ('comment', 'comment'),
+    )
+    
+    commentType = models.CharField(choices=COMMENT_TYPE, max_length=40, default='')
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rating = models.IntegerField(default=0, max_length=1)
     message = models.TextField(blank=True, max_length=1000)
     
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        ordering = ['-updated', '-created']
-    
-    def __str__(self):
-        return self.course
-    
-class CourseComment(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    message = models.TextField(max_length=500)
-    
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        ordering = ['-updated', '-created']
+    courseTask = models.ForeignKey(CourseTask, on_delete=models.CASCADE, blank=True, default=None, null=True)
+    rating = models.IntegerField(default=0, blank=True)
         
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    
+    @classmethod
+    def review_comment(cls, message, rating):
+        return CourseComment.objects.create(
+            commentType = 'review',
+            message = message,
+            rating = rating    
+        )
+    
+    @classmethod
+    def review_comment(cls, message, courseTask):
+        return CourseComment.objects.create(
+            commentType = 'comment',
+            message = message,
+            courseTask = courseTask
+        )
+    
+    class Meta:
+        ordering = ['-updated', '-created']
+    
     def __str__(self):
-        return self.message
+        return self.course  

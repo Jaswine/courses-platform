@@ -1,0 +1,37 @@
+<div class="course__comments__page">
+  {% if comments %}
+   <form class="page__buttons__filters" method="GET">
+    <select name="filters" id="">
+     <option value="all" selected>All</option>
+     <option value="reviews">Reviews</option>
+     <option value="comments">Comments</option>
+    </select>
+   </form>
+   <div class="page__comments">
+    {% for review in comments %}
+    <div class="comment review">
+      <div class="comment__header">
+          <a href="{% url 'base:profile' request.user.username %}" class="link">{{review.user.username}}</a>
+          <div class="">
+                <a></a>
+              <span>{{review.updated}}</span>
+              {% if user.is_authenticated %}
+                  {% if request.user.id == review.user.id %}
+                      <a class="delete material-symbols-outlined" href="{% url 'courses:course-review-delete' course.slug review.id %}">
+                          close
+                      </a>
+                  {% endif %}
+              {% endif %}
+          </div>
+      </div>
+      <p>{{review.message}}</p>
+      <!-- <a href="" class="link">replay</a> -->
+  </div>
+   {% endfor %}
+  </div>
+  {% else %}
+   <div class="not__found">
+    <h2>Comments Not Found</h2>
+   </div>
+  {% endif %}
+</div>

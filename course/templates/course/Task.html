@@ -26,10 +26,11 @@
         {% if task.task == 'text' %}
           <div>{{task.body}}</div>
         {% endif %}
-        <div class="comments">
+        <div class="comments" id='comments'>
           <h3>Comments</h3>
           <span class="hr"></span>
           <form action=""class='comment__form' method="POST">
+            {% csrf_token %}
             <input type="text" name="comment" placeholder="Enter ur comment..." class="comment__field">
             <button class="btn btn-icon" type="submit">
               <span class="material-symbols-outlined">
@@ -37,6 +38,27 @@
               </span>
             </button>
           </form>
+          <div class="reviews__list">
+            {% for review in comments %}
+                <div class="comment review">
+                    <div class="comment__header">
+                        <a href="{% url 'base:profile' request.user.username %}" class="link">{{review.user.username}}</a>
+                        <div class="">
+                            <span>{{review.updated}}</span>
+                            {% if user.is_authenticated %}
+                                {% if request.user.id == review.user.id %}
+                                    <a class="delete material-symbols-outlined" href="{% url 'courses:course-task-comment-delete' course.slug task.id review.id %}">
+                                        close
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <p>{{review.message}}</p>
+                    <!-- <a href="" class="link">replay</a> -->
+                </div>
+            {% endfor %}
+        </div>
         </div>
     </div>
 </div> 

@@ -22,7 +22,11 @@ urlpatterns = [
     path('courses/<str:slug>/course-titles/<str:title_id>/delete', views.deleteTitle, name='course-title-delete'),
     path('courses/<str:slug>/course-task/<str:task_id>/delete', views.deleteTask, name='course-task-delete'),
     
+    path('courses/<str:slug>/comments', views.ProfileComments, name='profile-comments'),
+    path('courses/<str:slug>/reviews', views.ProfileReviews, name='profile-reviews'),
+    
     #! REVIEWS AND COMMENTS
     path('courses/<str:slug>/reviews/<str:id>', views.deleteReview, name='course-review-delete'),
+    path('courses/<str:slug>/task/<str:pk>/comments/<str:comment_id>', views.courseTaskCommentDelete, name='course-task-comment-delete'),
 
 ]

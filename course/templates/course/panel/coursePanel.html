@@ -42,14 +42,14 @@
                 Update Info
             </a>
 
-            <a href="{% url 'courses:update-info-panel' course.slug %}" class="link">
+            <a href="{% url 'courses:profile-comments' course.slug %}" class="link">
                 <span class="material-symbols-outlined">
                     forum
                 </span>   
                 Comments
             </a>
 
-            <a href="{% url 'courses:update-info-panel' course.slug %}" class="link">
+            <a href="{% url 'courses:profile-reviews' course.slug %}" class="link">
                 <span class="material-symbols-outlined">
                     reviews
                 </span>  
@@ -79,6 +79,8 @@
                 {% include "course/panel/components/CreateTask.html" %}
             {% elif page == 'deleteTask' %}
                 {% include "course/panel/components/CreateTask.html" %}
+            {% elif page == 'comments' %}
+                {% include "course/panel/components/Comments.html" %}
             {% endif %}
 
         </div>
