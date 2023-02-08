@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from course.models import  Tag, Course
+from course.models import  Tag, Course, CourseTask
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
@@ -11,7 +11,10 @@ from requests import get
 
 
 def home(request):
-    context = {}
+    courses = Course.objects.filter(public=True)[:8]
+    articles = Article.objects.filter(public=True)[:8]
+    
+    context = {'courses': courses, 'articles': articles}
     return render(request, 'base/Home.html', context)
 
 #! _______________________AUTH_____________________

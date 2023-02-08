@@ -6,6 +6,10 @@ from django.contrib import messages
 def articleList(request):
     articles = Article.objects.all()
     public_articles = []
+    tags = Tag.objects.all()
+    
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    articles = Article.objects.filter(tag__name__icontains=q)
     
     for article in articles:
         if article.public == True:
@@ -13,7 +17,10 @@ def articleList(request):
             
     print(request.user.username)
     
-    context = {'articles': public_articles}
+    context = {
+        'articles': public_articles,
+        'tags': tags
+    }
     return render(request, 'article/articleList.html', context)
 
 def createArticle(request):

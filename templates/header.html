@@ -1,22 +1,15 @@
 <header>
     <a class="header__logo" href="/">CODELEARN</a>
     <div class="header__menu">
-        <div class="header__menu__left">
-            <a href={% url 'courses:catalog' %} class="link">Catalog</a>
-            {% comment %} <a href="" class="link">Community</a> {% endcomment %}
-            <a href="/articles" class="link">Blog</a>
-        </div>
-        <span class="header__menu__block"></span>
-        {% if request.user.is_authenticated %}
-        <div class="header__menu__right">
-            <a href="{% url 'base:profile' request.user.username %}" class="link">{{request.user.username}}</a>
-            <a href="{% url 'base:logout' %}" class="btn">Sign Out</a>      
-        </div>
-        {% else %}
-            <div class="header__menu__right">
-                <a href="/sign-in" class="link">Sign In</a>
-                <a href="/sign-up" class="btn">Sign Up</a>      
-            </div>
-        {% endif %}
+        <a href={% url 'courses:catalog' %} class="link">Все Курсы</a>
+        {% comment %} <a href="" class="link">Community</a> {% endcomment %}
+        <a href="/articles" class="link">Блог</a>
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'base:profile' request.user.username %}" class="link">{{request.user.username}}</a>
+        <a href="{% url 'base:logout' %}" class="btn">Sign Out</a>      
+    {% else %}
+        <a href="/sign-in" class="link">Войти </a>
+        <a href="/sign-up" class="btn">Регистрация</a>   
+    {% endif %}
     </div>
 </header>
