@@ -16,6 +16,7 @@
                 name="title"
                 placeholder="ur title..."
                 value = "{{article.title}}"
+                class="input"
             >
             <select name="tag" >
                 <option selected value ="{{article.tag.id}}">{{article.tag.name}}</option>
@@ -25,7 +26,7 @@
                     {% endif %}
                 {% endfor %}
             </select>
-            <a href="{% url 'base:tags' %}" class="link">Add Another Tag!</a>
+            <a href="{% url 'base:tags' %}" class="">Add Another Tag!</a>
             <textarea 
                 name="text" 
                 placeholder="ur text...."
@@ -47,7 +48,7 @@
     </div>
 {% elif page == 'update_article' %}
     <div class="page__article__form">
-        <h2>Create Article</h2>
+        <h2>Update article</h2>
         <form action="" method="POST">
             {% csrf_token %}
             <input 
@@ -55,6 +56,7 @@
                 name="title"
                 placeholder="ur title..."
                 id = 'ArticleTitle'
+                class="input"
             >
             <select name="tag">
                 <option value="" selected disabled>Select Tag</option>
@@ -62,7 +64,7 @@
                   <option value="{{tag.id}}">{{tag.name}}</option>
                 {% endfor %}
             </select>
-            <a href="{% url 'base:tags' %}" class="link">Add Another Tag!</a>
+            <a href="{% url 'base:tags' %}" class="">Add Another Tag!</a>
             <textarea name="text" placeholder="ur text...." id="ArticleText"></textarea>
             <div class="page__article__form__box">
                 <input type="checkbox" class="page__article__form__checkbox" name="public" > 

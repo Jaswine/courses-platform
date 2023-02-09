@@ -22,9 +22,7 @@
             <div class='page__article__filter__tags'>
                     <a href="{%  url "article:article_list" %}" class='page__article__filter__tag' >All </a>
                 {% for tag in tags %}
-                    <div class="page__article__filter__tag">
-                        <a href="{% url 'article:article_list' %}?q={{tag.name}}">{{tag.name}}</a>
-                    </div>
+                    <a href="{% url 'article:article_list' %}?q={{tag.name}}" class="page__article__filter__tag">{{tag.name}}</a>
                 {% endfor %}
             </div>
         </div>
