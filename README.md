@@ -4,16 +4,18 @@
 <h3>Page Structure: </h3><a href='https://www.figma.com/community/file/1196802917596051191'>https://www.figma.com/community/file/1196802917596051191</a>
 
 <hr>
-<h3>galery</h3>
-<br>
+<h3>NEW DESIGN: </h3>
+
+![image](https://user-images.githubusercontent.com/82625479/217524313-28219893-c564-4d65-b180-a6193f1c0feb.png)
+
+![image](https://user-images.githubusercontent.com/82625479/217524459-f0536502-d6c9-4257-9a23-65f6464c94b4.png)
+
+
+<h3>OLD DESIGN: </h3>
 
 ![image](https://user-images.githubusercontent.com/82625479/209466501-e3a7cb03-a77f-4922-9bcd-5611b51c7eea.png)
 
-<br>
-
 ![image](https://user-images.githubusercontent.com/82625479/209466521-e06ab43a-bd29-4d5f-b692-ee25b50982f1.png)
-
-<br>
 
 ![image](https://user-images.githubusercontent.com/82625479/209466424-26344cc6-e6ce-4f03-ad0a-fb5ffaec5152.png)
 
