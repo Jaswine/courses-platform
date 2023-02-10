@@ -6,9 +6,9 @@
 
 {% block content %}
 <div class="page">
-{% if page == 'create_article' %}
+{% if page == 'update_article' %}
     <div class="page__article__form">
-        <h2>Create Article</h2>
+        <h2>Update Article</h2>
         <form action="" method="POST">
             {% csrf_token %}
             <input 
@@ -46,9 +46,9 @@
             <button class="btn" type="submit">Save</button>
         </form>
     </div>
-{% elif page == 'update_article' %}
+{% elif page == 'create_article' %}
     <div class="page__article__form">
-        <h2>Update article</h2>
+        <h2>Create article</h2>
         <form action="" method="POST">
             {% csrf_token %}
             <input 

@@ -85,6 +85,10 @@
             background-color: var(--green);
         }
 
+        a, button, select { 
+            cursor: pointer;
+        }
+
         /* Header */
         header {
             display: flex;
@@ -127,7 +131,7 @@
             position: absolute;
         }
         .link:hover:after {
-            margin-top: 10px;
+            margin-top: 13px;
             opacity: 1;
         }
 
@@ -186,8 +190,8 @@
             width: 100%;*/
             
             display: grid;
-            grid-template-columns: repeat(auto-fill,minmax(260px,auto));
-            grid-template-rows: auto;
+            grid-template-columns: repeat(auto-fill,minmax(280px,auto));
+            grid-template-rows: repeat(auto-fill, minmax(auto));
             column-gap: 15px;
             row-gap: 15px;
             width: 100%;    
@@ -207,6 +211,7 @@
             background-color: #313131;
             margin: 10px ;
             border-radius: 10px ;
+            padding: 1% 0;
         }
         .course:hover .course__image img {
             opacity: .8;
@@ -229,6 +234,11 @@
             position: relative;
             height: 150px;
             border-radius: 10px;
+        }
+        .like__form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .course__mask {
             display: block;
@@ -520,6 +530,117 @@
             align-items: center;
             width: 100%;
             flex-direction: row !important;
+        }
+        .btn span {
+            color: black
+        }
+        .btn:hover span{
+            color: white
+        }
+
+        /*page__article*/
+        .page__article {
+            display: grid;
+            grid-template-columns: 2.5fr 1fr;
+            gap: 10px;
+            padding:  3%;
+        }
+        .page__article__left {
+            background-color: #2d2d39;
+            padding: 2%;
+            border-radius: 10px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+        }
+        .page__article__title {
+            margin-bottom: 2%;
+        }
+        .page__article__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 1%;
+        }
+        .page__article__footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin: 2%;
+        }
+        .like__form {
+
+        }
+        .icon__love {
+            background-color: transparent;
+            font-size: 30px;
+        }
+        a *:hover {
+            color: #5dd693;
+            cursor: pointer;
+        }
+
+
+        /* comments */
+        .comments {
+            width: 100%;
+        }
+        .comments__objects {
+            width: 100%;
+        }
+        .comment__form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        .comment__field {
+            background-color: #2d2d39;
+            border-bottom: 2px solid #e1f6fb;
+            font-size: 20px;
+            padding: 12px 6px;
+            width: 100%;
+        }
+
+        /* LOGIN */
+        .page__login__place {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: #2d2d39;
+            padding: 2%;
+            margin: 5% 0 0 0;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 100%;
+            padding-top: 5%;
+            box-shadow: 7px 7px 1px #000;
+        }
+        .page__login__place h2 {
+            font-size: 28px;
+            margin-bottom: 3%;
+        }
+        .page__form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            max-width: 400px;
+        }
+        .page__form input {
+            margin-bottom: 6% !important;
+        }
+        .sign__form__redirect {
+            margin: 5% 0;
+        } 
+        .page__login__place {
+
         }
     </style>     
 

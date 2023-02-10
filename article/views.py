@@ -82,6 +82,7 @@ def showArticle(request, slug):
     articles_filters = Article.objects.filter(tag = article.tag)
     latest_articles = []
     public_articles = []
+    liked = False
     
     for a in articles: #filter Articles
         if article.title != a.title:
@@ -95,11 +96,11 @@ def showArticle(request, slug):
     likes = article.likesForArticle
     likes_count = (article.likesForArticle).count()
             
-    if request.user.is_authenticated:
-        if request.method == 'POST':
-            type = request.POST.get('type')
-            
-            if type == 'like':
+    if request.method == 'POST':
+        type = request.POST.get('type')
+        
+        if type == 'like':
+            if request.user.is_authenticated: 
                 status = False
                 
                 for like in likes.all(): 
@@ -108,19 +109,23 @@ def showArticle(request, slug):
                         print(like.username)
                 
                 if status:
+                    liked = True
                     article.likesForArticle.remove(like)
                 if status == False:
+                    liked = False
                     article.likesForArticle.add(request.user)
                     article.save()
                         
                 return redirect('/articles/'+ slug+'/#like')
-            if type == 'comment':
+            else:
+                return redirect('/sign-in')
+            
+        if type == 'comment':
+            if request.user.is_authenticated:
                 message = request.POST.get('message')
-                print(message)
                 
                 if len(message) < 3:
                     return messages.error(request, 'Message is too short')
-                    
                 
                 form = ArticleComment.objects.create(
                     article=article,
@@ -128,13 +133,16 @@ def showArticle(request, slug):
                     message=message,
                 )
                 form.save()
-                return redirect('/articles/'+ slug+'/#comments')
-            
+                return redirect('/articles/'+ slug+'#comments')
+            else:
+                return redirect('base:login')
+                        
     context =  {
         'article': article, 
         'articles': latest_articles[:4], 
         'tag_articles': public_articles[:4], 
         'likes': likes_count,
+        'liked': liked,
         'comments': comments
     }
     return render(request, 'article/showArticle.html', context)

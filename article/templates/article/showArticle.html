@@ -10,30 +10,30 @@
         <div class="page__article__left">
             <h2 class="page__article__title">{{article.title}}</h2>
             <div class="page__article__header">
-                <a href="{% url 'base:profile' article.user.username %}" class="link"><b>{{article.user.username}}</b></a>
-                <a class="link">#{{article.tag}}</a>
+                <a href="{% url 'base:profile' article.user.username %}"><b>{{article.user.username}}</b></a>
+                <a class="">#{{article.tag}}</a>
             </div>
-            {% autoescape off %}
+            {% autoescape on %}
                 <p>{{article.text}}</p>
             {% endautoescape %}
-            <div class="page__article__header">
+            <div class="page__article__footer">
                 <b>
-                    <a>{{article.created}}</a>
+                    {{article.created|date:"d.m.Y   h:m" }}
                 </b>
                 <form action="" method="POST" class="like__form">
-                    {% if request.user.is_authenticated %}
-                        {% csrf_token %}
-                        <!-- <span>{{ likes }}</span> -->
-                        <input type="text" name="type" value="like" style="display: none;">
-                        <span class="icon icon__love icon__span">{{likes}}</span>
-                        <button class="material-symbols-outlined icon icon__love" id = "like">
-                            favorite
-                        </button>
-                    {% endif %}
+                    {% csrf_token %}
+                    <!-- <span>{{ likes }}</span> -->
+                    <input type="text" name="type" value="like" style="display: none;">
+                    <span class="icon icon__love icon__span">{{likes}}</span>
+                    <button 
+                        class="material-symbols-outlined icon icon__love" 
+                        id = "like">
+                        favorite
+                    </button>
                 </form>
             </div>
             <div class="comments" id="comments">
-                <h2>Comments</h2>
+                <h2>Комментарии</h2>
                 <div class="hr"></div>
                 <form action=""class='comment__form' method="POST">
                     {% csrf_token %}
