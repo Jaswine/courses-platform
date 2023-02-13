@@ -13,15 +13,10 @@
         {% endif %}
     {% endif %}
  {% endif %}
-<div class="courses page__article__articles">
+ <div class="home__courses__objects">
     {% for article in articles %}
-        <article>
-            <div class="article__head ">
-                <div class="">{{article.title}}</div>
-                <a href="{% url 'article:show_article' article.slug %}" class="material-symbols-outlined icon link">
-                    arrow_forward
-                </a>
-            </div>
+        <article class="article">
+            <a class="link__page"  href="{% url 'article:show_article' article.slug %}">{{article.title}}</a>
             <div class="article__body">
                 {{article.text | truncatewords:30 }}
             </div>
@@ -45,4 +40,4 @@
             {% endif %}
         </article>
     {% endfor %}
-</div>
+</div>  

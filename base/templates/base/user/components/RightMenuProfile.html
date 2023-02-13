@@ -1,50 +1,50 @@
 <div class="profile__body__left">
     {% comment %} TODO: Menu {% endcomment %}
-    <a href="{% url 'base:profile' user.username %}" class="link">
+    <a href="{% url 'base:profile' user.username %}" class="""">
         <span class="material-symbols-outlined">
             person
         </span>    
-         Profile
+         Профиль
     </a>
-    <a href="{% url 'base:profile-likes' user.username %}" class="link">
+    <a href="{% url 'base:profile-likes' user.username %}" class="""">
         <span class="material-symbols-outlined">favorite</span>
-        Likes
+        Лайки
     </a>
-    {% comment %} <a href="{% url 'base:profile' user.username %}" class="link">
+    {% comment %} <a href="{% url 'base:profile' user.username %}" class="""">
         <span class="material-symbols-outlined">
             bookmark
         </span>
         Bookmarks
     </a> {% endcomment %}
-     {% comment %} <a href="{% url 'base:profile' user.username %}" class="link">
+     <a href="{% url 'base:profile' user.username %}" class="""">
         <span class="material-symbols-outlined">
             workspace_premium
             </span>
-        Sertificates
-    </a>  {% endcomment %}
+        Сертификаты
+    </a>  
     {% if request.user.is_authenticated %}
         {% if request.user.is_superuser %}
-            <a href="{% url 'base:profile-courses' user.username %}" class="link">
+            <a href="{% url 'base:profile-courses' user.username %}" class="""">
                 <span class="material-symbols-outlined">
                     school  
                 </span>
-                Courses
+                Курсы
             </a>
-            <a href="{% url 'base:profile-articles' user.username %}" class="link">
+            <a href="{% url 'base:profile-articles' user.username %}" class="""">
                 <span class="material-symbols-outlined">
                     description
                     </span>
-                Articles
+                Статьи
             </a>
         {% endif %}
     {% endif %}
-    <!-- <a href="" class="link">Certificates</a> -->
+    <!-- <a href="" class="""">Certificates</a> -->
     {% if request.user.username == user.username %}
-    <a href="{% url 'base:profile-update' user.username %}" class="link">
+    <a href="{% url 'base:profile-update' user.username %}" class="""">
         <span class="material-symbols-outlined">
             settings
         </span>
-        Settings
+        Настройки
     </a>
     {% endif %}
 </div>

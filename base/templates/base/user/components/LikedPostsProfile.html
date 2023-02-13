@@ -42,14 +42,10 @@
     </div>
 
     {% if like_articles %}
+    <div class="home__courses__objects">
     {% for article in like_articles %}
-    <article>
-        <div class="article__head ">
-            <div class="">{{article.title}}</div>
-            <a href="{% url 'article:show_article' article.slug %}" class="material-symbols-outlined icon link">
-                arrow_forward
-            </a>
-        </div>
+    <article class="article">
+        <a class="link__page"  href="{% url 'article:show_article' article.slug %}">{{article.title}}</a>
         <div class="article__body">
             {{article.text | truncatewords:30 }}
         </div>
@@ -70,24 +66,10 @@
                     </div>
                 {% endif %}
             {% endif %}
-            {% if status %}
-                    <div class=" article__head article__buttons">
-                        <div href=""><b>#{{article.tag}}</b></div>
-                        <form action="" method="POST" class="like__form">
-                            {% if request.user.is_authenticated %}
-                                {% csrf_token %}
-                                <!-- <span>{{ likes }}</span> -->
-                                <span class="icon icon__love icon__span">{{article.likesForArticle.count}}</span>
-                                <a href="{% url 'article:show_article' article.slug %}#like" class="material-symbols-outlined icon icon__love" id = "like">
-                                    favorite
-                                </a>
-                            {% endif %}
-                        </form>
-                    </div>
-            {% endif %}
         {% endif %}
     </article>
 {% endfor %}
+</div>
 {% else %}
 <div class="not__found">
      <span class="material-symbols-outlined not-found-icon">

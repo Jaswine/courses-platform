@@ -78,7 +78,7 @@
 
         ::-webkit-scrollbar {
             background-color: transparent;
-            width: 12px;
+            width: 10px;
             background-color: var(--bg);
         }
         ::-webkit-scrollbar-thumb {
@@ -174,6 +174,9 @@
             display: flex;
             align-items: center;
             gap: 1rem
+        }
+        a:hover * {
+            color: var(--green)
         }
         .home__courses__doc a:hover {
             color: var(--green);
@@ -641,7 +644,138 @@
         } 
         .page__login__place {
 
+        }   
+        .profile__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 2% 5% 2%;
+            border-bottom: 1px solid rgb(254,254,254, .1);
+            margin-bottom: 2%;
         }
+        .profile__header__right__icon {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 
+                3px 3px 1px var(--green),
+                -3px -3px 1px var(--black);
+        }
+        .profile__header__right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }   
+        .profile__header__left {
+
+        }
+        .expirense {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+        .expirense  span {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 10px;
+            color: var(--black);
+            font-weight: bold;
+        }
+        .expirense  span::after{
+            display: block;
+            content: '';
+            width: 120%;
+            height: 180%;
+            background-color: var(--green);
+            z-index: -1;
+            position: absolute;
+            transform: rotate(45deg);
+        }
+        .profile__body {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            padding: 1% 5%;
+        }
+        .profile__body__left {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-direction: column;
+            padding: .4rem;
+            width: 100%;
+            max-width: 200px;
+        }
+        .profile__body__left a{
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px
+        }
+        .profile__body__right {
+            padding: 0% .5% 3%;
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+        .page__article__articles {
+            display: flex;
+            justify-content: start;
+            align-items: start;
+            flex-direction: column;
+        }
+        .profile__body__right__icons {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            margin-top: 1%;
+        }
+        .profile__body__right__icons a span {
+            font-size: 28px;
+            margin: 0 .4rem;
+        }
+        /*Change profile*/
+        .page__article__form form h3 {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .ava {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+        /* Liked  Courses */
+        .liked__courses {
+            width: 100%;    
+            overflow-x: scroll;
+            padding: 10px 0;
+            
+            display: flex;
+            justify-content: start;
+            align-items: start;
+            overflow-y: hidden;
+            height: 100%;
+            max-height: 300px;
+        }
+        .liked__courses .course {
+            margin: 0 0 0 10px;
+            width: 100%;
+            max-width: 250px;
+            height: 100%;
+        }
+
     </style>     
 
     <script>

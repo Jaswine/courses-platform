@@ -1,30 +1,28 @@
 {% load static %}
 {% comment %} ? IF WE CLICK ON ABOUT BUTTON {% endcomment %}
 {% if profile.bio %}
-<p><b>About:</b> {{profile.bio}}</p>
+<p><b>Об: </b> {{profile.bio}}</p>
 {% endif %}
-<p><b>Joined</b> {{profile.created}}</p>
+<p><b>Присоединился: </b> {{profile.created |date:"d.m.Y   h:m" }}</p>
 <div class="profile__body__right__icons">
     {% if profile.twitter %}
         <a href="https://twitter.com/{{profile.twitter}}" target="_blank">
-            <img src="{% static 'images/twitter.png' %}" alt="twitter"/>
+            <span class="fa fa-twitter fa-1x review__size" id="first"></span>
         </a>
     {% endif %}
     {% if profile.github %}
     <a href="https://github.com/{{profile.github}}"  target="_blank">
-        <img src="{% static 'images/github.png' %}"  alt="twitter"/>
+        <span class="fa fa-github fa-1x review__size" id="first"></span>
     </a>
     {% endif %}
     {% if profile.telegram %}
     <a href="https://t.me/{{profile.telegram}}" target="_blank">
-        <img src="{% static 'images/telegram.png' %}" alt="twitter"/>
+        <span class="fa fa-telegram fa-1x review__size" id="first"></span>
     </a>
     {% endif %}
     {% if profile.website %}
         <a href="{{profile.website}}" target="_blank">
-            <span class="material-symbols-outlined icon icon-profile">
-                language
-            </span>
+            <span class="fa fa-link   fa-1x review__size" id="first"></span>
         </a>
     {% endif %}
 </div>
