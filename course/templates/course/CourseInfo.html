@@ -12,6 +12,13 @@
     <div class="page__intro">
         <div class="page__intro__left">
             <h1 class="page__intro__title">{{course.title}}</h1>
+            <p>{{course.about | truncatewords:"100"}}</p>
+            <div class="buttons">
+                <a href="" class="btn">Начать Обучение</a>
+                {% if not request.user.is_authenticated %}
+                    <a href="" class=" btn btn-primary">Зарегестрироваться</a>
+                {% endif %}
+            </div>
             <div class="page__intro__tags">
                 <a href="{% url 'base:profile' request.user %}">
                 
@@ -102,7 +109,7 @@
                     {% for review in reviews %}
                         <div class="comment review">
                             <div class="comment__header">
-                                <a href="{% url 'base:profile' request.user.username %}" class="link">{{review.user.username}}</a>
+                                <a href="{% url 'base:profile' review.user.username %}" class="link">{{review.user.username}}</a>
                                 <div class="">
                                     <span class="review__show__stars">
                                             <span class="fa fa-star fa-1x review__size" id="one"></span>
@@ -184,7 +191,6 @@
         <div class="page__about__left">
             <div class="course__info__share">
                 <form action="" method="POST" class="like__form">
-                    {% if request.user.is_authenticated %}
                         {% csrf_token %}
                         <!-- <span>{{ likes }}</span> -->
                         <!-- <div class="icon__love icon icon__span like__form__text">Add To Lover</div> -->
@@ -193,7 +199,6 @@
                         <button class="material-symbols-outlined icon icon__love" id = "like">
                             favorite
                         </button>
-                    {% endif %}
                 </form>
             </div>
             <div class="course__info__share">
@@ -206,11 +211,11 @@
                 <div class="course__info__share__icons">
                     <div class="form__links">
                         <!--TODO Share on twitter, reddit, telegram and other social media -->
-                        {% post_to_facebook object_or_url '<img class="icon__img" src="../../../static/images/facebook.png">' %}
-                        <a href="https://www.instagram.com/"> <img class="icon__img" src="{% static 'images/instagram.png' %}" alt=""></a>
-                        {% post_to_twitter "Cool Course : '{{course.title}}' on CODELEARN." object_or_url '<img class="icon__img" src="../../../static/images/twitter.png" >'  %}
-                        {% post_to_reddit  "Cool Course: '{{course.title}}' on CODELEARN." object_or_url '<img class="icon__img" src="../../../static/images/reddit.png">' %}
-                        <a href="https://www.pinterest.com/"> <img class="icon__img" src="{% static 'images/pinterest.png' %}" alt=""></a>
+                        {% post_to_facebook object_or_url ' <span class="fa fa-facebook fa-1x review__size icon" id="first"></span>' %}
+                        <a href="https://www.instagram.com/"> <span class="fa fa-instagram fa-1x review__size icon" id="first"></span></a>
+                        {% post_to_twitter "Cool Course : '{{course.title}}' on CODELEARN." object_or_url '<span class="fa fa-twitter fa-1x review__size icon" id="first"></span>'  %}
+                        {% post_to_reddit  "Cool Course: '{{course.title}}' on CODELEARN." object_or_url '<span class="fa fa-reddit fa-1x review__size icon" id="first"></span>' %}
+                        <a href="https://www.pinterest.com/"> <span class="fa fa-pinterest fa-1x review__size icon" id="first"></span></a>
                     </div>
                 </div>
             </div>

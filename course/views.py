@@ -56,7 +56,7 @@ def course(request, slug):
             else:
                 messages.error(request, 'u need to choose some stars If u wanna send message')
     else:
-        messages.error(request, 'u need to sign in or sign up')
+        return redirect('base:login')
                 
     context = {
         'course': course, 
@@ -88,18 +88,21 @@ def task(request, slug, pk):
     comments = CourseComment.objects.filter(course=course, courseTask=task)
     
     if request.method == 'POST':
-        comment = request.POST.get('comment')
+        try: 
+            comment = request.POST.get('comment')
         
-        form = CourseComment.objects.create(
-            commentType = 'comment',
-            course = course,
-            user = request.user,
-            message = comment,
-            courseTask = task,
-        )
-        
-        form.save()
-        return redirect('courses:task', course.slug, task.id)
+            form = CourseComment.objects.create(
+                commentType = 'comment',
+                course = course,
+                user = request.user,
+                message = comment,
+                courseTask = task,
+            )
+            
+            form.save()
+            return redirect('courses:task', course.slug, task.id)
+        except:
+            return redirect('base:login')
     
     context = {
         'course': course,

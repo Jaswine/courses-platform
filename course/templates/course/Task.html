@@ -11,7 +11,7 @@
         {% for title in titles %}
           {% for exercise in title.tasks.all  %}
           <div class="menu__component">
-            <a href="/courses/{{course.slug}}/tasks/{{exercise.id}}" class="link menu__component__title">{{exercise.title}}</a>
+            <a href="/courses/{{course.slug}}/tasks/{{exercise.id}}" class=" menu__component__title">{{exercise.title}}</a>
             <p class="menu__component__text">{{exercise.description | truncatewords:15}}</p>
           </div>
           {% endfor %}
@@ -42,7 +42,7 @@
             {% for review in comments %}
                 <div class="comment review">
                     <div class="comment__header">
-                        <a href="{% url 'base:profile' request.user.username %}" class="link">{{review.user.username}}</a>
+                        <a href="{% url 'base:profile' request.user.username %}" >{{review.user.username}}</a>
                         <div class="">
                             <span>{{review.updated}}</span>
                             {% if user.is_authenticated %}

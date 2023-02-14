@@ -23,7 +23,7 @@
             <option value=""></option>
         </select> -->
     </div>
-    <div class="courses">
+    <div class="home__courses__objects">
         {% for course in courses  %}
             <div class="course">
                 <div class="course__image">
@@ -35,6 +35,24 @@
                         <a href="{% url 'courses:course' course.slug %}" class = 'course__title '>{{course.title}}</a>
                         <p>{{course.description|truncatewords:30}}</p>
                     </div>
+                    {% if request.user.is_authenticated %}
+                        {% if request.user.is_superuser %}
+                            {% if request.user.username == course.user.username %}
+                                <div class="course__info__tables ">
+                                    <a href="{% url 'courses:tasks-panel' course.slug %}" class="btn btn-icon">
+                                        <span class="material-symbols-outlined">
+                                            edit_square
+                                        </span>
+                                    </a>
+                                    <a href="" class="btn btn-delete">
+                                        <span class="material-symbols-outlined">
+                                        delete_forever
+                                        </span>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
                     <div class="course__info__tables">
                         <a href="/">{{course.user}}</a>
                         <a href="/">#{{course.tags}}</a>
@@ -42,6 +60,6 @@
                 </div>
             </div>
         {% endfor %}
-    </div>
+        </div>
 </div>
 {% endblock content %}
