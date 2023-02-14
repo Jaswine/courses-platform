@@ -10,6 +10,12 @@
 
 ![image](https://user-images.githubusercontent.com/82625479/217524459-f0536502-d6c9-4257-9a23-65f6464c94b4.png)
 
+![image](https://user-images.githubusercontent.com/82625479/218445573-24e2c1c3-ada1-4606-b5f8-632efa8109fa.png)
+
+![image](https://user-images.githubusercontent.com/82625479/218445653-3c2dc876-0660-41b9-baad-63adcfef92ac.png)
+
+![image](https://user-images.githubusercontent.com/82625479/218446163-f4652040-080f-4f02-8c71-e840249a6e90.png)
+
 
 <h3>OLD DESIGN: </h3>
 
