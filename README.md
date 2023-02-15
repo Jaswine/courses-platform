@@ -16,6 +16,13 @@
 
 ![image](https://user-images.githubusercontent.com/82625479/218446163-f4652040-080f-4f02-8c71-e840249a6e90.png)
 
+![image](https://user-images.githubusercontent.com/82625479/219077776-46f33c78-f005-42f3-aba7-ddbf0e06f244.png)
+
+![image](https://user-images.githubusercontent.com/82625479/219078002-159f7e76-0ed4-462d-a673-db365749d6fb.png)
+
+![image](https://user-images.githubusercontent.com/82625479/219078174-fb3b9844-08b5-4c42-95bb-5eab448e0766.png)
+
+
 
 <h3>OLD DESIGN: </h3>
 
