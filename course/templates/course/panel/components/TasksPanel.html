@@ -13,6 +13,7 @@
             type="text"
             name="title"
             placeholder="Title..."
+            class="input"
             >
             <button type="submit" class="btn">Create</button>
     </form>
@@ -22,10 +23,10 @@
             arrow_forward_ios
             </span>
         </h2>
-        <a href="{% url  'courses:create-task' course.slug %}" class="btn btn-delete btn-big">Add New Task</a>
+        <a href="{% url  'courses:create-task' course.slug %}" class="btn btn-delete">Add New Task</a>
     </div>
 
-    <div class="tasks">
+    <div class="tasks tags">
         {% for CourseTitle in CourseTitles  %}
           <div class="task">
             <div class="task__title">

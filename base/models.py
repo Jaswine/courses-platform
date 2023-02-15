@@ -8,6 +8,7 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='profiles', blank=True, null=True, default=None)
     bio = models.TextField(max_length=500, blank=True)
     
+    # number = models.CharField(max_length=12, blank=True)
     twitter = models.CharField(max_length=1000, blank=True)
     github = models.CharField(max_length=1000, blank=True)
     telegram = models.CharField(max_length=1000, blank=True)

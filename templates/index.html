@@ -489,6 +489,7 @@
             padding: 8px 20px;
             color: var(--error);
             font-size: 22px;
+            position: fixed;
         }
 
         /* TAGS */
@@ -561,9 +562,27 @@
             align-items: center;
             flex-direction: column;
             width: 100%;
+            margin: 0  4px 0 0 ;
+        }
+        article {
+            margin: 0 0 2% 0;
+        }
+        .page__article__right__block {
+            display: flex;
+            justify-content: center;
+            align-items: start;
+            flex-direction: column;
+            margin-bottom: 10%;
+            background-color: #2d2d39;
+            margin:  0 4px 5px;
+            border-radius: 10px;
+            padding: 6px 10px;
+        }
+        .page__article__right__block h3 {
+            margin: 10px 0;
         }
         .page__article__title {
-            margin-bottom: 2%;
+            margin-bottom: 5%;
         }
         .page__article__header {
             display: flex;
@@ -864,7 +883,7 @@
             padding: 0 .6rem;
         }
         .page__about__right  p {
-            margin: 2% 0;
+            margin-bottom: 2%;
             font-size: 20px;
         }
         .page__about__left {
@@ -910,8 +929,8 @@
             justify-content: start;
             align-items: center;
             width: 100%;
-            padding: 0%, 2%;
-            margin: .5%;
+            padding: 0% 2%;
+            margin: 1% 0;
             flex-direction: column;
         }
         .title__desc {
@@ -920,19 +939,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid var(--primary);
+            border: 1px solid var(--light-gray);
         }
         .title__desc:hover {
-            background-color: var(--white);
+            background-color: var(--black);
         }
         .title__task:hover {
-            background-color: var(--white);
+            background-color: var(--black);
         }
         .title__open {
             font-size: 3rem;
             font-weight: 100;
             background-color: transparent;
-            color: var(--primary);
+            color: var(--white);
             cursor: pointer;
             width: 50px;
             height: 50px;
@@ -940,7 +959,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            border: 1px solid var(--primary)
+            border: 1px solid var(--light)
         }
         .title__tasks {
             width: 100%;
@@ -955,10 +974,10 @@
             align-items: center;
             width: 90%;
             padding: 1% 3%;
-            border: 1px solid var(--primary)
+            border: 1px solid var(--light-gray)
         }
         .title__open:hover {
-            background-color: var(--lightGreen);
+            background-color: var(--black);
             border-color: var(--white);
             color: var(--white);
         }
@@ -991,7 +1010,7 @@
         .page__course__menu {
             max-width: 23%;
             width: 100%;
-            padding: 2% 10px 0 0;
+            padding: 2%  0 0;
             height: 100%;
             max-height: 90vh;
             overflow-y:scroll;
@@ -1002,12 +1021,12 @@
             z-index: 1000;
             background-color: var(--lightGray);
         }
-        .page__content {
+        .page__content {  
             width: 80%;
             padding: 2% 0 0 10px;
             font-family: serif;
             margin: 0 2% 0 25%;
-
+        }
         .hr {
             display: block;
             content: '';
@@ -1032,6 +1051,78 @@
             width: 100%;
             height: 100%;
         }
+        .review__form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        /* reviews */
+        .reviews {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-direction: column;
+            width: 100%;
+            margin: 2% 0 10% 0;
+        }
+        .review__form {
+            display: flex;
+            justify-content:space-between;
+            align-items: center;
+            width: 100%;
+            min-width: 100%;
+        }
+         .review__input {
+            width: 60%;
+            min-width: 60%;
+            background-color: transparent;
+            border-bottom: 1px solid var(--dark-light);
+            font-size: 20px;
+            padding: .4rem;
+        }
+        .review__input:hover {
+            border-color: var(--white);
+        }
+        .review__input:focus {
+            border-color: var(--white);
+        }
+        .review__form div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .review__form div input {
+
+        }
+        .checked {
+            color: rgb(93, 214, 147, .8);
+        }
+        .selected {
+            color: var(--green);
+        }
+        .review__size {
+            font-size: 28px;
+        }
+
+        /* Buttons Header in the Comments in the Course */
+        .course__comments__page {
+            width: 100%;
+        }
+        .page__buttons__filters {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            border-bottom: 1px solid #202020;
+            padding: .4rem 0;
+            margin-bottom: 1%;
+        }
+        .page__buttons__filters select {
+            max-width: 300px;
+            width: 100%;
+        }
         .hr {
             display: block;
             content: '';
@@ -1044,6 +1135,9 @@
             font-family: serif;
             max-width: 800px;
         }
+        .page__content h2 {
+            margin-bottom: 10px;
+        }
         .menu__component__title {
             font-size: 20px;
         }
@@ -1051,6 +1145,12 @@
             font-size: 14px;
             color: var(--gray);
             font-family: serif;
+        }
+        .menu__component {
+            padding: .4rem ;
+        }
+        .menu__component:hover {
+            background-color: var(--bg);
         }
         video {
             width: 100%;
@@ -1125,11 +1225,11 @@
             width: 100%;
         }
         .delete {
-            color: var(--primary);
+            color: var(--light);
             font-size: 24px ;
         }
         .delete:hover {
-            color: var(--pink);
+            color: var(--green);
         }
         .hr {
             display: block;
@@ -1138,6 +1238,82 @@
             height: 1px;
             background-color: var(--dark-light);
             margin: 0 0;
+        }
+        .update_course {
+            border: none;
+        }
+        .update__course__header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .update__course__header h2 {
+            text-align: left;
+            margin-left: 25px;
+        }
+        .create__task {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+            flex-direction: row;
+            max-width: 100% ;
+        }
+        .create__task input {
+            width: 100%;
+        }
+         /* tasks */
+         .tasks {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            margin: 3% 0;
+        }
+        .task {
+            width: 100%;
+            margin: .4rem 0 .8rem;
+        }
+        .task__title {
+            width: 100%;
+            padding: .6rem 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--light);
+        }
+        .task__title:hover {
+            background-color: #131313;
+        }
+        .task__title span {
+            font-size: 26px;
+            font-weight: 200;
+        }
+        .in__task {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            flex-direction: column;
+        }
+        .task__exercises {
+            max-width: 90%;
+            padding: .4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-big{
+            max-width: 200px;
+            width: 200px;
+        }
+        .display_none {
+            display: none;
+        }
+        .course__panel__header {
+            margin-bottom: 10px;
         }
     </style>     
 

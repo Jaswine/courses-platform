@@ -23,40 +23,44 @@ def course(request, slug):
         if i.user.username == request.user.username:
             commentPermission = False   
     
-    if request.user.is_authenticated:
         if request.method == 'POST': #! FOR LIKES
             type = request.POST.get('type')
-            if type == 'like':
-                status = False
-                
-                for like in course.likes.all():
-                    if like.username == request.user.username:
-                        status = True      
-                
-                if status:
-                    course.likes.remove(like)
-                else:
-                    course.likes.add(request.user)
-                    course.save()
-            elif type == 'review': #! FOR REVIEWS
-                message = request.POST.get('message')
-                stars = request.POST.get('stars')
-                user = request.user
-                
-                print(message)
-                form = CourseComment.objects.create(
-                    course = course,
-                    commentType = 'review',
-                    user = user,
-                    rating = stars,
-                    message = message,
-                )
-                form.save()
-                return redirect('/courses/'+ str(course.slug)+'#reviews')
+            if request.user.is_authenticated:
+                if type == 'like':
+                    status = False
+                    
+                    for like in course.likes.all():
+                        if like.username == request.user.username:
+                            status = True      
+                    
+                    if status:
+                        course.likes.remove(like)
+                    else:
+                        course.likes.add(request.user)
+                        course.save()
             else:
-                messages.error(request, 'u need to choose some stars If u wanna send message')
-    else:
-        return redirect('base:login')
+                return redirect('base:login')
+                    
+            if request.user.is_authenticated:
+                if type == 'review': #! FOR REVIEWS
+                    message = request.POST.get('message')
+                    stars = request.POST.get('stars')
+                    user = request.user
+                    
+                    print(message)
+                    form = CourseComment.objects.create(
+                        course = course,
+                        commentType = 'review',
+                        user = user,
+                        rating = stars,
+                        message = message,
+                    )
+                    form.save()
+                    return redirect('/courses/'+ str(course.slug)+'#reviews')
+                else:
+                    messages.error(request, 'u need to choose some stars If u wanna send message')
+            else:
+                return redirect('base:login')
                 
     context = {
         'course': course, 
@@ -86,6 +90,9 @@ def task(request, slug, pk):
     task = CourseTask.objects.get(id=pk)
     titles = CourseTitle.objects.filter(course=course.id)
     comments = CourseComment.objects.filter(course=course, courseTask=task)
+    
+    if request.user.is_authenticated != True:
+        return redirect('base:login')
     
     if request.method == 'POST':
         try: 

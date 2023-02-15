@@ -9,13 +9,14 @@
             type="text" 
             name="title"
             placeholder="ur title..."
-            class="course_field"
+            class="course_field input"
             value="{{course.title}}"
         >
         <input 
             type="file"
             name='image'
             value="{{course.image}}"
+            class="input"
         >
         <select name="tag">
             <option value="{{course.tags.id}}" selected>{{course.tags.name}}</option>
@@ -39,7 +40,6 @@
             placeholder="What Are other people will learn on this course? "
         >{{course.whatAreUWillLearn}}</textarea>
         <label for="">Task Level</label>
-        {{course.level}}
         <select name="level">
             <option value="{{course.level}}" selected disabled>{{course.level}}</option>
             {% if course.level == 'Beginner' %}
@@ -61,7 +61,7 @@
         <input 
             name="InitialRequirements" 
             placeholder="Initial Requirements" 
-            class="course_field"
+            class="course_field input"
             value="{{ course.initialRequirements }}"
         />
         <div class="page__article__form__box">
@@ -69,6 +69,7 @@
                 type="checkbox" 
                 class="page__article__form__checkbox" 
                 name="public" 
+                class="input"
                 {% if course.public %}
                     checked
                 {% endif %}

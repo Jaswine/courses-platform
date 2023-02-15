@@ -11,10 +11,10 @@
     {% for review in comments %}
     <div class="comment review">
       <div class="comment__header">
-          <a href="{% url 'base:profile' request.user.username %}" class="link">{{review.user.username}}</a>
+          <a href="{% url 'base:profile' request.user.username %}" class="">{{review.user.username}}</a>
           <div class="">
                 <a></a>
-              <span>{{review.updated}}</span>
+              <span>{{review.updated|date:"d.m.Y   h:m"}}</span>
               {% if user.is_authenticated %}
                   {% if request.user.id == review.user.id %}
                       <a class="delete material-symbols-outlined" href="{% url 'courses:course-review-delete' course.slug review.id %}">
@@ -25,7 +25,6 @@
           </div>
       </div>
       <p>{{review.message}}</p>
-      <!-- <a href="" class="link">replay</a> -->
   </div>
    {% endfor %}
   </div>

@@ -42,7 +42,7 @@
             {% for review in comments %}
                 <div class="comment review">
                     <div class="comment__header">
-                        <a href="{% url 'base:profile' request.user.username %}" >{{review.user.username}}</a>
+                        <a href="{% url 'base:profile' review.user.username %}" >{{review.user.username}}</a>
                         <div class="">
                             <span>{{review.updated}}</span>
                             {% if user.is_authenticated %}
