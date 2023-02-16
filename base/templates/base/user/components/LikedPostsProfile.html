@@ -1,6 +1,7 @@
 <div class="courses page__article__articles">
     {% comment %} TODO:  GET LIKES {% endcomment %}
 
+    {% if liked_courses %}
     <div class="liked__courses">
         {% for course in liked_courses  %}
             <div class="course">
@@ -40,6 +41,7 @@
             </div>
         {% endfor %}
     </div>
+    {% endif %} 
 
     {% if like_articles %}
     <div class="home__courses__objects">

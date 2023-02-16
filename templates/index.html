@@ -1010,7 +1010,7 @@
         .page__course__menu {
             max-width: 23%;
             width: 100%;
-            padding: 2%  0 0;
+            padding: 0  0 0;
             height: 100%;
             max-height: 90vh;
             overflow-y:scroll;
@@ -1073,7 +1073,7 @@
             width: 100%;
             min-width: 100%;
         }
-         .review__input {
+        .review__input {
             width: 60%;
             min-width: 60%;
             background-color: transparent;
@@ -1137,6 +1137,11 @@
         }
         .page__content h2 {
             margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
         }
         .menu__component__title {
             font-size: 20px;
@@ -1150,11 +1155,12 @@
             padding: .4rem ;
         }
         .menu__component:hover {
-            background-color: var(--bg);
+            background-color: var(--bg) ;
         }
         video {
             width: 100%;
             height: 100%;
+            max-width: 800px;
         }
 
         .dangerouse__place {
@@ -1314,6 +1320,23 @@
         }
         .course__panel__header {
             margin-bottom: 10px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem
+        }
+
+        /* not__found */
+        .not__found {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .not-found-icon {
+            font-size: 70px;
         }
     </style>     
 

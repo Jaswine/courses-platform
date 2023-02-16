@@ -49,7 +49,7 @@
                     {% for comment in comments %}
                       <div class="comment">
                         <div class="comment__header">
-                            <a href="{% url 'base:profile' request.user.username %}" class="">{{comment.user.username}}</a>
+                            <a href="{% url 'base:profile' comment.user.username %}" class="">{{comment.user.username}}</a>
                             <div class="">
                                 <span>{{comment.updated|date:"d.m.Y   h:m"}}</span>
                                 {% if user.is_authenticated %}

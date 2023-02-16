@@ -4,6 +4,12 @@
 <p><b>Об: </b> {{profile.bio}}</p>
 {% endif %}
 <p><b>Присоединился: </b> {{profile.created |date:"d.m.Y   h:m" }}</p>
+{% if profile.location %}
+<p><b>Где вас искать: </b> {{profile.location}}</p>
+{% endif %}
+{% if profile.number %}
+<p><b>Номер телефона: </b> {{profile.number}}</p>
+{% endif %}
 <div class="profile__body__right__icons">
     {% if profile.twitter %}
         <a href="https://twitter.com/{{profile.twitter}}" target="_blank">

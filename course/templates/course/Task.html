@@ -8,17 +8,36 @@
 {% block content %}
 <div class="page course__task__page">
     <div class="page__course__menu">
-        {% for title in titles %}
-          {% for exercise in title.tasks.all  %}
-          <div class="menu__component">
+        {% for exercise in tasks %} 
+        {% comment %} {% for title in titles %} {% endcomment %}
+          {% comment %} {% for exercise in title.tasks.all  %} {% endcomment %}
+          <div class="menu__component  "
+          {% if exercise.id == task.id %}
+            style="background-color: #2d2d39"
+          {% endif %}
+          >
             <a href="/courses/{{course.slug}}/tasks/{{exercise.id}}" class=" menu__component__title">{{exercise.title}}</a>
             <p class="menu__component__text">{{exercise.description | truncatewords:15}}</p>
           </div>
-          {% endfor %}
+          {% comment %} {% endfor %} {% endcomment %}
       {% endfor %}
     </div>
     <div class="page__content">
-      <h2>{{task.title}}</h2>
+      <h2>
+          {{task.title}}
+          <div class="buttons">
+            {% if priv_page %}
+              <a class="material-symbols-outlined" href="{%  url 'courses:task' course.slug priv_page.id %}">
+                arrow_back
+              </a>
+            {% endif %}
+            {% if  next_page %}
+              <a class="material-symbols-outlined btn" href="{%  url 'courses:task' course.slug  next_page.id %}">
+                  arrow_forward
+              </a>
+              {% endif %}
+        </div>
+      </h2>
         {% if task.task == 'video'  %}
           <video src="{% static 'media' %}/{{task.video}}" controls autoplay></video>
         {% endif %}

@@ -13,54 +13,54 @@ def course(request, slug):
     titles = CourseTitle.objects.filter(course=course.id)
     reviews = CourseComment.objects.filter(course=course,commentType = 'review')
     
+    first_element = titles[0].tasks.all()[0]
+    
     courseTitlesCount = titles.count()
     courseTasksCount = CourseTask.objects.filter(course = course).count()
     courseCommentsCount = reviews.count
     likes = course.likes.count
     
     commentPermission = True
-    for i in reviews:
+    
+    for i in reviews:  # Review Checked
         if i.user.username == request.user.username:
             commentPermission = False   
     
-        if request.method == 'POST': #! FOR LIKES
+    if request.method == 'POST': #! FOR LIKES
+        print(request.user.is_authenticated)
+        if request.user.is_authenticated:
             type = request.POST.get('type')
-            if request.user.is_authenticated:
-                if type == 'like':
-                    status = False
-                    
-                    for like in course.likes.all():
-                        if like.username == request.user.username:
-                            status = True      
-                    
-                    if status:
-                        course.likes.remove(like)
-                    else:
-                        course.likes.add(request.user)
-                        course.save()
-            else:
-                return redirect('base:login')
-                    
-            if request.user.is_authenticated:
-                if type == 'review': #! FOR REVIEWS
-                    message = request.POST.get('message')
-                    stars = request.POST.get('stars')
-                    user = request.user
-                    
-                    print(message)
-                    form = CourseComment.objects.create(
-                        course = course,
-                        commentType = 'review',
-                        user = user,
-                        rating = stars,
-                        message = message,
-                    )
-                    form.save()
-                    return redirect('/courses/'+ str(course.slug)+'#reviews')
+            if type == 'like':
+                status = False
+                
+                for like in course.likes.all():
+                    if like.username == request.user.username:
+                        status = True      
+                
+                if status:
+                    course.likes.remove(like)
                 else:
-                    messages.error(request, 'u need to choose some stars If u wanna send message')
+                    course.likes.add(request.user)
+                    course.save()
+
+            if type == 'review': #! FOR REVIEWS
+                message = request.POST.get('message')
+                stars = request.POST.get('stars')
+                user = request.user
+                
+                form = CourseComment.objects.create(
+                    course = course,
+                    commentType = 'review',
+                    user = user,
+                    rating = stars,
+                    message = message,
+                )
+                form.save()
+                return redirect('/courses/'+ str(course.slug)+'#reviews')
             else:
-                return redirect('base:login')
+                messages.error(request, 'u need to choose some stars If u wanna send message')
+        else:
+            return redirect('base:login')
                 
     context = {
         'course': course, 
@@ -74,6 +74,8 @@ def course(request, slug):
         'reviews': reviews,
         
         'commentPermission': commentPermission,
+        
+        'first_element': first_element,
     }
     return render(request, 'course/CourseInfo.html', context)
 
@@ -86,18 +88,39 @@ def deleteReview(request,slug, id):
 
 def task(request, slug, pk):
     course = Course.objects.get(slug=slug)
-    tasksAll = CourseTask.objects.filter(course=course).reverse()
     task = CourseTask.objects.get(id=pk)
     titles = CourseTitle.objects.filter(course=course.id)
     comments = CourseComment.objects.filter(course=course, courseTask=task)
+    
+    tasks = []
+    prev_page = ''
+    next_page = ''
+    
+    for title in titles:
+        for exercise in  title.tasks.all():
+            tasks.append(exercise)     
+    
+    number = tasks.index(task)
+    
+    try: 
+        if (tasks[number+1]):
+            next_page = tasks[number+1]
+    except:
+        print('Error')
+    
+    try: 
+        if (tasks[number-1] and  number!=0):
+            prev_page = tasks[number-1]
+    except:
+        print('Error')
     
     if request.user.is_authenticated != True:
         return redirect('base:login')
     
     if request.method == 'POST':
-        try: 
+        if (request.user.is_authenticated):
             comment = request.POST.get('comment')
-        
+            
             form = CourseComment.objects.create(
                 commentType = 'comment',
                 course = course,
@@ -108,14 +131,19 @@ def task(request, slug, pk):
             
             form.save()
             return redirect('courses:task', course.slug, task.id)
-        except:
+        else:
             return redirect('base:login')
     
     context = {
         'course': course,
-        'titles': titles,
-        'tasks': tasksAll,
         'task': task,
+        
+        'titles': titles,
+        'tasks': tasks,
+        
+        'priv_page': prev_page,
+        'next_page': next_page,
+        
         'comments': comments
     }
     return render(request, 'course/Task.html', context)

@@ -222,9 +222,11 @@ def profileUpdate(request, username):
                 
                 profileImage = profile.image
                 image = request.FILES.get('image',profileImage)
+                location = request.POST.get('location')
                 
                 bio = request.POST.get('bio')
                 
+                number = request.POST.get('number')
                 twitter = request.POST.get('twitter')
                 github = request.POST.get('github')
                 telegram = request.POST.get('telegram')
@@ -239,6 +241,8 @@ def profileUpdate(request, username):
                 profile.github = github
                 profile.telegram = telegram
                 profile.website = website
+                profile.number = number
+                profile.location = location
             
                 user.save()
                 profile.save()

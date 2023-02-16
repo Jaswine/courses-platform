@@ -36,7 +36,7 @@
                             <p>{{course.description|truncatewords:30}}</p>
                         </div>
                         <span class="course__info__tables">
-                            <a href="/">{{course.user}}</a>
+                            <a href="{% url 'base:profile' course.user %}">{{course.user}}</a>
                             <a href="/">#{{course.tags}}</a>
                         </span>
                         <span class="course__info__tables__line"></span>

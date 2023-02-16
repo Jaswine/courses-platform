@@ -11,7 +11,6 @@
     {% if request.user.is_superuser %}
     <div class="page__panel">
         <a href="{% url 'courses:create-course' %}" class="btn btn-delete">
-            {% comment %} <span>Add New Post</span> {% endcomment %}
             <span class="material-symbols-outlined ">
                 drive_file_rename_outline
             </span>
@@ -19,9 +18,6 @@
     </div>
     {% endif %}
     <div class="page__filters">
-        <!-- <select name="" id="">
-            <option value=""></option>
-        </select> -->
     </div>
     <div class="home__courses__objects">
         {% for course in courses  %}
@@ -54,7 +50,7 @@
                         {% endif %}
                     {% endif %}
                     <div class="course__info__tables">
-                        <a href="/">{{course.user}}</a>
+                        <a href="{% url 'base:profile' course.user.username %}">{{course.user}}</a>
                         <a href="/">#{{course.tags}}</a>
                     </div>
                 </div>

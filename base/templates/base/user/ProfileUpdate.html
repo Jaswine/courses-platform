@@ -31,6 +31,7 @@
             <textarea
                 name="bio"
                 placeholder="U need to tell us about urself"
+                value="{{profile.bio}}"
             >
             {{profile.bio}}
             </textarea>       
@@ -41,6 +42,20 @@
                 </span>
             </h3>
 
+            <input 
+                type="text" 
+                name="location" 
+                placeholder="Где вы..."  
+                value="{{profile.location}}"
+                class="input"
+            >
+            <input 
+                type="text" 
+                name="number" 
+                placeholder="Номер вашего телефона..." 
+                value="{{profile.number}}"
+                class="input"
+            >
             <input 
                 type="text" 
                 name="twitter" 
