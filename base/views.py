@@ -247,7 +247,6 @@ def profileUpdate(request, username):
                 user.save()
                 profile.save()
                 return redirect('/profile/'+request.user.username)
-
         else: 
             messages.add_message(request, 'Profile not found')
     else:

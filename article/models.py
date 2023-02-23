@@ -4,7 +4,6 @@ from course.models import Tag
 # from ckeditor_uploader.fields import RichTextUploadingField
 from ckeditor.fields import RichTextField
 
-
 #! ____________ARTICLE SECTION___________
 #TODO: ARTICLE
 class Article(models.Model):
