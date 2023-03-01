@@ -8,7 +8,7 @@
 {% block content %}
 <div class='page'>
     <div class="page__login__place">
-            <h2>Sign Up</h2>
+            <h2>Зарагестрироваться</h2>
             <form action="" method="POST" class="page__form">
                 {% csrf_token %}
                 <input 
@@ -31,13 +31,13 @@
                 >
 
                 <button type="submit" class="btn">Sign Up</button>
-                <div class="sign__form__redirect">Do u wanna
+                <div class="sign__form__redirect">У вас есть аккаунт?!
                      <a 
                         class="linki" 
                         href="/sign-in"
                         style="text-decoration:underline"
-                     >Sign In</a>
-                ?</div>
+                     >Войти</a>
+                </div>
             </form>
     </div>
 </div>
