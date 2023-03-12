@@ -38,11 +38,11 @@
               {% endif %}
         </div>
       </h2>
-        {% if task.task == 'video'  %}
+        {% if task.taskType == 'video'  %}
           <video src="{% static 'media' %}/{{task.video}}" controls autoplay></video>
         {% endif %}
 
-        {% if task.task == 'text' %}
+        {% if task.taskType == 'text' %}
           <div>{{task.body}}</div>
         {% endif %}
         <div class="comments" id='comments'>

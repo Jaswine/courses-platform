@@ -72,11 +72,11 @@
                         <div class="title__tasks">
                             {% for task in title.tasks.all  %}
                                 <div class="title__task">
-                                    {% if task.task == 'text' %}
+                                    {% if task.taskType == 'text' %}
                                     <span class="material-symbols-outlined">
                                         menu_book
                                         </span>
-                                    {% elif task.task == 'video' %}
+                                    {% elif task.taskType == 'video' %}
                                     <span class="material-symbols-outlined">
                                         movie
                                         </span>

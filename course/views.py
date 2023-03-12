@@ -363,7 +363,7 @@ def createTask(request, slug):
 
         if tag == None or tag == '':
             validated = False
-            messages.error(request, 'Tag is None')
+            messages.error(request, 'Task Type is None')
         
         if tag == 'text':
             body = request.POST.get('body')
@@ -375,7 +375,7 @@ def createTask(request, slug):
                         user = request.user,    
                         course = course,
                         title = title,
-                        task = tag,
+                        taskType = tag,
                         description = description,
                         body = body,
                         public = public
@@ -461,7 +461,7 @@ def updateTask(request, slug, task_id):
         if validated:
             
             task.title = title
-            task.task = tag
+            task.taskType = tag
             task.description = description
             
             if tag == 'video':  

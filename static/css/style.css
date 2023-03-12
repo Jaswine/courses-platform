@@ -595,7 +595,7 @@ a *:hover {
     align-items: center;
     flex-direction: column;
     background-color: #2d2d39;
-    padding: 2%;
+    padding: 2% 9vw;
     margin: 5% 0 0 0;
     border-radius: 10px;
     max-width: 500px;
@@ -619,6 +619,8 @@ a *:hover {
 }
 .sign__form__redirect {
     margin: 5% 0;
+    font-size: 16px;
+    hyphens: auto;
 } 
 .profile__header {
     display: flex;
@@ -661,7 +663,7 @@ a *:hover {
 .expirense  span::after{
     display: block;
     content: '';
-    width: 120%;
+    width: 160%;
     height: 180%;
     background-color: var(--green);
     z-index: -1;
@@ -810,7 +812,8 @@ a *:hover {
 }
 .icon {
     font-size: 28px;
-    margin: 0 6px
+    margin: 0 6px;
+    font-weight: 800;
 }
 .page__intro__right img {
     width: 60%;
@@ -998,6 +1001,9 @@ a *:hover {
 video {
     width: 100%;
     height: 100%;
+}
+.review {
+    border-bottom: 1px solid var(--light-gray);
 }
 .review__form {
     display: flex;
@@ -1236,7 +1242,7 @@ video {
 }
 .task__title {
     width: 100%;
-    padding: .6rem 10px;
+    padding: 8px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1246,7 +1252,7 @@ video {
     background-color: #131313;
 }
 .task__title span {
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 200;
 }
 .in__task {
@@ -1263,6 +1269,16 @@ video {
     justify-content: space-between;
     align-items: center;
 }
+.task__exercises span {
+    font-size: 18px;
+}
+.btn-icon-mini {
+    padding: 2px 4px;
+}
+.icon {
+    font-size: 32px;
+    font-weight: bold;
+}
 .btn-big{
     max-width: 200px;
     width: 200px;
@@ -1272,6 +1288,14 @@ video {
 }
 .course__panel__header {
     margin-bottom: 10px;
+    width: 100%;
+}
+
+.course__body__left__menu__all {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
 }
 .buttons {
     display: flex;
@@ -1296,3 +1320,9 @@ video {
     justify-content: center;
     align-items: center;
 }
+.course__panel__header__public {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px
+ }

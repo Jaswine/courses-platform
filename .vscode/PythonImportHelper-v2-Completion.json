@@ -57,19 +57,11 @@
         "documentation": {}
     },
     {
-        "label": "migrations",
-        "importPath": "django.db",
-        "description": "django.db",
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
         "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
-        "label": "models",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
+        "detail": "django.conf",
         "documentation": {}
     },
     {
@@ -82,86 +74,6 @@
     },
     {
         "label": "models",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
-        "label": "migrations",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
-        "label": "models",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
-        "label": "migrations",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
-        "label": "models",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
-        "label": "migrations",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
-        "label": "models",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
-        "label": "models",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
-        "label": "migrations",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
-        "label": "models",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
-        "label": "migrations",
         "importPath": "django.db",
         "description": "django.db",
         "isExtraImport": true,
@@ -258,6 +170,142 @@
     },
     {
         "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
         "importPath": "django.db",
         "description": "django.db",
         "isExtraImport": true,
@@ -938,6 +986,24 @@
         "documentation": {}
     },
     {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "base.migrations.0003_profile_scores",
+        "description": "base.migrations.0003_profile_scores",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('base', '0002_profile_location_profile_number'),\n    ]\n    operations = [\n        migrations.AddField(\n            model_name='profile',\n            name='scores',\n            field=models.IntegerField(default=0),\n        ),",
+        "detail": "base.migrations.0003_profile_scores",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "base.migrations.0004_task",
+        "description": "base.migrations.0004_task",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('course', '0009_rename_task_coursetask_tasktype'),\n        migrations.swappable_dependency(settings.AUTH_USER_MODEL),\n        ('base', '0003_profile_scores'),\n    ]\n    operations = [\n        migrations.CreateModel(\n            name='Task',\n            fields=[",
+        "detail": "base.migrations.0004_task",
+        "documentation": {}
+    },
+    {
         "label": "BaseConfig",
         "kind": 6,
         "importPath": "base.apps",
@@ -951,7 +1017,16 @@
         "kind": 6,
         "importPath": "base.models",
         "description": "base.models",
-        "peekOfCode": "class Profile(models.Model):\n    user = models.ForeignKey(User, on_delete=models.CASCADE)\n    image = models.ImageField(upload_to='profiles', blank=True, null=True, default=None)\n    bio = models.TextField(max_length=500, blank=True)\n    location = models.CharField(max_length=168, blank=True)\n    number = models.CharField(max_length=12, blank=True)\n    twitter = models.CharField(max_length=1000, blank=True)\n    github = models.CharField(max_length=1000, blank=True)\n    telegram = models.CharField(max_length=1000, blank=True)\n    website = models.URLField(blank=True)",
+        "peekOfCode": "class Profile(models.Model):\n    user = models.ForeignKey(User, on_delete=models.CASCADE)\n    scores = models.IntegerField(default=0)\n    image = models.ImageField(upload_to='profiles', blank=True, null=True, default=None)\n    bio = models.TextField(max_length=500, blank=True)\n    location = models.CharField(max_length=168, blank=True)\n    number = models.CharField(max_length=12, blank=True)\n    twitter = models.CharField(max_length=1000, blank=True)\n    github = models.CharField(max_length=1000, blank=True)\n    telegram = models.CharField(max_length=1000, blank=True)",
+        "detail": "base.models",
+        "documentation": {}
+    },
+    {
+        "label": "Task",
+        "kind": 6,
+        "importPath": "base.models",
+        "description": "base.models",
+        "peekOfCode": "class Task(models.Model):\n    user = models.ForeignKey(User, on_delete=models.CASCADE)\n    choiceCourse = models.ForeignKey(Course, on_delete=models.CASCADE)\n    lessons = models.ManyToManyField(CourseTask)\n    created_at = models.DateTimeField(auto_now_add=True)\n    updated_at = models.DateTimeField(auto_now=True)\n    class Meta: \n        ordering = ('updated_at', 'created_at', )\n    def __str__(self):\n        return '{} - {}'.form(self.user.username, self.course.title)",
         "detail": "base.models",
         "documentation": {}
     },
@@ -1151,6 +1226,15 @@
         "description": "course.migrations.0008_alter_coursecomment_coursetask",
         "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('course', '0007_coursecomment_commenttype_coursecomment_coursetask_and_more'),\n    ]\n    operations = [\n        migrations.AlterField(\n            model_name='coursecomment',\n            name='courseTask',\n            field=models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='course.coursetask'),\n        ),",
         "detail": "course.migrations.0008_alter_coursecomment_coursetask",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "course.migrations.0009_rename_task_coursetask_tasktype",
+        "description": "course.migrations.0009_rename_task_coursetask_tasktype",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('course', '0008_alter_coursecomment_coursetask'),\n    ]\n    operations = [\n        migrations.RenameField(\n            model_name='coursetask',\n            old_name='task',\n            new_name='taskType',\n        ),",
+        "detail": "course.migrations.0009_rename_task_coursetask_tasktype",
         "documentation": {}
     },
     {

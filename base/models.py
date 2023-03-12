@@ -4,6 +4,7 @@ from course.models import Course, CourseTask
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    scores = models.IntegerField(default=0)
     
     image = models.ImageField(upload_to='profiles', blank=True, null=True, default=None)
     bio = models.TextField(max_length=500, blank=True)
@@ -30,3 +31,17 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class Task(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    choiceCourse = models.ForeignKey(Course, on_delete=models.CASCADE)
+    lessons = models.ManyToManyField(CourseTask)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta: 
+        ordering = ('updated_at', 'created_at', )
+    
+    def __str__(self):
+        return '{} - {}'.form(self.user.username, self.course.title)

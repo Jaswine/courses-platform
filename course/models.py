@@ -50,7 +50,6 @@ class Course(models.Model):
 
 #! Course Task
 class CourseTask(models.Model):
-    
     TASKSTYPE = (
         ('video', 'video'),
         ('code', 'code'),
@@ -60,7 +59,7 @@ class CourseTask(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, default=None)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     # courseTitle = models.ForeignKey(CourseTitle, on_delete=models.CASCADE)
-    task = models.CharField(max_length=10, choices=TASKSTYPE, blank=True)
+    taskType = models.CharField(max_length=10, choices=TASKSTYPE, blank=True)
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, max_length=500)
         

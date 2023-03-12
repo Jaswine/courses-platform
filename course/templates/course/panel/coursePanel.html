@@ -9,7 +9,7 @@
 <div class="page profile">
     <div class="profile__body">
 
-        <div class="profile__body__left">
+        <div class="profile__body__left profile__body__course__menu">
 
             <div class="course__panel__header">
                 <h2>{{course.title}}</h2>
@@ -28,40 +28,42 @@
                 </div>
             </div>
 
-            <a href="{% url 'courses:tasks-panel' course.slug %}" >
-                <span class="material-symbols-outlined">
-                    task
-                </span>    
-                Tasks
-            </a>
+           <div class="course__body__left__menu__all">
+                <a href="{% url 'courses:tasks-panel' course.slug %}" >
+                    <span class="material-symbols-outlined">
+                        task
+                    </span>    
+                    Tasks
+                </a>
 
-            <a href="{% url 'courses:update-info-panel' course.slug %}" >
-                <span class="material-symbols-outlined">
-                    edit_note
-                </span>    
-                Update Info
-            </a>
+                <a href="{% url 'courses:update-info-panel' course.slug %}" >
+                    <span class="material-symbols-outlined">
+                        edit_note
+                    </span>    
+                    Update Info
+                </a>
 
-            <a href="{% url 'courses:profile-comments' course.slug %}" >
-                <span class="material-symbols-outlined">
-                    forum
-                </span>   
-                Comments
-            </a>
+                <a href="{% url 'courses:profile-comments' course.slug %}" >
+                    <span class="material-symbols-outlined">
+                        forum
+                    </span>   
+                    Comments
+                </a>
 
-            <a href="{% url 'courses:profile-reviews' course.slug %}" >
-                <span class="material-symbols-outlined">
-                    reviews
-                </span>  
-                Reviews
-            </a>
+                <a href="{% url 'courses:profile-reviews' course.slug %}" >
+                    <span class="material-symbols-outlined">
+                        reviews
+                    </span>  
+                    Reviews
+                </a>
 
-            <a href="{% url 'courses:update-info-panel' course.slug %}" >
-                <span class="material-symbols-outlined">
-                    analytics
-                </span>
-                Analytics
-            </a>
+                <a href="{% url 'courses:update-info-panel' course.slug %}" >
+                    <span class="material-symbols-outlined">
+                        analytics
+                    </span>
+                    Analytics
+                </a>
+           </div>
 
         </div>
 
