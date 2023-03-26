@@ -24,7 +24,7 @@
                 class='input'
             >
             {% if profile.image != '' or profile.image != None %}
-                <img src="http://127.0.0.1:8000/static/media/{{profile.image}}" alt="{{profile.user}}" class='ava'/>
+                <img src="/static/media/{{profile.image}}" alt="{{profile.user}}" class='ava'/>
             {% else %}  
                 <img src="" alt="None" class="ava">
             {% endif %}

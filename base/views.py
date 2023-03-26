@@ -1,33 +1,41 @@
 from django.shortcuts import render, redirect
-from course.models import  Tag, Course, CourseTask
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import UserAttributeSimilarityValidator, CommonPasswordValidator, NumericPasswordValidator
-from article.models import Article, ArticleComment
-from .models import Profile
 import random
 from requests import get
 
+from django.contrib.auth.models import User
+from course.models import  Tag, Course, CourseTask
+from .models import Profile
+from article.models import Article, ArticleComment
+
+from .services import get_filter_courses, get_filter_articles, user_filter_profile, get_user, get_user_profile, get_all_courses
+from article.services import get_all_tags, get_all_articles
+
 
 def home(request):
-    courses = Course.objects.filter(public=True)[:8]
-    articles = Article.objects.filter(public=True)[:8]
+    # get data
+    courses = get_filter_courses()
+    articles = get_filter_articles()
     
-    context = {'courses': courses, 'articles': articles}
+    context = {
+        'courses': courses, 
+        'articles': articles
+    }
     return render(request, 'base/Home.html', context)
 
-#! _______________________AUTH_____________________
 def registration(request):
     if request.method == 'POST':
+        # get data from form
         name = request.POST['name']
         email = request.POST['email']
         password = request.POST['password']
         
-        #! cheking on exits
+        # cheking on exits
         if User.objects.filter(username=name).count() == 0:
             if User.objects.filter(email=email).count() == 0: 
-                #! Checking validation
+                # Checking validation
                 if len(password) > 8:         
                     user = User.objects.create_user(name, email, password)
                     if user:
@@ -36,8 +44,10 @@ def registration(request):
                         profile = Profile.objects.create(
                             user = user,
                         )
+
                         profile.save()
-                        
+
+                        # login
                         login(request, user)
                         return redirect('/')        
                 else:
@@ -47,23 +57,25 @@ def registration(request):
         else:
             messages.error(request, 'Username already exists')       
                   
-    context = {}
-    return render(request,'base/Registration.html', context)
+    return render(request,'base/Registration.html')
 
 def loginUser(request):
     if request.method == 'POST':
-        #?: get data
+        # get data from form
         email = request.POST.get('email')
         password = request.POST['password']
             
+        # user cheking on exits
         try:
             user = User.objects.get(username=email)
         except: 
             messages.error(request, 'Username not found...')
             
+        # user authentication
         user = authenticate(username=email, password=password)
         
         if user is not None:
+            # login
             login(request, user)
             return redirect('/')
         else:
@@ -71,48 +83,60 @@ def loginUser(request):
         
     return render(request,'base/Login.html')
 
+
 def logoutUser(request):
+    # user logout
     logout(request)
     return redirect('/')
 
 
-#! ________________TAGS_____________
 def listTags(request):
-    tags  = Tag.objects.all()
+    # all tags
+    tags  = get_all_tags()
     
-    if request.user.is_authenticated:
-        if request.user.is_superuser:
-            if request.method == 'POST':
-                tag = request.POST.get('tag')
-                
-                tagForm = Tag.objects.create(name=tag)
-                tagForm.save()
-                return redirect('/tags')
-        else:
-            return redirect('/')
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            # get data from form
+            tag = request.POST.get('tag')
+            
+            # create new tag
+            tagForm = Tag.objects.create(name=tag)
+
+            tagForm.save()
     else:
         return redirect('/')
     
-    tags = tags.reverse() 
         
-    context = {'tags': tags, 'user': request.user}
+    context = {
+        'tags': tags.reverse(), 
+        'user': request.user
+    }
     return render(request,'base/Tags.html', context)
 
-def deleteTag(request, id):
-    if request.user.is_authenticated:
-        if  request.user.is_superuser:
-            tag = Tag.objects.get(id=id)
 
-            if tag:
-                tag.delete()
-            
-            return redirect('/tags')
-    return redirect('/')
+def deleteTag(request, id):
+    if  request.user.is_superuser:
+        # get tag
+        tag = Tag.objects.get(id=id)
+
+        if tag:
+            # delete tag
+            tag.delete()
+        else:
+            messages.error(request, 'Tag not found')
+        
+        return redirect('/tags')
+    else:
+        return redirect('/')
 
 def profile(request, username):
     page='profile'
-    user = User.objects.get(username=username)
-    profile = Profile.objects.get(user=user)
+
+    #get user and profile
+    user = get_user(username)
+    profile = get_user_profile(user)
+    
+    # if user doesn't have image
     ProfileImage = 'https://images.pexels.com/photos/4587958/pexels-photo-4587958.jpeg?auto=compress&cs=tinysrgb&w=800'
     getPhoto = []
         
@@ -151,40 +175,62 @@ def profile(request, username):
 # For admin user
 def profileCourses(request, username):
     page='courses'
-    user = User.objects.get(username=username)
-    profile = Profile.objects.get(user=user)
+
+    # get user and profile
+    user = get_user(username)
+    profile = get_user_profile(user)
     
+    # get user courses
     courses = Course.objects.filter(user=user)
     
-    context = {'user': user,  'page':page, 'profile': profile, 'courses': courses}
+    context = {
+        'user': user,  
+        'page':page, 
+        'profile': profile, 
+        'courses': courses
+    }
     return render(request,'base/user/Profile.html', context)
 
 #Articles 
 #for admin user
 def profileArticles(request, username):
     page = 'articles'
-    user = User.objects.get(username=username)
-    articles = Article.objects.filter(user=user)
-    profile = Profile.objects.get(user=user)
     
-    context = {'user': user,  'page': page, 'articles': articles, 'profile': profile}
+    # get user and profile
+    user = get_user(username=username)
+    profile = Profile.objects.get(user=user)
+
+    # get user articles
+    articles = Article.objects.filter(user=user)
+    
+    context = {
+        'user': user,  
+        'page': page, 
+        'articles': articles, 
+        'profile': profile
+    }
     return render(request,'base/user/Profile.html', context)
 
-#FOR AUTH USER[]
+# FOR AUTH USER
+# liked courses and articles
 def profileLikes(request, username):
     page = 'likes'
-    user = User.objects.get(username=username)
-    profile = Profile.objects.get(user=user)
+
+    # get user and profile
+    user = get_user(username)
+    profile = get_user_profile(user)
     
-    articles = Article.objects.all()
-    courses = Course.objects.all()
+    articles = get_all_articles()
+    courses = get_all_courses()
     
+    # articles and courses sorting
     like_articles = []
     liked_courses = []
+
     status_for_courses = False
     status = False
     
-    #Filter for articles
+    # articles filter
     for article in articles:
         for like in article.likesForArticle.all():
             if like.username == user.username:
@@ -192,6 +238,7 @@ def profileLikes(request, username):
                 if request.user.username == like.username:
                     status = True
 
+    # courses filter
     for course in courses:
         for like in course.likes.all():
             if like.username == user.username:
@@ -212,12 +259,15 @@ def profileLikes(request, username):
 
 #FOR AUTH USER
 def profileUpdate(request, username):
-    user = User.objects.get(username=username)
-    profile = Profile.objects.get(user=user)
+    # get user and profile
+    user = get_user(username=username)
+    profile = get_user_profile(user)
     
+    # user and profile checking 
     if user:
         if profile:
             if request.method == 'POST':
+                # get data from form
                 email = request.POST.get('email')
                 
                 profileImage = profile.image
@@ -232,6 +282,8 @@ def profileUpdate(request, username):
                 telegram = request.POST.get('telegram')
                 website = request.POST.get('website')
                 
+
+                # update profile
                 user.email = email
             
                 profile.image = image

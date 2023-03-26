@@ -15,7 +15,11 @@
             <p>{{course.about | truncatewords:"100"}}</p>
             <div class="buttons">
                 {% if request.user.is_authenticated %}
+                    {% if first_element}
                     <a href="{%  url 'courses:task' course.slug first_element.id %}" class="btn">Начать Обучение</a>
+                    {% else %}
+                    <a href="" type="disable" class="btn">Нет Уроков</a>
+                    {% endif %}
                 {% else %}
                     <a href="{% url 'base:login' %}" class="btn">Начать Обучение</a>
                 {% endif %}
@@ -37,7 +41,7 @@
             <p>{{course.description}}</p>
         </div>
         <div class="page__intro__right">
-            <img src="http://127.0.0.1:8000/static/media/{{course.image}}" alt="" class="page__right">
+            <img src="/static/media/{{course.image}}" alt="" class="page__right">
             <div class="page__intro__mask"></div>
         </div>
     </div>

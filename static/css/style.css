@@ -371,7 +371,7 @@ a:hover * {
     flex-direction: column;
     width: 100%;
     background-color: rgb(254, 254, 254, .03);
-    max-width: 600px;
+    max-width: 800px;
     margin: 4% 0 8%;
     padding: 3%;
     border-radius: 10px;
@@ -425,7 +425,8 @@ textarea {
     box-shadow: 1px 1px 4px black;
     max-width: 100%;
     min-width: 100%;
-    max-height: 500px;
+    max-height: 60vh;
+    height: 60vh;
     min-height: 200px;
 }
 .page__article__form__box {
@@ -1189,7 +1190,7 @@ video {
 }
 .delete {
     color: var(--light);
-    font-size: 24px ;
+    font-size: 28px !important;
     transition: all .3s linear;
 }
 .delete:hover {

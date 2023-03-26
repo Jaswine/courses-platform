@@ -1,20 +1,35 @@
 from django.shortcuts import render, redirect
-from .models import *
 from django.contrib import messages 
 
+from .models import Tag, CourseTitle, Course, CourseComment, CourseTask
+
+from .services import course_filter, get_one_comment, course_title_filter, course_get_comments, get_one_comment
+from base.services import get_all_courses
+from article.services import get_all_tags
+
+
 def catalog(request):
-    courses = Course.objects.filter(public=True)
+    # get all courses
+    courses = course_filter()
     
-    context = {'courses': courses}
+    context = {
+        'courses': courses
+    }
     return render(request, 'course/Catalog.html', context)
 
 def course(request, slug):
-    course = Course.objects.get(slug=slug)
-    titles = CourseTitle.objects.filter(course=course.id)
-    reviews = CourseComment.objects.filter(course=course,commentType = 'review')
+    # get course and titles
+    course = get_one_course(slug=slug)
+    titles = course_title_filter(course=course.id)
+    reviews = course_get_comments(course, 'review')
     
-    first_element = titles[0].tasks.all()[0]
+    first_element = ""
+
+    # get first element
+    if (titles.count() != 0):
+        first_element = titles[0].tasks.all()[0]
     
+    # counts
     courseTitlesCount = titles.count()
     courseTasksCount = CourseTask.objects.filter(course = course).count()
     courseCommentsCount = reviews.count
@@ -22,14 +37,16 @@ def course(request, slug):
     
     commentPermission = True
     
-    for i in reviews:  # Review Checked
+    # review checked
+    for i in reviews:  
         if i.user.username == request.user.username:
             commentPermission = False   
     
-    if request.method == 'POST': #! FOR LIKES
-        print(request.user.is_authenticated)
+    if request.method == 'POST':
         if request.user.is_authenticated:
             type = request.POST.get('type')
+
+            # add likes
             if type == 'like':
                 status = False
                 
@@ -43,11 +60,14 @@ def course(request, slug):
                     course.likes.add(request.user)
                     course.save()
 
-            if type == 'review': #! FOR REVIEWS
+            # add review
+            if type == 'review':
+                # get data from form
                 message = request.POST.get('message')
                 stars = request.POST.get('stars')
                 user = request.user
                 
+                # create review
                 form = CourseComment.objects.create(
                     course = course,
                     commentType = 'review',
@@ -55,6 +75,7 @@ def course(request, slug):
                     rating = stars,
                     message = message,
                 )
+
                 form.save()
                 return redirect('/courses/'+ str(course.slug)+'#reviews')
             else:
@@ -81,14 +102,18 @@ def course(request, slug):
 
 def deleteReview(request,slug, id):
     if request.user.is_authenticated:
-        comment =  CourseComment.objects.get(id=id)
+        # get comment 
+        comment =  get_one_comment(id)
+
+        # delete comment
         if request.user.username == comment.user.username:
             comment.delete()
             return redirect('/courses/'+ str(slug)+'#reviews')
 
 def task(request, slug, pk):
-    course = Course.objects.get(slug=slug)
-    task = CourseTask.objects.get(id=pk)
+    # get courses and tasks
+    course = get_one_course(slug=slug)
+    task =  get_one_task(pk)
     titles = CourseTitle.objects.filter(course=course.id)
     comments = CourseComment.objects.filter(course=course, courseTask=task)
     
@@ -149,7 +174,7 @@ def task(request, slug, pk):
     return render(request, 'course/Task.html', context)
 
 def courseTaskCommentDelete(request, slug, pk, comment_id):
-    course = Course.objects.get(slug=slug)
+    course = get_one_course(slug)
     task = CourseTask.objects.get(id=pk)
     courseComment = CourseComment.objects.get(id=comment_id)
     
@@ -164,7 +189,7 @@ def courseTaskCommentDelete(request, slug, pk, comment_id):
 
 def createCourse(request):
     tags = Tag.objects.all()
-    courses = Course.objects.all()
+    courses = get_all_courses()
     
     if request.method == 'POST':
         title = request.POST['title']
@@ -224,8 +249,8 @@ def createCourse(request):
 
 def updateInfoPanel(request, slug):
     page = 'UpdateInfoPanel'
-    course = Course.objects.get(slug=slug)
-    courses = Course.objects.all()
+    course = get_one_course(slug)
+    courses = get_all_courses()
     tags = Tag.objects.all()
     
     if request.method == 'POST':
@@ -313,7 +338,7 @@ def updateInfoPanel(request, slug):
 
 def TasksPanel(request, slug):
     page = 'TasksPanel'
-    course = Course.objects.get(slug=slug)
+    course = get_one_course(slug)
     CourseTitles = CourseTitle.objects.filter(course=course)
     
     if request.method == 'POST':
@@ -337,7 +362,7 @@ def TasksPanel(request, slug):
 
 def createTask(request, slug):
     page = 'create_task'
-    course = Course.objects.get(slug=slug)
+    course = get_one_course(slug)
     CourseTitles = CourseTitle.objects.filter(course =course)
     
     if request.method == 'POST':
@@ -414,7 +439,7 @@ def createTask(request, slug):
 
 def updateTitle(request, slug, course_title_id):
     page = 'updateTitle'
-    course = Course.objects.get(slug=slug)
+    course = get_one_course(slug)
     courseTitle = CourseTitle.objects.get(id=course_title_id)
     tasks = CourseTask.objects.filter(course=course)
     
@@ -432,7 +457,7 @@ def updateTitle(request, slug, course_title_id):
 
 def updateTask(request, slug, task_id):
     page = 'updateTask'
-    course = Course.objects.get(slug=slug)
+    course = get_one_course(slug)
     task = CourseTask.objects.get(id=task_id)
     courseTitles = CourseTitle.objects.filter(course=course)
     TaskCourseTitle = CourseTitle.objects.filter()
@@ -486,7 +511,7 @@ def updateTask(request, slug, task_id):
 
 def deleteTitle(request, slug, title_id):
     page = 'deleteTitle'
-    course = Course.objects.get(slug=slug)
+    course = get_one_course(slug)
     courseTitle = CourseTitle.objects.get(id=title_id)
     
     if request.method == 'POST':
@@ -503,7 +528,7 @@ def deleteTitle(request, slug, title_id):
 
 def deleteTask(request, slug, task_id):
     page = 'deleteTask'
-    course = Course.objects.get(slug=slug)
+    course = get_one_course(slug)
     task = CourseTask.objects.get(id = task_id)
     
     if request.method == 'POST':
@@ -520,7 +545,7 @@ def deleteTask(request, slug, task_id):
 
 def ProfileComments(request, slug):
     page = 'comments'
-    course = Course.objects.get(slug=slug)
+    course = get_one_course(slug)
     comments = CourseComment.objects.filter(course=course, commentType='comment')
     
     context = {
@@ -532,7 +557,7 @@ def ProfileComments(request, slug):
 
 def ProfileReviews(request, slug):
     page = 'comments'
-    course = Course.objects.get(slug=slug)
+    course = get_one_course(slug)
     comments = CourseComment.objects.filter(course=course, commentType='review')
     
     context = {

@@ -1,7 +1,7 @@
 <div class="profile__header">
     <div class="profile__header__right">
         {% if profile.image %}
-        <img src="http://127.0.0.1:8000/static/media/{{profile.image}}" class="profile__header__right__icon" alt="profile icon">
+        <img src="/static/media/{{profile.image}}" class="profile__header__right__icon" alt="profile icon">
         {% else %}
         <img src="{{ProfileImage}}" alt="ProfileImage" class="profile__header__right__icon">
         {% endif %}

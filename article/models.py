@@ -1,10 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User
-from course.models import Tag
-# from ckeditor_uploader.fields import RichTextUploadingField
 from ckeditor.fields import RichTextField
 
-#! ____________ARTICLE SECTION___________
+from django.contrib.auth.models import User
+from course.models import Tag
+
+
 #TODO: ARTICLE
 class Article(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

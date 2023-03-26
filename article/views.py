@@ -1,13 +1,21 @@
 from django.shortcuts import render, redirect
-from .models import Article, ArticleComment
-from course.models import Tag
 from django.contrib import messages
 
+from .models import Article, ArticleComment
+from course.models import Tag
+
+from .services import get_all_articles, get_one_article, get_all_tags, article_comments_filter, articles_list_filter_tags, article_get_one_comment
+from .utils import slug_generator
+
+
 def articleList(request):
-    articles = Article.objects.all()
+    # Get all articles and tags
+    articles = get_all_articles()
+    tags = get_all_tags()
+
     public_articles = []
-    tags = Tag.objects.all()
     
+    # Articles Filter
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     articles = Article.objects.filter(tag__name__icontains=q)
     
@@ -15,8 +23,6 @@ def articleList(request):
         if article.public == True:
             public_articles.append(article)
             
-    print(request.user.username)
-    
     context = {
         'articles': public_articles,
         'tags': tags
@@ -25,36 +31,47 @@ def articleList(request):
 
 def createArticle(request):
     page = 'create_article'
-    tags = Tag.objects.all()
-    articles = Article.objects.all()
+
+    # get all tags and articles
+    articles = get_all_articles()
+    tags = get_all_tags()
     
+    # create new article
     if request.method == 'POST':
+        # get data from form
         title = request.POST.get('title')
         tag = request.POST.get('tag')
         text = request.POST.get('text')
         public = request.POST.get('public')
         
-        slug = '-'.join(title.lower().split(' '))
+        # generate slug
+        slug = slug_generator(title)
         user = request.user
         
-        if public == 'on': #! PUBLIC & UNPUBLIC
+        # check public status
+        if public == 'on': 
             public = True
         elif public == None:
             public = False
-                
-        if len(text) < 10: #! VALIDATION
+
+        # check text, tag and title     
+        if len(text) < 10:
             messages.error(request, 'Text must be at least 10 characters')
         if (tag == None ):
             messages.error(request, 'Tag must be selected')
         if len(title) < 4:
             messages.error(request, 'Title must be at least 4 characters')
+        
+        # check if article already exists
         for article in articles:
             if slug == article.slug:
                 messages.error(request, 'This article already exists')
                 
+        # get tag object
         tag = Tag.objects.get(id = tag)
                 
-        form = Article.objects.create( #! CREATE ARTICLE
+        # create new article
+        form = Article.objects.create(
             user = user,
             title = title,
             slug = slug,
@@ -62,7 +79,6 @@ def createArticle(request):
             text = text,
             public = public,
         )
-        print(form)
         
         form.save()
         return redirect('/articles')
@@ -73,65 +89,86 @@ def createArticle(request):
     }
     return render(request, 'article/createArticle.html', context)
 
+
 def showArticle(request, slug):
-    article = Article.objects.get(slug = slug)
-    comments = ArticleComment.objects.filter(article=article)
-    user = request.user
-    
-    articles = Article.objects.all()
-    articles_filters = Article.objects.filter(tag = article.tag)
+    # get article and comments
+    article = get_one_article(slug)
+    comments = article_comments_filter(article)
+
+    # articles list filter
+    articles = get_all_articles()
+    articles_filters = articles_list_filter_tags(article.tag)
+
     latest_articles = []
     public_articles = []
-    liked = False
+
+    user = request.user
     
-    for a in articles: #filter Articles
+    #filter Articles
+    for a in articles:
         if article.title != a.title:
             latest_articles.append(a)
             
-    for i in articles_filters: #Also Filter Articles
+    #Also Filter Articles
+    for i in articles_filters: 
         if article.title != i.title:
             public_articles.append(i)
             
-    #* Likes
+    # Likes
+
+    liked = False
+
     likes = article.likesForArticle
     likes_count = (article.likesForArticle).count()
             
     if request.method == 'POST':
         type = request.POST.get('type')
         
+        # add new like or remove old like
         if type == 'like':
             if request.user.is_authenticated: 
                 status = False
                 
+                # get status
                 for like in likes.all(): 
                     if like.username == request.user.username:
                         status = True
                         print(like.username)
                 
+                # check if user already liked
                 if status:
+                    # if liked, remove like
                     liked = True
                     article.likesForArticle.remove(like)
+
                 if status == False:
+                    # if not liked, add like
                     liked = False
                     article.likesForArticle.add(request.user)
+
                     article.save()
-                        
+
                 return redirect('/articles/'+ slug+'/#like')
             else:
                 return redirect('/sign-in')
             
+        # create new comments
         if type == 'comment':
             if request.user.is_authenticated:
+                # get data from form
                 message = request.POST.get('message')
                 
-                if len(message) < 3:
-                    return messages.error(request, 'Message is too short')
+                # check data 
+                if len(message) < 6:
+                    messages.error(request, 'Message is too short')
                 
+                # create new comment
                 form = ArticleComment.objects.create(
                     article=article,
                     user=user,
                     message=message,
                 )
+
                 form.save()
                 return redirect('/articles/'+ slug+'#comments')
             else:
@@ -147,29 +184,47 @@ def showArticle(request, slug):
     }
     return render(request, 'article/showArticle.html', context)
 
+
 def deleteComment(request,slug, id):
-    comment =  ArticleComment.objects.get(id=id)
-    comment.delete()
+    # get comment
+    comment = article_get_one_comment(id)
+    
+    # check comment and user
+    if comment:
+        if comment.user == request.user:
+            #delete comment
+            comment.delete()
+        else:
+            messages.error(request, 'You are not allowed to delete this comment')
+    else:
+        messages.error(request, 'Comment not found')
+    
     return redirect('/articles/'+ slug+'/#comments')
+
 
 def updateArticle(request, slug):
     page = 'update_article'
-    article = Article.objects.get(slug = slug)
-    articles = Article.objects.all()
-    tags = Tag.objects.all()
+
+    # get article and all articles and tags
+    article = get_one_article(slug)
+    articles = get_all_articles()
+    tags = get_all_tags()()
     
     if request.method == 'POST':
+        # get data from form
         title = request.POST.get('title')
         tag = request.POST.get('tag')
         text = request.POST.get('text')
         public = request.POST.get('public')
                 
-        if public == 'on': #! PUBLIC & UNPUBLIC
+        # check public status
+        if public == 'on': 
             public = True
         elif public == None:
             public = False
             
-        if len(text) < 10: #! VALIDATION
+        # check text, tag and title
+        if len(text) < 10:
             messages.error(request, 'Text must be at least 10 characters')
         if (tag == None ):
             messages.error(request, 'Tag must be selected')
@@ -179,6 +234,7 @@ def updateArticle(request, slug):
         # if (int(article.tag.id)) != int(tag):
         tag = Tag.objects.get(id = tag)    
             
+        # update article data
         article.title = title
         article.tag = tag
         article.text = text
@@ -194,12 +250,22 @@ def updateArticle(request, slug):
     }
     return render(request, 'article/createArticle.html', context)
 
+
 def deleteArticle(request, slug):
-    article = Article.objects.get(slug = slug)
+    # get article
+    article = get_one_article(slug)
     
     if request.method == 'POST':
-        article.delete()
-        redirect('/articles')
+        # check article and user
+        if article:
+            if article.user == request.user:
+                # delete article
+                article.delete()
+                redirect('/articles')
+        else:
+            messages.error(request, 'You are not allowed to delete this comment')
+    else:
+        messages.error(request, 'Comment not found')
 
     return render(request, 'article/deleteArticle.html', {'article': article})
 
