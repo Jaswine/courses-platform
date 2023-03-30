@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-<title>Panel For {{course.title}}</title>
+<title>Панель для {{course.title}}</title>
 {% endblock title %}
 
 {% block content %}
@@ -16,14 +16,14 @@
                 <div class="course__panel__header__public">
                     {% if  course.public %}
                     <span class="material-symbols-outlined">
-                        Visibility
+                        public
                     </span>
-                    public
+                    Публичный
                     {% else %}
                     <span class="material-symbols-outlined course__panel__header__public__icon">
                         visibility_off
                     </span>
-                    Visibility Off
+                    Скрыт
                     {% endif %}
                 </div>
             </div>
@@ -33,36 +33,36 @@
                     <span class="material-symbols-outlined">
                         task
                     </span>    
-                    Tasks
+                    Задания
                 </a>
 
                 <a href="{% url 'courses:update-info-panel' course.slug %}" >
                     <span class="material-symbols-outlined">
                         edit_note
                     </span>    
-                    Update Info
+                    Настройки
                 </a>
 
                 <a href="{% url 'courses:profile-comments' course.slug %}" >
                     <span class="material-symbols-outlined">
                         forum
                     </span>   
-                    Comments
+                    Комментарии
                 </a>
 
                 <a href="{% url 'courses:profile-reviews' course.slug %}" >
                     <span class="material-symbols-outlined">
                         reviews
                     </span>  
-                    Reviews
+                    Отзывы
                 </a>
 
-                <a href="{% url 'courses:update-info-panel' course.slug %}" >
+                {% comment %} <a href="{% url 'courses:update-info-panel' course.slug %}" >
                     <span class="material-symbols-outlined">
                         analytics
                     </span>
                     Analytics
-                </a>
+                </a> {% endcomment %}
            </div>
 
         </div>

@@ -13,7 +13,7 @@
             <input 
                 type="text"
                 name="title"
-                placeholder="ur title..."
+                placeholder="название..."
                 id="title"
                 class="course_field input"
             >
@@ -29,31 +29,31 @@
                 {% endfor %}
             </select>
             <a href="{% url 'base:tags' %}" class="">Add Another Tag!</a>
-            <label for="">U need to talk about ur course</label>
+            <label for="">Описание:</label>
             <textarea 
                 name="about" 
-                placeholder="U need to talk about ur course" 
+                placeholder="Описание.." 
                 id="about"
                 class="course_field input"
             ></textarea>
-            <label for="">What Are other people will learn on this course?</label>
+            <label for="">Что смогут люди узнать из этого курса</label>
             <textarea 
                 name="WhatAreUWillLearn" 
                 class="course_field "
-                placeholder="What Are other people will learn on this course? "
+                placeholder="Что смогут люди узнать из этого курса..."
                 id = "WhatAreUWillLearn"
             ></textarea>
-            <label for="">Task Level</label>
+            <label for="">Уровень сложности</label>
             <select name="level">
                 <option value="" selected disabled>Select Level</option>
                <option value="Beginner">Beginner</option>
                <option value="Intermediate">Intermediate</option>
                <option value="Expert">Expert</option>
             </select>
-            <label for="">Initial Requirements</label>
+            <label for="">Начальные требования</label>
             <input 
                 name="InitialRequirements" 
-                placeholder="Initial Requirements" 
+                placeholder="что нада знать, перед тем, как проходить этот курс..." 
                 class="course_field input"
                 id = 'InitialRequirements'
             />

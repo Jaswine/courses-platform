@@ -18,9 +18,15 @@
    --roboto-condensed: 'Roboto Condensed', sans-serif;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 600px) {
    header {
       z-index: 10000000000000000000;
+   }
+   .header__logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
    }
    .page {
       margin-bottom: 10vh;
@@ -37,12 +43,13 @@
    }
    .header__line {
       display: block;
-      width: 40px;
-      height: 4px;
+      width: 35px;
+      height: 3px;
       content: "";
       background-color: var(--main-light);
-      margin-top: 7px;
+      margin-bottom: 3px;
       border-radius: 10px;
+      margin-top: 3px;
    }
    .header__pod__menu {
       display: flex;
@@ -143,12 +150,13 @@
    }
    .page__item {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       padding: 0 10px;
    }
    .page__article__filters {
       width: 100%;
       padding-top: 0;
+      max-width: 100%;
    }
    .article {
       padding: 10px;
@@ -209,11 +217,6 @@
    .profile__header {
       margin-bottom: 0;
    }
-   /* course */
-   .course {
-      /* min-width: 200px; */
-   }
-
    /*show course page*/
    .page__about, .page__intro {
       flex-direction: column-reverse;
@@ -229,7 +232,7 @@
    }
    .buttons {
       flex-wrap: wrap;
-      width: 100%;
+      text-align: right;
    }
    .page__intro__right {
       width: 100%;
@@ -252,9 +255,6 @@
       justify-content: center;
       align-items: center;
    }
-   .comment__header div span {
-      /* display: none; */
-   }
    .page__about__right {
       padding: 0 ;
   }
@@ -266,10 +266,6 @@
    }
    .review__size {
       font-size: 4vh;
-   }
-   .page__about {
-   }
-   .title__desc {
    }
    .title__name {
       font-size: 20px !important;

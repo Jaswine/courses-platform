@@ -1,7 +1,7 @@
 {% include 'index.html' %}
 
 {% block title %}
-<title>Create Article</title>
+<title>Создать Статью</title>
 <link rel="stylesheet" href="css/mobile-update-articles.css">
 {% endblock  %}
 
@@ -9,13 +9,13 @@
 <div class="page">
 {% if page == 'update_article' %}
     <div class="page__article__form">
-        <h2>Update Article</h2>
+        <h2>Обновить Статью</h2>
         <form action="" method="POST">
             {% csrf_token %}
             <input 
                 type="text"
                 name="title"
-                placeholder="ur title..."
+                placeholder="название..."
                 value = "{{article.title}}"
                 class="input"
             >
@@ -27,10 +27,10 @@
                     {% endif %}
                 {% endfor %}
             </select>
-            <a href="{% url 'base:tags' %}" class="">Add Another Tag!</a>
+            <a href="{% url 'base:tags' %}" class="">Добавить Другой Tег...</a>
             <textarea 
                 name="text" 
-                placeholder="ur text...."
+                placeholder="текст...."
                 value = "{{article.text}}"
             >{{article.text}}</textarea>
             <div class="page__article__form__box">
@@ -42,20 +42,20 @@
                         checked
                     {% endif %}
                 > 
-                <div>i wanna public my work</div>
+                <div>Я хочу опубликовать свою работу</div>
             </div>
-            <button class="btn" type="submit">Save</button>
+            <button class="btn" type="submit">Сохранить</button>
         </form>
     </div>
 {% elif page == 'create_article' %}
     <div class="page__article__form">
-        <h2>Create article</h2>
+        <h2>Создать Новую Статью</h2>
         <form action="" method="POST">
             {% csrf_token %}
             <input 
                 type="text"
                 name="title"
-                placeholder="ur title..."
+                placeholder="название..."
                 id = 'ArticleTitle'
                 class="input"
             >
@@ -65,13 +65,13 @@
                   <option value="{{tag.id}}">{{tag.name}}</option>
                 {% endfor %}
             </select>
-            <a href="{% url 'base:tags' %}" class="">Add Another Tag!</a>
+            <a href="{% url 'base:tags' %}" class="">Добавить Другой Тег!</a>
             <textarea name="text" placeholder="ur text...." id="ArticleText"></textarea>
             <div class="page__article__form__box">
                 <input type="checkbox" class="page__article__form__checkbox" name="public" > 
-                <div>i wanna public my work</div>
+                <div>Я хочу опубликовать свою работу</div>
             </div>
-            <button class="btn" type="submit" id="ArticleClearSession">Save</button>
+            <button class="btn" type="submit" id="ArticleClearSession">Созранить</button>
         </form>
     </div>
 <script>

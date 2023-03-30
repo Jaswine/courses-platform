@@ -120,6 +120,11 @@ def showArticle(request, slug):
 
     likes = article.likesForArticle
     likes_count = (article.likesForArticle).count()
+
+    for like in likes.all(): 
+        if like.username == request.user.username:
+            print(like.username)
+            liked = True
             
     if request.method == 'POST':
         type = request.POST.get('type')
@@ -138,12 +143,12 @@ def showArticle(request, slug):
                 # check if user already liked
                 if status:
                     # if liked, remove like
-                    liked = True
+                    liked = False
                     article.likesForArticle.remove(like)
 
                 if status == False:
                     # if not liked, add like
-                    liked = False
+                    liked = True
                     article.likesForArticle.add(request.user)
 
                     article.save()
@@ -186,20 +191,23 @@ def showArticle(request, slug):
 
 
 def deleteComment(request,slug, id):
-    # get comment
-    comment = article_get_one_comment(id)
-    
-    # check comment and user
-    if comment:
-        if comment.user == request.user:
-            #delete comment
-            comment.delete()
+    if request.user.is_authenticated:
+     # get comment
+        comment = article_get_one_comment(id)
+        
+        # check comment and user
+        if comment:
+            if comment.user == request.user:
+                #delete comment
+                comment.delete()
+            else:
+                messages.error(request, 'You are not allowed to delete this comment')
         else:
-            messages.error(request, 'You are not allowed to delete this comment')
+            messages.error(request, 'Comment not found')
+        
+        return redirect('/articles/'+ slug+'/#comments')
     else:
-        messages.error(request, 'Comment not found')
-    
-    return redirect('/articles/'+ slug+'/#comments')
+        return redirect('base:registration')
 
 
 def updateArticle(request, slug):
@@ -208,7 +216,7 @@ def updateArticle(request, slug):
     # get article and all articles and tags
     article = get_one_article(slug)
     articles = get_all_articles()
-    tags = get_all_tags()()
+    tags = get_all_tags()
     
     if request.method == 'POST':
         # get data from form
@@ -252,23 +260,21 @@ def updateArticle(request, slug):
 
 
 def deleteArticle(request, slug):
-    # get article
-    article = get_one_article(slug)
-    
-    if request.method == 'POST':
+    if request.user.is_superuser:
+     # get article
+        article = get_one_article(slug)
+        
         # check article and user
         if article:
             if article.user == request.user:
-                # delete article
+                #delete article
                 article.delete()
-                redirect('/articles')
+            else:
+                messages.error(request, 'You are not allowed to delete this article')
         else:
-            messages.error(request, 'You are not allowed to delete this comment')
+            messages.error(request, 'Article not found')
+        
+        return redirect('/articles/'+ slug)
     else:
-        messages.error(request, 'Comment not found')
+        return redirect('base:registration')
 
-    return render(request, 'article/deleteArticle.html', {'article': article})
-
-
-
-    

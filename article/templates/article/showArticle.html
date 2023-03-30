@@ -24,10 +24,18 @@
                     {% csrf_token %}
                     <!-- <span>{{ likes }}</span> -->
                     <input type="text" name="type" value="like" style="display: none;">
-                    <span class="icon icon__love icon__span">{{likes}}</span>
+                    <span class="icon icon__love icon__span"
+                    {% if liked %}
+                    style = "color: rgb(93, 214, 147, 1);"
+                    {% endif %}
+                    >{{likes}}</span>
                     <button 
                         class="material-symbols-outlined icon icon__love" 
-                        id = "like">
+                        id = "like"
+                        {% if liked %}
+                            style = "color: rgb(93, 214, 147, 1);"
+                        {% endif %}
+                        >
                         favorite
                     </button>
                 </form>
@@ -37,8 +45,18 @@
                 <div class="hr"></div>
                 <form action=""class='comment__form' method="POST">
                     {% csrf_token %}
-                    <input type="text" name="type" value="comment" style="display: none;">
-                    <input type="text" name="message" placeholder="Enter ur comment..." class="comment__field">
+                    <input 
+                        type="text" 
+                        name="type" 
+                        value="comment" 
+                        style="display: none;"
+                    >
+                    <input 
+                        type="text" 
+                        name="message" 
+                        placeholder="Ваш комментариий..." 
+                        class="comment__field"
+                    >
                     <button class="btn btn-icon" type="submit">
                       <span class="material-symbols-outlined">
                         send
@@ -71,7 +89,7 @@
         <div class="page__article__right">
             <div class="page__article__right__block">
                {% if articles %}
-                    <h3>Latest Articles</h3>
+                    <h3>Последние Статьи</h3>
                     {% for article in articles %}
                         {% if article.public %}
                             <article>
@@ -90,7 +108,7 @@
                 {% if tag_articles %}
                         {% for article in tag_articles  %}
                           {% if article.public %}
-                            <h3>Articles You Might Like</h3>
+                            <h3>Статьи которые могут вам понравиться</h3>
                           {% endif %}
                         {% endfor %}
                         {% for article in tag_articles %}

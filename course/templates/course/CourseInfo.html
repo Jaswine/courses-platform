@@ -15,10 +15,10 @@
             <p>{{course.about | truncatewords:"100"}}</p>
             <div class="buttons">
                 {% if request.user.is_authenticated %}
-                    {% if first_element}
+                    {% if first_element %}
                     <a href="{%  url 'courses:task' course.slug first_element.id %}" class="btn">Начать Обучение</a>
                     {% else %}
-                    <a href="" type="disable" class="btn">Нет Уроков</a>
+                    <button type="disable" style="cursor:none" class="btn">Нет Уроков</button>
                     {% endif %}
                 {% else %}
                     <a href="{% url 'base:login' %}" class="btn">Начать Обучение</a>
@@ -49,13 +49,13 @@
         <div class="page__about__right">
             <p><b><span class="material-symbols-outlined">
                 description
-                </span>About:</b> {{course.about}}</p>
+                </span>Описание:</b> {{course.about}}</p>
             <p>
                 <b>
                     <span class="material-symbols-outlined">
                         school
                         </span> 
-                    What Are U Will Learn:
+                    Что сможете изучить: 
                 </b> 
                 {{course.whatAreUWillLearn}}
             </p>
@@ -63,7 +63,7 @@
                 <span class="material-symbols-outlined">
                     other_admission
                     </span>
-                Initial Requirements: </b>{{course.initialRequirements}}</p>
+                Что нужно знать перед прохождением: </b>{{course.initialRequirements}}</p>
             <div class="page__titles" id="CourseTitlesAndTasks">
                 {% for title in titles %}
                     <div class="title">
@@ -74,7 +74,7 @@
                             </button>
                         </div>  
                         <div class="title__tasks">
-                            {% for task in title.tasks.all  %}
+                            {% for task in title.tasks.all.reverse  %}
                                 <div class="title__task">
                                     {% if task.taskType == 'text' %}
                                     <span class="material-symbols-outlined">
@@ -203,8 +203,18 @@
                         <!-- <span>{{ likes }}</span> -->
                         <!-- <div class="icon__love icon icon__span like__form__text">Add To Lover</div> -->
                         <input type="text" name="type" value="like" style="display: none;">
-                        <div class="icon icon__love icon__span">{{likes}}</div>
-                        <button class="material-symbols-outlined icon icon__love" id = "like">
+                        <div class="icon icon__love icon__span"
+                        {% if liked %}
+                            style = "color: rgb(93, 214, 147, 1);"
+                        {% endif %}
+                        >{{likes}}</div>
+                        <button 
+                            class="material-symbols-outlined icon icon__love" 
+                            id = "like"
+                            {% if liked %}
+                                style = "color: rgb(93, 214, 147, 1);"
+                            {% endif %}
+                        >
                             favorite
                         </button>
                 </form>
@@ -214,7 +224,7 @@
                     <!-- <span class="material-symbols-outlined icon">
                         groups
                         </span> -->
-                    Share In Social Media
+                    Поделиться в
                 </span>
                 <div class="course__info__share__icons">
                     <div class="form__links">
@@ -229,12 +239,12 @@
             </div>
             <div class="course__info__share">
                 <span>
-                    <b>More Info About Course</b>
+                    <b>Больше информации о курсе</b>
                 </span>
                 <div class="course__info__share__icons">
-                    <p><b>Titles: </b>{{courseTitlesCount}}</p>
-                    <p><b>Tasks: </b>{{courseTasksCount}}</p>
-                    <p><b>Comments: </b>{{courseCommentsCount}}</p>
+                    <p><b>Темы: </b>{{courseTitlesCount}}</p>
+                    <p><b>Задания: </b>{{courseTasksCount}}</p>
+                    <p><b>Комментарии: </b>{{courseCommentsCount}}</p>
                 </div>
             </div>
         </div>

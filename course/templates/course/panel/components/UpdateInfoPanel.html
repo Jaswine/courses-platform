@@ -1,14 +1,14 @@
 <div class="page__article__form update_course">
     <div class="update__course__header">
-        <h2>Update Course</h2>
-        <a href="{% url 'courses:course' course.slug %}" class="btn">Preview</a>
+        <h2>Обновить Курс</h2>
+        <a href="{% url 'courses:course' course.slug %}" class="btn">Посмотреть</a>
     </div>
     <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <input 
             type="text" 
             name="title"
-            placeholder="ur title..."
+            placeholder="название..."
             class="course_field input"
             value="{{course.title}}"
         >
@@ -26,20 +26,20 @@
               {% endif %}
             {% endfor %}
         </select>
-        <a href="{% url 'base:tags' %}" class="">Add Another Tag!</a>
-        <label for="">U need to talk about ur course</label>
+        <a href="{% url 'base:tags' %}" class="">Добавить другой тег!</a>
+        <label for="">Описание:</label>
         <textarea 
             name="about" 
-            placeholder="U need to talk about ur course" 
+            placeholder="Описание..." 
             class="course_field"
         >{{course.about}}</textarea>
-        <label for="">What Are other people will learn on this course?</label>
+        <label for="">Что узнаете</label>
         <textarea 
             name="WhatAreUWillLearn" 
             class="course_field"
-            placeholder="What Are other people will learn on this course? "
+            placeholder="Что люди смогут узнать из вашего курса..."
         >{{course.whatAreUWillLearn}}</textarea>
-        <label for="">Task Level</label>
+        <label for="">Уровень сложности</label>
         <select name="level">
             <option value="{{course.level}}" selected disabled>{{course.level}}</option>
             {% if course.level == 'Beginner' %}
@@ -57,10 +57,10 @@
                 <option value="Expert">Expert</option>
             {% endif %}           
         </select>
-        <label for="">Initial Requirements</label>
+        <label for="">Начальные знания</label>
         <input 
             name="InitialRequirements" 
-            placeholder="Initial Requirements" 
+            placeholder="Начальные знания" 
             class="course_field input"
             value="{{ course.initialRequirements }}"
         />
@@ -74,8 +74,8 @@
                     checked
                 {% endif %}
             > 
-            <div>i wanna public my course</div>
+            <div>я хочу опубликовать свой курс</div>
         </div>
-        <button class="btn" type="submit" id="Submit" >Save</button>
+        <button class="btn" type="submit" id="Submit" >сохранить</button>
     </form>
 </div>

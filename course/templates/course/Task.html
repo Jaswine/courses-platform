@@ -32,9 +32,14 @@
               </a>
             {% endif %}
             {% if  next_page %}
-              <a class="material-symbols-outlined btn" href="{%  url 'courses:task' course.slug  next_page.id %}">
-                  arrow_forward
-              </a>
+              <form>
+                {% csrf_token %}
+                
+               <a class="material-symbols-outlined btn" href="{%  url 'courses:task' course.slug  next_page.id %}">
+                    arrow_forward
+                </a>
+                
+              </form>
               {% endif %}
         </div>
       </h2>
@@ -50,7 +55,7 @@
           <span class="hr"></span>
           <form action=""class='comment__form' method="POST">
             {% csrf_token %}
-            <input type="text" name="comment" placeholder="Enter ur comment..." class="comment__field">
+            <input type="text" name="comment" placeholder="Введите ваш комментарий..." class="comment__field">
             <button class="btn btn-icon" type="submit">
               <span class="material-symbols-outlined">
                 send

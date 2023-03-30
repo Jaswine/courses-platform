@@ -1,7 +1,7 @@
 <div class="page__article__form update_course">
     <div class="update__course__header">
-        <h2>Create New Title </h2>
-        <a href="{% url 'courses:course' course.slug %}#CourseTitlesAndTasks" class="btn">Preview</a>
+        <h2>Создать новую тему:</h2>
+        <a href="{% url 'courses:course' course.slug %}#CourseTitlesAndTasks" class="btn">Посмотреть</a>
     </div>
     <form 
         action="" 
@@ -12,18 +12,14 @@
         <input 
             type="text"
             name="title"
-            placeholder="Title..."
+            placeholder="Название..."
             class="input"
             >
-            <button type="submit" class="btn">Create</button>
+            <button type="submit" class="btn">Создать</button>
     </form>
     <div class="update__course__header">
-        <h2>Create New Task 
-            <span class="material-symbols-outlined">
-            arrow_forward_ios
-            </span>
-        </h2>
-        <a href="{% url  'courses:create-task' course.slug %}" class="btn btn-delete">Add New Task</a>
+        <h2>Добавить новое задание:</h2>
+        <a href="{% url  'courses:create-task' course.slug %}" class="btn btn-delete">+</a>
     </div>
 
     <div class="tasks tags">
@@ -38,7 +34,7 @@
                 </a>
             </div>
             <div class="in__task"   >
-                {% for task in  CourseTitle.tasks.all %}
+                {% for task in  CourseTitle.tasks.all.reverse %}
                 <div class="task__title task__exercises">
                     <span>{{ task.title }}</span>
                     <a href="{% url 'courses:course-update-task' course.slug task.id %}" class="icon btn btn-icon btn-icon-mini">

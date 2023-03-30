@@ -18,9 +18,9 @@
     {% endif %}
     <div class="page__item">
         <div class="page__article__filters">
-            <h3 class="">All Topics</h3>
+            <h3 class="">Все Темы</h3>
             <div class='page__article__filter__tags'>
-                    <a href="{%  url "article:article_list" %}" class='page__article__filter__tag' >All </a>
+                    <a href="{%  url "article:article_list" %}" class='page__article__filter__tag' >Все</a>
                 {% for tag in tags %}
                     <a href="{% url 'article:article_list' %}?q={{tag.name}}" class="page__article__filter__tag">{{tag.name}}</a>
                 {% endfor %}

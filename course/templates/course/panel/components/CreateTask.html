@@ -2,7 +2,7 @@
 <div class="page__article__form update_course">
     <div class="update__course__header">
         {% if page == 'create_task' %}
-            <h2>Add New Task</h2>
+            <h2>Добавить новое задание</h2>
         {% else %}
             <h2>Update Task</h2>
         {% endif %}
@@ -13,15 +13,15 @@
         <input 
             type="text"
             name="title"
-            placeholder="title..."
+            placeholder="название..."
             id="titleTask"
             value="{{task.title}}"
             class = 'input'
         >
-        <textarea name="description" >{{task.description}}</textarea>
+        <textarea name="description" placeholder="об задании..." >{{task.description}}</textarea>
         {% if page == 'create_task' %}
             <select name="course_title" id="">
-                <option value="" selected disabled>Select Course Title</option>
+                <option value="" selected disabled>Выберите тему</option>
                 {% for CourseTitle in CourseTitles  %}
                 <option value="{{CourseTitle.id}}">{{CourseTitle.title}}</option>
                 {% endfor %}
@@ -36,9 +36,9 @@
         </select>
         {% else %}
         <select name="tag" id="typeTask">
-            <option value="" selected disabled>Choice Type Ur Task</option>
-            <option value="text">text</option>
-            <option value="video">video</option>
+            <option value="" selected disabled>Выберите тип вашего задания</option>
+            <option value="text">текст</option>
+            <option value="video">видео</option>
         </select>
         {% endif %}
 
@@ -47,7 +47,8 @@
                 name="body" 
                 id="bodyTask" 
                 class="display_none" 
-                placeholder="Add ur text lesson"
+                placeholder="текст"
+                style="width:100%"
             >{{task.body}}</textarea>
             <input type="file" name="video" id="videoTask" class="display_none input">
         </div>
@@ -106,7 +107,7 @@
         <input 
             type="text"
             name="title"
-            placeholder="title..."
+            placeholder="название..."
             id="titleTask"
             value="{{courseTitle.title}}"
             class = "input"

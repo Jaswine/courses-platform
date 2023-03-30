@@ -1,10 +1,11 @@
 <div class="course__comments__page">
   {% if comments %}
    <form class="page__buttons__filters" method="GET">
-    <select name="filters" id="">
-     <option value="all" selected>All</option>
-     <option value="reviews">Reviews</option>
-     <option value="comments">Comments</option>
+    <h4>Сортировка:</h4>
+    <select name="filters" id="" class="sorting">
+     <option value="all" selected>Все</option>
+     <option value="reviews">Отзывы</option>
+     <option value="comments">Комментарии</option>
     </select>
    </form>
    <div class="page__comments">
@@ -30,7 +31,7 @@
   </div>
   {% else %}
    <div class="not__found">
-    <h2>Comments Not Found</h2>
+    <h2>Комментарии не найдены</h2>
    </div>
   {% endif %}
 </div>

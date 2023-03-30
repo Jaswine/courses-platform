@@ -8,10 +8,10 @@
 <div class="page">
     {% comment %} <p>{{user.is_superuser}}</p> {% endcomment %}
     <div class="page__article__form">
-        <h2>Create New Tag</h2>
+        <h2>Добавить теги</h2>
         <form action="" method="POST" class="create__tags__form">
             {% csrf_token %}
-            <input type="text" class="input" name='tag' class="" placeholder='enter tag name...'>
+            <input type="text" class="input" name='tag' class="" placeholder='название тега...'>
             <button type="submit" class="btn">
                 <span class="material-symbols-outlined">
                     save
