@@ -1,13 +1,13 @@
 from django.urls import path
-from . import views
+from .views import get_all_articles_list, create_article, show_article, update_article, delete_article
 
 app_name = 'article'
 
 urlpatterns = [
-    path('articles', views.articleList, name='article_list'),
-    path('create-articles', views.createArticle, name='create_article'),
-    path('articles/<str:slug>/', views.showArticle, name='show_article'),
-    path('articles/<str:slug>/delete', views.deleteArticle, name='delete_article'),
-    path('articles/<str:slug>/update', views.updateArticle, name='update_article'),
-    path('articles/<str:slug>/comments/<str:id>/delete', views.deleteComment, name='delete_comment'),
+    path('', get_all_articles_list, name='all_articles'),
+    path('create', create_article, name='create_article'),
+    
+    path('<str:slug>', show_article, name='show_article'),
+    path('<str:slug>/update', update_article, name='update_article'),
+    path('<str:slug>/delete', delete_article, name='delete_article'),
 ]

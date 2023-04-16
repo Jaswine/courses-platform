@@ -1,47 +1,51 @@
 from django.db import models
-from ckeditor.fields import RichTextField
+from django.utils.text import slugify
 
+from ckeditor.fields import RichTextField 
 from django.contrib.auth.models import User
 from course.models import Tag
-
 
 #TODO: ARTICLE
 class Article(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
     title = models.CharField(max_length=255)
     slug = models.CharField(max_length=255, unique=True, default='')
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    
     text = RichTextField(blank=True)
     public = models.BooleanField(default=False)
     
-    #TODO: LIKES
-    likesForArticle = models.ManyToManyField(User, related_name='likesForArticle', blank=True)
-    bookmarksForCourse = models.ManyToManyField(User, related_name='bookmarksForCourse', blank=True)
-    
-    #TODO: STATISTIC
-    commentsCount = models.IntegerField(default=0)
+    likesForArticle = models.ManyToManyField(User, related_name='likesForArticle', blank=True, default=[])
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     
-    class Meta:
-        ordering = ['-updated', '-created']
+    def save(self, *args, **kwargs):
+      if not self.slug:
+         slug = slugify(self.title)
+      else:
+         slug = slugify(self.slug)
+         if self.__class__.objects.filter(slug=self.slug).exists():
+            i = 1
+            while self.__class__.objects.filter(slug='{}-{}'.format(slug, i)).exists():
+               i += 1
+            slug = '{}-{}'.format(slug, i)
+         self.slug = slug
+       
+      super(Article, self).delete(*args, **kwargs)   
         
     def __str__(self):
-        return self.title
+        return self.slug
     
 #TODO: ARTICLE COMMENT
 class ArticleComment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # answer_on = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     message = models.TextField(max_length=500)
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        ordering = ['-updated', '-created']
         
     def __str__(self):
         return self.message

@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Oswald:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;&display=swap');
+
+:root {
+   --white: #F7F7F7;
+   --black: #050505;
+   --lime: #00f98d;
+   --green: #11cc00;
+   --red: #cb0202;
+   
+   --black: #000;
+   --primary: #202020;
+   --green: #67dca9;
+   --main-light: #e1f6fb;
+   --dark: #3f4156;
+   --dark-light: #696d97;
+   --light: #e5e5e5;
+   --gray: #8b8b8b;
+   --light-gray: #b2bdbd;
+   --bg: #2d2d39;
+   --success: #5dd693;
+   --error: #fc4b0b;  
+
+   --open-sans:  'Open Sans', sans-serif;
+   --oswald: 'Oswald', sans-serif;
+   --roboto: 'Roboto', sans-serif;
+   --roboto-condensed: 'Roboto Condensed', sans-serif;
+
+
+   --text-s: 10px;
+   --text-m: 14px;
+   --text-l: 18px;
+   --text-xl: 22px;
+   --text-2xl: 26px;
+   --text-3xl: 28px;
+   --text-4l: 32px;
+}

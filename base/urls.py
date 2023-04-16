@@ -1,24 +1,18 @@
 from django.urls import path
-from .  import views
+
+from .views.auth_view import registration_view, login_view, logout_view
+from .views.index_view import index
+from .views.tag_view import tag_list_view, tag_delete_view
 
 app_name = 'base'
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', index, name='index'),
     
-    #! REGISTRATION & LOGIN & LOGOUT
-    path('sign-up', views.registration, name='registration'),
-    path('sign-in', views.loginUser, name='login'),
-    path('sign-out', views.logoutUser, name='logout'),
+    path('register/', registration_view, name='register'),
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
     
-    #! TAGS 
-    path('tags', views.listTags, name='tags'),
-    path('tags/<str:id>/', views.deleteTag, name='tags-delete'),
-    
-    #! PROFILE
-    path('profile/<str:username>/', views.profile, name='profile'),
-    path('profile/<str:username>/likes', views.profileLikes, name='profile-likes'),
-    path('profile/<str:username>/courses', views.profileCourses, name='profile-courses'),
-    path('profile/<str:username>/articles', views.profileArticles, name='profile-articles'),
-    path('profile/<str:username>/change', views.profileUpdate  , name='profile-update'),    
+    path('tags/', tag_list_view, name='tag_list'),
+    path('tags/<int:tag_id>/delete/', tag_delete_view, name='tag'),
 ]

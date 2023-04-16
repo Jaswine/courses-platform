@@ -1,0 +1,39 @@
+{% load static %}
+<header>
+    <a class="header__logo" href="/">CODELEARN</a>
+
+    <div class="header__pod__menu">
+        <div class="header__menu__icon">
+            <span class="header__line"></span>
+            <span class="header__line"></span>
+            <span class="header__line"></span>
+        </div>
+        <div class="header__menu">
+            <a href={% url 'courses:catalog' %} class="link link-mobile">Все Курсы</a>
+            {% comment %} <a href="" class="link">Community</a> {% endcomment %}
+            <a href="/articles" class="link link-mobile">Блог</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'base:profile' request.user.username %}" class="link ">{{request.user.username}}</a>
+            <a href="{% url 'base:logout' %}" class="btn">Выйти</a>      
+        {% else %}
+            <a href="/sign-in" class="link">Войти </a>
+            <a href="/sign-up" class="btn">Регистрация</a>   
+        {% endif %}
+        </div>
+    </div>
+</header>
+
+<!-- <script src="{% static 'js/header.js' %}"></script> -->
+
+<script>
+    const header__menu__icon = document.querySelector(".header__menu__icon");
+    const header__menu = document.querySelector(".header__menu");
+
+header__menu__icon.onclick = () => {
+    if (header__menu.style.top != "60px") {
+        header__menu.style.top = "60px"
+    } else {
+        header__menu.style.top = "-50vh"
+    }
+}
+</script>

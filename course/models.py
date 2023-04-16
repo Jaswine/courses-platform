@@ -1,18 +1,17 @@
 from django.db import models
+from ckeditor.fields import RichTextField 
 from django.contrib.auth.models import User
-from django.db.models import Avg
-from django.core.validators import MaxValueValidator, MinValueValidator
 
 
+# Create your models here.
 #!: ______TAG FOR COURSES & ARTICLES
 class Tag(models.Model):
     name = models.CharField(max_length=100)
     
     def __str__(self):
         return self.name
-
-
-#!: ____________COURSE_____________
+    
+    #!: ____________COURSE_____________
 class Course(models.Model):
     LEVEL = (
         ('Beginner', 'Beginner'),
@@ -22,29 +21,41 @@ class Course(models.Model):
     title = models.CharField(max_length=100)
     slug = models.CharField(max_length=100, unique=True, default='')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='courses', blank=True, null=True, default=None)
+    
+    image = models.ImageField(upload_to='courses', blank=True, default=None)
     tags = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True)
 
     #TODO: About this course
     about = models.TextField(max_length=2000, blank=True)
     whatAreUWillLearn = models.TextField(max_length=500, blank=True)
-    level = models.CharField(max_length=13, choices=LEVEL, null=True)
+    level = models.CharField(max_length=13, choices=LEVEL)
     initialRequirements = models.TextField(max_length=500, blank=True)
-    # certificate = models.FileField(upload_to='courses/certificates', blank=True, null=True)
+    certificate = models.ImageField(upload_to='courses/certificates', blank=True)
       
     #TODO: Public or Unpublic
     public = models.BooleanField(default=False)
     
     #TODO: Like & Bookmarks
     likes = models.ManyToManyField(User, blank=True, related_name='likes' )
-    bookmarks = models.ManyToManyField(User, blank=True, related_name='bookmarks')
+    
+    course_titles = models.ManyToManyField('CourseTitle', blank=True, default=[])
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['-updated', '-created']
         
+    def __str__(self):
+        return self.title
+    
+#!  ____________TITLE FOR CHAPTER COURSE_____________
+class CourseTitle(models.Model):
+    title = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
+    place = models.IntegerField(default=0, blank=True)
+    
+    tasks = models.ManyToManyField('CourseTask', blank=True, default=[])
+    
+    public = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.title
 
@@ -56,109 +67,68 @@ class CourseTask(models.Model):
         ('test', 'test'),
         ('text','text')
     )
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, default=None)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
-    # courseTitle = models.ForeignKey(CourseTitle, on_delete=models.CASCADE)
+    
     taskType = models.CharField(max_length=10, choices=TASKSTYPE, blank=True)
+    
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, max_length=500)
         
-    video = models.FileField(upload_to='courses/tasks/videos', blank=True, null=True)
-    body = models.TextField(blank=True, null=True)
-    codeAnswer = models.TextField(blank=True, null=True)
-    text = models.TextField(blank=True, null=True)
+    video = models.FileField(upload_to='courses/tasks/videos', blank=True)
+    body = RichTextField(blank=True)
+    codeAnswer = models.TextField(blank=True)
     
     public = models.BooleanField(default=False)
     
     @classmethod
-    def video_task(cls, title, description, video, public):
+    def video_task(cls, video):
         return CourseTask.objects.create(
-            task = "video",
-            title = title,
-            description = description,
+            taskType = "video",
             video = video,
-            public = public,
         )
     
     @classmethod
-    def code_task(cls, title, description, codeAnswer, public):
+    def code_task(cls, text, codeAnswer):
         return CourseTask.objects.create(
-            task = 'code', 
-            title = title,
-            description = description,
+            taskType = 'code', 
+            body = body,
             codeAnswer = codeAnswer,
-            public = public,
         )
         
     @classmethod
-    def article_task(cls, title, description, body, public):
+    def text_task(cls, body):
         return CourseTask.objects.create(
-            task = 'text',
-            title = title,
-            description = description,
+            taskType = 'text',
             body = body,
-            public = public,    
         )
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     
-    class Meta:
-        ordering = ['-updated', '-created']
-    
     def __str__(self):
         return self.title
     
-#!  ____________TITLE FOR CHAPTER COURSE_____________
-class CourseTitle(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
-    place = models.IntegerField(default=0, blank=True)
-    
-    tasks = models.ManyToManyField(CourseTask, blank=True, default=[])
-    
-    public = models.BooleanField(default=False)
-    
-    def __str__(self):
-        return self.title
-    
-class CourseComment(models.Model):
-    
-    COMMENT_TYPE = (
-        ('review', 'review'),
-        ('comment', 'comment'),
-    )
-    
-    commentType = models.CharField(choices=COMMENT_TYPE, max_length=40, default='')
+class CourseReview(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField(blank=True, max_length=1000)
     
-    courseTask = models.ForeignKey(CourseTask, on_delete=models.CASCADE, blank=True, default=None, null=True)
-    rating = models.IntegerField(default=0, blank=True)
+    stars = models.IntegerField(default=0, blank=True)
         
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     
-    @classmethod
-    def review_comment(cls, message, rating):
-        return CourseComment.objects.create(
-            commentType = 'review',
-            message = message,
-            rating = rating    
-        )
+    def __str__(self):
+        self.course.title
+
+class TaskComment(models.Model):
+    courseTask = models.ForeignKey(CourseTask, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    body = models.TextField(blank=True, max_length=1000)
     
-    @classmethod
-    def review_comment(cls, message, courseTask):
-        return CourseComment.objects.create(
-            commentType = 'comment',
-            message = message,
-            courseTask = courseTask
-        )
-    
-    class Meta:
-        ordering = ['-updated', '-created']
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return self.course  
+        return self.courseTask.title
+    

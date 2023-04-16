@@ -1,0 +1,59 @@
+{% include 'main.html' %}
+{% load static %}
+
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/articles/articles_all.css' %}">
+<title>All Articles</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page articles">
+   {% if request.user.is_superuser %}
+   <div class="page__panel">
+       <a href="{% url 'article:create_article' %}" class="btn btn-delete">
+            <i class="fa-solid fa-plus"></i>
+            <span>Add New Post</span>
+       </a>
+   </div>
+   {% endif %}
+   <div class="page__item">
+       <div class="page__article__filters">
+           <h3 class="">Все Темы</h3>
+           <div class='page__article__filter__tags'>
+                   <a href="{%  url 'article:all_articles' %}" class='page__article__filter__tag' >Все</a>
+               {% for tag in tags %}
+                   <a href="{% url 'article:all_articles' %}?q={{tag.name}}" class="page__article__filter__tag">{{tag.name}}</a>
+               {% endfor %}
+           </div>
+       </div>
+       <div class="home__courses__objects">
+           {% for article in articles %}
+               <article class="article">
+                   <a class="link__page"  href="{% url 'article:show_article' article.slug %}">{{article.title}}</a>
+                   <div class="article__body">
+                       {{article.text | truncatewords:30 }}
+                   </div>
+                   {% if request.user.is_authenticated %}
+                       {% if request.user.is_superuser %}
+                           {% if request.user.username == article.user.username %}
+                               <div class="article__head article__buttons">
+                                   <a href="{% url 'article:update_article' article.slug %}" class="btn btn-icon">
+                                       <span class="material-symbols-outlined">
+                                           edit_square
+                                       </span>
+                                   </a>
+                                   <a href="{% url 'article:delete_article' article.slug %}" class="btn btn-delete">
+                                       <span class="material-symbols-outlined">
+                                       delete_forever
+                                       </span>
+                                   </a>
+                               </div>
+                           {% endif %}
+                       {% endif %}
+                   {% endif %}
+               </article>
+           {% endfor %}
+       </div>
+   </div>
+</div>
+{% endblock content %}

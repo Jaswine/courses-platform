@@ -1,0 +1,41 @@
+@import './variables.css';
+
+/* Header */
+header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   width: 100%;
+   background-color: var(--black);
+   height: 60px;
+   padding: .4rem 10%;
+   position: fixed;
+   top: 0;
+   z-index: 10;
+}
+.header__menu {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+.header__logo {
+   font-size: 24px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 10px;
+   font-weight: bold;
+   color: var(--lime)
+}
+a:hover * {
+   color: var(--lime);
+ transition: all .3s linear;
+}
+
+.header__menu .btn:hover {
+   background-color: var(--white);
+   color: var(--black);
+}
+header a {
+   color: var(--white)
+}

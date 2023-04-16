@@ -1,7 +1,6 @@
 from .models import Article, ArticleComment
 from course.models import Tag
 
-
 def get_all_articles():
    return Article.objects.all()
 
