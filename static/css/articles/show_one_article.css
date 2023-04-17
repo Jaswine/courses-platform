@@ -1,15 +1,16 @@
 .page {
    display: flex;
-   justify-content: space-between;
+   justify-content: center;
    align-items: start;
    width: 100%;
    padding: 10px;
    gap: 5px;
    width: 100vw;
    flex-direction: row;
+   margin-bottom: 10%;
 }
 .page__left {
-   width: 65%;
+   width: 60%;
    display: flex;
    justify-content: center;
    align-items: center;

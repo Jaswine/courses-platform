@@ -1,0 +1,26 @@
+.profile__header {
+   width: 100%;
+   margin-bottom: 10px;
+   border-bottom: 2px solid black;
+   display: flex;
+   justify-content: space-between;
+   align-items:flex-end;
+   padding: 0 3%;
+}
+.profile__header__left {
+   display: flex;
+   justify-content: center;
+   align-items: flex-end;
+   gap: 10px
+}
+.profile__header__left img  {
+   width: 100px;
+   height: 100px;
+   object-fit: cover;
+}
+.profile__header__left h1 {
+   margin-bottom: -8px;
+}
+.profile__header__right {
+   font-size: 22px;
+}

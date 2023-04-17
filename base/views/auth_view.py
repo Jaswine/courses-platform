@@ -27,7 +27,6 @@ def registration_view(request):
          profile = Profile.objects.create(
             user = new_user,
          )
-         profile.save()
          
          # login user
          login(request, new_user)

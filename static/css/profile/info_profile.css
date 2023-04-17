@@ -1,0 +1,20 @@
+.profile__body__right__icons {
+   display: flex;
+   justify-content: start;
+   align-items: center;
+   gap: 5px
+}
+.profile__body__right__icons a {
+   font-size: 24px;
+}
+.profile__body__right__icons a span {
+   font-size: 32px;
+   transition: all .3s linear;
+}
+.profile__body__right__icons a span:hover {
+   color: #00f98d
+}
+p {
+   margin-bottom: 5px;
+   font-size: 20px;
+}

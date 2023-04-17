@@ -129,8 +129,8 @@ def show_article(request, slug):
       'comments': comments,
       
       'liked': liked,
-      'filtered_articles': filtered_articles,
-      'last_articles': last_articles
+      'filtered_articles': filtered_articles[3:],
+      'last_articles': last_articles[3:]
    }
    return render(request, 'article/showOneArticle.html', context)
 
