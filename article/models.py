@@ -19,21 +19,7 @@ class Article(models.Model):
     likesForArticle = models.ManyToManyField(User, related_name='likesForArticle', blank=True, default=[])
     
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    
-    def save(self, *args, **kwargs):
-      if not self.slug:
-         slug = slugify(self.title)
-      else:
-         slug = slugify(self.slug)
-         if self.__class__.objects.filter(slug=self.slug).exists():
-            i = 1
-            while self.__class__.objects.filter(slug='{}-{}'.format(slug, i)).exists():
-               i += 1
-            slug = '{}-{}'.format(slug, i)
-         self.slug = slug
-       
-      super(Article, self).delete(*args, **kwargs)   
+    updated = models.DateTimeField(auto_now=True)  
         
     def __str__(self):
         return self.slug

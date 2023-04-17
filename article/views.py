@@ -7,6 +7,7 @@ from course.models import Tag
 from .forms import ArticleForm
 
 from .services import get_all_articles, get_one_article, get_all_tags, article_comments_filter, articles_list_filter_tags, article_get_one_comment
+from .utils import slug_generator, checking_slug
 
 
 def get_all_articles_list(request):
@@ -33,10 +34,13 @@ def create_article(request):
          form = ArticleForm(request.POST)
          
          if form.is_valid():
-            form.save(commit=false)
-            form.user = request.user
+            slug = checking_slug(slug_generator(form.cleaned_data.get('title')))
             
-            form.save()
+            article = form.save(commit=False)
+            article.user = request.user
+            article.slug = slug
+         
+            article.save()
             return redirect('article:all_articles')
          
       context = {
@@ -51,18 +55,110 @@ def create_article(request):
 def show_article(request, slug):
    article = get_one_article(slug)
    comments = article_comments_filter(article)
+   
+   filtered_articles = Article.objects.filter(tag=article.tag)
+   last_articles = get_all_articles()
+   
+   liked = False
+
+   likes = article.likesForArticle
+   likes_count = (article.likesForArticle).count()
+   
+   user = request.user
+
+   for like in likes.all(): 
+      if like.username == request.user.username:
+         liked = True
+
+   if request.method == 'POST':
+      type = request.POST.get('type')
+      
+      # add new like or remove old like
+      if type == 'like':
+         if request.user.is_authenticated: 
+               status = False
+               
+               # get status
+               for like in likes.all(): 
+                  if like.username == request.user.username:
+                     status = True
+                     print(like.username)
+               
+               # check if user already liked
+               if status:
+                  # if liked, remove like
+                  liked = False
+                  article.likesForArticle.remove(like)
+
+               if status == False:
+                  # if not liked, add like
+                  liked = True
+                  article.likesForArticle.add(request.user)
+
+                  article.save()
+
+               return redirect('/articles/'+ slug)
+         else:
+               return redirect('/sign-in')
+         
+      # create new comments
+      if type == 'comment':
+         if request.user.is_authenticated:
+               # get data from form
+               message = request.POST.get('message')
+               
+               # check data 
+               if len(message) < 6:
+                  messages.error(request, 'Message is too short')
+               
+               # create new comment
+               form = ArticleComment.objects.create(
+                  article=article,
+                  user=user,
+                  message=message,
+               )
+
+               form.save()
+               return redirect('/articles/'+ slug)
+         else:
+               return redirect('base:login')
+                  
     
    context =  {
       'article': article,
-      'comments': comments
+      'comments': comments,
+      
+      'liked': liked,
+      'filtered_articles': filtered_articles,
+      'last_articles': last_articles
    }
    return render(request, 'article/showOneArticle.html', context)
 
+@login_required(login_url='base:login')
+def delete_comment(request,slug, id):
+    if request.user.is_authenticated:
+     # get comment
+      comment = article_get_one_comment(id)
+      
+      # check comment and user
+      if comment:
+         if comment.user == request.user:
+               #delete comment
+               comment.delete()
+         else:
+               messages.error(request, 'You are not allowed to delete this comment')
+      else:
+         messages.error(request, 'Comment not found')
+      
+      return redirect('/articles/'+ slug)
+    else:
+        return redirect('base:registration')
 
 @login_required(login_url='base:login')
 def update_article(request, slug):
    if request.user.is_superuser:
       article = get_one_article(slug)
+      page_type = 'update_article'
       
       if article.user == request.user:
          form = ArticleForm(instance=article)
@@ -72,15 +168,18 @@ def update_article(request, slug):
             
             if form.is_valid():
                form.save()
-               return redirect('base:all_articles')
+               return redirect('article:all_articles')
          
          context = {
+            'page_type': page_type,
+            'form': form,
             'article': article
          }
          return render(request, 'article/CreateUpdateArticle.html', context)
       else: 
          redirect('article:all_articles')
    else:
+      messages.error(request, 'You are not allowed to edit this article')
       return redirect('article:all_articles')
    
 
@@ -92,14 +191,19 @@ def delete_article(request, slug):
         
         # check article and user
         if article:
-            if article.user == request.user:
-                #delete article
-                article.delete()
-            else:
-                messages.error(request, 'You are not allowed to delete this article')
+           if request.method == 'POST':
+               if article.user == request.user:
+                  #delete article
+                  article.delete()
+                  return redirect('article:all_articles')
+               else:
+                  messages.error(request, 'You are not allowed to delete this article')
         else:
             messages.error(request, 'Article not found')
         
-        return redirect('/articles/'+ slug)
+        context = {
+           'article': article
+        }
+        return render(request, 'article/DeleteArticle.html', context)
    else:
-        return redirect('base:registration')
+        return redirect('article:registration')

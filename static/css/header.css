@@ -25,11 +25,11 @@ header {
    align-items: center;
    gap: 10px;
    font-weight: bold;
-   color: var(--lime)
+   color: #00f98d
 }
 a:hover * {
-   color: var(--lime);
- transition: all .3s linear;
+   color: #00f98d;
+   transition: all .3s linear;
 }
 
 .header__menu .btn:hover {
@@ -38,4 +38,49 @@ a:hover * {
 }
 header a {
    color: var(--white)
+}
+
+.header__menu__icon {
+   display: none;
+}
+
+@media screen and (max-width: 600px) {
+   .header__line {
+      display: block;
+      width: 40px;
+      height: 4px;
+      content: "";
+      margin-top: 4px;
+      margin-bottom: 2px;
+      background-color: white;
+      border-radius: 10px;
+   }
+.header__menu__icon {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+}
+.header__menu__icon:hover .header__line {
+   background-color: #00f98d;
+}
+   .header__menu {
+      flex-direction: column;
+      position: fixed;
+      background-color: black;
+      width: 100vw;
+      top: -50vh;
+      right: 0;
+      left:0;
+      height: 30vh;
+      transition: all .3s linear;
+      z-index: 9;
+   }
+   .header__menu a {
+      font-size: 20px ;
+      margin-bottom: 20px;
+   }
+   .link:hover:after {
+      display: none;
+   }
 }

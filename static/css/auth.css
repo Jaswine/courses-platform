@@ -86,14 +86,20 @@
    transition: all .3s linear;
 }
 .form__component:hover input, .form__component:focus input {
-   color: var(--lime);
-   border-color: var(--lime);
+   color: #00f98d;
+   border-color: #00f98d;
 }
 .form__component:hover label, .form__component:focus input {
-   color: var(--lime);
+   color: #00f98d;
 }
 
 .form form p {
    margin-top: 10px;
    font-size: var(--text-l);
+}
+
+@media screen and (max-width: 600px) {
+   .pre__form {
+      padding: 0 20px;
+   }
 }

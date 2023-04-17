@@ -3,7 +3,6 @@
 
 {% block title %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
-<link rel="stylesheet" href="{% static 'css/articles/create_article.css' %}">
 <link rel="stylesheet" href="{% static 'css/tag.css' %}">
 <title>Tags Page</title>
 {% endblock title %}
@@ -20,24 +19,20 @@
          </div>
         <form action="" method="POST">
             {% csrf_token %}
-            <div class = "add__form__component">
+            <div class = "form__component">
                 <label for="">Tag:</label>
                 <input type="text" class="input" name='tag' class="" placeholder='название тега...'>
              </div>
             
-            <button type="submit" class="btn">
-                <span class="material-symbols-outlined">
-                    save
-                </span>
-            </button>
+            <button type="submit" class="btn">save</button>
         </form>
         <div class="tags">
             {% for tag in tags  %}
               <div class="tag">
                 <h2>{{tag.name}}</h2>
-                <a class="btn btn-delete" href={% url 'base:tags-delete' tag.id %}>
+                <a class="btn btn-delete" href="{% url 'base:tags-delete' tag.id %}">
                     <span class="material-symbols-outlined">
-                        delete_forever
+                        delete
                     </span>
                 </a>
               </div>

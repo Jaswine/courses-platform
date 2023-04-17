@@ -14,5 +14,5 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     
     path('tags/', tag_list_view, name='tag_list'),
-    path('tags/<int:tag_id>/delete/', tag_delete_view, name='tag'),
+    path('tags/<int:tag_id>/delete/', tag_delete_view, name='tags-delete'),
 ]

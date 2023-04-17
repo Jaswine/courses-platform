@@ -28,10 +28,10 @@ def tag_list_view(request):
     return render(request,'base/tags.html', context)
 
 
-def tag_delete_view(request, id):
+def tag_delete_view(request, tag_id):
     if  request.user.is_superuser:
         # get tag
-        tag = Tag.objects.get(id=id)
+        tag = Tag.objects.get(id=tag_id)
 
         if tag:
             # delete tag
