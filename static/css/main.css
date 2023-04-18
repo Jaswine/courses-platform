@@ -132,3 +132,7 @@ body {
    padding: 10px;
    margin-top: 80px;
 }
+
+select {
+   background-color: white !important;
+}

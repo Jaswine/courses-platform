@@ -62,11 +62,27 @@ input {
    flex-direction: column;
 }
 .course__task {
-   width: 70%;
+   width: 90%;
    display: flex;
    justify-content: space-between;
    align-items: center;
    border: 1px solid lightgray;
    padding: 4px 6px;
    background-color: white;
+}
+.course__title__main a {
+   padding: 10px;
+   background-color: #00f98d;
+   border-radius: 10px;
+}
+.course__task a {
+   padding: 10px;
+   background-color: #00f98d;
+   border-radius: 10px;
+}
+.course__title__main a:hover {
+   background-color: black;
+}
+.course__task a:hover {
+   background-color: black;
 }

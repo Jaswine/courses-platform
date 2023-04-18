@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 # models
-from ..models import Tag, Course
+from ..models import Tag, Course, CourseTask, CourseTitle
 
 from ..forms import CourseForm
 
@@ -53,6 +53,63 @@ def create_course_view(request):
         return render(request, 'course/AddNewCourse.html', { 'form': form})
     else:
         return redirect('base:registration')
+
+@login_required(login_url='base:login')
+def task_view(request, slug, pk):
+    # get courses and tasks
+    course = Course.objects.get(slug=slug)
+    task =  CourseTask.objects.get(id=pk)
+    titles = CourseTitle.objects.filter(course=course.id)
+    # comments = CourseComment.objects.filter(course=course, courseTask=task)
+    
+    prev_page = ''
+    next_page = ''
+    
+    # number = tasks.index(task)
+    
+    # try: 
+    #     if (tasks[number+1]):
+    #         next_page = tasks[number+1]
+    # except:
+    #     print('Error')
+    
+    # try: 
+    #     if (tasks[number-1] and  number!=0):
+    #         prev_page = tasks[number-1]
+    # except:
+    #     print('Error')
+    
+    if request.user.is_authenticated != True:
+        return redirect('base:login')
+    
+    if request.method == 'POST':
+        if (request.user.is_authenticated):
+            # get data from form
+            comment = request.POST.get('comment')
+            
+            # create a new Course
+            form = CourseComment.objects.create(
+                commentType = 'comment',
+                course = course,
+                user = request.user,
+                # message = comment,
+                # courseTask = task,
+            )
+            
+            form.save()
+            return redirect('courses:task', course.slug, task.id)
+        else:
+            return redirect('base:login')
+    
+    context = {
+        'course': course,
+        'task': task,
+        
+        'priv_page': prev_page,
+        'next_page': next_page,
+        
+    }
+    return render(request, 'course/Task.html', context)
     
 @login_required(login_url='base:login')
 def delete_course(request, slug):

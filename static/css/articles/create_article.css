@@ -46,6 +46,7 @@
    font-size: var(--text-xl);
    transition: all .3s linear;
    background-color: var(--white);
+   background-color: white;
 }
 #id_public {
    width: 30px;

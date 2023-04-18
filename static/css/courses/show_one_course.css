@@ -131,3 +131,39 @@
 .course__info p {
    margin-bottom: 5px;
 }
+
+/* course__content__section */
+.course__content__section {
+   margin-bottom: 10px;
+   width: 100%;
+}
+.course__content__section  .topic  {
+   color: darkgray ;
+   font-size: 14px;
+   font-weight: 600;
+   margin-bottom: 4px;  
+}
+/* #00f98d */
+.course__content__section  h2  {
+   margin-bottom: 8px;
+}
+.course__countent__section__tasks {
+   display: flex;
+   justify-content: space-between;
+   align-items: start;
+   flex-direction: column;
+}
+.task {
+   background-color: rgb(0,0,0,.05);
+   margin-bottom: 10px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center; 
+   padding: 8px 5%;
+   border-radius: 10px;
+   width: 100%;
+   transition: all .3s linear;
+}
+.task:hover {
+   background-color: rgb(0, 249, 141, .05);
+}

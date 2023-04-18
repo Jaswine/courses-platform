@@ -129,67 +129,67 @@ def deleteReview(request,slug, id):
     else:
         return redirect('base:registration')
 
-def task(request, slug, pk):
-    # get courses and tasks
-    course = get_one_course(slug=slug)
-    task =  get_one_task(pk)
-    titles = CourseTitle.objects.filter(course=course.id)
-    comments = CourseComment.objects.filter(course=course, courseTask=task)
-    
-    # all tasks 
-    tasks = get_all_exercises_from_titles(titles)
-    prev_page = ''
-    next_page = ''
-    
-    number = tasks.index(task)
-    
-    try: 
-        if (tasks[number+1]):
-            next_page = tasks[number+1]
-    except:
-        print('Error')
-    
-    try: 
-        if (tasks[number-1] and  number!=0):
-            prev_page = tasks[number-1]
-    except:
-        print('Error')
-    
-    if request.user.is_authenticated != True:
-        return redirect('base:login')
-    
-    if request.method == 'POST':
-        if (request.user.is_authenticated):
-            # get data from form
-            comment = request.POST.get('comment')
-            
-            # create a new Course
-            form = CourseComment.objects.create(
-                commentType = 'comment',
-                course = course,
-                user = request.user,
-                message = comment,
-                courseTask = task,
-            )
-            
-            form.save()
-            return redirect('courses:task', course.slug, task.id)
-        else:
+    def task(request, slug, pk):
+        # get courses and tasks
+        course = get_one_course(slug=slug)
+        task =  get_one_task(pk)
+        titles = CourseTitle.objects.filter(course=course.id)
+        comments = CourseComment.objects.filter(course=course, courseTask=task)
+        
+        # all tasks 
+        tasks = get_all_exercises_from_titles(titles)
+        prev_page = ''
+        next_page = ''
+        
+        number = tasks.index(task)
+        
+        try: 
+            if (tasks[number+1]):
+                next_page = tasks[number+1]
+        except:
+            print('Error')
+        
+        try: 
+            if (tasks[number-1] and  number!=0):
+                prev_page = tasks[number-1]
+        except:
+            print('Error')
+        
+        if request.user.is_authenticated != True:
             return redirect('base:login')
-    
-    context = {
-        'course': course,
-        'task': task,
         
-        'titles': titles,
-        'tasks': tasks,
+        if request.method == 'POST':
+            if (request.user.is_authenticated):
+                # get data from form
+                comment = request.POST.get('comment')
+                
+                # create a new Course
+                form = CourseComment.objects.create(
+                    commentType = 'comment',
+                    course = course,
+                    user = request.user,
+                    message = comment,
+                    courseTask = task,
+                )
+                
+                form.save()
+                return redirect('courses:task', course.slug, task.id)
+            else:
+                return redirect('base:login')
         
-        'priv_page': prev_page,
-        'next_page': next_page,
-        
-        'comments': comments
-    }
-    return render(request, 'course/Task.html', context)
+        context = {
+            'course': course,
+            'task': task,
+            
+            'titles': titles,
+            'tasks': tasks,
+            
+            'priv_page': prev_page,
+            'next_page': next_page,
+            
+            'comments': comments
+        }
+        return render(request, 'course/Task.html', context)
 
 def courseTaskCommentDelete(request, slug, pk, comment_id):
     if request.user.is_authenticated:

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views.course import show_all_courses_view, create_course_view, course, delete_course
+from .views.course import show_all_courses_view, create_course_view, course, delete_course, task_view
 from .views.course_panel import course_panel_tasks_view, course_panel_update_info, create_task_view, course_panel_update_title_view, update_task_view, delete_task_view, delete_title_view
 
 app_name='course'
@@ -9,6 +9,7 @@ urlpatterns = [
    path('create', create_course_view, name='create_course'),
    
    path('courses/<str:slug>', course, name='course'),
+   path('courses/<str:slug>/tasks/<int:pk>/', task_view, name='task_view'), 
    path('courses/<str:slug>/delete', delete_course, name='delete_course'),
    
    path('courses/<str:slug>/panel/tasks', course_panel_tasks_view, name='tasks-panel'),

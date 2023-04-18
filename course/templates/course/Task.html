@@ -1,0 +1,40 @@
+{% include 'main.html' %}
+{% load static %}
+
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/courses/task.css' %}">
+<title>{{task.title}}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="task">
+  <div class="task__menu">
+    {% for title in course.course_titles.all %}
+      {% for task in title.tasks.all %}
+        <div class="task__menu__component">
+          <a href="{% url 'course:task_view' course.slug task.id %}" class="">{{ task.title }}</a>
+          <p href="" class="">{{ task.description | truncatewords:20 }}</p>
+        </div>
+      {% endfor %}  
+    {% endfor %}
+  </div>
+  <div class="task__content">
+    <div class="task__content__header">
+      <h2>{{task.title}}</h2>
+      <div class="task__content__header__paginate">
+        <div class="btn">left</div>
+        <div class="btn">right</div>
+      </div>
+    </div>
+    <div class="task__content__text">
+      {% if task.taskType == 'text' %}
+        {% autoescape off %} 
+        {{task.body}}
+        {% endautoescape %}
+      {% elif task.taskType == 'video' %}
+        <video src="/static/media/{{task.video}}" controls ></video>
+      {% endif %}
+    </div>
+  </div>
+</div> 
+{% endblock content %}

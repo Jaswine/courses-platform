@@ -5,7 +5,6 @@ textarea {
 .display_none {
    display: none;
 }
-
 select {
    margin-bottom: 10px;
 }
@@ -14,4 +13,11 @@ input {
 }
 .dangerouse__place {
    margin: 3% 0
+}
+.form {
+   row-gap: 10px;
+}
+
+h2 {
+   margin-bottom: 10px;
 }

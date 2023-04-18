@@ -31,20 +31,26 @@
         </div>
      {% endfor %}
 
-     <select name="course_title">
-        <option value="" disabled selected>Choose Title</option>
-        {% for title in course.course_titles.all %}
-            <option value="{{title.id}}">{{title.title}}</option>
-        {% endfor %}course_title_get
-     </select>
-
         {% if page == 'updateTask' %}
+        <select name="course_title">
+            <option value="" disabled selected>Choose Title</option>
+            {% for title in course.course_titles.all %}
+                <option value="{{title.id}}">{{title.title}}</option>
+            {% endfor %}course_title_get
+         </select>
+         
         <select name="tag" id="typeTask">
             <option value="{{task.taskType}}" selected>{{task.taskType}}</option>
             <!-- <option value="text">text</option> -->
             <option value="video">video</option>
         </select>
         {% else %}
+        <select name="course_title">
+            <option value="" disabled selected>Choose Title</option>
+            {% for title in course.course_titles.all %}
+                <option value="{{title.id}}">{{title.title}}</option>
+            {% endfor %}course_title_get
+         </select>
         <select name="tag" id="typeTask">
             <option value="" selected disabled>Выберите тип вашего задания</option>
             <option value="text">текст</option>

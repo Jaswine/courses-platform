@@ -42,7 +42,18 @@ def course_panel_update_title_view(request, slug, title_id):
         page = 'UpdateTasksPanel'
         course = Course.objects.get(slug=slug)
         course_title = CourseTitle.objects.get(id=title_id)
-        course_tasks = CourseTask.objects.all()
+        
+        all_course_tasks = CourseTask.objects.all()
+        course_title_tasks = course_title.tasks.all()
+        
+        title_selected = []
+        title_unselected = []
+        
+        for task in all_course_tasks:
+            if task in course_title_tasks:
+                title_selected.append(task)
+            else:
+                title_unselected.append(task)
         
         if request.method == 'POST':
             get_title = request.POST.get('title')
@@ -60,7 +71,7 @@ def course_panel_update_title_view(request, slug, title_id):
             'page': page, 
             'course': course, 
             'title': course_title,
-            'tasks': course_tasks, 
+            'tasks': all_course_tasks, 
         } 
         return render(request, 'course/panel/coursePanel.html', context)
     else:
@@ -91,7 +102,6 @@ def course_panel_update_info(request, slug):
         return render(request, 'course/panel/coursePanel.html',context)  
     else:
         return request('base:registration')
-    
 
     
 @login_required(login_url='base:login')
@@ -107,26 +117,30 @@ def create_task_view(request, slug):
             tag = request.POST.get('tag')
             course_title_get = request.POST.get('course_title')
             
+            if course_title_get is None:
+                messages.error(request, 'Title is not available')
+            
             if form.is_valid():
                 task = form.save(commit=False)
                 task.taskType = tag
                 task.user = request.user
                 
-                course_title = CourseTitle.objects.get(id=int(course_title_get))
-                course_title.tasks.add(task.id)
-                course_title.save()
-                
                 if tag == 'video':
                     video = request.FILES.get('video', None)
                     task.video = video
                     task.save()
-                    return redirect('course:create-task', course.slug)
+                    
+                    course_title = CourseTitle.objects.get(id=int(course_title_get))
+                    course_title.tasks.add(task.id)
+                    return redirect('course:tasks-panel', course.slug)
                 
                 elif tag == 'text':
                     body = request.POST.get('body')
                     task.body = body
-                    
                     task.save()
+                    
+                    course_title = CourseTitle.objects.get(id=int(course_title_get))
+                    course_title.tasks.add(task.id)
                     return redirect('course:tasks-panel', course.slug)
         
         context = {
@@ -158,20 +172,27 @@ def update_task_view(request, slug, task_id):
                 task.taskType = tag
                 task.user = request.user
                 
-                course_title = CourseTitle.objects.get(id=int(course_title_get))
-                course_title.tasks.add(task.id)
-                
                 if tag == 'video':
                     video = request.FILES.get('video', None)
                     task.video = video
                     task.save()
-                    return redirect('course:create-task', course.slug)
+                    
+                    if course_title_get:
+                        course_title = CourseTitle.objects.get(id=int(course_title_get))
+                        course_title.tasks.add(task.id)
+                        
+                    return redirect('course:tasks-panel', course.slug)
                 
                 elif tag == 'text':
                     body = request.POST.get('body')
                     task.body = body
                     
                     task.save()
+                    
+                    if course_title_get:
+                        course_title = CourseTitle.objects.get(id=int(course_title_get))
+                        course_title.tasks.add(task.id)
+                        
                     return redirect('course:tasks-panel', course.slug)
         
         context = {
@@ -212,7 +233,7 @@ def delete_title_view(request, slug, title_id):
         page = 'deleteTitle'
         
         course = Course.objects.get(slug=slug)
-        title = CourseTitle.objects.get(id=task_id)
+        title = CourseTitle.objects.get(id=title_id)
             
         if request.user.username == course.user.username:
             if request.method == 'POST':
