@@ -1,0 +1,23 @@
+form {
+   max-width: 600px;
+   width: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+}
+input, h2, select{
+   margin-bottom: 10px;
+}
+h2 {
+   margin-bottom: 5%;
+}
+select {
+   height: 300px;
+}
+select option {
+   padding: 4px 6px;
+}
+.dangerouse__place {
+   margin: 5% 0;
+}

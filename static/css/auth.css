@@ -85,6 +85,7 @@
    font-size: var(--text-xl);
    transition: all .3s linear;
 }
+
 .form__component:hover input, .form__component:focus input {
    color: #00f98d;
    border-color: #00f98d;

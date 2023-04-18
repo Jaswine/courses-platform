@@ -1,0 +1,41 @@
+{% load static %}
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/courses/task_panel.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+<div class="tasks__panel">
+   <div class="tasks__panel__header">
+      <h3>Create New Title</h3>
+      <a href="{% url 'course:course' course.slug %}" class="btn">Preview</a>
+   </div>
+   <form action="" method="POST">
+      {% csrf_token %}
+      <div class = "form__component">
+         <label for="">Title:</label>
+         <input type="text" class="input" name='title' class="" placeholder='title...'>
+      </div>
+      <button class="btn">save</button>
+   </form>
+   <div class="tasks__panel__header__right">
+      <a href="{% url 'course:create-task' course.slug %}" class="btn">+ Add New Task</a>
+   </div>
+   <div class="tasks__panel__schemes">
+      {% for course_title in course.course_titles.all %}
+      <div class="course__title">
+        <div class="course__title__main">
+         <h3> {{ course_title.title }}</h3>
+         <a href="{% url 'course:update-title' course.slug course_title.id %}"><i class="fa-solid fa-pen-to-square"></i></a>
+        </div>
+        <div class="course__title__tasks">
+         {% for course_task in course_title.tasks.all %}
+            <div class="course__task">
+               <h3>{{course_task.title}}</h3>
+               <a href="{% url 'course:update-task' course.slug course_task.id %}"><i class="fa-solid fa-pen-to-square"></i></a>
+            </div>
+         {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+   </div>
+</div>

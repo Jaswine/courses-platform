@@ -1,0 +1,22 @@
+{% load static %}
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/courses/task_panel.css' %}">
+<link rel="stylesheet" href="{% static 'css/articles/create_article.css' %}">
+<link rel="stylesheet" href="{% static 'css/courses/update_title.css' %}">
+{% endblock %}
+
+<form action="" method="POST">
+   {% csrf_token %}
+   <h2>Update {{title.title}}</h2>
+   <input type="text" name = 'title' value="{{title.title}}">
+   <select name="tasks" id="" multiple>
+      {% for task in tasks %}
+         <option value="{{task.id}}">{{ task.title }}</option>
+      {% endfor %}
+   </select>
+   <div class="dangerouse__place">
+      <span>Do u wanna delete this title?</span>
+      <a href="{% url 'course:course-title-delete' course.slug title.id %}"  class="btn btn-delete">Delete </a>
+  </div>
+   <button class="btn">save</button>
+</form>

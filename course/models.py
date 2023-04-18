@@ -22,7 +22,7 @@ class Course(models.Model):
     slug = models.CharField(max_length=100, unique=True, default='')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
-    image = models.ImageField(upload_to='courses', blank=True, default=None)
+    image = models.ImageField(upload_to='courses', blank=True)
     tags = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True)
 
     #TODO: About this course
@@ -50,8 +50,6 @@ class Course(models.Model):
 class CourseTitle(models.Model):
     title = models.CharField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
-    place = models.IntegerField(default=0, blank=True)
-    
     tasks = models.ManyToManyField('CourseTask', blank=True, default=[])
     
     public = models.BooleanField(default=False)

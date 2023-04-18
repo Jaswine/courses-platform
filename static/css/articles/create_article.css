@@ -19,12 +19,12 @@
    width: 100%;
    margin-bottom: 10px;
 }
-.add__form__component label {
+ label {
    font-size: var(--text-l);
    color: var(--primary);
    margin-bottom: 4px;
 }
-.add__form__component input {
+ input {
    max-width: 800px;
    width: 100%; 
    border: 2px solid var(--dark);
@@ -35,7 +35,7 @@
    font-size: var(--text-xl);
    transition: all .3s linear;
 }
-.add__form__component select {
+ select {
    max-width: 800px;
    width: 100%; 
    border: 2px solid var(--dark);

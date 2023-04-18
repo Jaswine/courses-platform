@@ -1,0 +1,20 @@
+{% include 'main.html' %}
+{% load static %}
+
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/articles/show_one_article.css' %}">
+<title>{{course.title}}</title>
+{% endblock %}
+
+{% block content %}
+<div class="page page__delete">
+   <div class="page__item">
+      <h2>{{course.title}}</h2>
+      <form class="page__item__delete" method="POST">
+         {% csrf_token %}
+         <a href="{{request.META.HTTP_REFERER}}">go to home</a>
+         <button class="btn" type="submit">delete course</button>
+      </form>
+   </div>
+</div>
+{% endblock content %}

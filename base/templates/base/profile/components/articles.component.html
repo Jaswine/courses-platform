@@ -13,7 +13,7 @@
    {% endif %}
 <div class="home__courses__objects">
 {% for article in articles %}
-   {% if article.public %}
+   {% if request.user.username == article.user.username %}
    <article class="article">
       <a class="link__page"  href="{% url 'article:show_article' article.slug %}">{{article.title}}</a>
       <div class="article__body">

@@ -1,0 +1,17 @@
+textarea {
+   max-width: 600px;
+   margin-bottom: 10px;
+}
+.display_none {
+   display: none;
+}
+
+select {
+   margin-bottom: 10px;
+}
+input {
+   margin-bottom: 10px;
+}
+.dangerouse__place {
+   margin: 3% 0
+}

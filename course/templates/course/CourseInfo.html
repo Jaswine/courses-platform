@@ -1,0 +1,63 @@
+{% include 'main.html' %}
+{% load static %}
+
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/courses/show_one_course.css' %}">
+<title>{{course.title}}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="course">
+   <div class="course__header">
+      <div class="course__header__back__image">
+         <img src="/static/media/{{course.image}}" alt="" class="course__img">
+         <div class="course__header__back__image__mask"></div>
+      </div>
+      <div class="course__header__info">
+         <a href="{% url 'course:show_all_courses' %}" class="back">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Courses</span>
+         </a>
+         <h1>{{course.title}}</h1>
+         <div class="course__header__links">
+            <div class="course__header__links__left">
+               <img src="/static/media/{{course.user.profile.image}}" alt="">
+               <a href ='{% url "base:profile" course.user.username %}'>{{course.user.username}}</a>
+            </div>
+            <div class="course__header__links__right">
+               <a href="">#{{course.tags}}</a>
+               <a href=""><i class="fa-solid fa-up-long"></i>{{course.level}}</a>
+            </div>
+         </div>
+         <div class="course__header__upgrade">
+            <div class="course__header__upgrade__info">
+               <span>lessons</span>
+               <span>partical works</span>
+               <span>progress</span>
+               <span>final project</span>
+            </div>
+            <div class="course__header__upgrade__line">
+               <span></span>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="course__body">
+      <div class="course__content">
+         Not Found
+      </div>
+      <div class="course__info">
+         <p><b><i class="fa-regular fa-file-lines"></i>About: </b>
+            {{ course.about}}
+         </p>  
+         <p><b><i class="fa-solid fa-book"></i></i>Knowledges: </b>
+            {{ course.whatAreUWillLearn}}
+         </p>
+         <p><b><i class="fa-solid fa-swatchbook"></i></i>Initial Requirements: </b>
+            {{ course.initialRequirements}}
+         </p>
+         <p>Course Details: ...</p>
+      </div>
+   </div>
+</div>
+{% endblock content %}
