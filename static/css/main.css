@@ -12,7 +12,7 @@ body {
    background-color: var(--white);
    color: var(--black);
    font-size: var(--text-l);
-   font-family: var(--roboto);
+   font-family: 'Roboto', sans-serif;
    overflow-x: hidden;
 }
 

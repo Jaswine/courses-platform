@@ -10,3 +10,8 @@ class TaskForm(ModelForm):
    class Meta:
       model = CourseTask
       fields = ['title', 'description']
+   
+class TaskForm(ModelForm):
+   class Meta:
+      model = CourseTask
+      fields = ['title', 'description']

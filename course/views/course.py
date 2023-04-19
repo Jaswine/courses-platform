@@ -19,16 +19,33 @@ def show_all_courses_view(request):
     courses = Course.objects.all()
     
     context = {
-        'courses': courses
+        'courses': courses,
     }
     return render(request, 'course/showAllCourses.html', context)
 
 def course(request, slug):
     # get course and titles
     course = Course.objects.get(slug=slug)
+    
+    lessons_count = 0
+    videos_count = 0
+    exercises_count = 0
+    projects_count = 0
+    
+    for title in course.course_titles.all():
+        for task in title.tasks.all():
+            lessons_count += 1
+            if task.taskType == 'video':
+                videos_count += 1
+            if task.taskType == 'code':
+                exercises_count += 1
                 
     context = {
         'course': course, 
+         'videos_count': videos_count,
+        'lessons_count': lessons_count,
+        'exercises_count': exercises_count,
+        'projects_count': projects_count
     }
     return render(request, 'course/CourseInfo.html', context)
  

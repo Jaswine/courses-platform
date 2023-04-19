@@ -41,8 +41,9 @@
          
         <select name="tag" id="typeTask">
             <option value="{{task.taskType}}" selected>{{task.taskType}}</option>
-            <!-- <option value="text">text</option> -->
+            <option value="text">text</option>
             <option value="video">video</option>
+            <option value="code">code</option>
         </select>
         {% else %}
         <select name="course_title">
@@ -55,17 +56,28 @@
             <option value="" selected disabled>Выберите тип вашего задания</option>
             <option value="text">текст</option>
             <option value="video">видео</option>
+            <option value="code">exercise</option>
         </select>
         {% endif %}
 
         <div id="other__fields">
+            {{media}}
             <textarea 
                 name="body" 
                 id="bodyTask" 
                 class="display_none" 
-                placeholder="текст"
+                placeholder="Talk about new theme..."
             >{{task.body}}</textarea>
+
             <input type="file" name="video" id="videoTask" class="display_none input">
+
+            <textarea 
+            name="bodyQuestionTask" 
+            id="bodyQuestionTask" 
+            class="display_none" 
+            placeholder="Talk about exercise..."
+        >{{task.body}}</textarea>
+            <input name="codeAnswer" value="{{task.codeAnswer}}" id="codeAnswer" cols="30" rows="10" placeholder = "Enter answer on your task..." />
         </div>
 
         {% if page == 'updateTask' %}
@@ -80,33 +92,38 @@
 </div>
 
     <script>
-        console.log('Js: I Work')
         let select  = document.getElementById('typeTask');
         let typeTask;
 
         //TASKS
         let bodyTask = document.getElementById('bodyTask');
         let videoTask = document.getElementById('videoTask');
+        let codeAnswer = document.getElementById('codeAnswer');
+        let bodyQuestionTask = document.getElementById('bodyQuestionTask');
 
-        console.log('select.value')
-        if (select.value == 'video' || select.value == 'text') {
-            if  (select.value == 'text') {
-                bodyTask.style.display = 'block';
-                videoTask.style.display = 'none';
-            }
+        const  displayNone = ()  => {
+            bodyTask.style.display = 'none';
+            videoTask.style.display = 'none';
+            codeAnswer.style.display = 'none';
+            bodyQuestionTask.style.display = 'none'
         }
+
+        displayNone()
 
         select.addEventListener('change', () => {
             console.log(select.value);
             typeTask = select.value;
 
             if (typeTask == 'text') {
+                displayNone()
                 bodyTask.style.display = 'block';
-                videoTask.style.display = 'none';
-                
             } else if (typeTask == 'video') {
+                displayNone()
                 videoTask.style.display = 'block';
-                bodyTask.style.display = 'none';
+            } else if (typeTask == 'code') {
+                displayNone()
+                bodyQuestionTask.style.display = 'block';
+                codeAnswer.style.display = 'block';
             }
         });
     

@@ -43,26 +43,29 @@ def course_panel_update_title_view(request, slug, title_id):
         course = Course.objects.get(slug=slug)
         course_title = CourseTitle.objects.get(id=title_id)
         
-        all_course_tasks = CourseTask.objects.all()
-        course_title_tasks = course_title.tasks.all()
+        tasks_selected = []
+        tasks_unselected = []
         
-        title_selected = []
-        title_unselected = []
+        all_course_tasks = CourseTask.objects.all()
         
         for task in all_course_tasks:
-            if task in course_title_tasks:
-                title_selected.append(task)
+            if task in course_title.tasks.all():
+                tasks_selected.append(task)
             else:
-                title_unselected.append(task)
+                tasks_unselected.append(task)
         
         if request.method == 'POST':
             get_title = request.POST.get('title')
             tasks = [int(i) for i in request.POST.getlist('tasks')]
+            task_for_delete = [int(i) for i in request.POST.getlist('task_for_delete')]
             
             course_title.title = get_title
             
             for task in tasks:
                 course_title.tasks.add(task)
+                
+            for delete_task in task_for_delete:
+                course_title.tasks.remove(delete_task)
             
             course_title.save()
             return redirect('course:tasks-panel', course.slug)
@@ -72,6 +75,9 @@ def course_panel_update_title_view(request, slug, title_id):
             'course': course, 
             'title': course_title,
             'tasks': all_course_tasks, 
+            
+            'tasks_selected': tasks_selected,
+            'tasks_unselected': tasks_unselected
         } 
         return render(request, 'course/panel/coursePanel.html', context)
     else:
@@ -142,6 +148,19 @@ def create_task_view(request, slug):
                     course_title = CourseTitle.objects.get(id=int(course_title_get))
                     course_title.tasks.add(task.id)
                     return redirect('course:tasks-panel', course.slug)
+                
+                elif tag == 'code':
+                    bodyQuestionTask = request.POST.get('bodyQuestionTask')
+                    codeAnswer = request.POST.get('codeAnswer')
+                    
+                    task.body = bodyQuestionTask
+                    task.codeAnswer = codeAnswer
+                    
+                    task.save()
+                    course_title = CourseTitle.objects.get(id=int(course_title_get))
+                    course_title.tasks.add(task.id)
+                    return redirect('course:tasks-panel', course.slug)
+                    
         
         context = {
             'page': page, 

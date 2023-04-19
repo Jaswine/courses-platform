@@ -31,10 +31,10 @@
          </div>
          <div class="course__header__upgrade">
             <div class="course__header__upgrade__info">
-               <span>lessons</span>
-               <span>partical works</span>
-               <span>progress</span>
-               <span>final project</span>
+               <span><i class="fa-solid fa-tv"></i> <b>{{lessons_count}}</b> lessons</span>
+               <span><i class="fa-solid fa-video"></i> <b>{{videos_count}}</b> videos</span>
+               <span><i class="fa-solid fa-file-code"></i> <b>{{exercises_count}}</b> exercises</span>
+               <span><i class="fa-solid fa-laptop-code"></i> <b>{{projects_count}}</b>  projects</span>
             </div>
             <div class="course__header__upgrade__line">
                <span></span>
@@ -56,6 +56,8 @@
                               <i class="fa-solid fa-newspaper"></i>
                               {% elif task.taskType == 'video' %}
                               <i class="fa-solid fa-video"></i>
+                              {% elif task.taskType == 'code' %}
+                              <i class="fa-solid fa-code"></i>
                               {% endif %}
                            </span>
                            <a href="{% url 'course:task_view' course.slug task.id %}"><h3>{{task.title}}</h3></a>

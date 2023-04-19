@@ -12,7 +12,7 @@
    <div class="page__left">
       <h2>{{article.title}}</h2>
       <div class="page__left__links">
-         <a href="">{{article.user.username}}</a>
+         <a href="{% url 'base:profile' article.user.username %}">{{article.user.username}}</a>
          <a href="/articles/?q={{article.tag}}">{{article.tag}}</a>
       </div>
       <div class="page__left__text">
@@ -67,7 +67,7 @@
                 {% for comment in comments %}
                   <div class="comment">
                     <div class="comment__header">
-                        <a href="" class="">{{comment.user.username}}</a>
+                        <a href="{% url 'base:profile' comment.user.username %}" class="">{{comment.user.username}}</a>
                         <div class="comment__header__right">
                             <span>{{comment.updated|date:"d.m.Y   h:m"}}</span>
                             {% if user.is_authenticated %}

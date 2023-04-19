@@ -9,6 +9,9 @@
 {% block content %}
 <div class="task">
   <div class="task__menu">
+    <div class="task__menu__close">
+      <i class="fa-solid fa-xmark"></i>
+    </div>
     {% for title in course.course_titles.all %}
       {% for task in title.tasks.all %}
         <div class="task__menu__component">
@@ -20,7 +23,12 @@
   </div>
   <div class="task__content">
     <div class="task__content__header">
+     <div class="task__content__header__paginate">
+      <div class="task__content__header__show__menu">
+        <i class="fa-solid fa-square-caret-down"></i>
+    </div>
       <h2>{{task.title}}</h2>
+     </div>
       <div class="task__content__header__paginate">
         <div class="btn">left</div>
         <div class="btn">right</div>
@@ -33,8 +41,23 @@
         {% endautoescape %}
       {% elif task.taskType == 'video' %}
         <video src="/static/media/{{task.video}}" controls ></video>
+      {% elif task.taskType == 'code' %}
+        <div class="redactor">
+          <div class="redactor__right">
+            {{task.body}}
+          </div>
+          <div class="redactor__left">
+            <div class="redactor__left__header"></div>
+            <textarea name="" id="" cols="30" rows="10" class="redactor__code__place" >//enter ur code here</textarea>
+            <div class="redactor__left__bottom">
+              <button href="" class="btn" id="runCode" >Run Code</button>
+              <button href="" class="btn" id="submitCode" >Submit</button>
+            </div>
+          </div>
+        </div>
       {% endif %}
     </div>
   </div>
 </div> 
+<script src="{% static 'js/show_task_menu.js' %}"></script>
 {% endblock content %}

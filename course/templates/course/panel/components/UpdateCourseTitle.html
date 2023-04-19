@@ -9,8 +9,17 @@
    {% csrf_token %}
    <h2>Update {{title.title}}</h2>
    <input type="text" name = 'title' value="{{title.title}}">
+   <div class="selected__tasks">
+      <h3 class="selected__tasks__title">Tasks For Delete:</h3>
+      {% for task in tasks_selected  %}
+         <div class="selected__task">
+            <input type="checkbox" name="task_for_delete" value="{{task.id}}">
+            <h3>{{task.title}}</h3>
+         </div>
+      {% endfor %}
+   </div>
    <select name="tasks" id="" multiple>
-      {% for task in tasks %}
+      {% for task in tasks_unselected %}
          <option value="{{task.id}}">{{ task.title }}</option>
       {% endfor %}
    </select>

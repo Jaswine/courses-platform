@@ -73,56 +73,44 @@ def show_article(request, slug):
    if request.method == 'POST':
       type = request.POST.get('type')
       
-      # add new like or remove old like
+      if request.user.is_authenticated == False: 
+         return redirect('/login')
+         
       if type == 'like':
-         if request.user.is_authenticated: 
-               status = False
-               
-               # get status
-               for like in likes.all(): 
-                  if like.username == request.user.username:
-                     status = True
-                     print(like.username)
-               
-               # check if user already liked
-               if status:
-                  # if liked, remove like
-                  liked = False
-                  article.likesForArticle.remove(like)
+         status = False
+         
+         for like in likes.all(): 
+            if like.username == request.user.username:
+               status = True
+         
+         if status:
+            liked = False
+            article.likesForArticle.remove(like)
 
-               if status == False:
-                  # if not liked, add like
-                  liked = True
-                  article.likesForArticle.add(request.user)
+         if status == False:
+            liked = True
+            article.likesForArticle.add(request.user)
 
-                  article.save()
+            article.save()
 
-               return redirect('/articles/'+ slug)
-         else:
-               return redirect('/sign-in')
+         return redirect('/articles/'+ slug)
+
          
       # create new comments
       if type == 'comment':
-         if request.user.is_authenticated:
-               # get data from form
-               message = request.POST.get('message')
-               
-               # check data 
-               if len(message) < 6:
-                  messages.error(request, 'Message is too short')
-               
-               # create new comment
-               form = ArticleComment.objects.create(
-                  article=article,
-                  user=user,
-                  message=message,
-               )
+         message = request.POST.get('message')
+         
+         if len(message) < 6:
+            messages.error(request, 'Message is too short')
+         
+         form = ArticleComment.objects.create(
+            article=article,
+            user=user,
+            message=message,
+         )
 
-               form.save()
-               return redirect('/articles/'+ slug)
-         else:
-               return redirect('base:login')
-                  
+         form.save()
+         return redirect('/articles/'+ slug)
     
    context =  {
       'article': article,
