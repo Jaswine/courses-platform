@@ -63,7 +63,7 @@
    position: relative;
 }
 .form__component label {
-   color: var(--black);
+   color: black;
    background-color: white;
    position: absolute;
    border-radius: 10px;
@@ -77,11 +77,11 @@
 .form__component input {
    width: 100%;
    max-width: 500px;
-   border: 2px solid var(--dark);
+   border: 2px solid black;
    font-size: 16px;
    padding: 8px 10px;
    border-radius: 10px;
-   color: var(--black);
+   color: black;
    font-size: var(--text-xl);
    transition: all .3s linear;
 }
@@ -103,4 +103,14 @@
    .pre__form {
       padding: 0 20px;
    }
+}
+.auth__social__media {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin: 6px 0 10px 0;
+}
+.auth__social__media .icon {
+   font-size: 32px;
+   
 }
