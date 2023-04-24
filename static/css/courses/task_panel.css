@@ -86,3 +86,16 @@ input {
 .course__task a:hover {
    background-color: black;
 }
+
+@media screen and (max-width: 500px) {
+   .course__title__main h3 {
+      font-size: 18px;
+   }
+   .course__task h3 {
+      font-size: 16px;
+   }
+   .course__title__main {
+      padding: 6px 8px;
+   }
+
+}

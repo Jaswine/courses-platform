@@ -111,6 +111,13 @@ body {
    .message {
       top: 80px
    }
+   .btn  {
+      font-size: 16px;
+      background-color: #00f98d;
+      color: var(--black);
+      padding: 8px 14px;
+      
+   }
 }
 .message_close {
    padding: 10px;

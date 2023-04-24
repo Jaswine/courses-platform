@@ -1,5 +1,5 @@
 {% include 'main.html' %}
-{% load static socialaccount account %}
+{% load socialaccount account static %}
 
 {% block title %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
@@ -56,6 +56,7 @@
          {% endif %}
          <div class="auth__social__media">
             <a class="icon" href="{% provider_login_url 'google' %}"><i class="fa-brands fa-google"></i></a>
+            <a class="icon" href="{% provider_login_url 'github'  %}"><i class="fa-brands fa-github"></i></a>
          </div>
          <button type="submit" class="btn">continue</button>
       

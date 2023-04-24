@@ -18,3 +18,11 @@
    gap: 6px;
    font-weight: bold;
 }
+@media screen and (max-width: 500px) {
+   .course__panel__header h2 {
+      display: none;
+   }
+   .course__panel__header__public {
+      display: none;
+   }
+}

@@ -4,6 +4,13 @@
 <link rel="stylesheet" href="{% static 'css/courses/courses_all.css' %}">
 {% endblock %}
 
+<div class="page__panel">
+    <a href="{% url 'course:create_course' %}" class="btn btn-delete">
+         <i class="fa-solid fa-plus"></i>
+         <span>Add New Course</span>
+    </a>
+</div>
+
 <div class="home__courses__objects">
    {% for course in courses  %}
        <div class="course">

@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 # models
-from ..models import Tag, Course, CourseTask, CourseTitle
+from ..models import Tag, Course, CourseTask, CourseTitle, TaskComment
 
 from ..forms import CourseForm
 
@@ -75,55 +75,64 @@ def create_course_view(request):
 def task_view(request, slug, pk):
     # get courses and tasks
     course = Course.objects.get(slug=slug)
-    task =  CourseTask.objects.get(id=pk)
     titles = CourseTitle.objects.filter(course=course.id)
-    # comments = CourseComment.objects.filter(course=course, courseTask=task)
+    
+    task =  CourseTask.objects.get(id=pk)
+    comments = TaskComment.objects.filter(courseTask=task)
+    
+    tasks = []
+
+    for title in titles:
+        for exercise in  title.tasks.all().reverse():
+            tasks.append(exercise)  
     
     prev_page = ''
     next_page = ''
     
-    # number = tasks.index(task)
-    
-    # try: 
-    #     if (tasks[number+1]):
-    #         next_page = tasks[number+1]
-    # except:
-    #     print('Error')
-    
-    # try: 
-    #     if (tasks[number-1] and  number!=0):
-    #         prev_page = tasks[number-1]
-    # except:
-    #     print('Error')
-    
-    if request.user.is_authenticated != True:
-        return redirect('base:login')
+    number = tasks.index(task)
     
     if request.method == 'POST':
         if (request.user.is_authenticated):
             # get data from form
-            comment = request.POST.get('comment')
+            message = request.POST.get('message')
+            print(message)
             
             # create a new Course
-            form = CourseComment.objects.create(
-                commentType = 'comment',
-                course = course,
+            form = TaskComment.objects.create(
+                body = message,
+                courseTask = task,
                 user = request.user,
-                # message = comment,
-                # courseTask = task,
             )
             
-            form.save()
-            return redirect('courses:task', course.slug, task.id)
+            # form.save()
+            return redirect('/courses/courses/{}/tasks/{}/'.format(course.slug,number))
         else:
             return redirect('base:login')
+            
+    try: 
+        if (tasks[number+1]):
+            next_page = tasks[number+1]
+    except:
+        print('Error')
+    
+    try: 
+        if (tasks[number-1] and  number!=0):
+            prev_page = tasks[number-1]
+    except:
+        print('Error')
+    
+    if request.user.is_authenticated != True:
+        return redirect('base:login')
     
     context = {
         'course': course,
         'task': task,
+        'tasks': tasks,
         
         'priv_page': prev_page,
         'next_page': next_page,
+        
+        'comments': comments,
         
     }
     return render(request, 'course/Task.html', context)
@@ -149,3 +158,16 @@ def delete_course(request, slug):
         return render(request, 'course/DeleteCourse.html', context)
    else:
         return redirect('article:registration')
+
+@login_required(login_url='base:login')
+def delete_comment_view(request, slug, pk, comment_id):
+    try: 
+        comment = TaskComment.objects.get(id=comment_id)
+        
+        if comment.user.username == request.user.username:
+            if comment:
+                comment.delete()
+                return redirect('course:task_view', slug, pk)
+    except:
+        return redirect('course:task_view', slug, pk)
+    

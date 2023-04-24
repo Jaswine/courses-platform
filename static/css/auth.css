@@ -109,8 +109,8 @@
    justify-content: center;
    align-items: center;
    margin: 6px 0 10px 0;
+   gap: 10px;
 }
 .auth__social__media .icon {
-   font-size: 32px;
-   
+   font-size: 30px;
 }

@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block title %}
+<link rel="stylesheet" href="{% static 'css/articles/show_one_article.css' %}">
 <link rel="stylesheet" href="{% static 'css/courses/task.css' %}">
 <title>{{task.title}}</title>
 {% endblock title %}
@@ -12,14 +13,17 @@
     <div class="task__menu__close">
       <i class="fa-solid fa-xmark"></i>
     </div>
-    {% for title in course.course_titles.all %}
-      {% for task in title.tasks.all %}
-        <div class="task__menu__component">
-          <a href="{% url 'course:task_view' course.slug task.id %}" class="">{{ task.title }}</a>
-          <p href="" class="">{{ task.description | truncatewords:20 }}</p>
+    {% comment %} {% for title in course.course_titles.all %} {% endcomment %}
+      {% for t in tasks %}
+        <div 
+          class="task__menu__component
+          {% if task.id == t.id %} task__menu__component__selected{% endif %}"
+        >
+          <a href="{% url 'course:task_view' course.slug task.id %}" class="">{{ t.title }}</a>
+          <p href="" class="">{{ t.description | truncatewords:20 }}</p>
         </div>
       {% endfor %}  
-    {% endfor %}
+    {% comment %} {% endfor %} {% endcomment %}
   </div>
   <div class="task__content">
     <div class="task__content__header">
@@ -30,8 +34,14 @@
       <h2>{{task.title}}</h2>
      </div>
       <div class="task__content__header__paginate">
-        <div class="btn">left</div>
-        <div class="btn">right</div>
+        {% if priv_page %}
+        <a class="fa-solid fa-arrow-left btn" href="{%  url 'course:task_view' course.slug priv_page.id %}">
+        </a>
+      {% endif %}
+      {% if  next_page %}
+         <a class="fa-solid fa-arrow-right btn" href="{%  url 'course:task_view' course.slug  next_page.id %}">
+          </a>
+        {% endif %}
       </div>
     </div>
     <div class="task__content__text">
@@ -48,7 +58,17 @@
           </div>
           <div class="redactor__left">
             <div class="redactor__left__header"></div>
-            <textarea name="" id="" cols="30" rows="10" class="redactor__code__place" >//enter ur code here</textarea>
+            <textarea name="" id="" cols="30" rows="10" class="redactor__code__place" id="editor" >//enter ur code here</textarea>
+            <div class="show__code__place">
+              <div class="show__code__place__header">
+                <span class="circle circle__red"></span>
+                <span class="circle circle__yellow"></span>
+                <span class="circle circle__green"></span>
+              </div>
+              <div class="show__code__place__return" id="output">
+                
+              </div>
+            </div>
             <div class="redactor__left__bottom">
               <button href="" class="btn" id="runCode" >Run Code</button>
               <button href="" class="btn" id="submitCode" >Submit</button>
@@ -56,8 +76,42 @@
           </div>
         </div>
       {% endif %}
+      <div class="page__left__comments" id="comments">
+        {% comment %} <h2>Комментарии</h2> {% endcomment %}
+        {% comment %} <form class='comment__form' method="POST" >
+            {% csrf_token %}
+            <input 
+                type="text" 
+                name="message" 
+                placeholder="Ваш комментариий..." 
+                class="comment__field"
+            >
+            <button class="btn btn-icon" >send</button>
+          </form> {% endcomment %}
+          <div class="comments__objects">
+            {% for comment in comments %}
+              <div class="comment">
+                <div class="comment__header">
+                    <a href="{% url 'base:profile' comment.user.username %}" class="">{{comment.user.username}}</a>
+                    <div class="comment__header__right">
+                        <span>{{comment.updated|date:"d.m.Y   h:m"}}</span>
+                        {% if user.is_authenticated %}
+                          {% if request.user.id == comment.user.id %}
+                            <a class="fa-solid fa-xmark" href="{% url 'course:delete_comment' course.slug task.id comment.id %}"></a>
+                          {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                <p>{{comment.message}}</p>
+                {% comment %} <a href="" class="">replay</a> {% endcomment %}
+              </div>
+            {% endfor %}
+          </div>
+  </div>
     </div>
   </div>
 </div> 
+
 <script src="{% static 'js/show_task_menu.js' %}"></script>
+<script src="{% static 'js/jscompilator.js' %}"></script>
 {% endblock content %}

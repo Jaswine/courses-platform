@@ -8,3 +8,6 @@
    width: 100%;
    padding: 0 10%;
 }
+.page__show__all a  {
+   gap: 10px
+}

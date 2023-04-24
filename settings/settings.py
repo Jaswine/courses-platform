@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
 ]
 
 SITE_ID = 1
@@ -196,4 +197,16 @@ SOCIALACCOUNT_PROVIDERS = {
             'key': ''
         }
     },
+    'github': {
+        'SCOPE': [
+            'user',
+            'repo',
+            'read:org',
+        ],
+        'APP': {
+            'client_id': '3651f71a16415178218c',
+            'secret': '1d0806b1bbf6100c05355ba1d6c48dbb74dae005',
+            'key': ''
+        }
+    }
 }

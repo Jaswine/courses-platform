@@ -47,7 +47,7 @@ header a {
 @media screen and (max-width: 600px) {
    .header__line {
       display: block;
-      width: 40px;
+      width: 30px;
       height: 4px;
       content: "";
       margin-top: 4px;

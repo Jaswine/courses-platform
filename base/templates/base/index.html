@@ -12,7 +12,7 @@
 <div class="page">
    <div class="page__show__all">
       <h2>Courses</h2>
-      <a href="{% url 'course:show_all_courses' %}">Show All Courses  <i class="fa-solid fa-right-long"></i></a>
+      <a href="{% url 'course:show_all_courses' %}">Show All Courses  <i class="fa-solid fa-arrow-right"></i></a>
    </div>
    <div class="home__courses__objects">
       {% for course in courses  %}
@@ -47,7 +47,7 @@
    </div>
    <div class="page__show__all">
       <h2>Articles</h2>
-      <a href="{% url 'article:all_articles' %}">Show All Articles <i class="fa-solid fa-right-long"></i></a>
+      <a href="{% url 'article:all_articles' %}">Show All Articles <i class="fa-solid fa-arrow-right"></i></a>
    </div>   
    <div class="home__courses__objects">
       {% for article in articles %}

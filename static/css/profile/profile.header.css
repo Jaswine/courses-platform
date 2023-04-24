@@ -24,3 +24,17 @@
 .profile__header__right {
    font-size: 22px;
 }
+
+@media screen and (max-width: 500px) {
+   .profile__header__left img {
+      width: 60px;
+      height: 60px;
+   }
+   .profile__header__left h1 {
+      font-size: 24px;
+      margin-bottom: -4px;
+   }
+   .profile__header__right {
+      font-size: 18px;
+   }
+}
