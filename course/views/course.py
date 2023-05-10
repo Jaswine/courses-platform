@@ -69,7 +69,7 @@ def create_course_view(request):
             
         return render(request, 'course/AddNewCourse.html', { 'form': form})
     else:
-        return redirect('base:registration')
+        return redirect('base:login')
 
 @login_required(login_url='base:login')
 def task_view(request, slug, pk):

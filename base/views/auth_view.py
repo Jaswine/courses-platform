@@ -10,6 +10,10 @@ from ..models import Profile
 
 
 def registration_view(request):
+   
+   if request.user.is_authenticated:
+      return redirect('base:profile', request.user.username)
+   
    page_type = 'registration'
    
    form = CreateUserForm()
@@ -22,14 +26,9 @@ def registration_view(request):
       if form.is_valid():
          new_user = form.save(commit=False)
          new_user.save()
-         
-         # create user profile
-         profile = Profile.objects.create(
-            user = new_user,
-         )
-         
+                  
          # login user
-         login(request, new_user)
+         login(request, new_user, backend='django.contrib.auth.backends.ModelBackend' )
          return redirect('base:index')
          
    context = {
@@ -41,6 +40,9 @@ def registration_view(request):
 # login
 def login_view(request):
    page_type = 'login'
+   
+   if request.user.is_authenticated:
+      return redirect('base:profile', request.user.username)
    
    if request.method == 'POST':
       # get data from form

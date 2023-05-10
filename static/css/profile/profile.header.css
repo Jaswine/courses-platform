@@ -14,9 +14,11 @@
    gap: 10px
 }
 .profile__header__left img  {
-   width: 100px;
-   height: 100px;
+   width: 10vw;
+   height: 10vw;
    object-fit: cover;
+   border-radius: 10px 10px 0 0 ;
+   box-shadow: 3px -3px 1px var(--lime);
 }
 .profile__header__left h1 {
    margin-bottom: -8px;
