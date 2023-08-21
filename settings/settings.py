@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'article',
     
     'ckeditor',
-    'memcache',
     
      'django.contrib.sites',
     
@@ -154,18 +153,6 @@ MEDIA_ROOT =  BASE_DIR / 'static/media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SESSIONS_ENGINE='django.contrib.sessions.backends.cache'
-
-CACHES = {
-    'default': {
-        # охраняет данные в оперативной памяти. Дает наивысшую производительность, но при отключении компьютера содержимое кэша будет потеряно;
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', 
-        # 'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache', 
-        # 'LOCATION ' : '127.0.0.1:11211',
-        
-        # не сохраняет кэшируемые данные.
-        # 'BACKEND': 'django.core.cache.backends.dummy.DummyCache'
-    },
-}
 
 CKEDITOR_CONFIGS = {
     'default': {

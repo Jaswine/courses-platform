@@ -1,5 +1,0 @@
-django-ckeditor           //redactor
-django
-pillow
-django-allauth            //for_auth_with_social_media
-python-memcached   //cache
