@@ -1,0 +1,47 @@
+{% load static %}
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/profile/info_profile.css' %}">
+{% endblock %}
+
+{% if profile.bio %}
+<p><b>Об: </b> {{profile.bio}}</p>
+{% endif %}
+<p><b>Присоединился: </b> {{profile.created |date:"d.m.Y   h:m" }}</p>
+{% if profile.location %}
+<p><b>Где вас искать: </b> {{profile.location}}</p>
+{% endif %}
+{% if profile.number %}
+<p><b>Номер телефона: </b> {{profile.number}}</p>
+{% endif %}
+<div class="profile__body__right__icons">
+    {% if profile.instagram %}
+    <a href="https://t.me/{{profile.instagram}}" target="_blank">
+        <span class="fa fa-instagram fa-1x review__size" id="first"></span>
+    </a>
+    {% endif %}
+    {% if profile.facebook %}
+    <a href="https://t.me/{{profile.facebook}}" target="_blank">
+        <span class="fa fa-facebook fa-1x review__size" id="first"></span>
+    </a>
+    {% endif %}
+    {% if profile.twitter %}
+        <a href="https://twitter.com/{{profile.twitter}}" target="_blank">
+            <span class="fa fa-twitter fa-1x review__size" id="first"></span>
+        </a>
+    {% endif %}
+    {% if profile.github %}
+    <a href="https://github.com/{{profile.github}}"  target="_blank">
+        <span class="fa fa-github fa-1x review__size" id="first"></span>
+    </a>
+    {% endif %}
+    {% if profile.telegram %}
+    <a href="https://t.me/{{profile.telegram}}" target="_blank">
+        <span class="fa fa-telegram fa-1x review__size" id="first"></span>
+    </a>
+    {% endif %}
+    {% if profile.website %}
+        <a href="{{profile.website}}" target="_blank">
+            <span class="fa fa-link   fa-1x review__size" id="first"></span>
+        </a>
+    {% endif %}
+</div>

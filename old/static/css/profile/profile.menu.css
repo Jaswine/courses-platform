@@ -1,0 +1,29 @@
+.profile__body__left {
+   display: flex;
+   justify-content: start;
+   align-items: start;
+   flex-direction: column;
+   max-width: 240px;
+   width: 100%;
+   margin-top: 10px ;
+}
+.profile__body__left a {
+   font-size: 22px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 6px;
+   margin-bottom: 6px;
+}
+
+@media screen and (max-width: 500px) {
+   .profile__body__left {
+      flex-direction: row;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      gap: 10px;
+      height: 50px;
+      overflow-y: hidden;
+   }
+}

@@ -1,0 +1,53 @@
+{% include 'main.html' %}
+{% load static %}
+
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'css/articles/create_article.css' %}">
+{% if page_type == 'create_article' %}
+<title>Add New Article</title>
+{% else %}
+<title>Update Article</title>
+{% endif %}
+{% endblock title %}
+
+{% block content %}
+<div class="pre__form">
+   <div class="form">
+      <div class="form__header">
+         <a href="{{request.META.HTTP_REFERER}}">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back</span>
+         </a>
+         <h3>
+            {% if page_type == 'create_article' %}
+               Add New Article
+            {% else %}
+               Update Article
+            {% endif %}
+         </h3>
+      </div>
+      <form action="" method="POST">
+         {% csrf_token %}
+         
+         {{form.media}}
+         {% for field in form  %}
+            <div class = "add__form__component">
+               {% if field.errors %}
+               <ul class="errorlist">
+                  {% for error in field.errors %}
+                  <li>{{ error }}</li>
+                  {% endfor %}
+               </ul>
+               {% endif %}
+               {{ field.label_tag }} {{ field }}
+            </div>
+         {% endfor %}
+
+         <p>Do you want to add new tag? <a href="{% url 'base:tag_list' %}">Add New Tag</a></p>
+
+         <button type="submit" class="btn">continue</button>
+      </form>
+   </div>
+</div>
+{% endblock content %}

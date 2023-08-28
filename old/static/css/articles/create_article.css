@@ -1,0 +1,59 @@
+@import './../variables.css';
+
+.pre__form {
+   margin-bottom: 10vh;
+}
+.form {
+   margin-top: 80px;
+   max-width: 800px;
+}
+.form form {
+   margin-top: 0;
+   padding: 10px 10px 30px;
+}
+.form form p {
+   margin-bottom: 20px;
+}
+.add__form__component {
+   max-width: 800px;
+   width: 100%;
+   margin-bottom: 10px;
+}
+ label {
+   font-size: var(--text-l);
+   color: var(--primary);
+   margin-bottom: 4px;
+}
+ input {
+   max-width: 800px;
+   width: 100%; 
+   border: 2px solid var(--dark);
+   font-size: 16px;
+   padding: 8px 10px;
+   border-radius: 10px;
+   color: var(--black);
+   font-size: var(--text-xl);
+   transition: all .3s linear;
+}
+ select {
+   max-width: 800px;
+   width: 100%; 
+   border: 2px solid var(--dark);
+   font-size: 16px;
+   padding: 8px 10px;
+   border-radius: 10px;
+   color: var(--black);
+   font-size: var(--text-xl);
+   transition: all .3s linear;
+   background-color: var(--white);
+   background-color: white;
+}
+#id_public {
+   width: 30px;
+   height: 30px;
+   margin: 10px;
+}
+
+@media screen and (min-width: 500px) {
+
+}

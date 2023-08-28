@@ -1,0 +1,30 @@
+<div class="profile__body__left">
+   {% comment %} TODO: Menu {% endcomment %}
+   <a href="{% url 'base:profile' user.username %}" >
+      <i class="fa-solid fa-user"></i>
+        Профиль
+   </a>
+   <a href="{% url 'base:profile-likes' user.username %}" >
+      <i class="fa-solid fa-heart"></i> 
+      Лайки
+   </a>
+    <a href="{% url 'base:profile-sertificates' user.username %}" >
+      <i class="fa-solid fa-certificate"></i>
+       Сертификаты
+   </a>  
+    <a href="{% url 'base:profile-courses' user.username %}" >
+    <i class="fa-solid fa-bars-progress"></i>
+        Курсы
+    </a>
+    <a href="{% url 'base:profile-articles' user.username %}" >
+    <i class="fa-solid fa-newspaper"></i>
+        Статьи
+    </a>
+   <!-- <a href="" >Certificates</a> -->
+   {% if request.user.username == user.username %}
+   <a href="{% url 'base:profile-update' user.username %}" >
+      <i class="fa-solid fa-gears"></i>
+       Настройки
+   </a>
+   {% endif %}
+</div>

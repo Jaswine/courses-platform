@@ -1,0 +1,41 @@
+{% load static %}
+<header>
+    <a class="header__logo" href="/">
+      <i class="fa-solid fa-code"></i>
+      <span>Core Developer</span>
+    </a>
+
+    <div class="header__pod__menu">
+        <div class="header__menu__icon">
+            <span class="header__line"></span>
+            <span class="header__line"></span>
+            <span class="header__line"></span>
+        </div>
+        <div class="header__menu">
+            <a class="link link-mobile" href="{% url 'course:show_all_courses' %}">Все Курсы</a>
+            <a href="{% url 'article:all_articles' %}" class="link link-mobile">Блог</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'base:profile' request.user.username %}" class="link ">{{request.user.username}}</a>
+            <a href="{% url 'base:logout' %}" class="btn">Выйти</a>      
+        {% else %}
+            <a href="{% url 'base:login' %}" class="link">Войти </a>
+            <a href="{% url 'base:register' %}" class="btn">Регистрация</a>   
+        {% endif %}
+        </div>
+    </div>
+</header>
+
+<!-- <script src="{% static 'js/header.js' %}"></script> -->
+
+<script>
+    const header__menu__icon = document.querySelector(".header__menu__icon");
+    const header__menu = document.querySelector(".header__menu");
+
+header__menu__icon.onclick = () => {
+    if (header__menu.style.top != "60px") {
+        header__menu.style.top = "60px"
+    } else {
+        header__menu.style.top = "-50vh"
+    }
+}
+</script>

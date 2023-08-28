@@ -1,0 +1,96 @@
+{% include "main.html" %}
+{% load static %}
+
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/profile/profile.menu.css' %}">
+<link rel="stylesheet" href="{% static 'css/profile/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/courses/course_panel_menu.css' %}">
+<title>Панель для {{course.title}}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page profile">
+    <div class="profile__body">
+
+        <div class="profile__body__left">
+
+            <div class="course__panel__header">
+                <h2>{{course.title}}</h2>
+                <div class="course__panel__header__public">
+                    {% if  course.public %}
+                    <i class="fa-solid fa-eye"></i>
+                    Публичный
+                    {% else %}
+                    <i class="fa-solid fa-eye-slash"></i>
+                    Скрыт
+                    {% endif %}
+                </div>
+            </div>
+
+                <a href="{% url 'course:tasks-panel' course.slug %}" >
+                  <i class="fa-solid fa-list-check"></i>
+                    Задания
+                </a>
+
+                <a href="{% url 'course:update-info-panel' course.slug %}" >
+                  <i class="fa-solid fa-sliders"></i>
+                    Настройки
+                </a>
+
+                {% comment %} <!-- <a href="{% url 'courses:profile-comments' course.slug %}" >
+                    <span class="material-symbols-outlined">
+                        forum
+                    </span>   
+                    Комментарии
+                </a> --> {% endcomment %}
+
+                {% comment %} <!-- <a href="{% url 'courses:profile-reviews' course.slug %}" >
+                    <span class="material-symbols-outlined">
+                        reviews
+                    </span>  
+                    Отзывы
+                </a> --> {% endcomment %}
+
+                {% comment %} <a href="{% url 'courses:update-info-panel' course.slug %}" >
+                    <span class="material-symbols-outlined">
+                        analytics
+                    </span>
+                    Analytics
+                </a> {% endcomment %}
+
+        </div>
+
+        <div class="profile__body__right">
+
+         {% if page == 'TasksPanel' %}
+                {% include "course/panel/components/TasksPanel.html" %}
+        {% elif page == 'UpdateInfoPanel' %}
+            {% include "course/panel/components/UpdateInfoPanel.html" %}
+        {% elif page == 'create_task' or page == 'updateTask' %}
+            {% include "course/panel/components/CreateTask.html" %}
+        {% elif  page == 'UpdateTasksPanel' %}
+            {% include "course/panel/components/UpdateCourseTitle.html" %}
+        {% elif page == 'deleteTask' or page == 'deleteTitle' %}
+            {% include "course/panel/components/DeleteTask.html" %}
+        {% endif %} 
+
+            {% comment %} <!-- {% if page == 'TasksPanel' %}
+                {% include "course/panel/components/TasksPanel.html" %}
+            {% elif page == 'UpdateInfoPanel' %}
+                {% include "course/panel/components/UpdateInfoPanel.html" %}
+            {% elif page == 'create_task' or page == 'updateTask' %}
+                {% include "course/panel/components/CreateTask.html" %}
+            {% elif page == 'updateTitle' %}
+                {% include "course/panel/components/CreateTask.html" %}
+            {% elif page == 'deleteTitle' %}
+                {% include "course/panel/components/CreateTask.html" %}
+            {% elif page == 'deleteTask' %}
+                {% include "course/panel/components/CreateTask.html" %}
+            {% elif page == 'comments' %}
+                {% include "course/panel/components/Comments.html" %}
+            {% endif %} --> {% endcomment %}
+
+        </div>
+    </div>
+</div>
+{% endblock content %}

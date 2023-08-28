@@ -1,0 +1,38 @@
+{% load static %}
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'css/articles/create_article.css' %}">
+{% endblock %}
+<form action="" method="POST" enctype="multipart/form-data">
+   {% csrf_token %}
+   
+   {{form.media}}
+   {% for field in profile_form  %}
+      <div class = "add__form__component">
+         {% if field.errors %}
+         <ul class="errorlist">
+            {% for error in field.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+         </ul>
+         {% endif %}
+         {{ field.label_tag }} {{ field }}
+      </div>
+   {% endfor %}
+
+   {% for field in user_form  %}
+      <div class = "add__form__component">
+         {% if field.errors %}
+         <ul class="errorlist">
+            {% for error in field.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+         </ul>
+         {% endif %}
+         {{ field.label_tag }} {{ field }}
+      </div>
+   {% endfor %}
+
+
+   <button type="submit" class="btn">save</button>
+</form>

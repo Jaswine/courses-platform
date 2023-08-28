@@ -1,0 +1,148 @@
+{% include 'main.html' %}
+{% load static %}
+
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/articles/articles_all.css' %}">
+<link rel="stylesheet" href="{% static 'css/articles/show_one_article.css' %}">
+<title>{{article.title}}</title>
+{% endblock %}
+
+{% block content %}
+<div class="page">
+   <div class="page__left">
+      <h2>{{article.title}}</h2>
+      <div class="page__left__links">
+         <a href="{% url 'base:profile' article.user.username %}">{{article.user.username}}</a>
+         <a href="/articles/?q={{article.tag}}">{{article.tag}}</a>
+      </div>
+      <div class="page__left__text">
+        {% autoescape off %}
+        {{article.text}}
+        {% endautoescape %}
+      </div>
+      <div class="page__left__links">
+         <span>{{article.updated|date:"d.m.Y   h:m"}}</span>
+            <form action="" method="POST" class="like__form" >
+               {% csrf_token %}
+               <!-- <span>{{ likes }}</span> -->
+               <input type="text" name="type" value="like" style="display: none;">
+               <button 
+                   class="fa-solid fa-heart love" 
+                   id = "like"
+                   {% if liked %}
+                       style = "color: rgb(93, 214, 147, 1);"
+                   {% endif %}
+                   >
+               </button>
+               <span class="icon icon__love icon__span"
+               {% if liked %}
+               style = "color: rgb(93, 214, 147, 1);"
+               {% endif %}
+               > {{ article.likesForArticle.count }}</span>
+           </form>
+      </div>
+      <div class="page__left__comments" id="comments">
+            <h2>Комментарии</h2>
+            <form action=""class='comment__form' method="POST" >
+                {% csrf_token %}
+                <input 
+                    type="text" 
+                    name="type" 
+                    value="comment" 
+                    style="display: none;"
+                >
+                <input 
+                    type="text" 
+                    name="message" 
+                    placeholder="Ваш комментариий..." 
+                    class="comment__field"
+                >
+                <button class="btn btn-icon" type="submit">
+                  <span class="material-symbols-outlined">
+                    send
+                  </span>
+                </button>
+              </form>
+              <div class="comments__objects">
+                {% for comment in comments %}
+                  <div class="comment">
+                    <div class="comment__header">
+                        <a href="{% url 'base:profile' comment.user.username %}" class="">{{comment.user.username}}</a>
+                        <div class="comment__header__right">
+                            <span>{{comment.updated|date:"d.m.Y   h:m"}}</span>
+                            {% if user.is_authenticated %}
+                              {% if request.user.id == comment.user.id %}
+                                <a class="fa-solid fa-xmark" href="{% url 'article:delete_comment' article.slug comment.id %}"></a>
+                              {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <p>{{comment.message}}</p>
+                    {% comment %} <a href="" class="">replay</a> {% endcomment %}
+                  </div>
+                {% endfor %}
+              </div>
+      </div>
+   </div>
+   <div class="page__right">
+      {% if last_articles %}
+         <h3>Последние Статьи</h3>
+         {% for article in last_articles %}
+         {% if article.public %}
+         <article class="article">
+          <a class="link__page"  href="{% url 'article:show_article' article.slug %}">{{article.title}}</a>
+          <div class="article__body">
+              {% autoescape off %}
+                   {{article.text | truncatewords:30 }}
+              {% endautoescape %}
+          </div>
+          {% if request.user.is_authenticated %}
+              {% if request.user.is_superuser %}
+                  {% if request.user.username == article.user.username %}
+                      <div class="article__head article__buttons">
+                          <a href="{% url 'article:update_article' article.slug %}" class="btn btn-icon">
+                           <i class="fa-regular fa-pen-to-square"></i>
+                          </a>
+                          <a href="{% url 'article:delete_article' article.slug %}" class="btn btn-delete">
+                               <i class="fa-solid fa-trash"></i>
+                          </a>
+                      </div>
+                  {% endif %}
+              {% endif %}
+          {% endif %}
+      </article>
+         {% endif %}
+     {% endfor %}
+   {% endif %}
+   {% if filtered_articles %}
+      <h3>Статьи которые могут вам понравиться</h3>
+      {% for article in filtered_articles %}
+         {% if article.public %}
+         <article class="article">
+            <a class="link__page"  href="{% url 'article:show_article' article.slug %}">{{article.title}}</a>
+            <div class="article__body">
+                {% autoescape off %}
+                     {{article.text | truncatewords:30 }}
+                {% endautoescape %}
+            </div>
+            {% if request.user.is_authenticated %}
+                {% if request.user.is_superuser %}
+                    {% if request.user.username == article.user.username %}
+                        <div class="article__head article__buttons">
+                            <a href="{% url 'article:update_article' article.slug %}" class="btn btn-icon">
+                             <i class="fa-regular fa-pen-to-square"></i>
+                            </a>
+                            <a href="{% url 'article:delete_article' article.slug %}" class="btn btn-delete">
+                                 <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </article>
+         {% endif %}
+   {% endfor %}
+   {% endif %}
+   </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,84 @@
+{% include 'main.html' %}
+{% load static %}
+
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/courses/show_one_course.css' %}">
+<title>{{course.title}}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="course">
+   <div class="course__header">
+      <div class="course__header__back__image">
+         <img src="/static/media/{{course.image}}" alt="" class="course__img">
+         <div class="course__header__back__image__mask"></div>
+      </div>
+      <div class="course__header__info">
+         <a href="{% url 'course:show_all_courses' %}" class="back">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Courses</span>
+         </a>
+         <h1>{{course.title}}</h1>
+         <div class="course__header__links">
+            <div class="course__header__links__left">
+               <img src="/static/media/{{course.user.profile.image}}" alt="">
+               <a href ='{% url "base:profile" course.user.username %}'>{{course.user.username}}</a>
+            </div>
+            <div class="course__header__links__right">
+               <a href="">#{{course.tags}}</a>
+               <a href=""><i class="fa-solid fa-up-long"></i>{{course.level}}</a>
+            </div>
+         </div>
+         <div class="course__header__upgrade">
+            <div class="course__header__upgrade__info">
+               <span><i class="fa-solid fa-tv"></i> <b>{{lessons_count}}</b> lessons</span>
+               <span><i class="fa-solid fa-video"></i> <b>{{videos_count}}</b> videos</span>
+               <span><i class="fa-solid fa-file-code"></i> <b>{{exercises_count}}</b> exercises</span>
+               <span><i class="fa-solid fa-laptop-code"></i> <b>{{projects_count}}</b>  projects</span>
+            </div>
+            <div class="course__header__upgrade__line">
+               <span></span>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="course__body">
+      <div class="course__content">
+         {% for title in course.course_titles.all %}
+            <div class="course__content__section">
+               <span class="topic">TOPIC {{forloop.counter}}</span>
+               <h2>{{title.title}}</h2>
+               <div class="course__countent__section__tasks">
+                     {% for task in title.tasks.all %}
+                        <div class="task">
+                           <span>
+                              {% if task.taskType == 'text' %}
+                              <i class="fa-solid fa-newspaper"></i>
+                              {% elif task.taskType == 'video' %}
+                              <i class="fa-solid fa-video"></i>
+                              {% elif task.taskType == 'code' %}
+                              <i class="fa-solid fa-code"></i>
+                              {% endif %}
+                           </span>
+                           <a href="{% url 'course:task_view' course.slug task.id %}"><h3>{{task.title}}</h3></a>
+                        </div>
+                     {% endfor %}
+               </div>
+            </div>
+         {% endfor %}
+      </div>
+      <div class="course__info">
+         <p><b><i class="fa-regular fa-file-lines"></i> About: </b>
+            {{ course.about}}
+         </p>  
+         <p><b><i class="fa-solid fa-book"></i> Knowledges: </b>
+            {{ course.whatAreUWillLearn}}
+         </p>
+         <p><b><i class="fa-solid fa-swatchbook"></i> Initial Requirements: </b>
+            {{ course.initialRequirements}}
+         </p>
+         <p><b>Course Details: </b>...</p>
+      </div>
+   </div>
+</div>
+{% endblock content %}

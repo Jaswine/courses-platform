@@ -1,0 +1,50 @@
+form {
+   max-width: 600px;
+   width: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+}
+input, h2, select{
+   margin-bottom: 10px;
+}
+h2 {
+   margin-bottom: 5%;
+}
+select {
+   height: 300px;
+}
+select option {
+   padding: 4px 6px;
+}
+.dangerouse__place {
+   margin: 5% 0;
+}
+.selected__tasks {
+   display: flex;
+   justify-content: start;
+   align-items: start;
+   flex-direction: column;
+   width: 100%;
+   margin: 3% 0;
+}
+.selected__tasks__title {
+   margin-bottom: 10px;
+}
+.selected__task {
+   width: 100%;
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 10px;
+   margin-bottom: 10px;
+}
+.selected__task input {
+   width: 25px;
+   height: 25px;
+   margin: 0 ;
+}
+.selected__task h3 {
+
+}

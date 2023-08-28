@@ -1,0 +1,13 @@
+.task__delete {
+   max-width: 600px;
+   width: 100%;
+   padding: 15px;
+   background-color: white;
+   margin-bottom: 6px;
+}
+.page__item__delete {
+   width: 100%;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}

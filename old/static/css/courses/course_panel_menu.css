@@ -1,0 +1,28 @@
+.profile__body__left {
+   background-color: white;
+   padding: 4px 10px;
+   border-radius: 10px;
+   box-shadow: 0 0  10px 0 rgb(0,0,0,.1);
+}
+.course__panel__header {
+   margin-bottom: 10px;
+}
+.course__panel__header h2 {
+   margin: 6px 0;
+}
+.course__panel__header__public {
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   margin-bottom: 4px;
+   gap: 6px;
+   font-weight: bold;
+}
+@media screen and (max-width: 500px) {
+   .course__panel__header h2 {
+      display: none;
+   }
+   .course__panel__header__public {
+      display: none;
+   }
+}

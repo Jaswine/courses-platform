@@ -1,0 +1,77 @@
+{% include 'main.html' %}
+{% load socialaccount account static %}
+
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+   {% if page_type == 'login' %}
+      <title>Login</title>
+   {% else %}
+      <title>Registration</title>
+   {% endif %}
+{% endblock title %}
+
+{% block content %}
+<div class="pre__form">
+   <div class="form">
+      <div class="form__header">
+         <a href="{{request.META.HTTP_REFERER}}">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back</span>
+         </a>
+         <h3>
+            {% if page_type == 'login' %}
+            LOGIN
+            {% else %}
+            REGISTRATION
+            {% endif %}
+         </h3>
+      </div>
+      <form action="" method="POST">
+         {% csrf_token %}
+
+         {% if page_type == 'login' %}
+            <div class = "form__component">
+               <label>Username:</label>
+               <input type="text" name="username" id="username" >
+            </div>
+
+            <div class = "form__component">
+               <label>Password:</label>
+               <input type="password" name="password" id="username" >
+            </div>
+         {% else %}
+            {% for field in form  %}
+               <div class = "form__component">
+                  {% if field.errors %}
+                  <ul class="errorlist">
+                     {% for error in field.errors %}
+                     <li>{{ error }}</li>
+                     {% endfor %}
+                  </ul>
+                  {% endif %}
+                  {{ field.label_tag }} {{ field }}
+               </div>
+            {% endfor %}
+
+         {% endif %}
+         <div class="auth__social__media">
+            <a class="icon" href="{% provider_login_url 'google' %}"><i class="fa-brands fa-google"></i></a>
+            <a class="icon" href="{% provider_login_url 'github'  %}"><i class="fa-brands fa-github"></i></a>
+         </div>
+         <button type="submit" class="btn">continue</button>
+      
+         {% if page_type == 'login' %}
+         <p>
+            <span>I don't have an account.</span>
+            <a href="{% url 'base:register' %}">Registration</a>
+         </p>
+         {% else %}
+         <p>
+            <span>Alredy signed up yet?</span>
+            <a href="{% url "base:login" %}">Login</a>
+         </p>
+         {% endif %}
+      </form>
+   </div>
+</div>
+{% endblock content %}

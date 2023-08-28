@@ -1,0 +1,31 @@
+.profile {
+   padding: 0 5%;
+}
+.profile__body {
+   display: flex;
+   justify-content: space-between;
+   align-items: start;
+   width: 100%;
+   gap: 3vw;
+   margin-bottom: 10%;
+}
+.profile__body__right {
+   width: 100%;
+   padding: 8px 3%;
+}
+@media screen and (max-width: 500px) {
+   .profile__body {
+      flex-direction: column;
+   }
+}
+textarea {
+   width: 100%;
+   border: 2px solid black;
+   border-radius: 10px ;
+   font-size: 18px;
+   padding: 6px ;
+   max-width: 100%;
+   min-width: 100%;
+   max-height: 600px;
+   min-height: 300px;
+}

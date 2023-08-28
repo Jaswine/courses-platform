@@ -1,0 +1,43 @@
+{% load static %}
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/articles/articles_all.css' %}">
+<link rel="stylesheet" href="{% static 'css/courses/courses_all.css' %}">
+{% endblock %}
+
+{% if request.user.is_superuser %}
+<div class="page__panel">
+    <a href="{% url 'course:create_course' %}" class="btn btn-delete">
+         <i class="fa-solid fa-plus"></i>
+         <span>Add New Course</span>
+    </a>
+</div>
+{% endif %}
+
+<div class="home__courses__objects">
+   {% for course in courses  %}
+       <div class="course">
+           <div class="course__image">
+               <img src="/static/media/{{course.image}}" alt="" class="course__img">
+               <div class="course__mask"></div>
+           </div>
+           <div class="course__info">
+               <div class="course__info__desc">
+                   <a href="{% url 'course:course' course.slug %}" class = 'course__title '>{{course.title}}</a>
+                   <p>{{course.description|truncatewords:30}}</p>
+               </div>
+
+               {% if request.user.username == course.user.username %}
+                   <div class="course__info__tables ">
+                       <a href="{% url 'course:tasks-panel' course.slug %}" class="btn btn-icon">
+                               <i class="fa-solid fa-trash"></i></a>
+                       <a href="" class="btn btn-delete"><i class="fa-regular fa-pen-to-square"></i></a>
+                   </div>
+               {% endif %}
+               <div class="course__info__tables">
+                   <a href="{% url 'base:profile' course.user.username %}">{{course.user}}</a>
+                   <a href="/">#{{course.tags}}</a>
+               </div>
+           </div>
+       </div>
+   {% endfor %}
+   </div>

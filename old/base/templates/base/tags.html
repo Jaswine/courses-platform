@@ -1,0 +1,43 @@
+{% include 'main.html' %}
+{% load static %}
+
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'css/tag.css' %}">
+<title>Tags Page</title>
+{% endblock title %}
+
+{% block content %}
+<div class="pre__form">
+    <div class="form">
+        <div class="form__header">
+            <a href="{{request.META.HTTP_REFERER}}">
+               <i class="fa-solid fa-arrow-left"></i>
+               <span>Back</span>
+            </a>
+            <h3>Tags</h3>
+         </div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class = "form__component">
+                <label for="">Tag:</label>
+                <input type="text" class="input" name='tag' class="" placeholder='название тега...'>
+             </div>
+            
+            <button type="submit" class="btn">save</button>
+        </form>
+        <div class="tags">
+            {% for tag in tags  %}
+              <div class="tag">
+                <h2>{{tag.name}}</h2>
+                <a class="btn btn-delete" href="{% url 'base:tags-delete' tag.id %}">
+                    <span class="material-symbols-outlined">
+                        delete
+                    </span>
+                </a>
+              </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,182 @@
+{% load static %}
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/articles/create_article.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'css/courses/create_task.css' %}">
+{% endblock %}
+
+{% if page == 'create_task' or page == 'updateTask' %}
+<div class="page__article__form update_course">
+    <div class="update__course__header">
+        {% if page == 'create_task' %}
+            <h2>Добавить новое задание</h2>
+        {% else %}
+            <h2>Update Task</h2>
+        {% endif %}
+        <a href="" class=""></a>
+    </div>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+       
+        {% for field in form  %}
+        <div class = "add__form__component">
+           {% if field.errors %}
+           <ul class="errorlist">
+              {% for error in field.errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+           </ul>
+           {% endif %}
+           {{ field.label_tag }} {{ field }}
+        </div>
+     {% endfor %}
+
+        {% if page == 'updateTask' %}
+        <select name="course_title">
+            <option value="" disabled selected>Choose Title</option>
+            {% for title in course.course_titles.all %}
+                <option value="{{title.id}}">{{title.title}}</option>
+            {% endfor %}course_title_get
+         </select>
+         
+        <select name="tag" id="typeTask">
+            <option value="{{task.taskType}}" selected>{{task.taskType}}</option>
+            <option value="text">text</option>
+            <option value="video">video</option>
+            <option value="code">code</option>
+        </select>
+        {% else %}
+        <select name="course_title">
+            <option value="" disabled selected>Choose Title</option>
+            {% for title in course.course_titles.all %}
+                <option value="{{title.id}}">{{title.title}}</option>
+            {% endfor %}course_title_get
+         </select>
+        <select name="tag" id="typeTask">
+            <option value="" selected disabled>Выберите тип вашего задания</option>
+            <option value="text">текст</option>
+            <option value="video">видео</option>
+            <option value="code">exercise</option>
+        </select>
+        {% endif %}
+
+        <div id="other__fields">
+            {{media}}
+            <textarea 
+                name="body" 
+                id="bodyTask" 
+                class="display_none" 
+                placeholder="Talk about new theme..."
+            >{{task.body}}</textarea>
+
+            <input type="file" name="video" id="videoTask" class="display_none input">
+
+            <textarea 
+            name="bodyQuestionTask" 
+            id="bodyQuestionTask" 
+            class="display_none" 
+            placeholder="Talk about exercise..."
+        >{{task.body}}</textarea>
+            <input name="codeAnswer" value="{{task.codeAnswer}}" id="codeAnswer" cols="30" rows="10" placeholder = "Enter answer on your task..." />
+        </div>
+
+        {% if page == 'updateTask' %}
+        <div class="dangerouse__place">
+            <span>Do u wanna delete this task?</span>
+            <a href="{% url 'course:course-task-delete' course.slug task.id %}"  class="btn btn-delete">Delete </a>
+        </div>
+        {% endif %}
+        
+        <button class="btn" type="submit" id="Submit" >Save</button>
+    </form>
+</div>
+
+    <script>
+        let select  = document.getElementById('typeTask');
+        let typeTask;
+
+        //TASKS
+        let bodyTask = document.getElementById('bodyTask');
+        let videoTask = document.getElementById('videoTask');
+        let codeAnswer = document.getElementById('codeAnswer');
+        let bodyQuestionTask = document.getElementById('bodyQuestionTask');
+
+        const  displayNone = ()  => {
+            bodyTask.style.display = 'none';
+            videoTask.style.display = 'none';
+            codeAnswer.style.display = 'none';
+            bodyQuestionTask.style.display = 'none'
+        }
+
+        displayNone()
+
+        select.addEventListener('change', () => {
+            console.log(select.value);
+            typeTask = select.value;
+
+            if (typeTask == 'text') {
+                displayNone()
+                bodyTask.style.display = 'block';
+            } else if (typeTask == 'video') {
+                displayNone()
+                videoTask.style.display = 'block';
+            } else if (typeTask == 'code') {
+                displayNone()
+                bodyQuestionTask.style.display = 'block';
+                codeAnswer.style.display = 'block';
+            }
+        });
+    
+    </script>
+{% elif page == 'updateTitle' %}
+<div class="page__article__form update_course">
+    <div class="update__course__header">
+        <h2>Update Title</h2>
+        <a href="" class=""></a>
+    </div>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input 
+            type="text"
+            name="title"
+            placeholder="название..."
+            id="titleTask"
+            value="{{courseTitle.title}}"
+            class = "input"
+        >
+        <select multiple name="course_title" id="" class="select__multiple">
+            <option value="" selected disabled>Select Course Title</option>
+            {% for task in tasks  %}
+            <option value="{{task.id}}">{{task.title}}</option>
+            {% endfor %}
+        </select>
+
+        <!-- <span class="little__text red">This is a dangerous place</span> -->
+        <div class="dangerouse__place">
+            <span>Do u wanna delete this post?</span>
+            <a href="{% url 'courses:course-title-delete' course.slug courseTitle.id %}"  class="btn btn-delete">Delete </a>
+        </div>
+
+        <button class="btn" type="submit" id="Submit" >Save</button>
+    </form>
+</div>
+{% elif page == 'deleteTitle' or page == 'deleteTask' %}
+<div class="page__article__form">
+    <h3>Do u wanna delete this -  <b>"{{courseTitle.title}}"</b> - title?</h3>
+
+    <form class="delete__buttons" method='POST'>
+        {% csrf_token %}
+        <a href="{% url 'courses:tasks-panel' course.slug %}" class="btn btn-icon"> 
+            <span class="material-symbols-outlined">
+                keyboard_return
+            </span>
+        </a>
+        <button class="btn btn-delete">
+            <span class="material-symbols-outlined">
+                delete_forever
+            </span>
+        </button>
+    </form>
+
+</div>
+{% endif %}

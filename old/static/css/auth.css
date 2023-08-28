@@ -1,0 +1,116 @@
+@import './variables.css';
+
+.pre__form {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width: 100%; 
+}
+.form {
+   display: flex;
+   justify-content: center;
+   flex-direction: column;
+   align-items: center;
+   max-width: 500px;
+   width: 100%;
+   border-radius: 10px;
+   margin-top: 130px;  
+   background-color: white;
+   box-shadow: 0 0 10px 0px rgb(0,0,0,.1); 
+}
+.form__header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   width: 100%;
+   background-color: var(--black);
+   border-radius: 10px 10px;
+   padding: 10px 20px;
+}
+.form__header a {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 10px;
+   font-weight: bold;
+   font-size: var(--text-l);
+}
+.form__header * {
+   color: var(--white);
+}
+.form__header h3 {
+   font-size: var(--text-xl);
+}
+.form form {
+   padding: 20px 10px;
+   width: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   margin-top:20px;
+}
+
+.form__component {
+   display: flex;
+   justify-content: start;
+   align-items: start;
+   flex-direction: column;
+   width: 100%;
+   max-width: 450px;
+   margin-bottom: 20px;
+   row-gap: 2px;
+   position: relative;
+}
+.form__component label {
+   color: black;
+   background-color: white;
+   position: absolute;
+   border-radius: 10px;
+   padding: 2px 4px;
+   margin: 0 10px;
+   top: -30%;
+   font-size: var(--text-l);
+   font-weight: bold;
+   transition: all .3s linear;
+}
+.form__component input {
+   width: 100%;
+   max-width: 500px;
+   border: 2px solid black;
+   font-size: 16px;
+   padding: 8px 10px;
+   border-radius: 10px;
+   color: black;
+   font-size: var(--text-xl);
+   transition: all .3s linear;
+}
+
+.form__component:hover input, .form__component:focus input {
+   color: #00f98d;
+   border-color: #00f98d;
+}
+.form__component:hover label, .form__component:focus input {
+   color: #00f98d;
+}
+
+.form form p {
+   margin-top: 10px;
+   font-size: var(--text-l);
+}
+
+@media screen and (max-width: 600px) {
+   .pre__form {
+      padding: 0 20px;
+   }
+}
+.auth__social__media {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin: 6px 0 10px 0;
+   gap: 10px;
+}
+.auth__social__media .icon {
+   font-size: 30px;
+}

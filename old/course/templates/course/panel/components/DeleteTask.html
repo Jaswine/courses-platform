@@ -1,0 +1,14 @@
+{% load static %}
+{% block title %}
+<link rel="stylesheet" href="{% static 'css/courses/delete-task.css' %}">
+<title>{{task.title}}</title>
+{% endblock %}
+
+   <div class="task__delete">
+      <h2>Do you want to delete {{task.title}}? </h2>
+      <form class="page__item__delete" method="POST">
+            {% csrf_token %}
+         <a href="{{request.META.HTTP_REFERER}}">go back</a>
+         <button class="btn" type="submit">delete task</button>
+      </form>
+   </div>

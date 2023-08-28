@@ -1,0 +1,103 @@
+@import './../variables.css';
+
+.page__panel {
+   display: flex;
+   justify-content: end;
+   width: 100%;
+   align-items: center;
+   margin-bottom: 15px;
+}
+.page__item {
+   display: flex;
+   justify-content: space-between;
+   align-items: start;
+   width: 100%;
+}
+.page__article__filters {
+   width: 20%;
+   display: flex;
+   justify-content: start;
+   align-items: start;
+   flex-direction: column;
+   margin-right: 20px;
+   padding: 10px ;
+   /* background-color: white; */
+   /* box-shadow: 0 0 10px 1px rgb(0,0,0,.1 ); */
+   border-radius: 10px;
+}
+.page__article__filters h3 {
+   border-bottom: 1px solid rgb(0,0,0,.1 );
+   width: 100%;
+   padding: 4px 0;
+   margin-bottom: 4px;
+}
+.page__article__filter__tags {
+   display: flex;
+   justify-content: start;
+   align-items: start;
+   flex-direction: column;
+   width: 100%;
+}
+.page__article__filter__tags a {
+   font-size: var(--text-xl);
+   margin: 4px;
+   width: 100%;
+   border-bottom: 1px solid rgb(0,0,0,.1 );
+}
+
+.home__courses__objects {
+   display: grid;
+   grid-template-columns: repeat(auto-fill,minmax(280px,auto));
+   grid-template-rows: repeat(auto-fill, minmax(auto));
+   column-gap: 15px;
+   row-gap: 15px;
+   width: 100%;    
+   max-width: 80%;
+   margin: 2vh 0;
+}
+
+/* articles */
+.article {
+   width: 100%;
+   display: flex;
+   justify-content: flex-start;
+   align-items: flex-start;
+   flex-direction: column;
+   row-gap: 6px;
+   margin: 10px;
+   border-radius: 10px;
+   padding: 2% 5% 0%;
+   max-width: 450px;
+   min-width: 340px;
+}
+.article:hover, article:hover  {
+   background-color: white;
+}
+.article__body {
+   font-size: var(--text-l);
+   color: var(--primary )
+}
+.link__page {
+   font-size: var(--text-xl);
+   transition: all .3s linear;
+}
+.article__buttons {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   width: 100%;
+   margin: 10px 0;
+}
+
+@media screen and (max-width: 600px) {
+   .page__item {
+       flex-direction: column;
+   }  
+   .page__article__filters {
+      width: 100%;
+   }
+   article {
+      width: 100%;
+      min-width: 90vw;
+   }
+}
