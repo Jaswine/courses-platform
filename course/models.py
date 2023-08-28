@@ -36,7 +36,7 @@ class Course(models.Model):
     #TODO: Like & Bookmarks
     likes = models.ManyToManyField(User, blank=True, related_name='likes')
     
-    course_titles = models.ManyToManyField('Title', through='TitleOrder', blank=True, default=[])
+    titles = models.ManyToManyField('Title', through='TitleOrder', blank=True, default=[],  related_name='titles')
         
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -48,14 +48,14 @@ class Title(models.Model):
     title = models.CharField(max_length=255)
     public = models.BooleanField(default=False)
     
-    course_tasks = models.ManyToManyField('Task', through='TaskOrder', blank=True, default=[])
+    tasks = models.ManyToManyField('Task', through='TaskOrder', blank=True, default=[], related_name='tasks')
     
     def __str__(self):
         return self.title
 
 class Task(models.Model):
     TYPE = (
-        ('text','text')
+        ('text','text'),
         ('video', 'video'),
     )
     
