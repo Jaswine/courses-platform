@@ -1,11 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# class CourseExperience(models.Model):
-#     course = ''
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     experience = models.
-
 class Profile(models.Model):
     SKILLS = (
         ('HTML', 'HTML'),

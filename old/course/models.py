@@ -52,7 +52,7 @@ class CourseTitle(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     tasks = models.ManyToManyField('CourseTask', blank=True, default=[])
     
-    public = models.BooleanField(default=False)
+    public  = models.BooleanField(default=False)
     
     def __str__(self):
         return self.title
