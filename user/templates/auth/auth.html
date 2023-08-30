@@ -1,0 +1,70 @@
+{% include 'main.html' %}
+{% comment %} {% load socialaccount account static %} {% endcomment %}
+
+{% block title %}
+    <link rel="stylesheet" href="/static/css/auth.css">
+    <title>{{ type }}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page">
+    <div class="page__left">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <h2>{{ type }}</h2>
+            {% if type == 'Sign In' %}
+                <div class="form__field">
+                    <label for="">Email</label>
+                    <input type="email" name="email" placeholder="Your address email" required />
+                </div>
+                <div class="form__field">
+                    <label for="">Password</label>
+                    <input type="password" name="password" placeholder="Your password" required />
+                </div>
+            {% else %}
+                {% for field in form  %}
+                    <div class = "form__field">
+                    {% if field.errors %}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    {{ field.label_tag }} {{ field }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="buttons">
+                <button class="btn btn--primary" type='submit'>{{ type }}</button>
+                {% if type == 'Sign Up' %}
+                    <a href="{% url 'auth:sign-in' %}" class="btn--link">Sign In</a>
+                {% else %}
+                    <a href="{% url 'auth:sign-up' %}" class="btn--link">Sign Up</a>
+                {% endif %}
+            </div>
+            <div class="buttons">
+                <span class="line"></span>
+                <span>OR</span>
+                <span class="line"></span>
+            </div>
+            <div class="buttons">
+                <a href="" class="buttons__social">Continue with Google</a>
+            </div>
+        </form>
+    </div>
+    <div class="page__right">
+        <div class="slider">
+            <div class="slider__desc">
+                <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, beatae voluptate. Quisquam itaque, cumque dolorum aut tenetur provident, reprehenderit odio sequi, odit soluta fugit similique vel temporibus at illum obcaecati!</h3>
+                <div class="page__slider__menu">
+                    <img src="/static/media/icons/left.svg" alt="left" class="left">
+                    <span>1/4</span>
+                    <img src="/static/media/icons/right.svg" alt="right" class="right">
+                </div>
+            </div>
+            <img src="/static/media/auth/christopher-gower-m_HRfLhgABo-unsplash.jpg" alt="Christopher Gower" class="slider__image" />
+        </div>
+    </div>
+</div>
+{% endblock content %}

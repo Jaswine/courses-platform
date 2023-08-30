@@ -1,0 +1,173 @@
+@import './variables.css';
+
+.page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+.page__left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 50%;
+    overflow-y: auto;
+}
+.page__left form {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    max-width: 440px;
+    width: 100%;
+}
+.page__left form h2 {
+    font-family: var(--PaytoneOne);
+    font-size: 38px;
+    margin-bottom: 3vh;
+}
+.form__field {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    margin-bottom: 2vh;
+}
+.form__field label  {
+    font-size: 18px;
+    color: rgb(20,20,20,.35);
+    margin-bottom: 2px;
+}
+.form__field input {
+    border-radius: 10px; 
+    padding: 12px;
+    font-size: 18px;
+    color: rgb(20,20,20,.9);
+    width: 100%;
+    border: 2px solid rgb(20,20,20,.25);
+}
+.form__field input::placeholder {
+    color: rgb(20,20,20,.25);
+}
+.page__right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    padding: 10px;
+    font-family: var(--Roboto);
+}
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 14px;
+    margin: 2vh 0;
+}
+.buttons .line {
+    display: block;
+    content: '';
+    width: 100%;
+    height: 2px;
+    background-color: rgb(20,20,20,.25);
+    border-radius: 10px;
+}
+.buttons span {
+    color: rgb(20,20,20,.25);
+}
+.buttons__social {
+    width: 100%;
+    border: 2px solid rgb(20,20,20,.25);
+    color: rgb(20,20,20,.25);
+    font-size: 18px;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
+.buttons__social:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.buttons .btn {
+    width: 45%;
+    color: var(--black);
+    /* background: conic-gradient(from 180deg at -15.79% 136.54%, #EAB6E1 43deg, #F2E6D9 126deg, #96B8FD 249deg, #BBA8FD 321deg);  */
+    border-radius: 10px;
+    background: rgb(234,182,225);
+    /* background: linear-gradient(145deg, rgba(234,182,225,1) 0%, rgba(242,230,217,1) 47%, rgba(187,168,253,1) 100%);  */
+    background: linear-gradient(145deg, rgba(234,182,225,1) 0%, rgba(242,230,217,1) 33%, rgba(150,184,253,1) 69%, rgba(187,168,253,1) 100%); 
+    transition: all .3s linear;
+}
+.buttons .btn:hover {
+    background: white;
+}
+.btn--link {
+    min-width: 45%;
+    text-align: center;
+    color: rgb(20,20,20,.45)
+}
+.btn--link:hover {
+    color: var(--primary);
+}
+.slider {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+    padding: 4vh 3vw;
+    border-radius: 20px;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('/static/media/back.png');
+    position: relative;
+}
+.slider__image {
+    position: absolute;
+    object-fit: cover;
+
+    bottom: 0;
+    right: 0;
+
+    width: 90%;
+    height: 70%;
+
+    border-radius: 20px;
+    box-shadow: -4px 4px 10px rgb(20,20,20, .1);
+    opacity: 80%;
+    filter: blur(50deg);
+}
+.slider__desc h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: rgb(20,20,20,.9);
+}
+.page__slider__menu {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+}
+.page__slider__menu {
+    color: rgb(20,20,20,.25);
+}
+.page__slider__menu span {
+    font-size: 18px;
+    font-weight: 600;
+}
+.page__slider__menu .left, .right {
+    font-size: 22px !important;
+    cursor: pointer;
+}

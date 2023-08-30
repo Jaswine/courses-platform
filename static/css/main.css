@@ -1,0 +1,67 @@
+@import './variables.css';
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    
+    text-decoration: none;
+    outline: none;
+    border: none;
+}
+
+body {
+    background-color: var(--white);
+    color: var(--primary);
+    font-size: 18px;
+    font-family: var(--Roboto);
+    overflow-x: hidden;
+}
+a {
+    color: rgb(20,20,20,.9);
+}
+.btn {
+    padding: 14px 16px;
+    border-radius: 10px;
+    background-color: var(--black);
+    color: var(--white);
+    font-size: 18px;
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: var(--white);
+    color: var(--black);
+    box-shadow: 0 0 10px 1px rgb(20,20,20,.1);
+}
+.btn--primary {
+
+}
+a, button, input, textarea {
+    transition: all .3s linear;
+}
+.message {
+    background-color: var(--white);
+    width: 100%;
+    max-width: 50vw;
+    right: 25vw;
+    left: 25vw;
+    top: 10vh;
+    position: fixed;
+    z-index: 10;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 10px 1px rgb(20,20,20,.1);
+    font-size: 18px;
+    transition: all .3s linear;
+}
+.message .close {
+    color: rgb(20,20,20,.5);
+    transition: all .3s linear;
+    cursor: pointer;
+}
+.message .close:hover {
+    color: var(--primary);
+}
