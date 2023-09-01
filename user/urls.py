@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import auth
+from .views import auth, main
 
 app_name = 'auth'
 
@@ -9,4 +9,5 @@ urlpatterns = [
     path('sign-up', auth.sign_up, name='sign-up'),
     path('sign-out', auth.sign_out, name='sign-out'),   
    
+    path('', main.dashboard, name='dashboard'),   
 ]

@@ -1,0 +1,79 @@
+{% include 'main.html' %}
+{% comment %} {% load socialaccount account static %} {% endcomment %}
+
+{% block title %}
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <title>{{ type }}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page">
+    <div class="page__header">
+        <div class="page__header__top">
+            <div class="page__header__user">
+                <img 
+                    {% if request.user.profile.image  %}
+                        src="/static/media/{{ request.user.profile.image }}" 
+                    {% else %}
+                        src="https://images.pexels.com/photos/17886484/pexels-photo-17886484/free-photo-of-patio-of-a-restaurant.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load"
+                    {% endif  %}
+                    alt="{{ request.user.username }}">
+                <a href="/users/{{ request.user.username }}">{{ request.user.username }}</a>
+            </div>
+            <div class="page__header__menu">
+                <a href="" class="active">
+                   <img src="/static/media/icons/Content.svg" alt="Dashboard">
+                   Dashboard
+                </a>
+                <a href="/courses" class="">
+                    <img src="/static/media/icons/GraduationCap.svg" alt="Courses">
+                    Courses
+                </a>
+                <a href="/articles" class="">
+                    <img src="/static/media/icons/News.svg" alt="Articles">
+                    Articles
+                </a>
+                <a href="/tasks" class="">
+                    <img src="/static/media/icons/SigningADocument.svg" alt="SigningADocument">
+                    Tasks
+                </a>
+                <a href="/favorites" class="">
+                    <img src="/static/media/icons/Heart.svg" alt="Favorites">
+                    Favorites
+                </a>
+                <a href="/settings" class="">
+                    <img src="/static/media/icons/Settings.svg" alt="Settings">
+                    Settings
+                </a>
+            </div>
+        </div>
+        <div class="page__header__bottom">
+            <a href="/sign-out" class="btn btn--primary">Sign Out</a>
+        </div>
+    </div>
+    <div class="page__content">
+        <div class="page__content__main">
+            <div class="page__content__header">
+                <h2>HI, {{ request.user.username }} 👋</h2>
+                <div class="">
+                    <button class="btn btn--primary">
+                        <img src="/static/media/icons/Search.svg" alt="search">
+                    </button>
+                    <a href="" class="btn">Add New Course</a>
+                </div>
+            </div>
+            <div class="page__content__popular">
+                
+            </div>
+            <div class="page__content__courses"></div>
+        </div>
+        <div class="page__content__comments">
+            <div class="page__content__header page__content__header"> 
+                <button class="btn btn--primary">
+                    <img src="/static/media/icons/Messaging.svg" alt="Messaging">
+                </button>   
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

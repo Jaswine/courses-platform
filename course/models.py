@@ -33,8 +33,9 @@ class Course(models.Model):
     #TODO: Public or Unpublic
     public = models.BooleanField(default=False)
     
-    #TODO: Like & Bookmarks
+    #TODO: Like & Participants
     likes = models.ManyToManyField(User, blank=True, related_name='likes')
+    # participants = models.ManyToManyField(User, blank=True, related_name='participants')
     
     titles = models.ManyToManyField('Title', through='TitleOrder', blank=True, default=[],  related_name='titles')
         
@@ -110,8 +111,11 @@ class UserTaskProgress(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     
     points_earned = models.PositiveIntegerField(default=0)
-    completed = models.BooleanField(default=False)    
- 
+    completed = models.BooleanField(default=False) 
+    
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+       
     def __str__(self):
         return self.user.username
  
