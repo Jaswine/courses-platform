@@ -8,9 +8,4 @@ from ..models import Profile
 
 
 def settings(request):
-    
-    
-    context = {
-        
-    }
-    return render(request, 'auth/settings.html', context)
+    return render(request, 'auth/settings.html')

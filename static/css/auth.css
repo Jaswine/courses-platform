@@ -37,6 +37,7 @@
     flex-direction: column;
     margin-bottom: 2vh;
 }
+
 .form__field label  {
     font-size: 18px;
     color: rgb(20,20,20,.35);
@@ -132,6 +133,9 @@
     background-size: cover;
     background-image: url('/static/media/back.png');
     position: relative;
+
+    transition: all .3s linear;
+    animation: show .3s;
 }
 .slider__image {
     position: absolute;
@@ -147,6 +151,23 @@
     box-shadow: -4px 4px 10px rgb(20,20,20, .1);
     opacity: 80%;
     filter: blur(50deg);
+
+    animation: show .3s;
+}
+@keyframes show {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.slider__desc {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
 }
 .slider__desc h3 {
     font-size: 20px;
@@ -170,4 +191,10 @@
 .page__slider__menu .left, .right {
     font-size: 22px !important;
     cursor: pointer;
+
+    transition: all .3s linear;
+}
+
+.page__slider__menu .left:hover, .right:hover {
+    opacity: .5;    
 }

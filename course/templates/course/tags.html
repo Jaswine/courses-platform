@@ -1,0 +1,26 @@
+{% include 'main.html' %}
+
+{% block title %}
+    <link rel="stylesheet" href="/static/css/tags.css">
+    <title>Tags</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page">
+    {% include "header.html" %}
+    <div class="page__content">
+        <div class="page__content__main">
+            <div class="page__content__header">
+                <h2>Tags 🔖</h2>
+                <div class="tags">
+                 
+                </div>
+            </div>
+            <div class="page__content__popular">
+                
+            </div>
+        </div>
+        <div class="page__content__sorting"></div>
+    </div>
+</div>
+{% endblock content %}

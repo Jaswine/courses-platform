@@ -1,0 +1,16 @@
+{% include 'main.html' %}
+{% comment %} {% load socialaccount account static %} {% endcomment %}
+
+{% block title %}
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <title>Settings</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page">
+    {% include "header.html" %}
+    <div class="page__content">
+       Content
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,150 @@
+@import './../variables.css';
+
+.page__content__main {
+    width: 64vw;
+}
+.page__content__form {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    padding: 10px 0;
+}
+.form__field {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+
+    margin-bottom: 8px;
+    width: 100%;
+}
+.form__field label {
+    font-size: 16px;
+    color: rgb(20,20,20,.35);
+    font-family: var(--Roboto);
+    margin-bottom: 2px;
+}
+.form__field input, select, textarea {
+    color: rgb(20,20,20,.85);
+    font-family: var(--Roboto);
+    font-size: 18px;
+    border: 2px solid rgb(20,20,20,.35);
+    border-radius: 10px;
+    padding: 14px;
+    width: 100%;
+    background-color: transparent;
+}
+option {
+    padding: 4px;
+}
+select {
+    appearance: none; 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+select:focus option:checked {
+    background-color: var(--violet);
+    color: var(--white);
+}
+select:focus option:hover {
+    background-color: var(--violet);
+    color: var(--white);
+}
+select:focus {
+    background-color: var(--violet);
+    color: var(--white);
+}
+input:hover, select:hover, textarea:hover {
+    border-color: var(--violet);
+}
+input:hover + label {
+    color: var(--violet);
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--violet);
+}
+
+input:focus label, 
+select:focus + label, 
+textarea:focus + label {
+    color: var(--violet);
+}
+
+input[type="file"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    position: relative;
+}
+input[type="file"]::after {
+    display: block;
+    content: url('/static/media/icons/EditImage.svg');
+    position: absolute;
+    z-index: 1;
+    top: -2px;
+    left: -2px;
+    opacity: 35%;
+
+    border: 2px solid rgb(20,20,20,.35);
+    border-radius: 10px;
+    padding: 14px;
+    background-color: var(--white);
+    width: 100%;
+    height: 100%;
+
+    transition: all .3s linear;
+}
+input[type="file"]:hover:after {
+    color: var(--violet);
+}
+
+textarea {
+    height: 100px;
+}
+.page__content__sorting {
+    height: 100vh;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: fixed;
+    right: 0;
+    width: 20vw;
+    padding: 10px 3%;
+}
+.page__content__sorting button {
+    width: 100%;
+    background-color: var(--violet);
+    font-weight: bold;
+    color: var(--primary);
+}
+.form__field__public {
+    max-width: 100px;
+}
+.form__field__public input {
+    width: 30px;
+    height: 30px;
+    appearance: none;
+}
+.form__field__public input:checked {
+    background-color: var(--violet);
+}
+.form__field p {
+    font-size: 16px;
+    margin: 6px 0;
+    color: rgb(20,20,20,.35);
+}
+.form__field a {
+    font-size: 16px;
+    margin: 6px 0;
+    color: rgb(20,20,20,.35);
+}
+.form__field a:hover {
+    color: var(--violet);
+}

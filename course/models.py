@@ -1,6 +1,8 @@
 from django.db import models
 
 from django.contrib.auth.models import User
+import datetime
+
 
 #!: ______ TAG FOR COURSES & ARTICLES________
 class Tag(models.Model):
@@ -16,9 +18,8 @@ class Course(models.Model):
         ('Intermediate', 'Intermediate'),
         ('Expert', 'Expert'),
     )
-    title = models.CharField(max_length=100)
-    slug = models.CharField(max_length=100, unique=True, default='')
-    user = models.ManyToManyField(User)
+    title = models.CharField(max_length=150)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     image = models.ImageField(upload_to='courses', blank=True)
     tags = models.ManyToManyField(Tag, blank=True)

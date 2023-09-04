@@ -1,0 +1,39 @@
+{% include 'main.html' %}
+{% comment %} {% load socialaccount account static %} {% endcomment %}
+
+{% block title %}
+    <link rel="stylesheet" href="/static/css/courses.css">
+    <title>Courses</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page">
+    {% include "header.html" %}
+    <div class="page__content">
+        <div class="page__content__main">
+            <div class="page__content__header">
+                <h2>Courses &#128218;</h2>
+                <div class="">
+                    <button class="btn btn--primary">
+                        <img src="/static/media/icons/Search.svg" alt="search">
+                    </button>
+                    {% if request.user.is_superuser %}
+                        <a href="{% url 'course:create_course' %}" class="btn">Add New Course</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="page__content__popular">
+                
+            </div>
+            <div class="page__content__courses"></div>
+        </div>
+        <div class="page__content__sorting">
+            <div class="page__content__sorting__header"> 
+                <button class="btn btn--primary">
+                    <img src="/static/media/icons/Slider.svg" alt="Slider">
+                </button>   
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

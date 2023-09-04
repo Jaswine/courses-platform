@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-bzqkqqkxwl+^x9t9(m&zons6*$0ctom+-gwa!(ut0pa04ynl5x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '*'
+]
 
 
 # Application definition
@@ -41,6 +43,8 @@ INSTALLED_APPS = [
     
     'course',
     'user',
+    
+    'django_select2',
 ]
 
 MIDDLEWARE = [
