@@ -8,5 +8,5 @@ urlpatterns = [
     path('courses/<str:slug>/', courses.courses_get_update_delete, name='courses_get_update_delete'),
     
     path('tags', tags.tags_list_create, name='tags_list_create'),
-    path('tags/<str:name>/', tags.tags_get_update_delete, name='tags_get_update_delete'),
+    path('tags/<int:id>/', tags.tags_get_update_delete, name='tags_get_update_delete'),
 ]

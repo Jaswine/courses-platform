@@ -122,7 +122,6 @@ textarea {
     width: 100%;
     background-color: var(--violet);
     font-weight: bold;
-    color: var(--primary);
 }
 .form__field__public {
     max-width: 100px;

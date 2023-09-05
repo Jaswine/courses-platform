@@ -6,25 +6,7 @@
     align-items: center;
     flex-direction: column;
     width: 75%;
-    padding: 10px 5%;
-}
-.page__content__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 15vh;
-}
-.page__content__header h2 {
-    font-family: var(--PaytoneOne);
-    font-size: 28px;
-    font-weight: 400;
-}
-.page__content__header div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+    padding: 0 5%;
 }
 .page__content__sorting {
     width: 25%;

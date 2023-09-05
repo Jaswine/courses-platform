@@ -49,7 +49,7 @@
                 <div class="form__field">
                     <label for="{{ form.tags.id_for_label }}">Tags:</label>
                     {{ form.tags }}
-                    <p>Can't see your tags? <a href='/tags'>Add more tags!</a></p>
+                    <p>Can't see your tags? <a href='{% url "course:tags" %}'>Add more tags!</a></p>
                 </div>
 
                 <div class="form__field">

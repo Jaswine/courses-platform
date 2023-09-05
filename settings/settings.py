@@ -44,8 +44,19 @@ INSTALLED_APPS = [
     'course',
     'user',
     
-    'django_select2',
+    'django.contrib.sites',
+    
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
+
+SITE_ID = 1
+SOCIALACCOUNT_LOGIN_ON_GET=True
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -141,6 +152,19 @@ MEDIA_ROOT =  BASE_DIR / 'static/media'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'APP': {
+            'client_id': '728039268958-1fu5ia6no08bht637bq0oqeg45h3q6u6.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    },
+}

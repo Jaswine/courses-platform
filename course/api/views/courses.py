@@ -21,7 +21,7 @@ def courses_list_create(request):
             'size': courses.count(),
             'courses': data   
         }, safe=False)
-        
+
     elif request.method == 'POST':
         title = request.POST.get('title')
         

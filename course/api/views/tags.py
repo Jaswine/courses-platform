@@ -21,9 +21,10 @@ def tags_list_create(request):
                 } for tag in tags]
         
         return JsonResponse({
-            'status': 'error',
-            'tags': data   
+            'status': 'success',
+            'tags': data
         }, safe=False)
+        
         
     elif request.method == 'POST':
         name = request.POST.get('name', '')
@@ -39,13 +40,13 @@ def tags_list_create(request):
         return JsonResponse({'error': 'Method not allowed'}, status=405)
     
 @csrf_exempt
-def tags_get_update_delete(request, name):
+def tags_get_update_delete(request, id):
     try:
-        tag = Tag.objects.get(name=name)
+        tag = Tag.objects.get(id=id)
     except Tag.DoesNotExist:
         return JsonResponse({
             'status': 'error',
-            'message': f'Name tag: {name} not found.'
+            'message': f'Name tag: {id} not found.'
         }, status=404)
     
     if request.method == 'PUT':
@@ -57,6 +58,7 @@ def tags_get_update_delete(request, name):
             'message': 'Tag was successfully updated'
         }, status=404)
     elif request.method == 'DELETE':
+        tag.delete()
         return JsonResponse({
             'status': 'success',
             'message': 'Tag was successfully deleted'
