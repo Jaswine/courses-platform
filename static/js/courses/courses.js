@@ -8,12 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для взятие всех курсов с фильтрами и поиском
     const getCourses = () => {   
-        console.log(filters)
         fetch(`/api/courses?q=${search}&order_by_data=${filters[0]}&order_by_popular=${filters[1]}&filter_by_tag=${filters[2]}`)
             .then((response) => response.json())
             .then(data => {
                 ShowAllCourses.innerHTML = ''
-                console.log(data)
                 
                 // Проверка колличества курсов
                 if (data.courses.length > 0) {
@@ -69,10 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         div.innerHTML += `
                         <div class='course__footer'>
                             <div class='course__footer__left'>
-                                <div>
-                                    <i class="fa-solid fa-heart heart"></i>
+                                <form>
+                                    <i class="fa-solid fa-heart heart" style="${course.liked_for_this_user ? 'color: #EAB6E1': 'color: #202020'}"></i>
                                     <span>${course.likes}</span>
-                                </div>
+                                </form>
                                 <div>
                                     <i class="fa-solid fa-message comment"></i>
                                     <span>${course.likes}</span>
@@ -163,6 +161,33 @@ document.addEventListener('DOMContentLoaded', () => {
     ShowFilters.querySelector('#filterByTag').addEventListener('change', (e) => {
         filters[2] = e.target.value
         getCourses()
+    })
+
+    ShowAllCourses.addEventListener('click', (e) => {
+        if (e.target.classList.contains('heart')) {
+            let course = e.target.parentNode.parentNode.parentNode.parentNode;
+
+            fetch(`/api/courses-like/${course.id}`, {
+                method: 'POST'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    let heart = e.target
+                    let span = heart.parentNode.querySelector('span')
+
+                    if (data.message == 'User like removed successfully') {
+                        heart.style.color = '#202020'
+                        span.innerHTML = parseInt(span.innerHTML) - 1
+                    } else {
+                        heart.style.color = '#EAB6E1'
+                        span.innerHTML = parseInt(span.innerHTML) + 1
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                
+        }
     })
 
     getTags()

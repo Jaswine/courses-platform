@@ -48,6 +48,7 @@ def courses_list_create(request):
                 'image': course.image.url,
                 'about': course.about[:150],
                 'likes': course.likes.count(),
+                'liked_for_this_user':True if request.user in course.likes.all() else False,
                 'updated': course.updated.strftime("%Y.%m.%d"),
                 'created': course.created.strftime("%Y.%m.%d"),
                 } for course in courses]
@@ -73,13 +74,13 @@ def courses_list_create(request):
         return JsonResponse({'error': 'Method not allowed'}, status=405)
     
 @csrf_exempt
-def courses_get_update_delete(request, slug):    
+def courses_get_update_delete(request, id):    
     try:
-        course = Course.objects.get(slug=slug)
+        course = Course.objects.get(id=id)
     except Course.DoesNotExist:
         return JsonResponse({
             'status': 'error',
-            'message': f'Course: {slug} not found.'
+            'message': f'Course: {id} not found.'
         }, status=404)
         
     if request.method == 'PUT':
@@ -99,3 +100,31 @@ def courses_get_update_delete(request, slug):
         }, status=404)
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
+    
+@csrf_exempt
+def course_add_like(request, id):
+    try:
+        course = Course.objects.get(id=int(id))
+        
+        if request.method == 'POST':
+            if request.user in course.likes.all():
+                course.likes.remove(request.user)
+                
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'User like removed successfully'
+                }, status=404)
+            else:
+                course.likes.add(request.user)
+            
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Course was liked successfully'
+                }, status=404)
+                
+    except Course.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Course: {id} not found.'
+        }, status=404)
+        

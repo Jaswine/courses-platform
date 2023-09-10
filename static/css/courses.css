@@ -140,18 +140,18 @@
     justify-content: center;
     align-items: center;
 }
-.course__footer__left div {
+.course__footer__left div, .course__footer__left form{
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 4px;
 }
-.course__footer__left div i {
+.course__footer__left  i {
     font-size: 20px;
     opacity: .7;
     transition: all .3s linear;
 }
-.course__footer__left div span {
+.course__footer__left  span {
     font-size: 14px;
     color: rgb(20,20,20, .7);
 }
@@ -182,7 +182,7 @@
     transition: all .3s linear;
 }
 .heart:hover {
-    color: var(--pink);
+    color: rgb(234, 182, 225,.4);
     cursor: pointer;
 }
 .comment:hover  {
