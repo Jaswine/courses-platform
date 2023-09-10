@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('#CreateTagForm')
 
     const getAllTags = () => {
-        fetch('/api/courses/tags')
+        fetch('/api/tags')
             .then((response) => response.json())
             .then(data => {
                 ShowAllTags.innerHTML = ''
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault()
         
         let data = new FormData(form)
-        fetch('/api/courses/tags', {
+        fetch('/api/tags', {
             method: 'POST',
             body: data
         }) 
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('material-symbols-outlined')) {
             let tag = e.target.parentNode
 
-            fetch(`/api/courses/tags/${tag.id}`, {
+            fetch(`/api/tags/${tag.id}`, {
                 method: 'DELETE',
             }) 
                 .then((response) => response.json())

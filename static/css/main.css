@@ -183,7 +183,6 @@ a, button, input, textarea, select, textarea {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 15vh;
 }
 .page__content__header {
     justify-content: space-between;

@@ -18,9 +18,12 @@ def create_course(request):
         form = CourseForm()
         
         if request.method == 'POST':
-            form = CourseForm(request.POST)
-            
+            form = CourseForm(request.POST, request.FILES)
+           
             if form.is_valid():
+                course = form.save(commit=False)
+                course.user = request.user
+            
                 form.save()
                 return redirect('/')
         

@@ -19,7 +19,7 @@ const images = [
     },
     { 
         id: 4, 
-        image: 'museums-victoria-QSBm03YHtrI-unsplash.jpg', 
+        image: 'arnel-hasanovic-MNd-Rka1o0Q-unsplash.jpg', 
         text: 'Meet and chat with other people!'
     },
 ]

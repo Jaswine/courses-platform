@@ -13,27 +13,42 @@
         <div class="page__content__main">
             <div class="page__content__header">
                 <h2>Courses &#128218;</h2>
-                <div class="">
+                <form class="" method="POST" id="searchForm">
+                    {% csrf_token  %}
+                    <input type="text" class="search" name="search" placeholder="Search...">
                     <button class="btn btn--primary">
                         <img src="/static/media/icons/Search.svg" alt="search">
                     </button>
                     {% if request.user.is_superuser %}
                         <a href="{% url 'course:create_course' %}" class="btn">Add New Course</a>
                     {% endif %}
-                </div>
+                </form>
             </div>
-            <div class="page__content__popular">
-                
-            </div>
-            <div class="page__content__courses"></div>
+            <div class="page__content__courses" id='ShowAllCourses'></div>
         </div>
         <div class="page__content__sorting">
             <div class="page__content__sorting__header"> 
-                <button class="btn btn--primary">
+                <button class="btn btn--primary" id="filtersButton">
                     <img src="/static/media/icons/Slider.svg" alt="Slider">
                 </button>   
             </div>
+            <form action="" method="POST" id="ShowFilters" style="display: none; opacity: 0;" >
+                {% csrf_token %}
+                <select name="" id="orderByDate">
+                    <option value="Newest">Newest</option>
+                    <option value="Oldest">Oldest</option>
+                </select>
+                <!-- <select name="" id="orderByPopular">
+                    <option value="Popular">Popular</option>
+                    <option value="Unpopular">Unpopular</option>
+                </select> -->
+                <select name="" id="filterByTag">
+                    <option value="" selected>All</option>
+                </select>
+            </form>
         </div>
     </div>
+
+    <script src='/static/js/courses/courses.js' ></script>
 </div>
 {% endblock content %}

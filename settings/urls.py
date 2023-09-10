@@ -9,5 +9,5 @@ urlpatterns = [
     
     path('accounts/', include('allauth.urls')),
     
-    path('api/courses/', include('course.api.urls')),
+    path('api/', include('course.api.urls')),
 ]
