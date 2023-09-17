@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const ShowAllCourses = document.querySelector('#ShowAllCourses')
-    const searchForm = document.querySelector('#searchForm')
+    const searchForm = document.querySelector('#searchForm', '')
+    const user__status = document.querySelector('.user__status', '')
 
     // Взятие тэгов для фильтрации
     let search = ''
@@ -28,6 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         div.innerHTML = `
                             <div class='course__header'>
                                 <a href='/courses/${course.id}'>${course.title}</a>
+                                ${user__status ? `
+                                    <img src='/static/media/icons/MenuVertical.svg' 
+                                        alt='MenuVertical' 
+                                        class='course__header__menu' />
+                                    <div class='course__header__options'>
+                                        <a href='/courses/${course.id}/edit'>Edit</a>
+                                        <a href='/courses/${course.id}/delete'>Delete</a>
+                                    </div>
+                                `: ''}
                             </div>
                             <div class='course__pod__header'>
                                 <a href='/users/${course.user}'>${course.user}</a>
@@ -116,52 +126,53 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Поиск 
-    searchForm.addEventListener('submit', (e) => {
-        e.preventDefault()
-
-        search = searchForm.querySelector('.search').value
-        getCourses()
-    })
+    if (searchForm) {
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault()
     
-    const filtersButton = document.querySelector('#filtersButton')
-    const ShowFilters = document.querySelector('#ShowFilters')
+            search = searchForm.querySelector('.search').value
+            getCourses()
+        })
+    }
     
-    filtersButton.addEventListener('click', (e) => {
-        if (ShowFilters.style.opacity == 0) {
+    const filtersButton = document.querySelector('#filtersButton', '')
+    const ShowFilters = document.querySelector('#ShowFilters', '')
+    
+    if (filtersButton) {
+        filtersButton.addEventListener('click', (e) => {
+            if (ShowFilters.style.opacity == 0) {
+    
+                ShowFilters.style.display = 'flex'
+                
+                setTimeout(() => {
+                    ShowFilters.style.opacity = 1
+                    ShowFilters.classList.add('animationFormClass')
+                }, 200)
+    
+            } else {
+    
+                ShowFilters.style.opacity = 0
+                ShowFilters.classList.remove('animationFormClass')
+    
+                setTimeout(() => {
+                    ShowFilters.style.display = 'none'
+                }, 200)
+    
+            }
+        })
+    }
 
-            ShowFilters.style.display = 'flex'
-            
-            setTimeout(() => {
-                ShowFilters.style.opacity = 1
-                ShowFilters.classList.add('animationFormClass')
-            }, 200)
-
-        } else {
-
-            ShowFilters.style.opacity = 0
-            ShowFilters.classList.remove('animationFormClass')
-
-            setTimeout(() => {
-                ShowFilters.style.display = 'none'
-            }, 200)
-
-        }
-    })
-
-    ShowFilters.querySelector('#orderByDate').addEventListener('change', (e) => {
-        filters[0] = e.target.value
-        getCourses()
-    })
-
-    // ShowFilters.querySelector('#orderByPopular').addEventListener('change', (e) => {
-    //     filters[1] = e.target.value
-    //     getCourses()
-    // })
-
-    ShowFilters.querySelector('#filterByTag').addEventListener('change', (e) => {
-        filters[2] = e.target.value
-        getCourses()
-    })
+    if (ShowFilters) {
+        ShowFilters.querySelector('#orderByDate').addEventListener('change', (e) => {
+            filters[0] = e.target.value
+            getCourses()
+        })
+    
+        ShowFilters.querySelector('#filterByTag').addEventListener('change', (e) => {
+            filters[2] = e.target.value
+            getCourses()
+        })
+    }
 
     ShowAllCourses.addEventListener('click', (e) => {
         if (e.target.classList.contains('heart')) {
@@ -172,21 +183,44 @@ document.addEventListener('DOMContentLoaded', () => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    let heart = e.target
-                    let span = heart.parentNode.querySelector('span')
+                    if (data.status == 'success') {
+                        let heart = e.target
+                        let span = heart.parentNode.querySelector('span')
 
-                    if (data.message == 'User like removed successfully') {
-                        heart.style.color = '#202020'
-                        span.innerHTML = parseInt(span.innerHTML) - 1
+                        if (data.message == 'User like removed successfully') {
+                            heart.style.color = '#202020'
+                            span.innerHTML = parseInt(span.innerHTML) - 1
+                        } else {
+                            heart.style.color = '#EAB6E1'
+                            span.innerHTML = parseInt(span.innerHTML) + 1
+                        }
                     } else {
-                        heart.style.color = '#EAB6E1'
-                        span.innerHTML = parseInt(span.innerHTML) + 1
+                        const div = document.createElement('div')
+                        div.classList.add('message')
+                        div.innerHTML = `${data.status} - ${data.message}  
+                                            <span class="material-symbols-outlined close">
+                                                close
+                                            </span>`
+                        document.querySelector('.messages').appendChild(div)
                     }
                 })
                 .catch(error => {
-                    console.log(error)
+                   console.log(error)
                 })
                 
+        }
+        
+        if (e.target.classList.contains('course__header__menu')) {
+            let course = e.target.parentNode.parentNode
+            let menu = course.querySelector('.course__header__options')
+            console.log(menu)
+            if (menu.style.opacity == 1) {
+                menu.style.opacity = 0
+                menu.style.display = 'none'
+            } else {
+                menu.style.opacity = 1
+                menu.style.display = 'flex'
+            }
         }
     })
 

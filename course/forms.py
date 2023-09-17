@@ -8,7 +8,7 @@ class CourseForm(ModelForm):
                 'title', 
                 'image',
                 'tags',
-                'about', 'whatAreUWillLearn', 'knowledges', 'initialRequirements',
+                'about',
                 'level', 
                 'public',
             ]

@@ -46,7 +46,7 @@ def courses_list_create(request):
                 'user': course.user.username,
                 'tags': [{'id': tag.id, 'name': tag.name} for tag in course.tags.all()],
                 'image': course.image.url,
-                'about': course.about[:150],
+                'about': course.about[:200],
                 'likes': course.likes.count(),
                 'liked_for_this_user':True if request.user in course.likes.all() else False,
                 'updated': course.updated.strftime("%Y.%m.%d"),
@@ -72,7 +72,7 @@ def courses_list_create(request):
         return JsonResponse(data, status=201)
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
-    
+   
 @csrf_exempt
 def courses_get_update_delete(request, id):    
     try:
@@ -104,23 +104,30 @@ def courses_get_update_delete(request, id):
 @csrf_exempt
 def course_add_like(request, id):
     try:
-        course = Course.objects.get(id=int(id))
+        if request.user.is_authenticated:
+            course = Course.objects.get(id=int(id))
         
-        if request.method == 'POST':
-            if request.user in course.likes.all():
-                course.likes.remove(request.user)
+            if request.method == 'POST':
+                if request.user in course.likes.all():
+                    course.likes.remove(request.user)
+                    
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'User like removed successfully'
+                    }, status=200)
+                else:
+                    course.likes.add(request.user)
                 
-                return JsonResponse({
-                    'status': 'success',
-                    'message': 'User like removed successfully'
-                }, status=404)
-            else:
-                course.likes.add(request.user)
-            
-                return JsonResponse({
-                    'status': 'success',
-                    'message': 'Course was liked successfully'
-                }, status=404)
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'Course was liked successfully'
+                    }, status=200)
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'User unauthenticated!'
+            }, status=401)
+        
                 
     except Course.DoesNotExist:
         return JsonResponse({

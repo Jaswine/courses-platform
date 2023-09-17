@@ -8,8 +8,16 @@
 
 {% block content %}
 <div class="page">
-    {% include "header.html" %}
-    <div class="page__content">
+    {% if request.user.is_authenticated %}
+        {% include "header.html" %}
+    {% endif %}
+    <div class="page__content" 
+        {% if request.user.is_authenticated %}
+            style="margin-left: 200px;"
+        {% else %}
+            style="margin-left: 0px"
+        {% endif %}
+    >
         <div class="page__content__main">
             <div class="page__content__header">
                 <h2>Courses &#128218;</h2>

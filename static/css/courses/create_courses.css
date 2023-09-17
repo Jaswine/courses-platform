@@ -104,7 +104,7 @@ input[type="file"]:hover:after {
 }
 
 textarea {
-    height: 100px;
+    height: 200px;
 }
 .page__content__sorting {
     height: 100vh;

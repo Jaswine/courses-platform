@@ -26,10 +26,7 @@ class Course(models.Model):
 
     #TODO: About this course
     about = models.TextField(max_length=2000, blank=True)
-    whatAreUWillLearn = models.TextField(max_length=500, blank=True)
-    knowledges = models.TextField(max_length=500, blank=True)
     level = models.CharField(max_length=13, choices=LEVEL)
-    initialRequirements = models.TextField(max_length=500, blank=True)
       
     #TODO: Public or Unpublic
     public = models.BooleanField(default=False)
@@ -44,7 +41,7 @@ class Course(models.Model):
     updated = models.DateTimeField(auto_now=True)
         
     def __str__(self):
-        return self.slug
+        return self.title
 
 class Title(models.Model):
     title = models.CharField(max_length=255)

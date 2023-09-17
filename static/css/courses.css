@@ -80,6 +80,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 
     width: 100%;
 }
@@ -260,7 +261,49 @@
 }
 .page__content__sorting form select:focus option:checked {
     background-color: var(--violet);
+    color: var(--white);
 }
 .page__content__sorting form select:focus {
     background-color: rgb(20,20,20, .15);
 }
+.course__header__menu {
+    opacity: .8;
+    cursor: pointer;
+ }
+ .course__header__menu:hover {
+    opacity: 1;
+ }
+ .course__header__options {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    z-index: 1;
+    right: 0;
+    background-color: var(--white);
+    border-radius: 10px;
+    width: 100%;
+    max-width: 100px;
+    box-shadow: 3px 3px 5px rgb(20,20,20,.05);
+
+    opacity: 0;
+    display: none;
+ }
+ .course__header__options a {
+    padding: 8px 10px;
+    font-size: 18px;
+
+    text-align: left;
+    width: 100%;
+ }
+ .course__header__options a:hover {
+    background-color: rgb(20,20,20, .03);
+ }
+ .course__header__options a:first-child {
+    border-radius: 10px 10px 0 0 ;
+ }
+ .course__header__options a:last-child {
+    border-radius: 0 0 10px 10px;
+ }

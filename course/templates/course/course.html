@@ -1,0 +1,76 @@
+{% include 'main.html' %}
+{% comment %} {% load socialaccount account static %} {% endcomment %}
+
+{% block title %}
+    <link rel="stylesheet" href="/static/css/courses/course.css">
+    <title>{{ course.title }}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="course">
+    {% if request.user.is_authenticated %}
+        {% include "header.html" %}
+    {% endif %}
+    <div class="course__item"  
+    {% if request.user.is_authenticated %}
+        style="margin-left: 200px;"
+    {% else %}
+        style="margin-left: 0px"
+    {% endif %}>
+        <div class="course__header">
+            <div class="course__header__image" style="background-image: url('/static/media/{{ course.image }}');"></div>
+            <div class="course__header__mask"></div>
+            <div class="course__header__item">
+                <div class="course__header__title">
+                    <h2>Front End</h2>
+                    <span id="course__favorite"></span>
+                </div>
+                <div class="course__header__info">
+                    <div class="course__header__info__left">
+                        <a href="/users/{{ course.user.username }}">{{ course.user.username }}</a>
+                    </div>
+                    <div class="course__header__info__right">
+                        {% for tag in course.tags.all %}
+                        <div class="course__tag" style="background-color: {% if forloop.counter|divisibleby:3 %}#BBA8FD{% elif forloop.counter|divisibleby:2 %}#EAB6E1{% else %}#F2E6D9{% endif %}">
+                                {{ tag.name }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            <div class="course__header__desc">
+                <div class="">
+                    <img src="/static/media/icons/Monitor.svg" alt="video">
+                    <span>15 Lessons</span>
+                </div>
+                <div class="">
+                    <img src="/static/media/icons/VideoCall.svg" alt="VideoCall">
+                    <span>10 Videos</span>
+                </div>
+                <div class="">
+                    <img src="/static/media/icons/CodeFile.svg" alt="CodeFile">
+                    <span>4 Exercises</span>
+                </div>
+                <div class="">
+                    <img src="/static/media/icons/ProjectManagement.svg" alt="ProjectManagement">
+                    <span>2 Projects</span>
+                </div>
+            </div>
+            <div class="course__header__experience">
+                <div class="course__header__experience__line">
+                    <span></span>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="course__content">
+            <div class="course__content__left">
+
+            </div>
+            <div class="course__content__right">
+                <p><b>About: </b> {{ course.about }}</p>
+                <p><b>Level: </b> {{ course.level }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

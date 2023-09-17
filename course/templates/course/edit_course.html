@@ -1,0 +1,62 @@
+{% include 'main.html' %}
+{% comment %} {% load socialaccount account static %} {% endcomment %}
+
+{% block title %}
+    <link rel="stylesheet" href="/static/css/courses/create_courses.css">
+    <title>Create a new course</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page">
+    <input type="hidden" name="user_status" class="user__status" value="{{ request.user.is_superuser }}" />
+    {% include "header.html" %}
+    <form class="page__content" method='POST' enctype='multipart/form-data'>
+        {% csrf_token %}
+        <div class="page__content__main">
+            <div class="page__content__header">
+                <h2>{{ course.title }}</h2>
+                <div class=""></div>
+            </div>  
+            <div class="page__content__form" id='CreateCourseForm'>                
+                <div class="form__field">
+                    <label for="{{ form.title.id_for_label }}">Title:</label>
+                    {{ form.title }}
+                </div>
+
+                <div class="form__field">
+                    <label for="{{ form.image.id_for_label }}">Image:</label>
+                    {{ form.image }}
+                </div>
+
+                <div class="form__field">
+                    <label for="{{ form.tags.id_for_label }}">Tags:</label>
+                    {{ form.tags }}
+                    <p>Can't see your tags? <a href='{% url "course:tags" %}'>Add more tags!</a></p>
+                </div>
+
+                <div class="form__field">
+                    <label for="{{ form.about.id_for_label }}">About:</label>
+                    {{ form.about }}
+                </div>
+
+                <div class="form__field">
+                    <label for="{{ form.level.id_for_label }}">Level:</label>
+                    {{ form.level }}
+                </div>
+
+                <div class="form__field form__field__public">
+                    <label for="{{ form.public.id_for_label }}">Public:</label>
+                    {{ form.public }}
+                </div>
+
+            </div>
+        </div>
+        <div class="page__content__sorting">
+            <button type="submit" class="btn">Save</button>
+        </div>
+    </form>
+</div>
+
+<script src='/static/js/courses/create_courses.js'></script>
+
+{% endblock content %}create_courses
