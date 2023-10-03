@@ -22,7 +22,7 @@
             <div class="course__header__mask"></div>
             <div class="course__header__item">
                 <div class="course__header__title">
-                    <h2>Front End</h2>
+                    <h2>{{ course.title }}</h2>
                     <span id="course__favorite"></span>
                 </div>
                 <div class="course__header__info">
@@ -40,11 +40,11 @@
             <div class="course__header__desc">
                 <div class="">
                     <img src="/static/media/icons/Monitor.svg" alt="video">
-                    <span>15 Lessons</span>
+                    <span>{{ lessons_count }} Lessons</span>
                 </div>
                 <div class="">
                     <img src="/static/media/icons/VideoCall.svg" alt="VideoCall">
-                    <span>10 Videos</span>
+                    <span>{{ videos_count }} Videos</span>
                 </div>
                 <div class="">
                     <img src="/static/media/icons/CodeFile.svg" alt="CodeFile">
@@ -64,13 +64,59 @@
         </div>
         <div class="course__content">
             <div class="course__content__left">
+                <!-- <h3>Course program:</h3> -->
+                <div class="tasks">
+                    {% for task in tasks %}
+                        <div class="task">
+                            <div class="task__left">
+                                <span class="task__done"></span>
+                                {% if task.type == 'video' %}
+                                    <img src="/static/media/icons/VideoCall.svg" alt="VideoCall">
+                                {% else %}
+                                    <img src="/static/media/icons/News.svg" alt="Text">
+                                {% endif %}
+                                <a href="">{{ task.title }}</a>
+                            </div>
+                           <div class="task__right">
+                            <a href="">
+                                <svg width="13.25" height="23.75" viewBox="0 0 53 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.07043 5L47.4968 47.4264" stroke="#202020" stroke-width="10" stroke-linecap="round"/>
+                                    <path d="M5 89.6583L47.4264 47.2319" stroke="#202020" stroke-width="10" stroke-linecap="round"/>
+                                </svg>                                    
+                            </a>
+                           </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="course__reviews">
 
+                </div>
             </div>
             <div class="course__content__right">
-                <p><b>About: </b> {{ course.about }}</p>
-                <p><b>Level: </b> {{ course.level }}</p>
+                <!-- <div class="course__content__right__place"> -->
+                    <button class="btn">Enroll in a course</button>
+                <!-- </div> -->
+                <div class="course__content__right__place">
+                    <p><b>About: </b> {% autoescape off %}
+                        <div class="text">
+                            {{ course.about }}
+                        </div>
+                        {% endautoescape %}</p>
+                    <p><b>Level: </b> {{ course.level }}</p>
+                </div>
+                <div class="course__content__right__place">
+                    <b>Share on social networks:</b>
+                    <div class="line">
+                        <a class="fa-brands fa-square-facebook" href=""></a>
+                        <a class="fa-brands fa-square-instagram" href=""></a>
+                        <a class="fa-brands fa-square-x-twitter" href=""></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script src="/static/js/courses/course.js"></script>
+
 {% endblock content %}

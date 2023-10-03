@@ -7,3 +7,7 @@ venv/
 
 .env
 *.env
+
+courses
+courses/
+

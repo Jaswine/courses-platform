@@ -1,4 +1,3 @@
-console.log('Show TAsk Menu')
 const button = document.querySelector('.task__content__header__show__menu')
 const menu = document.querySelector('.task__menu')
 const close = document.querySelector('.task__menu__close')

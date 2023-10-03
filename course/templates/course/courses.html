@@ -7,6 +7,7 @@
 {% endblock title %}
 
 {% block content %}
+<input type="hidden" name="user_status" class="user__status" value="{{ request.user.is_superuser }}" />
 <div class="page">
     {% if request.user.is_authenticated %}
         {% include "header.html" %}

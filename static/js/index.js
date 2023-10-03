@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (scrollPosition > windowHeight / 10 &&  scrollPosition < contentHeight) {
             let scaleHeight = (scrollPosition /  (contentHeight - (windowHeight / 10)) * 100)
 
-            console.log(scaleHeight)
             for (let i = 0; i < cards.length; i++) {
                 if (i == 0 && scaleHeight > 20) {
                     card__descs[i].style.margin = 0

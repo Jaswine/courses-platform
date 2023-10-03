@@ -1,6 +1,8 @@
 textarea {
-   max-width: 600px;
+   /* max-width: 600px; */
    margin-bottom: 10px;
+   width: 100%;
+   min-width: 100%;
 }
 .display_none {
    display: none;

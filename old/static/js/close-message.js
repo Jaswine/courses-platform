@@ -10,7 +10,6 @@ for (let i=0; i<messages.length; i++) {
 
 // Close Message When U Click on Escape or Delete
 addEventListener('keydown', (e) => {
-   console.log(messages.value)
    for (let i=0; i<messages.length; i++) {
       if (e.key === 'Delete' || e.key === 'Escape') {
          messages[i].style.display = 'none';

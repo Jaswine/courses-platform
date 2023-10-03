@@ -1,0 +1,28 @@
+{% include 'main.html' %}
+{% comment %} {% load socialaccount account static %} {% endcomment %}
+
+{% block title %}
+    <link rel="stylesheet" href="/static/css/courses.css"> 
+    <link rel="stylesheet" href="/static/css/courses/delete_course.css">
+    <title>Delete "{{ course.title }}"</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page">
+    {% include "header.html" %}
+    <div class="page__content">
+        <form class="page__content__main" method="POST">
+            {% csrf_token %}
+            <h2>Do you want to remove this -  "{{ course.title }}"?</h2>
+    
+            <div class="buttons">
+                <a href="{{ url }}">Return back</a>
+                <button type="submit" class="btn">Delete permanently</button>
+            </div>
+    
+        </form>
+        <div class="page__content__sorting"></div>
+    </div>
+</div>
+
+{% endblock content %}

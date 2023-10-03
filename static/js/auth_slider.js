@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Рендеринг Слайда
     const renderSlider = (x) => {
-        console.log(x)
         slider.style.opacity = 0
         
         slider.querySelector('.slider__image').src = `/static/media/auth/${images[x].image}`

@@ -1,13 +1,8 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
-from datetime import datetime
 
 from ...models import Course
-
-
-from ...utils import checking_slug, slug_generator
-
 
 @csrf_exempt
 def courses_list_create(request):
@@ -135,3 +130,69 @@ def course_add_like(request, id):
             'message': f'Course: {id} not found.'
         }, status=404)
         
+@csrf_exempt
+def course_add_(request, id):
+    try:
+        if request.user.is_authenticated:
+            course = Course.objects.get(id=int(id))
+        
+            if request.method == 'POST':
+                if request.user in course.likes.all():
+                    course.likes.remove(request.user)
+                    
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'User like removed successfully'
+                    }, status=200)
+                else:
+                    course.likes.add(request.user)
+                
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'Course was liked successfully'
+                    }, status=200)
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'User unauthenticated!'
+            }, status=401)
+        
+                
+    except Course.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Course: {id} not found.'
+        }, status=404)
+        
+# @csrf_exempt
+# def course_title_list_create(request, id):
+#     try:
+#         if request.user.is_authenticated:
+#             course = Course.objects.get(id=int(id))
+
+#             if request.method == 'GET':
+#                 titles = []
+                
+#                 return JsonResponse({
+#                     'status': 'success',
+#                     'data': titles
+#                 })
+        
+#             if request.method == 'POST':
+                
+#                 return JsonResponse({
+#                     'status': 'success',
+#                     'message': 'Course was liked successfully'
+#                 }, status=200)
+#         else:
+#             return JsonResponse({
+#                 'status': 'error',
+#                 'message': f'User unauthenticated!'
+#             }, status=401)
+        
+                
+#     except Course.DoesNotExist:
+#         return JsonResponse({
+#             'status': 'error',
+#             'message': f'Course: {id} not found.'
+#         }, status=404)

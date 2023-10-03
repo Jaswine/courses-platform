@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('course__header__menu')) {
             let course = e.target.parentNode.parentNode
             let menu = course.querySelector('.course__header__options')
-            console.log(menu)
+            
             if (menu.style.opacity == 1) {
                 menu.style.opacity = 0
                 menu.style.display = 'none'

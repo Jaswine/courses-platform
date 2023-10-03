@@ -50,21 +50,20 @@
 
 /* course */
 .page__content__courses {
-    display: flex;
-    justify-content: start;
-    align-items: start;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 49% 49%;
 
     width: 100%;
     gap: 2%;
     row-gap: 2%;
+    margin-bottom: 20%;
 }
 .course {
     display: flex;
     justify-content: start;
     align-items: start;
     flex-direction: column;
-    width: 49%;
+    width: 100%;
     padding: 10px;
     border-radius: 10px;
     background-color: rgb(217,217,217, .2);

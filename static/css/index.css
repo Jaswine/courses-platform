@@ -80,6 +80,8 @@
     width: 100%;
     padding: 5vh 5vw;
     height: 100vh;
+
+    /* margin-left: 10%; */
 }
 .intro__right {
     display: flex;
@@ -147,6 +149,8 @@
 .about {
     height: 165vh;
     width: 100%;
+
+    /* margin-left: 10%; */
 }
 .title {
     font-family: var(--PaytoneOne);
@@ -272,6 +276,8 @@
 .collection {
     width: 100%;
     margin-bottom: 6vh;
+
+    /* margin-left: 10%; */
 }
 .collection__titles {
     display: flex;
@@ -475,6 +481,7 @@
     background-color: var(--primary);
     color: #bcbcbc;
     padding: 4vh 8vh;
+
 }
 .footer__left {
     display: flex;

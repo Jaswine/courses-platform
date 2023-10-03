@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     
     'django.contrib.sites',
     
+    'ckeditor',
+    
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -166,5 +168,13 @@ SOCIALACCOUNT_PROVIDERS = {
             'secret': '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',
             'key': ''
         }
+    },
+}
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        # 'toolbar': 'custom',
+        'height': 400,
+        'width': '100%',
     },
 }

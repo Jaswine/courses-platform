@@ -10,6 +10,7 @@
     align-items: start;
     flex-direction: column;
     padding: 10px 0;
+    padding-bottom: 20%;
 }
 .form__field {
     display: flex;
@@ -27,7 +28,7 @@
     margin-bottom: 2px;
 }
 .form__field input, select, textarea {
-    color: rgb(20,20,20,.85);
+    color: rgb(20,20,20,.55);
     font-family: var(--Roboto);
     font-size: 18px;
     border: 2px solid rgb(20,20,20,.35);
@@ -38,7 +39,11 @@
 }
 option {
     padding: 4px;
+    color: rgb(20,20,20,.55);
 }
+/* option:selected {
+    color: rgb(20,20,20,.55);
+} */
 select {
     appearance: none; 
     -webkit-appearance: none;
@@ -111,15 +116,24 @@ textarea {
     overflow: hidden;
 
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     position: fixed;
     right: 0;
     width: 20vw;
     padding: 10px 3%;
 }
+.page__content__sorting a {
+    margin-bottom: 5%;
+    width: 100%;
+    text-align: center;
+}
 .page__content__sorting button {
     width: 100%;
+    background-color: var(--violet);
+    font-weight: bold;
+}
+.button__spec {
     background-color: var(--violet);
     font-weight: bold;
 }
@@ -146,4 +160,13 @@ textarea {
 }
 .form__field a:hover {
     color: var(--violet);
+}
+
+.form__video {
+    margin-bottom: 10px;
+}
+.form__video video {
+    width: 100%;
+    margin-top: 2%;
+    border-radius: 20px;
 }

@@ -5,7 +5,7 @@
    align-items: start;
    margin-top: 60px;
    overflow: hidden;
-   
+   margin-bottom: 10px;
 }
 .task__menu   {
    width: 100%;

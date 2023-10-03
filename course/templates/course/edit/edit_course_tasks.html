@@ -1,0 +1,32 @@
+{% include 'main.html' %}
+{% comment %} {% load socialaccount account static %} {% endcomment %}
+
+{% block title %}
+    <link rel="stylesheet" href="/static/css/courses/create_courses.css">
+    <link rel="stylesheet" href="/static/css/courses/tasks.css">
+
+    <title>Create a new course</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page">
+    {% include "header.html" %}
+    <input type="hidden" id="CourseId" value="{{ course.id }}">
+    <div class="page__content">
+        {% csrf_token %}
+        <div class="page__content__main">
+            <div class="page__content__header">
+                <h2>Edit Tasks 🗒</h2>
+                <a href="{% url 'course:course_tasks_create' course.id %}" class="btn button__spec">Create a Task</a>
+            </div>
+            <div class="page__content__tasks" id='CourseTasks'></div>
+        </div>
+        <div class="page__content__sorting" style="justify-content: center; height: 16vh">
+            <a href='{% url "course:course-edit" course.id %}' class="btn">Change Info</a>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/courses/tasks.js"></script>
+
+{% endblock content %}
