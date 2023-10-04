@@ -55,10 +55,18 @@ class Course(models.Model):
 #     def __str__(self):
 #         return self.title
 
+class TaskURLField(models.Model):
+    url_on_repo = models.URLField()
+    
+    def __str__(self) -> str:
+        return self.url_on_repo
+
 class Task(models.Model):
     TYPE = (
         ('text','text'),
         ('video', 'video'),
+        ('project','project'),
+        ('code', 'code'),
     )
     
     title = models.CharField(max_length=255)
@@ -66,6 +74,8 @@ class Task(models.Model):
 
     video = models.FileField(upload_to='courses/tasks/videos', blank=True)
     text = RichTextField(blank=True)
+    url_on_repo  = models.ManyToManyField(TaskURLField, blank=True)
+    code_true_answer = models.CharField(max_length=255)
     
     @classmethod    
     def video_task(cls, video):
@@ -79,6 +89,22 @@ class Task(models.Model):
         return Task.objects.create(
             type = 'text',
             text = text,
+        )
+        
+    @classmethod    
+    def project_task(cls, text, url_on_repo):
+        return Task.objects.create(
+            type = "project",
+            text = text,
+            url_on_repo = url_on_repo
+        )
+        
+    @classmethod    
+    def project_task(cls, text, code_true_answer):
+        return Task.objects.create(
+            type = "code",
+            text = text,
+            url_on_repo = code_true_answer
         )
         
     public = models.BooleanField(default=False)
@@ -107,7 +133,7 @@ class TaskOrder(models.Model):
         ordering = ['order']  
  
 #!: ____________ PROGRESS _____________       
-class UserTaskProgress(models.Model):
+class UserCourseProgress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     

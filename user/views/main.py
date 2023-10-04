@@ -4,12 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from django.contrib.auth.models import User
-from course.models import Course, UserTaskProgress, Tag
+from course.models import Course, UserCourseProgress, Tag
 
 
 def dashboard(request):
     if request.user.is_authenticated:
-        courses = UserTaskProgress.objects.filter(user=request.user)
+        courses = UserCourseProgress.objects.filter(user=request.user)
     
         context = {
             'courses': courses,
@@ -33,9 +33,9 @@ def favorites(request):
 
 @login_required(login_url='auth:sign-in')
 def courses(request):
-    courses = UserTaskProgress.objects.filter(user=request.user, public=True)
+    # courses = UserCourseProgress.objects.filter(user=request.user, public=True)
     
     context = {
-        'courses': courses,
+        # 'courses': courses,
     }
     return render(request, 'auth/dashboard.html', context)

@@ -8,7 +8,6 @@ from ..models import Tag, Course, Task, TaskOrder
 
 from ..forms import CourseForm
 
-
 def courses(request):
     return render(request, 'course/courses.html')
 

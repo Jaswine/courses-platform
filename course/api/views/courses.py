@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
 
-from ...models import Course
+from ...models import Course, UserCourseProgress
 
 @csrf_exempt
 def courses_list_create(request):
@@ -40,7 +40,7 @@ def courses_list_create(request):
                 'title': course.title, 
                 'user': course.user.username,
                 'tags': [{'id': tag.id, 'name': tag.name} for tag in course.tags.all()],
-                'image': course.image.url,
+                'image': course.image.url if course.image else None,
                 'about': course.about[:200],
                 'likes': course.likes.count(),
                 'liked_for_this_user':True if request.user in course.likes.all() else False,
@@ -164,35 +164,34 @@ def course_add_(request, id):
             'message': f'Course: {id} not found.'
         }, status=404)
         
-# @csrf_exempt
-# def course_title_list_create(request, id):
-#     try:
-#         if request.user.is_authenticated:
-#             course = Course.objects.get(id=int(id))
-
-#             if request.method == 'GET':
-#                 titles = []
-                
-#                 return JsonResponse({
-#                     'status': 'success',
-#                     'data': titles
-#                 })
+@csrf_exempt
+def course_write_user(request, id):
+    try:
+        if request.user.is_authenticated:
+            course = Course.objects.get(id=int(id))
         
-#             if request.method == 'POST':
+            if request.method == 'POST':
+                courseProgress = UserCourseProgress.objects.create(
+                    user = request.user,
+                    course = course,
+                    points_earned = 0
+                )
                 
-#                 return JsonResponse({
-#                     'status': 'success',
-#                     'message': 'Course was liked successfully'
-#                 }, status=200)
-#         else:
-#             return JsonResponse({
-#                 'status': 'error',
-#                 'message': f'User unauthenticated!'
-#             }, status=401)
+                courseProgress.save()
+                
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Course was added successfully'
+                }, status=200)
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'User unauthenticated!'
+            }, status=401)
         
                 
-#     except Course.DoesNotExist:
-#         return JsonResponse({
-#             'status': 'error',
-#             'message': f'Course: {id} not found.'
-#         }, status=404)
+    except Course.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Course: {id} not found.'
+        }, status=404)
