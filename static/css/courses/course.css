@@ -4,6 +4,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start; 
+    margin-bottom: 5%;
 }
 .course__item {
     display: flex;
@@ -28,7 +29,7 @@
     align-items: center;
     flex-direction: column;
     width: 100%; 
-    padding: 8vh 3vw 3vh;
+    padding: 8vh 3vw 3vh ;
 }
 .course__header {
     display: flex;
@@ -80,6 +81,7 @@
 .course__header__title h2 {
     font-family: var(--PaytoneOne);
     font-size: 46px;
+    margin-bottom: 10px;
 }
 .course__header__info {
     display: flex;
@@ -150,7 +152,8 @@
 .course__header__experience__line {
     width: 100%;
     border-radius: 20px;
-    background-color: var(--white);
+    /* background-color: var(--white); */
+    background-color: rgb(254,254,254,.3);
     position: relative;
     height: 20px;
     display: flex;
@@ -183,7 +186,7 @@
     justify-content: start;
     align-items: start;
     flex-direction: column;
-    padding: 0 2% ;
+    padding: 0 2% 0 0 ;
 }
 .course__content__left h3 {
     margin-bottom: 2%;
@@ -212,6 +215,21 @@
     font-size: 16px;
     /* margin-bottom: 10px; */
     width: 100%;
+}
+.course__content__right__place__spec {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 3%;
+}
+.course__content__right__place__spec a {
+    min-width: 70%;
+}
+.course__content__right__place__spec button {
+    min-width: 27%;
+    background-color: white;
+    color: black;
 }
 .course__content__right__place .text {
     margin-left: 6px;
@@ -304,4 +322,202 @@
 }
 .task__right svg:hover  {
     opacity: 1;
+}
+.btn {
+    text-align: center;
+}
+.course__reviews {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 3%;
+}
+.course__reviews form {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+}
+.course__reviews form input {
+    border: 2px solid rgb(20, 20, 20, .1);
+    border-radius: 10px;
+    padding: 14px 16px;
+    max-width: 100px;
+}
+.course__reviews form textarea {
+    font-size: 16px;
+    padding: 8px;
+    border: 2px solid rgb(20, 20, 20, .1);
+    width: 100%;
+    border-radius: 10px;
+    min-height: 100px;
+    height: 100%;
+}
+.course__reviews form div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 6px;
+}
+
+.course__reviews__filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 8px 0;
+    margin-top: 6px;
+    border-bottom: 2px solid rgb(20, 20, 20, .1);
+}
+.course__reviews__filters .stars {
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    gap: 5px;
+}
+.course__reviews__filters .show__count__reviews {
+
+}
+.course__reviews__filters select {
+    border: 2px solid rgb(20, 20, 20, .1);
+    color: rgb(20, 20, 20, .5);
+    font-size: 16px;
+}
+.review {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+    /* border-radius: 10px; */
+    /* background-color: rgb(20,20,20,.04); */
+    padding: 10px;
+    transition: all .3s linear;
+    border-bottom: 1px solid rgb(20, 20, 20, .1);
+}
+.review:hover {
+    /* background-color: rgb(20,20,20,.08); */
+}
+.review__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 6px;
+}
+.review__header__left {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 6px
+}
+.review__header__left a {
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.review__header__right {
+    font-size: 18px;
+    color: rgb(20, 20, 20, .8);
+    gap: 10px;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+.options {
+    cursor: pointer;
+    color: rgb(20, 20, 20, .4);
+    transition: all .3s linear;
+}
+.options:hover {
+    color: rgb(20, 20, 20, .8);
+}
+.review__header__left a img {
+    border-radius: 100%;
+    width: 30px;
+    height: 30px;
+}
+.review__header__left a:hover {
+    color: var(--violet);
+}
+.review__message {
+    width: 100%;
+    font-size: 16px;
+    color: var(--primary);
+}
+.review__data {
+    display: flex;
+    justify-content: flex-end;
+    align-self: center;
+    width: 100%;
+}
+.review__data {
+    font-size: 14px;
+    color: rgb(20,20,20, .4);
+    margin-top: 8px;
+}
+
+.window {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    
+    display: none;
+    opacity: 0;
+    transition: all .3s linear;
+}
+.window::after {
+    display: block;
+    content: '';
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(5px);
+    position: fixed;
+    z-index: -1;
+ }
+.window__form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff;
+    padding: 5%;
+    border-radius: 20px;
+    border: 2px solid rgb(20,20,20,.1);
+}
+.window__form h2 {
+    font-size: 28px;
+    margin-bottom: 5%;
+}
+.window__buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.window__buttons .btn {
+    max-width: 300px;
+    width: 100%;
 }

@@ -15,3 +15,106 @@
     align-items: center;
     flex-direction: column;
 }
+.page__content__popular {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
+    height: 50vh;
+}
+.popular__course {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+}
+.popular__course__back {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+}
+.popular__course__back .mask {
+    display: block;
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-radius: 10px;
+}
+.popular__course__back img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    border-radius: 10px;
+}
+.popular__course__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 6%;
+}
+/* .popular__course__content__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+} */
+.popular__course__content a {
+    font-size: calc((1vw + 1vh) * 1.1);
+    font-weight: bold;
+}
+.popular__course__content__desc {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    width: 100%;
+}
+.popular__course__content__load {
+    display: block;
+    width: 100%;
+    background-color: rgb(254,254,254,.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: calc((1vw + 1vh) * .6);
+    margin-top: 6px;
+    border-radius: 10px;
+}
+.popular__course__content__load span {
+    display: block;
+    content: '';
+    width: 0;
+    height: calc((1vw + 1vh) * .6);
+    border-radius: 10px;
+}
+.page__content__courses {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    width: 100%;
+}
+.page__content__courses h2 {
+    font-family: var(--PaytoneOne);
+    font-size: 28px;
+    font-weight: 400;
+    height: 15vh;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}

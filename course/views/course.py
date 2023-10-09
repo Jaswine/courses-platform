@@ -111,6 +111,7 @@ def course_task_create(request, id):
             title = request.POST.get('title')
             type = request.POST.get('type')
             public = request.POST.get('public')
+            points = request.POST.get('points')
             
             if public == 'on':
                 public = True
@@ -119,7 +120,8 @@ def course_task_create(request, id):
             
             task = Task.objects.create(title=title, 
                                            type=type,
-                                           public=public)
+                                           public=public,
+                                           points=points)
             
             task.save()
             
@@ -205,3 +207,11 @@ def course_task_delete(request, id, task_id):
         messages.error(request, '')
         return redirect('/')
             
+@login_required(login_url='auth:sign-in')
+def course_task(request, id, task_id):
+    course = get_object_or_404(Course, pk=id)
+    task = get_object_or_404(Task, pk=task_id)
+    
+    return render(request, 'course/task.html', {
+        'task': task,
+    })

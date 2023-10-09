@@ -1,8 +1,9 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
+from datetime import datetime
 
-from ...models import Course, UserCourseProgress
+from ...models import Course, CourseReview
 
 @csrf_exempt
 def courses_list_create(request):
@@ -165,24 +166,28 @@ def course_add_(request, id):
         }, status=404)
         
 @csrf_exempt
-def course_write_user(request, id):
+def user_add_to_course(request, id):
     try:
         if request.user.is_authenticated:
-            course = Course.objects.get(id=int(id))
+            course = Course.objects.get(id=id)
         
             if request.method == 'POST':
-                courseProgress = UserCourseProgress.objects.create(
-                    user = request.user,
-                    course = course,
-                    points_earned = 0
-                )
-                
-                courseProgress.save()
-                
-                return JsonResponse({
-                    'status': 'success',
-                    'message': 'Course was added successfully'
-                }, status=200)
+                if request.user in  course.users_who_completed_course.all():
+                    course.users_who_completed_course.remove(request.user)
+                    course.save()
+                    
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'Course was removed from user profile successfully'
+                    }, status=200)
+                else:
+                    course.users_who_completed_course.add(request.user)
+                    course.save()
+                    
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'Course was added to user profile successfully'
+                    }, status=200)
         else:
             return JsonResponse({
                 'status': 'error',
@@ -195,3 +200,90 @@ def course_write_user(request, id):
             'status': 'error',
             'message': f'Course: {id} not found.'
         }, status=404)
+        
+        
+def course_reviews_show_create(request, id):
+    try:
+        course = Course.objects.get(id=id)
+    except Course.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Course with id {id} not found'
+        })
+        
+    if request.method == 'GET':
+        reviews = CourseReview.objects.filter(course=course).order_by('-created')
+        medium__stars = 0
+        
+        for review in reviews:
+            medium__stars += review.stars
+        
+        medium__stars = medium__stars / reviews.count()
+        
+        data = [{
+            'id': review.id,
+            'message': review.message,
+            'stars': review.stars,
+            'user': {
+                'username': review.user.username,
+                'image': 'https://images.unsplash.com/photo-1696509528129-c28dc0308733?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2663&q=80',
+            },
+            'updated': datetime.fromisoformat(str(review.updated).replace("Z", "+00:00")).strftime("%d.%m.%Y %H:%M")
+        } for review in reviews]
+        
+        return JsonResponse({
+            'status': 'success',
+            'medium__stars': round(medium__stars, 2),
+            'data': data
+        }, status=200)
+        
+    elif request.method == 'POST':
+        message = request.POST.get('message')
+        stars_count = request.POST.get('stars_count')
+        print('message', message, stars_count)
+        
+        if stars_count and message:
+            review = CourseReview.objects.create(
+                user = request.user,
+                course = course,
+                message = message,
+                stars = stars_count
+            )
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Review created successfully'    
+            }, status=201)
+        return JsonResponse({
+                'status': 'error',
+                'message': 'You need to choose some stars and write message'    
+        }, status=400)
+    else:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Method not supported'
+        })
+    
+@csrf_exempt    
+def course_reviews_delete(request, id):
+    try:
+        review = CourseReview.objects.get(id=id)
+    except CourseReview.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Review with id {id} not found'
+        })
+        
+    if request.method == 'DELETE':
+        review.delete()
+        
+        return JsonResponse({
+            'status': 'error',
+            'message': f'Review with id {id} deleted successfully'
+        })
+        
+    else:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Method not supported'
+        })

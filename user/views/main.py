@@ -4,15 +4,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from django.contrib.auth.models import User
-from course.models import Course, UserCourseProgress, Tag
+from course.models import Course, Tag
 
 
 def dashboard(request):
     if request.user.is_authenticated:
-        courses = UserCourseProgress.objects.filter(user=request.user)
+        courses_before_3 = request.user.users_who_completed_course.all()[:3]
+        courses_after_3 = request.user.users_who_completed_course.all()[3:]
     
         context = {
-            'courses': courses,
+            'courses_before_3': courses_before_3,
+            'courses_after_3': courses_after_3,
         }
         return render(request, 'auth/dashboard.html', context)
     else:

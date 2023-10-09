@@ -40,6 +40,8 @@ class Course(models.Model):
     # titles = models.ManyToManyField('Title', through='TitleOrder', blank=True, default=[],  related_name='titles')
     tasks = models.ManyToManyField('Task', through='TaskOrder', blank=True, default=[], related_name='tasks')
 
+    users_who_completed_course = models.ManyToManyField(User, related_name='users_who_completed_course', blank=True)
+
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
         
@@ -71,11 +73,12 @@ class Task(models.Model):
     
     title = models.CharField(max_length=255)
     type = models.CharField(max_length=10, choices=TYPE, blank=True)
+    points = models.IntegerField(default=0)
 
     video = models.FileField(upload_to='courses/tasks/videos', blank=True)
     text = RichTextField(blank=True)
     url_on_repo  = models.ManyToManyField(TaskURLField, blank=True)
-    code_true_answer = models.CharField(max_length=255)
+    code_true_answer = models.CharField(max_length=255, blank=True)
     
     @classmethod    
     def video_task(cls, video):
@@ -106,8 +109,10 @@ class Task(models.Model):
             text = text,
             url_on_repo = code_true_answer
         )
-        
+                
     public = models.BooleanField(default=False)
+    
+    users_who_completed = models.ManyToManyField(User, related_name='users_who_completed_task', blank=True)
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -132,19 +137,19 @@ class TaskOrder(models.Model):
     class Meta:
         ordering = ['order']  
  
-#!: ____________ PROGRESS _____________       
-class UserCourseProgress(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+# #!: ____________ PROGRESS _____________       
+# class UserCourseProgress(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     
-    points_earned = models.PositiveIntegerField(default=0)
-    completed = models.BooleanField(default=False) 
+#     points_earned = models.PositiveIntegerField(default=0)
+#     completed = models.BooleanField(default=False) 
     
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+#     created = models.DateTimeField(auto_now_add=True)
+#     updated = models.DateTimeField(auto_now=True)
        
-    def __str__(self):
-        return self.user.username
+#     def __str__(self):
+#         return self.user.username
  
 #!: ____________ COMMENTS _____________       
 class CourseReview(models.Model):

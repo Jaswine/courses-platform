@@ -11,6 +11,7 @@ urlpatterns = [
     path('<int:id>/delete', course.course_delete, name='course-delete'),
     
     # Tasks
+    path('<int:id>/<int:task_id>', course.course_task, name='task'),
     path('<int:id>/edit/tasks', course.course_edit_tasks, name='course-edit-tasks'),
     path('<int:id>/edit/tasks/<int:task_id>/edit', course.course_task_update, name='course_tasks_update'),
     path('<int:id>/edit/tasks/<int:task_id>/delete', course.course_task_delete, name='course_task_delete'),
