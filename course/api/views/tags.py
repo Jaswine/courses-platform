@@ -37,7 +37,7 @@ def tags_list_create(request):
                 'name': tag.name }
         return JsonResponse(data, status=201)
     else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+        return JsonResponse({'error': 'Access denied for this method: This method seems to be illegal in this world.'}, status=405)
     
 @csrf_exempt
 def tags_get_update_delete(request, id):
@@ -64,4 +64,4 @@ def tags_get_update_delete(request, id):
             'message': 'Tag was successfully deleted'
         }, status=404)
     else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+        return JsonResponse({'error': 'Access denied for this method: This method seems to be illegal in this world.'}, status=405)

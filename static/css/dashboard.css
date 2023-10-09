@@ -29,6 +29,11 @@
     align-items: center;
     flex-direction: column;
     position: relative;
+    transition: all .3s linear;
+}
+.popular__course:hover {
+    box-shadow:  0  0 10px 1px rgb(20,20,20,.25);
+    border-radius: 10px;
 }
 .popular__course__back {
     width: 100%;

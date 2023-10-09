@@ -10,6 +10,7 @@
 <div class="course">
     <input type="hidden" id="CourseId" value="{{ course.id }}" />
     {% if request.user.is_authenticated %}
+        <input type="hidden" id="UserId" value="{{ request.user.id }}" />
         {% include "header.html" %}
     {% endif %}
     <div class="course__item"  
@@ -66,7 +67,9 @@
         </div>
         <div class="course__content">
             <div class="course__content__left">
-                <!-- <h3>Course program:</h3> -->
+                <!--  <h3>Course program:</h3> -->
+
+                {% comment %} tasks {% endcomment %}
                 <div class="tasks">
                     {% for task in tasks %}
                         <div class="task">
@@ -90,16 +93,20 @@
                         </div>
                     {% endfor %}
                 </div>
+
+                {% comment %} reviews {% endcomment %}
                 <div class="course__reviews">
                     <h2>📌 Learners' reviews</h2>
-                    <form action="" id="CourseReviewsForm">
-                        {% csrf_token %}
-                        <textarea name="message" placeholder="What did you like? What have you learned in this course? What was new to you?"></textarea>
-                        <div class="">
-                            <input type="number" name="stars_count" value="5" max="5" min="1">
-                            <button class="btn">Send review</button>
-                        </div>
-                    </form>
+                    {% if request.user.is_authenticated %}
+                        <form action="" id="CourseReviewsForm">
+                            {% csrf_token %}
+                            <textarea name="message" placeholder="What did you like? What have you learned in this course? What was new to you?"></textarea>
+                            <div class="">
+                                <input type="number" name="stars_count" value="5" max="5" min="1">
+                                <button class="btn">Send review</button>
+                            </div>
+                        </form>
+                    {% endif %}
                     <div class="course__reviews__filters">
                         <div class="stars"></div>
                         <div class="show__count__reviews">
@@ -109,16 +116,25 @@
                     </div>
                     <div class="course__reviews__all" id="CourseReviews"></div>
                 </div>
+
             </div>
+
+
             <div class="course__content__right">
+
+                {% comment %} Enroll / Drop in a course {% endcomment %}
                 <div class="course__content__right__place__spec"> 
-                    {% if request.user in course.users_who_completed_course.all %}
-                        <a class='btn course__continue'>Continue</a>
-                        <button class="btn" id='EnrollInACourse'>Drop</button>
-                    {% else %}
-                        <button class="btn" id='EnrollInACourse'>Enroll in a course</button>
+                    {% if request.user.is_authenticated %}
+                        {% if request.user in course.users_who_completed_course.all %}
+                            <a class='btn course__continue'>Continue</a>
+                            <button class="btn" id='EnrollInACourse'>Drop</button>
+                        {% else %}
+                            <button class="btn" id='EnrollInACourse'>Enroll in a course</button>
+                        {% endif %}
                     {% endif %}
                </div>
+
+               {% comment %} about {% endcomment %}
                 <div class="course__content__right__place">
                     <p><b>About: </b> {% autoescape off %}
                         <div class="text">
@@ -127,6 +143,8 @@
                         {% endautoescape %}</p>
                     <p><b>Level: </b> {{ course.level }}</p>
                 </div>
+
+                {% comment %} share on social networks {% endcomment %}
                 <div class="course__content__right__place">
                     <b>Share on social networks:</b>
                     <div class="line">

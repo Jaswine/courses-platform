@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </form>
                                 <div>
                                     <i class="fa-solid fa-message comment"></i>
-                                    <span>${course.likes}</span>
+                                    <span>${course.comments_count}</span>
                                 </div>
                             </div>
                             <div class='course__footer__right'>

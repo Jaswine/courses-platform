@@ -44,6 +44,7 @@ def courses_list_create(request):
                 'image': course.image.url if course.image else None,
                 'about': course.about[:200],
                 'likes': course.likes.count(),
+                'comments_count': CourseReview.objects.filter(course=course).count(),
                 'liked_for_this_user':True if request.user in course.likes.all() else False,
                 'updated': course.updated.strftime("%Y.%m.%d"),
                 'created': course.created.strftime("%Y.%m.%d"),
@@ -55,19 +56,29 @@ def courses_list_create(request):
         }, safe=False)
 
     elif request.method == 'POST':
-        title = request.POST.get('title')
+        if request.user.is_superuser:
+            title = request.POST.get('title')
         
-        course = Course.objects.create( 
-            title = title,
-        )
+            course = Course.objects.create( 
+                title = title,
+            )
+            
+            course.user.add(request.user)
+            
+            data = {'id': course.id, 
+                    'slug': course.slug }
+            
+            return JsonResponse(data, status=201)
         
-        course.user.add(request.user)
-        
-        data = {'id': course.id, 
-                'slug': course.slug }
-        return JsonResponse(data, status=201)
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Dragon Ban: Not even a dragon can fly here. Access is denied.'
+        }, status=403)
     else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Access denied for this method: This method seems to be illegal in this world.'
+        }, status=405)
    
 @csrf_exempt
 def courses_get_update_delete(request, id):    
@@ -79,60 +90,35 @@ def courses_get_update_delete(request, id):
             'message': f'Course: {id} not found.'
         }, status=404)
         
-    if request.method == 'PUT':
-        course.title = request.POST.get('title', '')
-        course.image = request.FILES.get('image', '')
-        course.about = request.POST.get('about', '')
-        course.save()
-        
-        return JsonResponse({
-            'status': 'success',
-            'message': 'Course was successfully updated'
-        }, status=404)
-    elif request.method == 'DELETE':
-        return JsonResponse({
-            'status': 'success',
-            'message': 'Course was successfully deleted'
-        }, status=404)
-    else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
-    
-@csrf_exempt
-def course_add_like(request, id):
-    try:
-        if request.user.is_authenticated:
-            course = Course.objects.get(id=int(id))
-        
-            if request.method == 'POST':
-                if request.user in course.likes.all():
-                    course.likes.remove(request.user)
-                    
-                    return JsonResponse({
-                        'status': 'success',
-                        'message': 'User like removed successfully'
-                    }, status=200)
-                else:
-                    course.likes.add(request.user)
-                
-                    return JsonResponse({
-                        'status': 'success',
-                        'message': 'Course was liked successfully'
-                    }, status=200)
+    if request.user.is_superuser:
+        if request.method == 'PUT':
+            course.title = request.POST.get('title', '')
+            course.image = request.FILES.get('image', '')
+            course.about = request.POST.get('about', '')
+            course.save()
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Course was successfully updated'
+            }, status=404)
+        elif request.method == 'DELETE':
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Course was successfully deleted'
+            }, status=404)
         else:
             return JsonResponse({
                 'status': 'error',
-                'message': f'User unauthenticated!'
-            }, status=401)
-        
-                
-    except Course.DoesNotExist:
+                'message': 'Access denied for this method: This method seems to be illegal in this world.'
+            }, status=405)
+    else:
         return JsonResponse({
             'status': 'error',
-            'message': f'Course: {id} not found.'
-        }, status=404)
-        
+            'message': "Only brothers of the Night's Watch can pass. You will have to find another way."
+        }, status=403)
+    
 @csrf_exempt
-def course_add_(request, id):
+def course_add_like(request, id):
     try:
         if request.user.is_authenticated:
             course = Course.objects.get(id=int(id))
@@ -225,6 +211,7 @@ def course_reviews_show_create(request, id):
             'message': review.message,
             'stars': review.stars,
             'user': {
+                'id': review.user.id,
                 'username': review.user.username,
                 'image': 'https://images.unsplash.com/photo-1696509528129-c28dc0308733?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2663&q=80',
             },
@@ -238,30 +225,36 @@ def course_reviews_show_create(request, id):
         }, status=200)
         
     elif request.method == 'POST':
-        message = request.POST.get('message')
-        stars_count = request.POST.get('stars_count')
-        print('message', message, stars_count)
-        
-        if stars_count and message:
-            review = CourseReview.objects.create(
-                user = request.user,
-                course = course,
-                message = message,
-                stars = stars_count
-            )
+        if request.user.is_authenticated:
+            message = request.POST.get('message')
+            stars_count = request.POST.get('stars_count')
+            print('message', message, stars_count)
             
+            if stars_count and message:
+                review = CourseReview.objects.create(
+                    user = request.user,
+                    course = course,
+                    message = message,
+                    stars = stars_count
+                )
+                
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Review created successfully'    
+                }, status=201)
             return JsonResponse({
-                'status': 'success',
-                'message': 'Review created successfully'    
-            }, status=201)
-        return JsonResponse({
+                    'status': 'error',
+                    'message': 'You need to choose some stars and write message'    
+            }, status=400)
+        else:
+            return JsonResponse({
                 'status': 'error',
-                'message': 'You need to choose some stars and write message'    
-        }, status=400)
+                'message': "No White Walkers allowed"
+            }, status=401)
     else:
         return JsonResponse({
             'status': 'error',
-            'message': 'Method not supported'
+            'message': 'Access denied for this method: This method seems to be illegal in this world.'
         })
     
 @csrf_exempt    
@@ -274,16 +267,22 @@ def course_reviews_delete(request, id):
             'message': f'Review with id {id} not found'
         })
         
-    if request.method == 'DELETE':
-        review.delete()
+    if request.user.id == review.user.id:
+        if request.method == 'DELETE':
+            review.delete()
+            
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Review with id {id} deleted successfully'
+            })
         
-        return JsonResponse({
-            'status': 'error',
-            'message': f'Review with id {id} deleted successfully'
-        })
-        
-    else:
-        return JsonResponse({
-            'status': 'error',
-            'message': 'Method not supported'
-        })
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Access denied for this method: This method seems to be illegal in this world.'
+            })
+           
+    return JsonResponse({
+        'status': 'error',
+        'message': 'You can try, but this place is locked tighter than the Iron Throne.'
+    }, status=403) 
