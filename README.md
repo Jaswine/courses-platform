@@ -6,7 +6,21 @@ https://www.figma.com/file/z40JQFsGp7kKiv0B9GWfAU/Code-Course-Platform?type=desi
 <hr>
 <h3> DESIGN: </h3>
 
+<<<<<<< HEAD
 
+=======
+![image](https://github.com/Jaswine/Code-Cources-Platform/assets/82625479/0649ffe6-8cd3-4fee-8068-e0365d3d4d6d)
+
+![image](https://github.com/Jaswine/Code-Cources-Platform/assets/82625479/c5d652a0-263c-4060-a0ca-da6436cb53ec)
+
+![image](https://github.com/Jaswine/Code-Cources-Platform/assets/82625479/5b5e0cf4-1c66-49ab-8cb0-2799e9ceb99b)
+
+![image](https://github.com/Jaswine/Code-Cources-Platform/assets/82625479/7bbcb75c-f8cd-4880-892a-754f42b0966b)
+
+![image](https://github.com/Jaswine/Code-Cources-Platform/assets/82625479/5781680c-6a73-4509-8002-45357531568c)
+
+![image](https://github.com/Jaswine/Code-Cources-Platform/assets/82625479/b72fbfb1-a0ca-4303-ac32-d4d0370f8448)
+>>>>>>> refs/remotes/origin/main
 
 <hr>
 
