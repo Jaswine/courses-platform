@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from django.contrib import messages
 
@@ -36,16 +37,24 @@ def create_course(request):
 
 def course(request, id):
     course = get_object_or_404(Course, pk=id)
-    tasks = course.tasks.all().filter(public=True)
+    tasks = []
+    videos_count = [ ]
+        
+    task_orders = TaskOrder.objects.filter(course_id=id).order_by('order')
+    tasks_all = [task_order.task for task_order in task_orders]
     
-    videos_count = tasks.filter(type='video').count()    
+    for task in tasks_all:
+        if task.public:
+            tasks.append(task)
+        if task.type == 'video':
+            videos_count += 1
 
     return render(request, 'course/course.html', {
         'course': course,
         'tasks': tasks,
         
         'videos_count': videos_count,
-        'lessons_count': tasks.count(),
+        'lessons_count': len(tasks),
     })
     
     
@@ -208,10 +217,23 @@ def course_task_delete(request, id, task_id):
         return redirect('/')
             
 @login_required(login_url='auth:sign-in')
-def course_task(request, id, task_id):
+def course_task(request, id):
     course = get_object_or_404(Course, pk=id)
-    task = get_object_or_404(Task, pk=task_id)
+    tasks = []
+        
+    task_orders = TaskOrder.objects.filter(course_id=id).order_by('order')
+    tasks_all = [task_order.task for task_order in task_orders]
+    
+    for task in tasks_all:
+        if task.public:
+            tasks.append(task)
+    
+    paginator = Paginator(tasks, 1) 
+
+    page_number = request.GET.get("tasks")
+    tasks = paginator.get_page(page_number)
     
     return render(request, 'course/task.html', {
-        'task': task,
+        'task': tasks[0],
+        'course': course
     })

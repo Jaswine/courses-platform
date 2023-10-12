@@ -2,12 +2,54 @@
 {% comment %} {% load socialaccount account static %} {% endcomment %}
 
 {% block title %}
-    <link rel="stylesheet" href="/static/css/task.css">
+    <link rel="stylesheet" href="/static/css/courses/task.css">
     <title>Task</title>
 {% endblock title %}
 
 {% block content %}
-<div class="page">
-    .page__
+<div class="task">
+    <div class="task__header"></div>
+    <div class="task__content">
+        <div class="task__left">
+        
+        </div>
+        <div class="task__right">
+            <div class="task__right__header">
+                <div class="task__right__header__left">
+                    <span class="material-symbols-outlined">
+                        arrow_back_ios_new
+                    </span>
+                    {% if task.type == 'video' %}
+                        <img src="/static/media/icons/VideoCall.svg" alt="VideoCall" class="task__type"/>
+                    {% else %}
+                        <img src="/static/media/icons/News.svg" alt="Text" class="task__type" />
+                    {% endif %}
+                    <h3>{{ task.title }}</h3>
+                </div>
+                <div class="task__right__header__right">
+                    <button id="ShareLesson">
+                        <span class="material-symbols-outlined">
+                            share
+                        </span>
+                    </button>
+                    <button id="FullScreen">
+                        <span class="material-symbols-outlined">
+                            fullscreen
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <div class="task__right__content">
+                {% if task.type == 'video' %}
+                <video src="/static/{{ task.video.url }}"></video>
+                {% else %}
+                {{ task.text }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src='/static/js/courses/task.js'></script>
+
 {% endblock content %}
