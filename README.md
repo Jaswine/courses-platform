@@ -4,7 +4,11 @@
 https://www.figma.com/file/z40JQFsGp7kKiv0B9GWfAU/Code-Course-Platform?type=design&node-id=0%3A1&mode=design&t=54RAnWCSfzZA6MU2-1
 
 <hr>
-<h3>NEW DESIGN: </h3>
+<h3> DESIGN: </h3>
+
+
+
+<hr>
 
 ![image](https://user-images.githubusercontent.com/82625479/217524313-28219893-c564-4d65-b180-a6193f1c0feb.png)
 
@@ -41,3 +45,7 @@ https://www.figma.com/file/z40JQFsGp7kKiv0B9GWfAU/Code-Course-Platform?type=desi
 ![image](https://user-images.githubusercontent.com/82625479/212683727-2654380a-ec57-4cbf-acb4-58ef0c4febf6.png)
 
 ![image](https://user-images.githubusercontent.com/82625479/212683879-ad3b76be-638a-4157-85d4-68cdc42e0646.png)
+
+
+<h2>Plan</h2>
+

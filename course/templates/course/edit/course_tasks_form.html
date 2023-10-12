@@ -27,26 +27,28 @@
                             required />
                 </div>
 
-                <div class="form__field">
-                    <label>Points:</label>
-                    <input 
-                            type="number" 
-                            name="points" 
-                            placeholder="Enter points number" 
-                            value='{{ task.points }}' 
-                            required />
-                </div>
-
-                <div class="form__field">
-                    <label>Type:</label>
-                    <select 
-                        name="type" 
-                        id="SelectTask" 
-                        required>
-                        <option selected disabled>Select task type</option>
-                        <option value="text" {% if task.type == 'text' %}selected{% endif %}>text</option>
-                        <option value="video" {% if task.type == 'video' %}selected{% endif %}>video</option>
-                    </select>
+                <div class="page__content__div">
+                    <div class="form__field">
+                        <label>Points:</label>
+                        <input 
+                                type="number" 
+                                name="points" 
+                                placeholder="0" 
+                                value='{% if task.points %}{{ task.points }} {% else %}0{% endif %}' 
+                                required />
+                    </div>
+    
+                    <div class="form__field">
+                        <label>Type:</label>
+                        <select 
+                            name="type" 
+                            id="SelectTask" 
+                            required>
+                            <option selected disabled>Select task type</option>
+                            <option value="text" {% if task.type == 'text' %}selected{% endif %}>text</option>
+                            <option value="video" {% if task.type == 'video' %}selected{% endif %}>video</option>
+                        </select>
+                    </div>
                 </div>
 
                 <input type='hidden' id='TaskType' value='{{ task.type }}' />

@@ -170,3 +170,14 @@ textarea {
     margin-top: 2%;
     border-radius: 20px;
 }
+.page__content__div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+    gap: 5%;
+}
+.page__content__div .form__field:first-child {
+    max-width: 100px;
+}
