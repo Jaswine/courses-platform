@@ -8,4 +8,4 @@ def create_profile_model(sender,instance, created, **kwargs):
    if created:
       Profile.objects.create(
          user = instance,
-      )
+      ) 

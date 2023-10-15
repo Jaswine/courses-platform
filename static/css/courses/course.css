@@ -159,19 +159,13 @@
     display: flex;
     justify-content: start;
     align-items: start;
-    
 }
-.course__header__experience__line span {
+#CourseHeaderExperienceLine {
     display: block;
     content: '';
-    width: 50%;
     height: 100%;
     border-radius: 20px;
-    z-index: 1;
     background-color: var(--pink);
-    position: absolute;
-    top: 0;
-    left: 0;
 }
 .course__content {
     display: flex;
@@ -294,10 +288,23 @@
     border-radius: 100%;
     border: 2px solid rgb(20, 20, 20, .6);
     transition: all .3s linear;
+    position: relative;
 }
 .task__done:hover {
     background-color: rgb(234, 182, 225, .4);
     border-color: rgb(234, 182, 225, .4);
+}
+.task__done span {
+    display: block;
+    width: 130%;
+    height: 130%;
+    background-color: rgb(234, 182, 225, 1);
+    border-radius: 100%;
+    border: 2px solid rgb(234, 182, 225, 1);
+    position: absolute;
+    top: -2px;
+    left: -2px;
+
 }
 .task__left img {
     opacity: .6;

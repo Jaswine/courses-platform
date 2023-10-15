@@ -43,24 +43,24 @@
             <div class="course__header__desc">
                 <div class="">
                     <img src="/static/media/icons/Monitor.svg" alt="video">
-                    <span>{{ lessons_count }} Lessons</span>
+                    <span id='CourseLessonsCount'>{{ lessons_count }} Lessons</span>
                 </div>
                 <div class="">
                     <img src="/static/media/icons/VideoCall.svg" alt="VideoCall">
-                    <span>{{ videos_count }} Videos</span>
+                    <span  id='CourseVideosCount'>{{ videos_count }} Videos</span>
                 </div>
                 <div class="">
                     <img src="/static/media/icons/CodeFile.svg" alt="CodeFile">
-                    <span>4 Exercises</span>
+                    <span id='CourseExerciesesCount'>4 Exercises</span>
                 </div>
                 <div class="">
                     <img src="/static/media/icons/ProjectManagement.svg" alt="ProjectManagement">
-                    <span>2 Projects</span>
+                    <span id='CourseProjectsCount'>2 Projects</span>
                 </div>
             </div>
             <div class="course__header__experience">
                 <div class="course__header__experience__line">
-                    <span></span>
+                    <span id="CourseHeaderExperienceLine"></span>
                 </div>
             </div>
             </div>
@@ -70,29 +70,7 @@
                 <!--  <h3>Course program:</h3> -->
 
                 {% comment %} tasks {% endcomment %}
-                <div class="tasks">
-                    {% for task in tasks %}
-                        <div class="task">
-                            <div class="task__left">
-                                <span class="task__done"></span>
-                                {% if task.type == 'video' %}
-                                    <img src="/static/media/icons/VideoCall.svg" alt="VideoCall">
-                                {% else %}
-                                    <img src="/static/media/icons/News.svg" alt="Text">
-                                {% endif %}
-                                <a href="">{{ task.title }}</a>
-                            </div>
-                           <div class="task__right">
-                            <a href="">
-                                <svg width="13.25" height="23.75" viewBox="0 0 53 95" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5.07043 5L47.4968 47.4264" stroke="#202020" stroke-width="10" stroke-linecap="round"/>
-                                    <path d="M5 89.6583L47.4264 47.2319" stroke="#202020" stroke-width="10" stroke-linecap="round"/>
-                                </svg>                                    
-                            </a>
-                           </div>
-                        </div>
-                    {% endfor %}
-                </div>
+                <div class="tasks"></div>
 
                 {% comment %} reviews {% endcomment %}
                 <div class="course__reviews">

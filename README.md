@@ -3,12 +3,6 @@
 # Design
 https://www.figma.com/file/z40JQFsGp7kKiv0B9GWfAU/Code-Course-Platform?type=design&node-id=0%3A1&mode=design&t=54RAnWCSfzZA6MU2-1
 
-<hr>
-<h3> DESIGN: </h3>
-
-<<<<<<< HEAD
-
-=======
 ![image](https://github.com/Jaswine/Code-Cources-Platform/assets/82625479/0649ffe6-8cd3-4fee-8068-e0365d3d4d6d)
 
 ![image](https://github.com/Jaswine/Code-Cources-Platform/assets/82625479/c5d652a0-263c-4060-a0ca-da6436cb53ec)
@@ -20,7 +14,7 @@ https://www.figma.com/file/z40JQFsGp7kKiv0B9GWfAU/Code-Course-Platform?type=desi
 ![image](https://github.com/Jaswine/Code-Cources-Platform/assets/82625479/5781680c-6a73-4509-8002-45357531568c)
 
 ![image](https://github.com/Jaswine/Code-Cources-Platform/assets/82625479/b72fbfb1-a0ca-4303-ac32-d4d0370f8448)
->>>>>>> refs/remotes/origin/main
+
 
 <hr>
 
@@ -60,6 +54,4 @@ https://www.figma.com/file/z40JQFsGp7kKiv0B9GWfAU/Code-Course-Platform?type=desi
 
 ![image](https://user-images.githubusercontent.com/82625479/212683879-ad3b76be-638a-4157-85d4-68cdc42e0646.png)
 
-
-<h2>Plan</h2>
 

@@ -8,17 +8,21 @@
 
 {% block content %}
 <div class="task">
+    <input type="hidden" name="" value="{{ course.id }}" id="CourseId"/>
+    <input type="hidden" name="" value="{{ task.id }}" id="TaskId"/>
+
     <div class="task__header"></div>
     <div class="task__content">
-        <div class="task__left">
-        
-        </div>
+        <div class="task__left"></div>
         <div class="task__right">
             <div class="task__right__header">
                 <div class="task__right__header__left">
-                    <span class="material-symbols-outlined">
-                        arrow_back_ios_new
-                    </span>
+                    <a href='/courses/{{ course.id }}'>
+                        <svg width="24" height="20" viewBox="0 0 53 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.07043 5L47.4968 47.4264" stroke="#202020" stroke-width="10" stroke-linecap="round"/>
+                            <path d="M5 89.6583L47.4264 47.2319" stroke="#202020" stroke-width="10" stroke-linecap="round"/>
+                        </svg>                            
+                    </a>
                     {% if task.type == 'video' %}
                         <img src="/static/media/icons/VideoCall.svg" alt="VideoCall" class="task__type"/>
                     {% else %}
@@ -28,14 +32,21 @@
                 </div>
                 <div class="task__right__header__right">
                     <button id="ShareLesson">
-                        <span class="material-symbols-outlined">
-                            share
-                        </span>
+                        <svg width="23" height="20" viewBox="0 0 73 81" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="60.5" cy="12.5" r="12.5" fill="#202020"/>
+                            <circle cx="12.5" cy="40.5" r="12.5" fill="#202020"/>
+                            <circle cx="60.5" cy="68.5" r="12.5" fill="#202020"/>
+                            <line x1="20.8141" y1="45.0068" x2="53.8141" y2="65.0068" stroke="#202020" stroke-width="7"/>
+                            <line x1="20.1859" y1="36.0078" x2="53.1853" y2="16.0069" stroke="#202020" stroke-width="7"/>
+                        </svg>                            
                     </button>
                     <button id="FullScreen">
-                        <span class="material-symbols-outlined">
-                            fullscreen
-                        </span>
+                        <svg width="20" height="20" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="4" y1="24" x2="40" y2="24" stroke="#202020" stroke-width="8" stroke-linecap="round"/>
+                            <line x1="40" y1="60" x2="40" y2="24" stroke="#202020" stroke-width="8" stroke-linecap="round"/>
+                            <line x1="24" y1="4" x2="60" y2="4" stroke="#202020" stroke-width="8" stroke-linecap="round"/>
+                            <line x1="60" y1="40" x2="60" y2="4" stroke="#202020" stroke-width="8" stroke-linecap="round"/>
+                        </svg>                            
                     </button>
                 </div>
             </div>
@@ -43,7 +54,9 @@
                 {% if task.type == 'video' %}
                 <video src="/static/{{ task.video.url }}"></video>
                 {% else %}
-                {{ task.text }}
+                    {% autoescape off %}
+                        {{ task.text }}
+                    {% endautoescape %}
                 {% endif %}
             </div>
         </div>

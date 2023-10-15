@@ -2,18 +2,16 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ...models import Course, Task, TaskOrder
+from user.models import Profile
+from ..utils import get_element_or_404
 
 
 @csrf_exempt
 def tasks_list(request, id):
     if request.user.is_superuser:
-        try:
-            course = Course.objects.get(id=id)
-        except Course.DoesNotExist:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Course not found'
-            }, status=404)
+        course = get_element_or_404(Course, id)
+        if isinstance(course, JsonResponse):
+            return course
                        
         if request.method == 'GET':
             # tasks = course.tasks.order_by('taskorder__order')
@@ -95,4 +93,38 @@ def change_task_place(request, id, task_id, new_order):
             'message': 'User is not a superuser'
         }, status=403)
 
-
+@csrf_exempt
+def task_add_user(request, id):
+    task = get_element_or_404(Task, id)
+    if isinstance(task, JsonResponse):
+        return task
+    
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            if request.user not in task.users_who_completed.all():
+                task.users_who_completed.add(request.user)
+                
+                user = Profile.objects.get(user=request.user)
+                user.scores += task.points
+                
+                user.save()
+                task.save()
+                
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'The task was completed successfully'
+                }, status=200)
+            return JsonResponse({
+                'status': 'success',
+                'message': 'The task has already been completed'
+            }, status=200)
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'User unauthenticated!'
+            }, status=401)
+    else:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Access denied for this method: This method seems to be illegal in this world.'
+        }, status=405)

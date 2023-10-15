@@ -37,24 +37,9 @@ def create_course(request):
 
 def course(request, id):
     course = get_object_or_404(Course, pk=id)
-    tasks = []
-    videos_count = [ ]
-        
-    task_orders = TaskOrder.objects.filter(course_id=id).order_by('order')
-    tasks_all = [task_order.task for task_order in task_orders]
     
-    for task in tasks_all:
-        if task.public:
-            tasks.append(task)
-        if task.type == 'video':
-            videos_count += 1
-
     return render(request, 'course/course.html', {
         'course': course,
-        'tasks': tasks,
-        
-        'videos_count': videos_count,
-        'lessons_count': len(tasks),
     })
     
     
@@ -167,8 +152,8 @@ def course_task_update(request, id, task_id):
             task.title = request.POST.get('title')
             
             type = request.POST.get('type')
+            points = request.POST.get('points')
             task.type = type
-            print(type)
             
             public = request.POST.get('public')
             
@@ -176,6 +161,8 @@ def course_task_update(request, id, task_id):
                 task.public = True
             else:
                 task.public = False  
+                
+            task.points = points
             
             if type == 'text':
                 task.text = request.POST.get('text')
@@ -235,5 +222,6 @@ def course_task(request, id):
     
     return render(request, 'course/task.html', {
         'task': tasks[0],
-        'course': course
+        'course': course,
+        'tasks': tasks,
     })

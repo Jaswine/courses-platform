@@ -3,7 +3,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
 from datetime import datetime
 
-from ...models import Course, CourseReview
+from ...models import Course, CourseReview, TaskOrder
+from ..utils import get_element_or_404
 
 @csrf_exempt
 def courses_list_create(request):
@@ -82,13 +83,9 @@ def courses_list_create(request):
    
 @csrf_exempt
 def courses_get_update_delete(request, id):    
-    try:
-        course = Course.objects.get(id=id)
-    except Course.DoesNotExist:
-        return JsonResponse({
-            'status': 'error',
-            'message': f'Course: {id} not found.'
-        }, status=404)
+    course = get_element_or_404(Course, id)
+    if isinstance(course, JsonResponse):
+        return course
         
     if request.user.is_superuser:
         if request.method == 'PUT':
@@ -118,84 +115,105 @@ def courses_get_update_delete(request, id):
         }, status=403)
     
 @csrf_exempt
+def course_show_tasks(request, id):
+    course = get_element_or_404(Course, id)
+    if isinstance(course, JsonResponse):
+        return course
+
+    if request.method == 'GET':
+        task_orders = TaskOrder.objects.filter(course_id=id).order_by('order')
+        tasks_all = [task_order.task for task_order in task_orders]
+        
+        completed_tasks_count = 0
+        tasks = []
+        
+        for index,task in enumerate(tasks_all):
+            if task.public:
+                status = 'Yes' if request.user in task.users_who_completed.all() else 'No' if request.user.is_authenticated else ''
+                if status == 'Yes':
+                    completed_tasks_count += 1
+
+                tasks.append({
+                    "id": index+1,
+                    "title": task.title,
+                    "type": task.type,
+                    "status": status,
+                })
+        videos_count = sum(1 for task in tasks_all if task.type == 'video')
+        tasks_len = len(tasks)
+
+        return JsonResponse({
+            'course': course.title,
+            'completed': completed_tasks_count * 100 / tasks_len,
+            'tasks_count': tasks_len,
+            'videos_count': videos_count,
+            'tasks': tasks,
+        })
+    
+@csrf_exempt
 def course_add_like(request, id):
-    try:
-        if request.user.is_authenticated:
-            course = Course.objects.get(id=int(id))
-        
-            if request.method == 'POST':
-                if request.user in course.likes.all():
-                    course.likes.remove(request.user)
-                    
-                    return JsonResponse({
-                        'status': 'success',
-                        'message': 'User like removed successfully'
-                    }, status=200)
-                else:
-                    course.likes.add(request.user)
+    course = get_element_or_404(Course, id)
+    if isinstance(course, JsonResponse):
+        return course
+    
+    if request.user.is_authenticated:
+    
+        if request.method == 'POST':
+            if request.user in course.likes.all():
+                course.likes.remove(request.user)
                 
-                    return JsonResponse({
-                        'status': 'success',
-                        'message': 'Course was liked successfully'
-                    }, status=200)
-        else:
-            return JsonResponse({
-                'status': 'error',
-                'message': f'User unauthenticated!'
-            }, status=401)
-        
-                
-    except Course.DoesNotExist:
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'User like removed successfully'
+                }, status=200)
+            else:
+                course.likes.add(request.user)
+            
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Course was liked successfully'
+                }, status=200)
+    else:
         return JsonResponse({
             'status': 'error',
-            'message': f'Course: {id} not found.'
-        }, status=404)
+            'message': f'User unauthenticated!'
+        }, status=401)
         
 @csrf_exempt
 def user_add_to_course(request, id):
-    try:
-        if request.user.is_authenticated:
-            course = Course.objects.get(id=id)
-        
-            if request.method == 'POST':
-                if request.user in  course.users_who_completed_course.all():
-                    course.users_who_completed_course.remove(request.user)
-                    course.save()
-                    
-                    return JsonResponse({
-                        'status': 'success',
-                        'message': 'Course was removed from user profile successfully'
-                    }, status=200)
-                else:
-                    course.users_who_completed_course.add(request.user)
-                    course.save()
-                    
-                    return JsonResponse({
-                        'status': 'success',
-                        'message': 'Course was added to user profile successfully'
-                    }, status=200)
-        else:
-            return JsonResponse({
-                'status': 'error',
-                'message': f'User unauthenticated!'
-            }, status=401)
-        
+    course = get_element_or_404(Course, id)
+    if isinstance(course, JsonResponse):
+        return course
+    
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            if request.user in course.users_who_completed_course.all():
+                course.users_who_completed_course.remove(request.user)
+                course.save()
                 
-    except Course.DoesNotExist:
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Course was removed from user profile successfully'
+                }, status=200)
+            else:
+                course.users_who_completed_course.add(request.user)
+                course.save()
+                
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Course was added to user profile successfully'
+                }, status=200)
+    else:
         return JsonResponse({
             'status': 'error',
-            'message': f'Course: {id} not found.'
-        }, status=404)
+            'message': f'User unauthenticated!'
+        }, status=401)
         
         
 def course_reviews_show_create(request, id):
-    try:
-        course = Course.objects.get(id=id)
-    except Course.DoesNotExist:
-        return JsonResponse({
-            'status': 'error',
-            'message': f'Course with id {id} not found'
-        })
+    course = get_element_or_404(Course, id)
+    if isinstance(course, JsonResponse):
+        return course
         
     if request.method == 'GET':
         reviews = CourseReview.objects.filter(course=course).order_by('-created')
@@ -259,13 +277,9 @@ def course_reviews_show_create(request, id):
     
 @csrf_exempt    
 def course_reviews_delete(request, id):
-    try:
-        review = CourseReview.objects.get(id=id)
-    except CourseReview.DoesNotExist:
-        return JsonResponse({
-            'status': 'error',
-            'message': f'Review with id {id} not found'
-        })
+    review = get_element_or_404(CourseReview, id)
+    if isinstance(review, JsonResponse):
+        return review
         
     if request.user.id == review.user.id:
         if request.method == 'DELETE':
