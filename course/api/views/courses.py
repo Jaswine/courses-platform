@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
 from datetime import datetime
 
-from ...models import Course, CourseReview, TaskOrder
+from ...models import Course, CourseReview, TaskOrder, TaskComment
 from ..utils import get_element_or_404
 
 @csrf_exempt

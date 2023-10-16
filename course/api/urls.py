@@ -17,7 +17,7 @@ urlpatterns = [
     path('courses/edit/<int:id>/tasks', tasks.tasks_list, name='tasks_list_create'),
     path('courses/edit/<int:id>/tasks/<int:task_id>/change-place/to/<int:new_order>', tasks.change_task_place, name='change_task_place'),
     path('tasks/<int:id>/add-to-task', tasks.task_add_user, name='task_add_user'),
-    
+    path('tasks/<int:id>/comments', tasks.task_comments_list_add, name='task_comments_list_add'),
     # Tags
     path('tags', tags.tags_list_create, name='tags_list_create'),
     path('tags/<int:id>/', tags.tags_get_update_delete, name='tags_get_update_delete'),

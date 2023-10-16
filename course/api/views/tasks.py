@@ -1,9 +1,10 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ...models import Course, Task, TaskOrder
+from ...models import Course, Task, TaskOrder, TaskComment
 from user.models import Profile
 from ..utils import get_element_or_404
+from datetime import datetime
 
 
 @csrf_exempt
@@ -122,6 +123,63 @@ def task_add_user(request, id):
             return JsonResponse({
                 'status': 'error',
                 'message': f'User unauthenticated!'
+            }, status=401)
+    else:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Access denied for this method: This method seems to be illegal in this world.'
+        }, status=405)
+        
+@csrf_exempt
+def task_comments_list_add(request, id):
+    task = get_element_or_404(Task, id)
+    if isinstance(task, JsonResponse):
+        return task
+    
+    if request.method == 'GET':
+        comments = TaskComment.objects.filter(task=task)
+        
+        data = [{
+            'id': id,
+            'task': comment.task.id,
+            'user': {
+                'id': comment.user.id,
+                'username': comment.user.username,
+                'image': 'https://images.unsplash.com/photo-1696509528129-c28dc0308733?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2663&q=80',
+            },
+            'text': comment.text,
+            'updated': datetime.fromisoformat(str(comment.updated).replace("Z", "+00:00")).strftime("%d.%m.%Y %H:%M")
+        } for comment in comments]
+        
+        return JsonResponse({
+                'status': 'success',
+                'data': data,
+            }, status=200)
+    
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            text = request.POST.get('text')
+           
+            if len(text) > 10:
+                comment = TaskComment(
+                    task = task,
+                    user = request.user,
+                    text = text,
+                )
+                comment.save()
+                
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Comment created successfully'
+                }, status=201)
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Your comment is too short'
+            }, status=400)
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'User unauthenticated!'
             }, status=401)
     else:
         return JsonResponse({

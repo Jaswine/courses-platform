@@ -9,7 +9,9 @@
 {% block content %}
 <div class="task">
     <input type="hidden" name="" value="{{ course.id }}" id="CourseId"/>
+    <input type="hidden" name="" value="{{ course.title }}" id="CourseTitle"/>
     <input type="hidden" name="" value="{{ task.id }}" id="TaskId"/>
+    <input type="hidden" id="UserId" value="{{ request.user.id }}" />
 
     <div class="task__header"></div>
     <div class="task__content">
@@ -17,12 +19,6 @@
         <div class="task__right">
             <div class="task__right__header">
                 <div class="task__right__header__left">
-                    <a href='/courses/{{ course.id }}'>
-                        <svg width="24" height="20" viewBox="0 0 53 95" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5.07043 5L47.4968 47.4264" stroke="#202020" stroke-width="10" stroke-linecap="round"/>
-                            <path d="M5 89.6583L47.4264 47.2319" stroke="#202020" stroke-width="10" stroke-linecap="round"/>
-                        </svg>                            
-                    </a>
                     {% if task.type == 'video' %}
                         <img src="/static/media/icons/VideoCall.svg" alt="VideoCall" class="task__type"/>
                     {% else %}
@@ -32,7 +28,7 @@
                 </div>
                 <div class="task__right__header__right">
                     <button id="ShareLesson">
-                        <svg width="23" height="20" viewBox="0 0 73 81" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="22" height="20" viewBox="0 0 73 81" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="60.5" cy="12.5" r="12.5" fill="#202020"/>
                             <circle cx="12.5" cy="40.5" r="12.5" fill="#202020"/>
                             <circle cx="60.5" cy="68.5" r="12.5" fill="#202020"/>
@@ -41,7 +37,7 @@
                         </svg>                            
                     </button>
                     <button id="FullScreen">
-                        <svg width="20" height="20" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="22" height="20" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <line x1="4" y1="24" x2="40" y2="24" stroke="#202020" stroke-width="8" stroke-linecap="round"/>
                             <line x1="40" y1="60" x2="40" y2="24" stroke="#202020" stroke-width="8" stroke-linecap="round"/>
                             <line x1="24" y1="4" x2="60" y2="4" stroke="#202020" stroke-width="8" stroke-linecap="round"/>
@@ -58,6 +54,31 @@
                         {{ task.text }}
                     {% endautoescape %}
                 {% endif %}
+                <div class="task__right__content__footer">
+                    <div class="">
+                        {% if tasks.has_previous %}
+                            <a class="btn btn--primary" href="/courses/{{ course.id }}/?tasks={{ tasks.previous_page_number }}">Prev lesson</a>
+                        {% endif %}
+                    </div>
+    
+                    {% if tasks.has_next %}
+                    <a class="btn" href="/courses/{{ course.id }}/?tasks={{ tasks.next_page_number }}">Next lesson</a>
+                    {% endif %}
+                </div>
+                <div class="task__comments">
+                    <div class="task__comments__header">
+                        <h3>📌 Comments</h3>
+                    </div>
+                    <form action="" method="POST" id="TaskCommentsForm">
+                        {% csrf_token %}
+                        <textarea name="text" placeholder="Enter your comment..."></textarea>
+                        <div class="">
+                            <span class=""></span>
+                            <button class="btn">Leave a comment</button>
+                        </div>
+                    </form>
+                    <div class="task__comments__content" id="TaskComments"></div>
+                </div>
             </div>
         </div>
     </div>

@@ -454,6 +454,8 @@
     border-radius: 100%;
     width: 30px;
     height: 30px;
+    object-fit: cover;
+
 }
 .review__header__left a:hover {
     color: var(--violet);
