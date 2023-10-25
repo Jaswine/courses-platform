@@ -1,6 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
+class Skill(models.Model):
+    name = models.CharField(max_length=200)
+    
+    def __str__(self):
+        return self.name
+    
+class Interest(models.Model):
+    name = models.CharField(max_length=200)
+    
+    def __str__(self):
+        return self.name
+
 class Profile(models.Model):
     SKILLS = (
         ('HTML', 'HTML'),
@@ -46,7 +59,6 @@ class Profile(models.Model):
         ('Bitcoin', 'Bitcoin'),
         ('Cryptocurrency', 'Cryptocurrency'),
         ('Decentralized Applications (DApps)', 'Decentralized Applications (DApps)'),
-        ('Graphic Design', 'Graphic Design'),
         ('UI/UX Design', 'UI/UX Design'),
         ('Adobe Photoshop', 'Adobe Photoshop'),
         ('Adobe Illustrator', 'Adobe Illustrator'),
@@ -111,8 +123,8 @@ class Profile(models.Model):
     Telegram = models.CharField(max_length=1000, blank=True)
     website = models.URLField(blank=True)
     
-    skills = models.CharField(max_length=1000, blank=True, choices=SKILLS)
-    interests = models.CharField(max_length=1000, blank=True, choices=INTERESTS)
+    skills = models.ManyToManyField(Skill, blank=True)
+    interests = models.ManyToManyField(Interest, blank=True)
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

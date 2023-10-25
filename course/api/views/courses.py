@@ -222,7 +222,7 @@ def course_reviews_show_create(request, id):
         for review in reviews:
             medium__stars += review.stars
         
-        medium__stars = medium__stars / reviews.count()
+        medium__stars = medium__stars / len(reviews) if len(reviews) > 0 else 0
         
         data = [{
             'id': review.id,
@@ -236,12 +236,18 @@ def course_reviews_show_create(request, id):
             'updated': datetime.fromisoformat(str(review.updated).replace("Z", "+00:00")).strftime("%d.%m.%Y %H:%M")
         } for review in reviews]
         
-        return JsonResponse({
-            'status': 'success',
-            'medium__stars': round(medium__stars, 2),
-            'data': data
-        }, status=200)
-        
+        if len(reviews) > 0:
+            return JsonResponse({
+                'status': 'success',
+                'medium__stars': round(medium__stars, 2),
+                'data': data
+            }, status=200)
+        else:
+            return JsonResponse({
+                'status': 'success',
+                'medium__stars':0,
+            }, status=200)
+            
     elif request.method == 'POST':
         if request.user.is_authenticated:
             message = request.POST.get('message')

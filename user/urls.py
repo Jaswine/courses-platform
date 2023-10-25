@@ -12,5 +12,8 @@ urlpatterns = [
     path('', main.dashboard, name='dashboard'),
     path('favorites', main.favorites, name='favorites'),   
     
-    path('settings', user.settings, name='settings'),   
+    path('settings', user.settings, name='settings'),
+    path('users/<str:username>/', user.profile, name='profile'),
+    path('users/<str:username>/certificates', user.certificates, name='certificates'),
+    
 ]

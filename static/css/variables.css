@@ -4,9 +4,9 @@
     --black: #000;
     --white: #fff;
     --primary: #202020;
-    --lightYellow: #F2E6D9;
+    --lightYellow: rgb(242, 230, 217);
     --pink: #EAB6E1;
-    --violet: #BBA8FD;
+    --violet: rgb(187, 168, 253);
     --lilac: #DDC1EA;
     --lightBlue: #F3F8FF;
     --blue: #DEECFF;

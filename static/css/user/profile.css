@@ -1,0 +1,163 @@
+
+@import './../variables.css';
+
+.page__content {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    width: 100%;
+    margin-left: 200px;
+    padding: 4vh 2vw;
+    padding-bottom: 20vh;
+}
+.profile__back {
+    width: 100%;
+    height: 30vh;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.profile__header {
+    display: grid;
+    grid-template-columns: 20% 75%;
+    justify-content: start;
+    align-items: start;
+    padding: 0.5vh 2vw;
+    width: 100%;
+    gap: 2%;
+}
+.profile__header__left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    margin-top: -40%;
+    gap: 10px;
+}
+.profile__header__left img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 100%;
+    border: 10px solid #fff;
+}
+.profile__header__left .btn {
+    width: 100%;
+    text-align: center;
+}
+.profile__header__right {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    width: 100%;
+}
+.profile__header__right h3 {
+    font-size: 28px;
+}
+.profile__header__right div {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.profile__header__right div a, .profile__header__right div span {
+    color: rgb(20,20,20, .6);   
+}
+.profile__header__right div span {
+    font-size: 18px;
+}
+.profile__tags b {
+    font-size: 18px;
+}
+.profile__tags a {
+    background-color: rgb(242, 230, 217, .6);   
+    border-radius: 4px;
+    padding: 3px 6px; 
+    font-size: 16px;
+}
+.profile__tags a:hover {
+    background-color: rgb(242, 230, 217, .9);    
+}
+.profile__menu  {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+    gap: 5%;
+    padding: 2vh 2vw;
+}
+.profile__menu__link {
+    font-size: 20px;
+    color: rgb(20,20,20, .6);
+    font-weight: bold;
+}
+.profile__menu__link::after {
+    display: block;
+    content: '';
+    width: 0%;
+    height: 4px;
+    border-radius: 10px;
+    background-color: var(--pink);
+    transition: all .3s linear;
+}
+.profile__menu__link:hover {
+    color: #202020;
+}
+.profile__menu__link:hover::after {
+    width: 50%;
+}
+.profile__menu__activate {
+    color: #202020;
+}
+.profile__menu__activate::after {
+    width: 50%;
+}
+.profile__description {
+    font-size: 16px;
+}
+.profile__courses {
+    width: 70%;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    gap: 5%;
+    padding: 1vh 2vw;
+}
+.profile__course {
+    display: grid;
+    grid-template-columns: 54% 24% 12% ;
+    align-items: center;
+    /* background-color: rgba(174, 174, 174, 0.2); */
+    border: 2px solid rgba(174, 174, 174, 0.3);
+    border-radius: 8px;
+    padding: 14px;
+    gap: 10px;
+    width: 100%;
+    /* border: 2px solid rgb(20,20,20, .1); */
+    transition: all .3s linear;
+}
+.profile__course:hover {
+    box-shadow: 3px 3px 10px rgba(174, 174, 174, 0.4);
+}
+.profile__course a {
+    font-weight: bold;
+    font-size: 18px;
+}
+.profile__course span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border-radius: 10px;
+    padding: 3px 4px;
+    font-size: 16px;
+}
+.profile__course span:first-child {
+    font-weight: 600;
+}

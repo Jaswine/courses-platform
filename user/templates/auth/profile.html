@@ -1,0 +1,78 @@
+{% include 'main.html' %}
+{% comment %} {% load socialaccount account static %} {% endcomment %}
+
+{% block title %}
+    <link rel="stylesheet" href="/static/css/user/profile.css">
+
+    <title>{{ user.username }}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page">
+    {% include "header.html" %}
+    <div class="page__content">
+        <img src="/static/{{ profile.backImage.url }}" alt="{{ profile.user.username }}" class="profile__back" />
+        <div class="profile__header">
+            <div class="profile__header__left">
+                <img src="/static/{{profile.image.url }}" alt="{{ profile.user.username }}" />
+                <a class="btn">+ Follow</a>
+                <a class="btn btn--primary">+ Write a message</a>
+            </div>
+            <div class="profile__header__right">
+                <h3>{{ profile.user.username }}</h3>
+                <div>
+                    <span>{{ profile.location }}</span>
+                    {% if profile.website %} <a href="{{ proprofile__header__leftfile.website }}">Website</a>{% endif %}
+                    {% if profile.Twitter %} <a href="{{ profile.Twitter }}">Twitter</a>{% endif %}
+                    {% if profile.GitHub %} <a href="{{ profile.GitHub }}">GitHub</a>{% endif %}
+                    {% if profile.GitLub %} <a href="{{ profile.GitLub }}">GitLub</a>{% endif %}
+                    {% if profile.Linkedin %} <a href="{{ profile.Linkedin }}">Linkedin</a>{% endif %}
+                    {% if profile.Telegram %} <a href="{{ profile.Telegram }}">Telegram</a>{% endif %}
+                </div>
+                {% if profile.skills.count > 0 %}
+                    <div class="profile__tags">
+                        <b>Skills:  </b>
+                        {% for skill in profile.skills.all %}
+                            <a>{{ skill }}</a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if profile.skills.count > 0 %}
+                <div class="profile__tags">
+                    <b>Interests: </b>
+                    {% for skill in profile.interests.all %}
+                        <a>{{ skill}}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if profile.bio %}
+                <div class="profile__description">
+                    {{ profile.bio }}
+                </div>
+                {% endif  %}
+            </div>
+        </div>
+        <div class="profile__menu">
+            <a href="/users/{{ user.username }}" class="profile__menu__link {% if status == 'profile' %}profile__menu__activate{% endif %}">Profile</a>
+            <a href="/users/{{ user.username }}/certificates" class="profile__menu__link {% if status == 'certificates' %}profile__menu__activate{% endif %}">Certificates</a>
+        </div>
+       {% if status == 'profile' %}
+        <div class="profile__courses">
+            {% for course in courses %}
+                <div class="profile__course">
+                    <a href="/courses/{{ course.id }}">
+                        {{ course.title }}
+                    </a>
+                    <span>{{ course.points_earned }} / {{ course.points_all }}</span>
+                    <span style="{% if course.status == 'Began' %} background-color: rgb(242, 230, 217, .2); color:  rgb(242, 230, 217); {% elif course.status == 'Completed' %} background-color: rgb(187, 168, 253, .2); color: #BBA8FD;{% else %} background-color: rgb(208, 162, 200, .2); color: #D0A2C8; {% endif  %}">{{ course.status }}</span>
+                </div>
+            {% endfor %}
+        </div>
+       {% else %}
+        <div class="profile__courses">
+            
+        </div>
+       {% endif %}
+    </div>
+</div>
+{% endblock content %}
