@@ -8,31 +8,33 @@
 
 {% block content %}
 <div class="content">
-    <!-- Header -->
-    <header class="header">
+     <!-- Header -->
+     <header class="header">
         <div class="header__left">
-            <a href="/">Courses  Platform</a>
+            <a href="/" class="header__logo">Courses Platform</a>
+        </div>
+        <div class="header__left__menu">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#courses">Courses</a>
+            <a href="#articles">Articles</a>
         </div>
         <div class="header__right">
-            <a href="{% url 'auth:sign-up' %}">Sign Up</a>
-            <a href="{% url 'auth:sign-in' %}">Sign In</a>
+            <a href="{% url 'auth:sign-in' %}" class="button">
+                Login/Register
+            </a>
         </div>
     </header>
 
     <!-- Intro -->
     <div class="intro">
-        <div class="intro__right">
+
+        <div class="intro__center">
             <h2>Unlock Your Potential: Elevate Your Knowledge with the Finest Courses.</h2>
             <p>Your Path to Excellence Starts Here.</p>
             <div class="intro__right__buttons">
                 <a href="{% url 'auth:sign-in' %}" class="btn">Sign In</a>
-                <a href="/courses">Show All Courses</a>
-            </div>
-        </div>
-        <div class="intro__left">
-            <img src="/static/media/index/rightback.png" alt="back">
-            <div class="intro__left__code">
-                <img src="/static/media/index/code.png" alt="code" />
+                <a href="/courses"  class="btn btn--primary">Show All Courses</a>
             </div>
         </div>
     </div>
@@ -41,10 +43,11 @@
     <div class="about">
         <!-- <div class="title">About Our Platform</div> -->
         <div class="about__content">
+            <div class="about__content__circle"></div>
             <div class="about__content__line">
                 <span class="about__content__line__draw"></span>
             </div>
-            <div class="about__content__left">
+            <div class="about__content__left about__content__left__spec">
                 <div class="card card1">
                     <img src="/static/media/index/image1.png" alt="image 1" >
                 </div>
