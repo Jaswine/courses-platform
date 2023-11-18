@@ -23,9 +23,12 @@ def create_course(request):
             if form.is_valid():
                 course = form.save(commit=False)
                 course.user = request.user
+                print(course.title)
             
                 form.save()
                 return redirect('/')
+            else:
+                messages.error(request, 'Form is not valid')
         
         return render(request, 'course/create_course.html', {
             'form': form
@@ -41,7 +44,6 @@ def course(request, id):
     return render(request, 'course/course.html', {
         'course': course,
     })
-    
     
 @login_required(login_url='auth:sign-in')
 def course_edit(request, id):    

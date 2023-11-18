@@ -51,7 +51,7 @@
     width: 100%;
     /* height: 35vh; */
     height: 100%;
-    background-color: rgb(254,254,254,.4);
+    background-color: rgb(254,254,254,.6);
     position: absolute;
     top: 0;
     left: 0;
@@ -175,7 +175,7 @@
     padding: 2vh 0;
 }
 .course__content__left {
-    width: 60%;
+    width: 55%;
     display: flex;
     justify-content: start;
     align-items: start;
@@ -186,7 +186,7 @@
     margin-bottom: 2%;
 }
 .course__content__right {
-    width: 40%;
+    width: 45%;
     gap: 10px;
     display: flex;
     justify-content: center;

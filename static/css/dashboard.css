@@ -116,10 +116,32 @@
 }
 .page__content__courses h2 {
     font-family: var(--PaytoneOne);
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 400;
     height: 15vh;
     display: flex;
     justify-content: start;
     align-items: center;
+}
+.page__content__notfound {
+    width: 100%;
+    height: 20vh;
+    border: 4px solid rgb(20,20,20,.2);
+    color: rgb(20,20,20,.2);
+    font-weight: bold;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    flex-direction: column;
+    margin-bottom: 2%;
+    font-size: calc((1vw + 1vh) * 1.4);
+}
+.page__content__others {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 15px;
+    font-family: var(--PaytoneOne);
+    font-size: 24px;
 }

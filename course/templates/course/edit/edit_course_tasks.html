@@ -17,8 +17,13 @@
         <div class="page__content__main">
             <div class="page__content__header">
                 <h2>Edit Tasks 🗒</h2>
-                <a href="{% url 'course:course_tasks_create' course.id %}" class="btn button__spec">Create a Task</a>
+                {% comment %} <a href="{% url 'course:course_tasks_create' course.id %}" class="btn button__spec">Create a Task</a> {% endcomment %}
             </div>
+            <form action="" class="page__content__" method="POST">
+                {% csrf_token %}
+                <input type="text" placeholder="Enter title subject...">
+                <button type="submit">Create</button>
+            </form>
             <div class="page__content__tasks" id='CourseTasks'></div>
         </div>
         <div class="page__content__sorting" style="justify-content: center; height: 16vh">

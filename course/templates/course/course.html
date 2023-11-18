@@ -103,7 +103,7 @@
                 {% comment %} Enroll / Drop in a course {% endcomment %}
                 <div class="course__content__right__place__spec"> 
                     {% if request.user.is_authenticated %}
-                        {% if request.user in course.users_who_completed_course.all %}
+                        {% if request.user in course.users_who_registered.all %}
                             <a class='btn course__continue'>Continue</a>
                             <button class="btn" id='EnrollInACourse'>Drop</button>
                         {% else %}

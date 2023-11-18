@@ -17,15 +17,15 @@ class Course(models.Model):
         ('Intermediate', 'Intermediate'),
         ('Expert', 'Expert'),
     )
-    title = models.CharField(max_length=150)
+    title = models.CharField(max_length=250)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
-    image = models.ImageField(upload_to='courses', blank=True)
+    image = models.ImageField(upload_to=f'courses/{title}', blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
 
     #TODO: About this course
     # about = models.TextField(max_length=2000, blank=True)
-    about = RichTextField(max_length=2000, blank=True)
+    about = RichTextField(blank=True)
     level = models.CharField(max_length=13, choices=LEVEL)
       
     #TODO: Public or Unpublic
@@ -66,7 +66,7 @@ class Task(models.Model):
     type = models.CharField(max_length=10, choices=TYPE, blank=True)
     points = models.IntegerField(default=0)
 
-    video = models.FileField(upload_to='courses/tasks/videos', blank=True)
+    video = models.FileField(upload_to=f'courses/tasks/videos', blank=True)
     text = RichTextField(default="", blank=True)
     urls  = models.ManyToManyField("TaskURLField", default=[],  blank=True)
     questions = models.ManyToManyField("Question", default=[], blank=True)

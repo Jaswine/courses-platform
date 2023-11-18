@@ -9,8 +9,8 @@ from course.models import Course, Tag
 
 def dashboard(request):
     if request.user.is_authenticated:
-        courses_before_3 = request.user.users_who_completed_course.all()[:3]
-        courses_after_3 = request.user.users_who_completed_course.all()[3:]
+        courses_before_3 = request.user.users_who_registered.all()[:3]
+        courses_after_3 = request.user.users_who_registered.all()[3:]
     
         context = {
             'courses_before_3': courses_before_3,

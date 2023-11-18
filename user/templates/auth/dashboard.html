@@ -3,6 +3,7 @@
 
 {% block title %}
     <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link rel="stylesheet" href="/static/css/courses.css">
     <title>Dashboard</title>
 {% endblock title %}
 
@@ -22,6 +23,8 @@
                     {% endif %}
                 </div>
             </div>
+            <h2 class="page__content__others">My courses  🗂</h2>
+            {% if courses_before_3 > 0 %}
             <div class="page__content__popular">
                 {% for course in courses_before_3 %}
                     <div class="popular__course">
@@ -51,9 +54,18 @@
                         </div>
                     </div>
                 {% endfor %}
-            </div>
+                </div>
+                {% else %}
+                <div class="page__content__notfound">
+                    Nothing found 🗑
+                </div>
+                <h2 class="page__content__others">Other Courses  📚</h2>
+                <div class="page__content__courses" id='ShowAllCourses'></div>
+
+                <script src='/static/js/courses/courses.js' ></script>
+                {% endif %}
             <div class="page__content__courses">
-                <h2>Other Courses 😍</h2>
+                {% comment %} <h2>Other Courses 😍</h2> {% endcomment %}
             </div>
         </div>
         <div class="page__content__comments">

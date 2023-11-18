@@ -8,6 +8,5 @@ venv/
 .env
 *.env
 
-courses
-courses/
-
+/media/courses
+/media/courses/

@@ -60,7 +60,7 @@
     color: rgb(20,20,20, .8);
 }
 .header__left__menu a:hover {
-    color: var(--violet);
+    color: var(--pink);
 }
 
 .header__logo {
@@ -85,7 +85,7 @@
 }
 .header__right .button {
     background-color: var(--pink);
-    color: var(--white);
+    /* color: var(--white); */
     border: none !important;
     font-weight: 400;
     border-radius: 5px;
@@ -93,11 +93,13 @@
     padding: 10px 20px;
 }
 .header__right a i {
+
 }
 .header__right .button:hover {
     background-color: var(--white);
     color: var(--black);
     border: none !important;
+    box-shadow: 0 0 10px 1px rgba(20, 20, 20, .1);
 }
 
 /* TODO:  intro */
@@ -116,10 +118,53 @@
     /* background: rgb(187,168,253);
     background: linear-gradient(125deg, rgba(187,168,253,0.3) 0%, rgba(234,182,225,0.3) 50%, rgba(242,230,217,0.3) 100%);  */
 
-    background: rgb(187,168,253);
-    background: linear-gradient(180deg, rgba(187,168,253,0.3) 0%, rgba(234,182,225,0.3) 50%, rgba(255,255,255,1) 100%); 
-
+    position: relative;
     margin-bottom: 10vh;
+}
+.intro__back {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    width: 100vw;
+    height: 100vh;
+
+    z-index: -1;
+    position: absolute;
+
+    top: 0;
+    left: 0;
+}
+.intro__back__gradient {
+    display: block;
+    content: '';
+    width: 100vw;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    background: rgb(187,168,253);
+    z-index: 2;
+    background: linear-gradient(180deg, rgba(187,168,253,0.3) 0%, rgba(234,182,225,0.3) 50%, rgba(255,255,255,1) 100%); 
+}
+.intro__back img {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: 1;
+    object-fit: cover;
+    opacity: .5;
+}
+.intro__back video {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: 1;
 }
 .intro__center {
     display: flex;
@@ -129,7 +174,7 @@
 }
 .intro__center h2 {
     font-family: var(--PaytoneOne);
-    font-size: calc((1vw + 1vh) * 1.8);
+    font-size: calc((1vw + 1vh) * 2);
     text-align: center;
     max-width: 70vw;
     margin-bottom: 1%;
@@ -141,7 +186,7 @@
 }
 .btn--primary {
     background-color: var(--pink);
-    color: var(--white);
+    /* color: var(--white); */
 }
 .intro__right__buttons {
     width: 100%;

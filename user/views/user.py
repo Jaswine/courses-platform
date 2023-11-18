@@ -16,7 +16,7 @@ def profile(request, username):
     user = User.objects.get(username=username)
     profile = Profile.objects.get(user=user)
     courses = []
-    courses_base = user.users_who_completed_course.all()
+    courses_base = user.users_who_registered.all()
     
     for course in courses_base:
         completed_tasks_count = 0

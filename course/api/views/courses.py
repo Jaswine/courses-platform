@@ -43,7 +43,6 @@ def courses_list_create(request):
                 'user': course.user.username,
                 'tags': [{'id': tag.id, 'name': tag.name} for tag in course.tags.all()],
                 'image': course.image.url if course.image else None,
-                'about': course.about[:200],
                 'likes': course.likes.count(),
                 'comments_count': CourseReview.objects.filter(course=course).count(),
                 'liked_for_this_user':True if request.user in course.likes.all() else False,
@@ -187,8 +186,8 @@ def user_add_to_course(request, id):
     
     if request.user.is_authenticated:
         if request.method == 'POST':
-            if request.user in course.users_who_completed_course.all():
-                course.users_who_completed_course.remove(request.user)
+            if request.user in course.users_who_registered.all():
+                course.users_who_registered.remove(request.user)
                 course.save()
                 
                 return JsonResponse({
@@ -196,7 +195,7 @@ def user_add_to_course(request, id):
                     'message': 'Course was removed from user profile successfully'
                 }, status=200)
             else:
-                course.users_who_completed_course.add(request.user)
+                course.users_who_registered.add(request.user)
                 course.save()
                 
                 return JsonResponse({
