@@ -1,0 +1,97 @@
+@import './../../variables.css';
+
+.page__content__form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    /* gap: 10px; */
+    padding-bottom: 0;
+    flex-direction: row;
+    border-radius: 10px 0 0 10px;
+    margin-bottom: 4vh;
+}
+.page__content__form input {
+    border-right: none;
+    border-radius: 10px 0 0 10px;
+    padding: 15px 15px;
+    width: 80%;
+}
+.page__content__form input:hover {
+    border: 2px solid rgb(20,20,20, .8);
+}
+.page__content__form input:focus {
+    border: 2px solid rgb(20,20,20, .8);
+}
+.page__content__form button {
+    margin-left: -6px;
+    padding: 17px 15px;
+    width: 100%;
+    max-width: 25%;
+}
+.page__content__titles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+.page__content__titles h2 {
+    color: rgb(20,20,20, .3);
+}
+
+/* Title */
+.course__title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    border: 2px solid rgb(20,20,20, .4);
+    border-radius: 10px;
+    padding: 4px 10px ;
+    transition: all .3s linear;
+    margin-bottom: 10px;
+}
+.course__title:hover {
+    border: 2px solid rgb(20,20,20, .8);
+    box-shadow: 4px 4px 10px rgba(20,20,20, .2);
+    scale: 1.05;
+}
+
+.course__title__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.course__title__header input {
+    border: none;
+    width: 100%;
+}
+.course__title__header div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.course__title__header div button {
+    background-color: transparent;
+    font-size: 18px;
+    color: rgb(20,20,20, .4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 4px 6px ;
+    border-radius: 100%;
+    /* background-color: rgb(20,20,20, .3); */
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    padding: 4px;
+}
+.course__title__header div button:hover {
+    color: rgb(20,20,20, .8);
+    background-color: rgb(187, 168, 253, .1);
+}

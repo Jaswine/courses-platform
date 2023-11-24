@@ -36,7 +36,7 @@
     justify-content: start;
     align-items: center;
     width: 100%;
-    max-width: 200px;
+    max-width: 240px;
 }
 .page__content__header form a {
     width: 100%;
@@ -203,6 +203,7 @@
     margin: 0 -14px 0 0;
     width: 100%;
     max-width: 300px;
+    border-right: none;
 }
 .search::placeholder {
     color: rgb(20,20,20,.25);
@@ -266,7 +267,8 @@
     background-color: rgb(20,20,20, .15);
 }
 .course__header__menu {
-    opacity: .8;
+    opacity: .6;
+    width: 25px;
     cursor: pointer;
  }
  .course__header__menu:hover {

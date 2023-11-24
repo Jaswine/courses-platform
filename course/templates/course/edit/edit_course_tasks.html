@@ -21,10 +21,10 @@
             </div>
             <form action="" class="page__content__form" id="CreateTitleForm" method="POST">
                 {% csrf_token %}
-                <input type="text" placeholder="Enter title subject...">
-                <button type="submit">Create</button>
+                <input type="text" name='title' minlength="5" maxlength="255" placeholder="Enter title subject..." />
+                <button type="submit"  class="btn">Create</button>
             </form>
-            <div class="page__content__titles" id='CourseTitles'></div>
+            <div class="page__content__titles" id='CourseData'></div>
         </div>
         <div class="page__content__sorting" style="justify-content: center; height: 16vh">
             <a href='{% url "course:course-edit" course.id %}' class="btn">Change Info</a>

@@ -1,10 +1,11 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ...models import Course, Title, TitleOrder
+from ...models import Course, Title, TitleOrder, TaskOrder, Task
 from ..utils import get_element_or_404
 
 
+@csrf_exempt
 def title_list_create(request, id):
     if request.user.is_superuser:
         course = get_element_or_404(Course, id)
@@ -15,18 +16,19 @@ def title_list_create(request, id):
         if request.method == 'GET':
             titles = course.course_titles.order_by('taskorder__order')
             title_orders = TitleOrder.objects.filter(course_id=id).order_by('order')
-            titles = [task_order.task for task_order in title_orders]
+            titles = [title_order.title for title_order in title_orders]
             
             if len(titles) > 0:
                 data = [{
                     'id': title.id, 
                     'title': title.title, 
                     'public': title.public,
+                    'tasks': [task_order for task_order in TaskOrder.objects.filter(title_id=title.id).order_by('order')]
                 } for title in titles]
                 
                 return JsonResponse({
                     'size': len(titles),
-                    'tasks': data   
+                    'titles': data,
                 }, safe=False)
             else:
                 return JsonResponse({
@@ -34,15 +36,14 @@ def title_list_create(request, id):
                     'message': 'Titles not found'
                 })
         elif request.method == 'POST':
-            title = request.POST.get('title', '')
-
-            if 0 < len(title) < 255:
-                title = Title.objects.create(title=title)
+            get_title = request.POST.get('title', '')
+            if  255 > len(get_title) > 0 :
+                title = Title.objects.create(title=get_title)
                 title.save()
             
                 order = course.course_titles.count() + 1
                 TitleOrder.objects.create(course=course, title=title, order=order)
-                course.tasks.add(title)
+                course.course_titles.add(title)
 
                 return JsonResponse({
                     'status': 'success',
@@ -65,7 +66,7 @@ def title_list_create(request, id):
             'message': 'User is not a superuser'
         }, status=403)
 
-
+@csrf_exempt
 def title_update_delete(request, id):
     if request.user.is_superuser:
         course_title = get_element_or_404(Title, id)
@@ -73,23 +74,36 @@ def title_update_delete(request, id):
         if isinstance(course_title, JsonResponse):
             return course_title
         
-        if request.method == 'PUT':
+        if request.method == 'POST':
             title = request.POST.get('title', '')
             public = request.POST.get('public', None)
-            
+            is_changed = False
+
             if 0 < len(title) < 255:
                 course_title.title = title
+                is_changed = True
                 course_title.save()
             
             if public:
-                course_title.public = public
+                print('public', public)
+                if public == 'true':
+                    course_title.public = False
+                else: 
+                    course_title.public = True
+                is_changed = True
                 course_title.save()
 
-            return JsonResponse({
-                'status': 'success',
-                'message': 'Title updated successfully!'
-            }, status=200)
-
+            if is_changed:
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Title updated successfully!'
+                }, status=200)
+            else: 
+                 return JsonResponse({
+                    'status': 'success',
+                    'message': 'Title didn\'t change!'
+                }, status=200)
+            
         if request.method == 'DELETE':
             course_title.delete()
 

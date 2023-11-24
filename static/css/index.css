@@ -523,6 +523,7 @@
     margin: 0 -14px 0 0;
     width: 100%;
     max-width: 300px;
+    border-right: none;
 }
 .search::placeholder {
     color: rgb(20,20,20,.25);

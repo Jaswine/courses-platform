@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const ShowAllCourses = document.querySelector('#ShowAllCourses')
     const searchForm = document.querySelector('#searchForm', '')
-    const user__status = document.querySelector('.user__status', '')
+    const user__status = document.querySelector('.user__status', 'None')
+    console.log(user__status.value)
 
     // Взятие тэгов для фильтрации
     let search = ''
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         div.innerHTML = `
                             <div class='course__header'>
                                 <a href='/courses/${course.id}'>${course.title}</a>
-                                ${user__status ? `
+                                ${user__status? user__status.value == 'True' ? `
                                     <img src='/static/media/icons/MenuVertical.svg' 
                                         alt='MenuVertical' 
                                         class='course__header__menu' />
@@ -37,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <a href='/courses/${course.id}/edit'>Edit</a>
                                         <a href='/courses/${course.id}/delete'>Delete</a>
                                     </div>
-                                `: ''}
+                                `: '' : ""}
                             </div>
                             <div class='course__pod__header'>
                                 <a href='/users/${course.user}'>${course.user}</a>
@@ -162,15 +163,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (ShowFilters) {
-        ShowFilters.querySelector('#orderByDate').addEventListener('change', (e) => {
-            filters[0] = e.target.value
-            getCourses()
-        })
-    
-        ShowFilters.querySelector('#filterByTag').addEventListener('change', (e) => {
-            filters[2] = e.target.value
-            getCourses()
-        })
+        try {
+            ShowFilters.querySelector('#orderByDate').addEventListener('change', (e) => {
+                filters[0] = e.target.value
+                getCourses()
+            })
+        
+            ShowFilters.querySelector('#filterByTag').addEventListener('change', (e) => {
+                filters[2] = e.target.value
+                getCourses()
+            })
+        } catch (error) {
+            console.log('Filters not found', error)
+        }
     }
 
     ShowAllCourses.addEventListener('click', (e) => {

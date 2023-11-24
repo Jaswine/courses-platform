@@ -17,6 +17,7 @@ body {
     font-family: var(--Roboto);
     overflow-x: hidden;
 }
+
 a {
     color: rgb(20,20,20,.9);
 }
@@ -35,6 +36,16 @@ a {
 }
 .btn--primary {
 
+}
+input {
+   border-radius: 10px; 
+   padding: 12px;
+   font-size: 18px;
+   color: rgb(20,20,20,.9);
+   width: 100%;
+   border: 2px solid rgb(20,20,20,.25);
+}
+input:hover {
 }
 a, button, input, textarea, select, textarea {
     transition: all .3s linear;

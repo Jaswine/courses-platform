@@ -16,6 +16,7 @@ body {
    overflow-x: hidden;
 }
 
+
 ::selection {
    background-color: #00f98d;
    color: var(--black);
