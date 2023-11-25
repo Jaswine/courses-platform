@@ -69,6 +69,19 @@
             <div class="course__content__left">
                 <!--  <h3>Course program:</h3> -->
 
+                {% comment %} about {% endcomment %}
+                <div class="course__about">
+                    <h2>📎 About</h2>
+                    <div class="course__about">
+                        <p>{% autoescape off %}
+                            <div class="text">
+                                {{ course.about }}
+                            </div>
+                            {% endautoescape %}</p>
+                    </div>
+                    <p><b>Level: </b> {{ course.level }}</p>
+                </div>
+
                 {% comment %} tasks {% endcomment %}
                 <div class="tasks"></div>
 
@@ -111,16 +124,6 @@
                         {% endif %}
                     {% endif %}
                </div>
-
-               {% comment %} about {% endcomment %}
-                <div class="course__content__right__place">
-                    <p><b>About: </b> {% autoescape off %}
-                        <div class="text">
-                            {{ course.about }}
-                        </div>
-                        {% endautoescape %}</p>
-                    <p><b>Level: </b> {{ course.level }}</p>
-                </div>
 
                 {% comment %} share on social networks {% endcomment %}
                 <div class="course__content__right__place">

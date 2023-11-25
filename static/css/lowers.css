@@ -9,9 +9,6 @@ select {
     background-color: transparent;
     cursor: pointer;
 }
-select:focus {
-    border-color: var(--violet);
-}
 select:hover {
     border-color: var(--violet);
 }

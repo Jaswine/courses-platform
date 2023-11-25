@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 
 from django.contrib.auth.models import User
-from ..models import Tag, Course, Task, TaskOrder
+from ..models import Tag, Course, Task, TaskOrder, Title, TitleOrder
 
 from ..forms import CourseForm
 
@@ -99,9 +99,10 @@ def course_edit_tasks(request, id):
         return redirect('/')
     
 @login_required(login_url='auth:sign-in')
-def course_task_create(request, id):    
+def course_task_create(request, id, title_id):    
     if request.user.is_superuser:
         course = get_object_or_404(Course, pk=id)
+        title = get_object_or_404(Title, pk=title_id)
         
         if request.method == 'POST':
             title = request.POST.get('title')
@@ -121,21 +122,23 @@ def course_task_create(request, id):
             
             task.save()
             
-            if type == 'text':
+            if type == 'TaskText':
                 task.text = request.POST.get('text')
-                
-            elif type == 'video':
+            elif type == 'TaskVideo':
+                task.text = request.POST.get('text')
                 task.video = request.FILES.get('video') 
+            elif type == 'TaskProject':
+                task.text = request.POST.get('text')
+            # elif type == 'TaskQuestions':
+            #     task.questions.add()
                 
             task.save()            
                     
-            order = course.tasks.count() + 1
-            TaskOrder.objects.create(course=course, task=task, order=order)
+            order = title.tasks.count() + 1
+            TitleOrder.objects.create(title=title, task=task, order=order)
             
-            course.tasks.add(task)
-            
+            title.tasks.add(task)
             return redirect('course:course-edit-tasks', course.id)
-            
         
         return render(request, 'course/edit/course_tasks_form.html', {
             'course': course,

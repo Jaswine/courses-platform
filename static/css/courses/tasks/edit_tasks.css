@@ -75,7 +75,7 @@
     align-items: center;
     gap: 10px;
 }
-.course__title__header div button {
+.course__title__header div button, .course__title__header div a {
     background-color: transparent;
     font-size: 18px;
     color: rgb(20,20,20, .4);
@@ -91,7 +91,7 @@
     height: 30px;
     padding: 4px;
 }
-.course__title__header div button:hover {
+.course__title__header div button:hover, .course__title__header div a:hover {
     color: rgb(20,20,20, .8);
-    background-color: rgb(187, 168, 253, .1);
+    background-color: rgb(187, 168, 253, .3);
 }

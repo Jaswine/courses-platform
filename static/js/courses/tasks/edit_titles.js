@@ -38,6 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <button 
                                     class="fa-solid fa-trash course__title__header__remove" 
                                     title="Remove"></button>
+                                <a 
+                                    class="fa-solid fa-circle-plus course__title__header__add__new__task " 
+                                    title="Add new task" 
+                                    href="/courses/${course_id}/title/${title.id}/tasks-create"></a>
                                 <button 
                                     class="fa-solid fa-sort-down course__title__header__open" 
                                     title="Open"></button>
@@ -152,6 +156,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.target.classList.contains('course__title__header__open')) {
             const title = e.target.parentNode.parentNode.parentNode;
             console.log(title)
+            
+        }
+
+          // Open issues under title
+          if (e.target.classList.contains('course__title__header__add__new__task')) {
+            window.location.href = e.target.href
             
         }
 

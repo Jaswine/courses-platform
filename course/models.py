@@ -56,14 +56,15 @@ class Title(models.Model):
 
 class Task(models.Model):
     TYPE = (
-        ('text','text'),
-        ('video', 'video'),
-        ('project','project'),
-        ('code', 'code'),
+        ('TaskText','TaskText'),
+        ('TaskVideo', 'TaskVideo'),
+        ('TaskProject','TaskProject'),
+        ('TaskQuestions', 'TaskQuestions'),
+        ('TaskCode', 'TaskCode'),
     )
     
     title = models.CharField(max_length=255)
-    type = models.CharField(max_length=10, choices=TYPE, blank=True)
+    type = models.CharField(max_length=20, choices=TYPE, blank=True)
     points = models.IntegerField(default=0)
 
     video = models.FileField(upload_to=f'courses/tasks/videos', blank=True)
@@ -72,28 +73,44 @@ class Task(models.Model):
     questions = models.ManyToManyField("Question", default=[], blank=True)
     code_tasks = models.ManyToManyField("CodeTask", default=[], blank=True)
 
-    # @classmethod    
-    # def video_task(cls, video):
-    #     return Task.objects.create(
-    #         type = "video",
-    #         video = video,
-    #         text = ""
-    #     )
+    @classmethod    
+    def video_task(cls, text, video):
+        return Task.objects.create(
+            type = "TaskVideo",
+            video = video,
+            text = text,
+        )
         
-    # @classmethod
-    # def text_task(cls, text):
-    #     return Task.objects.create(
-    #         type = 'text',
-    #         text = text,
-    #     )
+    @classmethod
+    def text_task(cls, text):
+        return Task.objects.create(
+            type = 'TaskText',
+            text = text,
+        )
         
-    # @classmethod    
-    # def project_task(cls, text, urls):
-    #     return Task.objects.create(
-    #         type = "project",
-    #         text = text,
-    #         urls = urls
-    #     )
+    @classmethod    
+    def project_task(cls, text, urls):
+        return Task.objects.create(
+            type = "TaskProject",
+            text = text,
+            urls = urls
+        )
+    
+    @classmethod    
+    def questions_task(cls, text, questions):
+        return Task.objects.create(
+            type = "TaskQuestions",
+            text = text,
+            questions = questions
+        )
+    
+    @classmethod    
+    def code_task(cls, text, code_tasks):
+        return Task.objects.create(
+            type = "TaskCode",
+            text = text,
+            code_tasks = code_tasks
+        )
                 
     public = models.BooleanField(default=False)
 
@@ -125,7 +142,6 @@ class Question(models.Model):
     type = models.CharField(max_length=100, choices=QUESTION_TYPES)
 
     answers_to_choose = models.ManyToManyField("QuestionAnswersToChoose", blank=True)
-    users_who_completed_question = models.ManyToManyField(User, related_name='users_who_completed_question', blank=True)
 
     correct_answer = models.CharField(max_length=200)
 
@@ -153,10 +169,8 @@ class QuestionAnswersToChoose(models.Model):
     
 # ?: Code Task
 class CodeTask(models.Model):
-    title = models.CharField(max_length=500)
-    text = models.TextField()
-
-    users_who_completed_code = models.ManyToManyField(User, related_name='users_who_completed_code', blank=True)
+    title = models.TextField()
+    code = models.TextField()
 
     def __str__(self) -> str:
         return self.title

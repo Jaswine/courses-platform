@@ -21,7 +21,8 @@ def title_create(request, id):
                 task = Task.objects.create(
                     title = title,
                     type = type,
-                    points = points
+                    points = points,
+                    public = False
                 )
                 task.save()
             

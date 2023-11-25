@@ -53,14 +53,6 @@ select:focus option:checked {
     background-color: var(--violet);
     color: var(--white);
 }
-select:focus option:hover {
-    background-color: var(--violet);
-    color: var(--white);
-}
-select:focus {
-    background-color: var(--violet);
-    color: var(--white);
-}
 input:hover, select:hover, textarea:hover {
     border-color: var(--violet);
 }

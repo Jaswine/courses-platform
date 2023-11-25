@@ -1,0 +1,40 @@
+.form__field__selected {
+    border-right: none;
+    /* border: 2px solid rgb(20,20,20,.35); */
+    color: rgb(20,20,20,.35);
+    border-radius: 10px;
+    padding: 15px 10px;
+    width: 100%;
+    font-size: 18px !important;
+}
+/* Form for question */
+.form__question {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.form__question h4 {
+    margin: 3% 0;
+    font-size: 24px;
+}
+.form__question__create {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid rgb(20,20,20,.35);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+.form__question__create h5 {
+    font-size: 22px;
+    margin: 1% 0;
+}
+.form__question__create__line {
+    display: grid;
+    justify-content: space-between;
+    align-items: start;
+    grid-template-columns: 60% 37%;
+    gap: 3%;
+    width: 100%;
+    margin-bottom: 6px;
+}
