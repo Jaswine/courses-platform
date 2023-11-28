@@ -19,15 +19,32 @@ def title_list_create(request, id):
             titles = [title_order.title for title_order in title_orders]
             
             if len(titles) > 0:
-                data = [{
-                    'id': title.id, 
-                    'title': title.title, 
-                    'public': title.public,
-                    'tasks': [task_order for task_order in TaskOrder.objects.filter(title_id=title.id).order_by('order')]
-                } for title in titles]
-                
+                data = [] 
+                for title in titles:
+                    title_data = {
+                        'id': title.id,
+                        'title': title.title,
+                        'public': title.public,
+                        'tasks': []
+                    }
+
+                    tasks_orders = TaskOrder.objects.filter(title_id=title.id).order_by('order')
+                    tasks = [task_order.task for task_order in tasks_orders]
+                    
+                    tasks = [{
+                        "id": task.id,
+                        "title": task.title,
+                        "points": task.points,
+                        "type": task.type,
+                        "public": task.public,
+                    } for task in tasks]
+                    title["data"]
+                    title_data['tasks'] = tasks
+
+                    data.append(title_data)
+
                 return JsonResponse({
-                    'size': len(titles),
+                    'size': len(data),
                     'titles': data,
                 }, safe=False)
             else:

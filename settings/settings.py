@@ -171,10 +171,74 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+# CKEDITOR_CONFIGS = {
+#     'default': {
+#         'toolbar': 'Custom',
+#         'toolbar_Custom': [
+#             ['Bold', 'Italic', 'Underline'],
+#             ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+#             ['Link', 'Unlink'],
+#             ['RemoveFormat', 'Source']
+#         ],
+#         'height': 340,
+#         'width': '100%',
+#     },
+# }
+
 CKEDITOR_CONFIGS = {
     'default': {
-        # 'toolbar': 'custom',
-        'height': 400,
+        # 'skin': 'moono',
+        # 'skin': 'office2013',
+        'height': 340,
         'width': '100%',
-    },
+        'toolbar_Basic': [
+            ['Source', '-', 'Bold', 'Italic']
+        ],
+        'toolbar_YourCustomToolbarConfig': [
+            {'name': 'basicstyles',
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript']},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList', '-', 'Blockquote', '-',
+                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
+            {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
+            {'name': 'insert',
+             'items': ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
+            '/',
+            {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
+            {'name': 'colors', 'items': ['TextColor', 'BGColor']},
+            {'name': 'tools', 'items': ['Maximize']},
+            '/',  # put this to force next toolbar on new line
+        ],
+        'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
+        # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
+        # 'height': 291,
+        # 'width': '100%',
+        # 'filebrowserWindowHeight': 725,
+        # 'filebrowserWindowWidth': 940,
+        # 'toolbarCanCollapse': True,
+        # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
+        'tabSpaces': 4,
+        'extraPlugins': ','.join([
+            'uploadimage', # the upload image feature
+            # your extra plugins here
+            'div',
+            'autolink',
+            'autoembed',
+            'embedsemantic',
+            'autogrow',
+            # 'devtools',
+            'widget',
+            'lineutils',
+            'clipboard',
+            'dialog',
+            'dialogui',
+            'elementspath'
+        ]),
+    }
 }
+
+# CKEDITOR_BASEPATH = "/static/media/ckeditor/ckeditor/"
+CKEDITOR_UPLOAD_PATH = "static/media/ckeditor/uploads/"
+# CKEDITOR_RESTRICT_BY_USER = True
+CKEDITOR_STORAGE_BACKEND = True
+CKEDITOR_FORCE_JPEG_COMPRESSION = True

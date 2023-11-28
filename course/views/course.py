@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from ..models import Tag, Course, Task, TaskOrder, Title, TitleOrder
 
-from ..forms import CourseForm
+from ..forms import CourseForm, TaskForm
 
 def courses(request):
     return render(request, 'course/courses.html')
@@ -102,46 +102,53 @@ def course_edit_tasks(request, id):
 def course_task_create(request, id, title_id):    
     if request.user.is_superuser:
         course = get_object_or_404(Course, pk=id)
-        title = get_object_or_404(Title, pk=title_id)
+        course_title = get_object_or_404(Title, pk=title_id)
+        form = TaskForm()
         
         if request.method == 'POST':
-            title = request.POST.get('title')
-            type = request.POST.get('type')
-            public = request.POST.get('public')
-            points = request.POST.get('points')
-            
-            if public == 'on':
-                public = True
-            else:
-                public = False  
-            
-            task = Task.objects.create(title=title, 
-                                           type=type,
-                                           public=public,
-                                           points=points)
-            
-            task.save()
-            
-            if type == 'TaskText':
-                task.text = request.POST.get('text')
-            elif type == 'TaskVideo':
-                task.text = request.POST.get('text')
-                task.video = request.FILES.get('video') 
-            elif type == 'TaskProject':
-                task.text = request.POST.get('text')
-            # elif type == 'TaskQuestions':
-            #     task.questions.add()
+            form = TaskForm(request.POST)
+
+            if form.is_valid():
+                type = request.POST.get('type')
+                public = request.POST.get('public')
+                points = request.POST.get('points')
                 
-            task.save()            
-                    
-            order = title.tasks.count() + 1
-            TitleOrder.objects.create(title=title, task=task, order=order)
+                if public == 'on':
+                    public = True
+                else:
+                    public = False  
+                
+                task = Task.objects.create(title=form.cleaned_data['title'], 
+                                            type=type,
+                                            public=public,
+                                            points=points)
+                
+                task.save()
+
+                order = course_title.tasks.count() + 1
+                TaskOrder.objects.create(title=course_title, task=task, order=order)
             
-            title.tasks.add(task)
-            return redirect('course:course-edit-tasks', course.id)
-        
+                course_title.tasks.add(task)
+                course_title.save()
+                
+                if type == 'TaskText':
+                    task.text = form.cleaned_data['text']
+                elif type == 'TaskVideo':
+                    task.text = form.cleaned_data['text']
+                    task.video = request.FILES.get('video') 
+                elif type == 'TaskProject':
+                    task.text = form.cleaned_data['text']
+                elif type == 'TaskQuestions':
+                    messages.error(request, 'This task\'s type not supported!')
+                elif type == 'TaskQuestions':
+                    messages.error(request, 'This task\'s type not supported!')
+                    
+                task.save()            
+                return redirect('course:course-edit-tasks', course.id)
+            
         return render(request, 'course/edit/course_tasks_form.html', {
             'course': course,
+            'form': form,
         })
     else:
         messages.error(request, '')
