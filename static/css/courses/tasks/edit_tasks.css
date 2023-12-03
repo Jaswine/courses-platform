@@ -85,7 +85,7 @@
     flex-direction: column;
     padding: 4px 6px ;
     border-radius: 100%;
-    /* background-color: rgb(20,20,20, .3); */
+    /* background-color: rgb(20,20,20, Z.3); */
     cursor: pointer;
     width: 30px;
     height: 30px;
@@ -94,4 +94,58 @@
 .course__title__header div button:hover, .course__title__header div a:hover {
     color: rgb(20,20,20, .8);
     background-color: rgb(187, 168, 253, .3);
+}
+
+.title__tasks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 0 0 40px;
+    transition: all.3s linear;
+}
+.title__task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border: 2px solid rgb(20,20,20,.2);
+    border-radius: 8px;
+    padding: 6px;
+    gap: 6px;
+    margin-bottom:10px
+}
+.title__task i {
+    font-size: 18px;
+    color: rgb(20,20,20, .4);
+    padding: 0 0 0 6px
+}
+.title__task input {
+    border: none;
+    width: 70%;
+}
+.title__task input {
+
+}
+.title__task div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px
+}
+.title__task div a, .title__task div button {
+    background-color: transparent;
+    font-size: 18px;
+    color: rgb(20,20,20, .4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 4px 6px;
+    border-radius: 100%;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    padding: 4px;
 }

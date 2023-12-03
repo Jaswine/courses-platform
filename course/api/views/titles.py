@@ -38,7 +38,7 @@ def title_list_create(request, id):
                         "type": task.type,
                         "public": task.public,
                     } for task in tasks]
-                    title["data"]
+
                     title_data['tasks'] = tasks
 
                     data.append(title_data)

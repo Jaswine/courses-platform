@@ -13,7 +13,7 @@ def courses_list_create(request):
         courses = Course.objects.all().order_by('-updated')
         
         order_by_date = request.GET.get('order_by_data', '-updated')
-        order_by_popular =  request.GET.get('order_by_popular', 'popular')
+        order_by_popular = request.GET.get('order_by_popular', 'popular')
         filter_by_tag = request.GET.get('filter_by_tag', '')
         
         if order_by_date is not None and order_by_date != '':
