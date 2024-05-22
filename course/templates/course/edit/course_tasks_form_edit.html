@@ -1,0 +1,141 @@
+{% include 'main.html' %}
+{% comment %} {% load socialaccount account static %} {% endcomment %}
+
+{% block title %}
+    <link rel="stylesheet" href="/static/css/courses/create_courses.css">
+    <link rel="stylesheet" href="/static/css/courses/tasks/create_task.css">
+
+    <title>Update </title>
+{% endblock title %}
+
+{% block content %}
+<div class="page">
+    {% include "header.html" %}
+    <form class="page__content" method='POST' enctype='multipart/form-data'>
+        {% csrf_token %}
+        <div class="page__content__main">
+            <div class="page__content__header">
+                <h2>🖊 Update Task </h2>
+                <div class=""></div>
+            </div>
+            <div class="page__content__form" id='CreateCourseForm'>
+                <div class="form__field">
+                    {{ form.title.label_tag }}
+                    {{ form.title }}
+                </div>
+
+                <div class="page__content__div">
+                    <div class="form__field">
+                        <label>Points:</label>
+                        <input
+                                type="number"
+                                name="points"
+                                value="{{ task.points }}"
+                                required />
+                    </div>
+
+                    <div class="form__field">
+                        <label>Type:</label>
+                        <select
+                            name="type"
+                            id="SelectTask"
+                            required>
+                            <option selected disabled>Select task type</option>
+                            <option value="TaskText" {% if task.type == 'TaskText' %}selected{% endif %}>text</option>
+                            <option value="TaskVideo" {% if task.type == 'TaskVideo' %}selected{% endif %}>video</option>
+                            <option value="TaskProject" {% if task.type == 'TaskProject' %}selected{% endif %}>project</option>
+                            <option value="TaskQuestions" {% if task.type == 'TaskQuestions' %}selected{% endif %}>questions</option>
+                            <option value="TaskCode" {% if task.type == 'TaskCode' %}selected{% endif %}>code tasks</option>
+                        </select>
+                    </div>
+                </div>
+
+                <input type='hidden' id='TaskType' value='{{ task.type }}' />
+
+                {% comment %} Text task{% endcomment %}
+                <div class="form__field" id="TaskText" style="{% if task.type == 'TaskText' %}display: flex;{% else %}display: none;{% endif %}">
+                    <!-- <label>Text:</label> -->
+                    {{ form.text.label_tag }}
+                    {{ form.text }}
+                    {{ form.media }}
+                    <!-- <textarea name="text" placeholder="Description of the topic or project...">{{ task.text }}</textarea> -->
+                </div>
+
+
+                {% comment %} Video task{% endcomment %}
+                <div class="form__field form__video" id="TaskVideo" style="{% if task.type == 'TaskVideo' %}display: flex;{% else %}display: none;{% endif %}">
+                    <label>Video:</label>
+                    {% if task.video %}
+                        <video src='/static{{ task.video.url }}' controls ></video>
+                        <p>
+                            Uploaded: <a href="/static{{ task.video.url }}" >{{ task.video.name }}</a>
+                        </p>
+                    {% endif %}
+                    <input type="file" name="video" />
+                </div>
+
+
+                {% comment %} Project task{% endcomment %}
+                <div class="form__field" id="TaskProject" style="{% if task.type == 'TaskProject' %}display: flex;{% else %}display: none;{% endif %}">
+                    <p class="form__field__selected"><i class="fa-solid fa-feather-pointed"></i> You have added the ability for students to add links to their projects</p>
+                </div>
+
+
+                {% comment %} Question task{% endcomment %}
+                <div class="form__question" id="TaskQuestions" style="{% if task.type == 'TaskQuestions' %}display: flex;{% else %}display: none;{% endif %}">
+                    <h4>❓ Questions</h4>
+                    <div class="form__question__create" id="TaskQuestionCreate">
+                        <h5>Add New Question</h5>
+                        <div class="form__question__create__line">
+                            <div class="form__field">
+                                <label for="">Question:</label>
+                                <input type="text" name="question__title" placeholder="Enter your question..." id="QuestionTitle" />
+                            </div>
+                            <div class="form__field">
+                                <label for="">Type:</label>
+                                <select name="question__type" id="QuestionType">
+                                     <option selected disabled>Select question type</option>
+                                     <option value="No answer choice">No answer choice</option>
+                                     <option value="With a choice of one answer">With a choice of one answer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form__field">
+                            <label for="">Answer:</label>
+                            <input type="text" name="question__answer" placeholder="Enter answer..." id="QuestionAnswer" />
+                        </div>
+                        <div class="">
+                            <button class="btn">Save</button>
+                        </div>
+                    </div>
+                    <div class="questions" id="TaskQuestionsList"></div>
+                </div>
+
+
+                {% comment %} Code task{% endcomment %}
+                <div class="form__field" id="TaskCode" style="{% if task.type == 'TaskCode' %}display: flex;{% else %}display: none;{% endif %}">
+                    <h4></h4>
+                </div>
+
+
+                <div class="form__field form__field__public">
+                    <label>Public:</label>
+                    <input
+                            type="checkbox"
+                            name="public"
+                            {% if task.public %}checked{% endif %}  />
+                </div>
+
+            </div>
+        </div>
+        <div class="page__content__sorting">
+            <div></div>
+            <button type="submit" class="btn"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
+<script src='/static/js/courses/tasks/create_task.js'></script>
+
+{% endblock content %}

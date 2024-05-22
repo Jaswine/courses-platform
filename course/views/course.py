@@ -159,39 +159,38 @@ def course_task_update(request, id, task_id):
     if request.user.is_superuser:
         course = get_object_or_404(Course, pk=id)
         task = get_object_or_404(Task, pk=task_id)
+        form = TaskForm(instance=task)
         
         if request.method == 'POST':
-            task.title = request.POST.get('title')
+            form = TaskForm(request.POST, instance=task)
+
+            if form.is_valid():
+                form.save(commit=False)
+
+                task.type = request.POST.get('type')
+                task.points = request.POST.get('points')
+
+                public = request.POST.get('public')
             
-            type = request.POST.get('type')
-            points = request.POST.get('points')
-            task.type = type
-            
-            public = request.POST.get('public')
-            
-            if public == 'on':
-                task.public = True
-            else:
-                task.public = False  
-                
-            task.points = points
-            
-            if type == 'text':
-                task.text = request.POST.get('text')
-                
-            elif type == 'video':
-                video = request.FILES.get('video')
-                print(video)
-                
-                if video:
-                    task.video = video
-                
-            task.save()            
-            return redirect('course:course-edit-tasks', course.id)
+                if public == 'on':
+                    task.public = True
+                else:
+                    task.public = False
+
+                if type == 'video':
+                    video = request.FILES.get('video')
+
+                    if video:
+                        task.video = video
+
+                task.save()
+                form.save()
+                return redirect('course:course-edit-tasks', course.id)
         
-        return render(request, 'course/edit/course_tasks_form.html', {
+        return render(request, 'course/edit/course_tasks_form_edit.html', {
             'course': course,
             'task': task,
+            'form': form,
         })
     else:
         messages.error(request, '')

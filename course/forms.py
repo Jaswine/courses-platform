@@ -5,12 +5,9 @@ class CourseForm(ModelForm):
    class Meta:
       model = Course
       fields = [
-                'title', 
-                'image',
-                'tags',
-                'about',
-                'level', 
-                'public',
+                'title', 'image',
+                'tags', 'about',
+                'level', 'public',
             ]
       widgets = {
           'tags': CheckboxSelectMultiple,
