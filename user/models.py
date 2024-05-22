@@ -1,4 +1,7 @@
 from django.db import models
+from multiselectfield import MultiSelectField
+from ckeditor.fields import RichTextField
+
 from django.contrib.auth.models import User
 
 
@@ -107,13 +110,13 @@ class Profile(models.Model):
         ('Web', 'Web'),
     )
     
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     scores = models.IntegerField(default=0)
     
     image = models.ImageField(upload_to='profiles', blank=True, default=None)
     backImage = models.ImageField(upload_to='back_images', blank=True, default=None)
     
-    bio = models.TextField(max_length=500, blank=True)
+    bio = RichTextField(max_length=500, blank=True)
     location = models.CharField(max_length=168, blank=True)
     
     Twitter = models.CharField(max_length=1000, blank=True)
@@ -123,9 +126,12 @@ class Profile(models.Model):
     Telegram = models.CharField(max_length=1000, blank=True)
     website = models.URLField(blank=True)
     
-    skills = models.ManyToManyField(Skill, blank=True)
-    interests = models.ManyToManyField(Interest, blank=True)
-    
+    # skills = MultiSelectField(choices=SKILLS, max_length=100, null=True, blank=True)
+    # interests = MultiSelectField(choices=INTERESTS, max_length=100, null=True, blank=True)
+
+    skills = models.ManyToManyField(Skill, blank=True, null=True)
+    interests = models.ManyToManyField(Interest, blank=True, null=True)
+
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

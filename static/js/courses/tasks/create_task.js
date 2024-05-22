@@ -24,12 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const elem = document.querySelector(`#${selectedValue}`);
         elem.style.display = 'flex';
-
-        if (selectedValue != 'TaskText') {
-            document.querySelector(`#TaskText`).style.display = 'flex';
-        }
-
     })
-
 
 })

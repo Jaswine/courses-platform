@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
@@ -6,11 +6,33 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from ..models import Profile
 from course.models import Task, TaskOrder
+from ..forms import UpdateUserForm, UpdateProfileForm
 
 
 @login_required(login_url='auth:sign-in')
 def settings(request):
-    return render(request, 'auth/settings.html')
+    profile = get_object_or_404(Profile, user=request.user)
+    formUser = UpdateUserForm(instance=request.user)
+    formProfile = UpdateProfileForm(instance=profile)
+
+    if request.method == 'POST':
+        formUser = UpdateUserForm(request.POST, instance=request.user)
+        formProfile = UpdateProfileForm(request.POST, request.FILES, instance=profile)
+
+        if formUser.is_valid() and formProfile.is_valid():
+            formUser.save()
+            formProfile.save()
+
+            messages.success(request, 'Your profile has been updated successfully!')
+            return redirect('auth:dashboard')
+        else:
+            messages.error(request, 'Something went wrong. Please try again.')
+            return redirect('auth:settings')
+
+    return render(request, 'auth/settings.html', {
+        'formUser': formUser,
+        'formProfile': formProfile,
+    })
 
 def profile(request, username):
     user = User.objects.get(username=username)

@@ -3,7 +3,7 @@
         <div class="page__header__user">
             <img 
                 {% if request.user.profile.image  %}
-                    src="/static/media/{{ request.user.profile.image }}" 
+                    src="{{ request.user.profile.image.url }}"
                 {% else %}
                     src="https://images.pexels.com/photos/17886484/pexels-photo-17886484/free-photo-of-patio-of-a-restaurant.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load"
                 {% endif  %}

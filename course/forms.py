@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, CheckboxSelectMultiple
 from .models import Course, Tag, Task
 
 class CourseForm(ModelForm):
@@ -12,6 +12,9 @@ class CourseForm(ModelForm):
                 'level', 
                 'public',
             ]
+      widgets = {
+          'tags': CheckboxSelectMultiple,
+      }
       
 class TaskForm(ModelForm):
    class Meta:

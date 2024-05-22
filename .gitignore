@@ -10,3 +10,6 @@ venv/
 
 /media/courses
 /media/courses/
+
+.sqlite
+*.sqlite

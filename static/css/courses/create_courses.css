@@ -25,7 +25,7 @@
     font-size: 16px;
     color: rgb(20,20,20,.35);
     font-family: var(--Roboto);
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 .form__field input, select, textarea {
     color: rgb(20,20,20,.55);
@@ -172,4 +172,36 @@ textarea {
 }
 .page__content__div .form__field:first-child {
     max-width: 100px;
+}
+
+.form__field #id_skills div label input:checked {
+    background-color: var(--violet);
+}
+
+.form__field #id_interests,
+.form__field #id_tags,
+.form__field #id_skills {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr ;
+    width: 100%;
+    margin: 6px 0;
+}
+.form__field #id_interests div label,
+.form__field #id_tags div label,
+.form__field #id_skills div label  {
+    display: flex;
+    margin-right: 16px;
+    align-items: center;
+}
+.form__field #id_interests div label input,
+.form__field #id_skills div label input,
+.form__field #id_tags label input {
+    width: 12px;
+    height: 12px;
+    appearance: none;
+    margin-right: 8px;
+}
+.form__field #id_interests div label input:checked,
+.form__field #id_tags div label input:checked {
+    background-color: var(--violet);
 }

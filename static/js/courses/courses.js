@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <a href='/users/${course.user}'>${course.user}</a>
                                 <span>${course.updated}</span>
                             </div>
-                            <img ${course.image ? `src='/static/${course.image}' ` : 'src="https://images.unsplash.com/photo-1519327128442-131d250b06b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fG5vdCUyMGZvdW5kfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60"'} alt='${course.title}'/>
+                            <img ${course.image ? `src='${course.image}' ` : 'src="https://images.unsplash.com/photo-1519327128442-131d250b06b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fG5vdCUyMGZvdW5kfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60"'} alt='${course.title}'/>
                             <div class='course__tags></div>
                         `
 

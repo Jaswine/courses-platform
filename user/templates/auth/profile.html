@@ -11,23 +11,35 @@
 <div class="page">
     {% include "header.html" %}
     <div class="page__content">
-        <img src="/static/{{ profile.backImage.url }}" alt="{{ profile.user.username }}" class="profile__back" />
+        {% if profile.backImage %}
+            <img src="{{ profile.backImage.url }}" alt="{{ profile.user.username }}" class="profile__back" />
+        {% else %}
+            <img src="https://images.unsplash.com/photo-1715942163364-5aa9e6d66bb4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNnx8fGVufDB8fHx8fA%3D%3D" alt="{{ profile.user.username }}" class="profile__back" />
+        {% endif %}
         <div class="profile__header">
             <div class="profile__header__left">
-                <img src="/static/{{profile.image.url }}" alt="{{ profile.user.username }}" />
+                {% if profile.image %}
+                <img src="{{ profile.image.url }}" alt="{{ profile.user.username }}" />
+                {% else %}
+                <img
+                    src="https://images.pexels.com/photos/17886484/pexels-photo-17886484/free-photo-of-patio-of-a-restaurant.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load"
+                    alt="{{ profile.user.username }}" />
+                {% endif %}
                 <a class="btn">+ Follow</a>
                 <a class="btn btn--primary">+ Write a message</a>
             </div>
             <div class="profile__header__right">
                 <h3>{{ profile.user.username }}</h3>
                 <div>
-                    <span>{{ profile.location }}</span>
-                    {% if profile.website %} <a href="{{ proprofile__header__leftfile.website }}">Website</a>{% endif %}
-                    {% if profile.Twitter %} <a href="{{ profile.Twitter }}">Twitter</a>{% endif %}
-                    {% if profile.GitHub %} <a href="{{ profile.GitHub }}">GitHub</a>{% endif %}
-                    {% if profile.GitLub %} <a href="{{ profile.GitLub }}">GitLub</a>{% endif %}
-                    {% if profile.Linkedin %} <a href="{{ profile.Linkedin }}">Linkedin</a>{% endif %}
-                    {% if profile.Telegram %} <a href="{{ profile.Telegram }}">Telegram</a>{% endif %}
+                    {% if profile.location %}
+                        <span>{{ profile.location }} - </span>
+                    {% endif %}
+                    {% if profile.website %} <a href="{{ proprofile__header__leftfile.website }}">Website</a> - {% endif %}
+                    {% if profile.Twitter %} <a href="{{ profile.Twitter }}">Twitter</a> - {% endif %}
+                    {% if profile.GitHub %} <a href="{{ profile.GitHub }}">GitHub</a> - {% endif %}
+                    {% if profile.GitLub %} <a href="{{ profile.GitLub }}">GitLub</a> - {% endif %}
+                    {% if profile.Linkedin %} <a href="{{ profile.Linkedin }}">Linkedin</a> - {% endif %}
+                    {% if profile.Telegram %} <a href="{{ profile.Telegram }}">Telegram</a> - {% endif %}
                 </div>
                 {% if profile.skills.count > 0 %}
                     <div class="profile__tags">
@@ -47,7 +59,9 @@
                 {% endif %}
                 {% if profile.bio %}
                 <div class="profile__description">
+                    {% autoescape off %}
                     {{ profile.bio }}
+                    {% endautoescape %}
                 </div>
                 {% endif  %}
             </div>
