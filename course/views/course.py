@@ -215,24 +215,11 @@ def course_task_delete(request, id, task_id):
         return redirect('/')
             
 @login_required(login_url='auth:sign-in')
-def course_task(request, id):
+def course_task(request, id, task_id):
     course = get_object_or_404(Course, pk=id)
-    tasks = []
-        
-    task_orders = TaskOrder.objects.filter(course_id=id).order_by('order')
-    tasks_all = [task_order.task for task_order in task_orders]
-    
-    for task in tasks_all:
-        if task.public:
-            tasks.append(task)
-    
-    paginator = Paginator(tasks, 1) 
-
-    page_number = request.GET.get("tasks")
-    tasks = paginator.get_page(page_number)
+    task = get_object_or_404(Task, pk=task_id)
     
     return render(request, 'course/task.html', {
-        'task': tasks[0],
+        'task': task,
         'course': course,
-        'tasks': tasks,
     })

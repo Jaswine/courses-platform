@@ -1,0 +1,92 @@
+.task {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+}
+.task__left {
+      width: 22vw;
+}
+.task__right {
+      width: 78vw;
+      display: flex;
+      justify-content: start;
+      align-items: start;
+      flex-direction: column;
+      overflow: hidden;
+      overflow-y: auto;
+      padding: 0 2vw;
+}
+.task__content {
+      width: 100%;
+}
+.task__right__header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+      border-bottom: 2px solid rgb(20, 20, 20, 1);
+      margin-bottom: 10px;
+}
+.task__right__header__left {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+}
+.task__right__content {
+      max-width: 70vw;
+}
+.task__right__content p img {
+      width: 100% !important;
+      height: auto !important;
+}
+
+.task__comments {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 3%;
+    margin-bottom: 3vh;
+}
+.task__comments__header {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+}
+.task__comments__header h3 {
+      font-size: 26px;
+      font-family: var(--PaytoneOne);
+}
+.task__comments form {
+      display: flex;
+      justify-content: start;
+      align-items: start;
+      flex-direction: column;
+      width: 100%;
+      margin-top: 10px;
+}
+.task__comments form textarea {
+      font-size: 16px;
+      padding: 8px;
+      border: 2px solid rgb(20, 20, 20, .1);
+      width: 100%;
+      border-radius: 10px;
+      min-height: 100px;
+      height: 100%;
+      margin-bottom: 10px;
+  }
+  .task__comments__content {
+      margin-bottom: 5vh;
+  }
+  .task__right__header__right {
+      display: flex;
+      justify-content: center;
+      gap: 10px
+  }
+  .task__right__header__right button {
+      background-color: transparent;
+      cursor: pointer;
+  }

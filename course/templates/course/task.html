@@ -13,10 +13,9 @@
     <input type="hidden" name="" value="{{ task.id }}" id="TaskId"/>
     <input type="hidden" id="UserId" value="{{ request.user.id }}" />
 
-    <div class="task__header"></div>
-    <div class="task__content">
-        <div class="task__left"></div>
-        <div class="task__right">
+    <div class="task__left" id='TaskList'></div>
+    <div class="task__right">
+        <div class="task__content">
             <div class="task__right__header">
                 <div class="task__right__header__left">
                     {% if task.type == 'video' %}
@@ -24,7 +23,7 @@
                     {% else %}
                         <img src="/static/media/icons/News.svg" alt="Text" class="task__type" />
                     {% endif %}
-                    <h3>{{ task.title }}</h3>
+                    <h2>{{ task.title }}</h2>
                 </div>
                 <div class="task__right__header__right">
                     <button id="ShareLesson">
@@ -73,7 +72,7 @@
                         <textarea name="text" placeholder="Enter your comment..."></textarea>
                         <div class="">
                             <span class=""></span>
-                            <button class="btn">Leave a comment</button>
+                            <button class="btn">Send</button>
                         </div>
                     </form>
                     <div class="task__comments__content" id="TaskComments"></div>
