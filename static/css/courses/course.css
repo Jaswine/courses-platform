@@ -85,7 +85,7 @@ h2 {
 .course__header__title h2 {
     font-family: var(--PaytoneOne);
     font-size: 46px;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
 }
 .course__header__info {
     display: flex;
@@ -263,9 +263,28 @@ h2 {
 .tasks {
     display:flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
     flex-direction: column;
     width: 100%;
+    margin: 10px 0;
+}
+.tasks__title {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    transition: all .3s linear;
+}
+.tasks__title:hover {
+    /* border: 2px solid rgb(20, 20, 20, .8); */
+    /* box-shadow: 4px 4px 10px rgba(20,20,20, .2); */
+}
+.tasks__title h4 {
+    margin-bottom:  8px;
+    font-size: 22px;
 }
 .task {
     border: 2px solid rgb(20,20,20,.08);
@@ -294,10 +313,6 @@ h2 {
     transition: all .3s linear;
     position: relative;
 }
-.task__done:hover {
-    background-color: rgb(234, 182, 225, .4);
-    border-color: rgb(234, 182, 225, .4);
-}
 .task__done span {
     display: block;
     width: 130%;
@@ -310,17 +325,44 @@ h2 {
     left: -2px;
 
 }
-.task__left img {
+.task__left img, .task__left i {
     opacity: .6;
 }
 .task__left a {
     color: rgb(20,20,20,.6);
     font-weight: 600;
 }
-.task__right svg {
+.task__right a svg {
     opacity: .6;
     scale: .9;
     transition: all .3s linear;
+    cursor: pointer;
+    transition: all .3s linear;
+}
+.task:hover .task__right a svg {
+    opacity: 1;
+    margin-left: 8px;
+}
+.task__right a svg:hover  {
+    opacity: 1;
+    margin-left: 8px;
+}
+.task__right a:hover svg {
+    opacity: 1;
+}
+.task__right a {
+    width: 34px;
+    height: 34px;
+    padding: 6px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+}
+.task__right a:hover {
+    /* background-color: rgb(20, 20, 20, .06); */
 }
 .task:hover {
     border-color: #202020;
@@ -328,10 +370,7 @@ h2 {
 .task:hover .task__left a {
     color: #202020;
 }
-.task:hover .task__left img {
-    opacity: 1;
-}
-.task__right svg:hover  {
+.task:hover .task__left i {
     opacity: 1;
 }
 .btn {
@@ -556,4 +595,9 @@ h2 {
 .course__about h2 {
     font-size: 26px;
     font-family: var(--PaytoneOne);
+    margin-bottom: 10px;
+}
+
+#TasksContent h2 {
+    margin-bottom: 10px;
 }

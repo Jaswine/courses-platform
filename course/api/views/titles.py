@@ -37,6 +37,7 @@ def title_list_create(request, id):
                         "points": task.points,
                         "type": task.type,
                         "public": task.public,
+                        "completed_status": True if request.user in task.users_who_completed.all() else False
                     } for task in tasks]
 
                     title_data['tasks'] = tasks
