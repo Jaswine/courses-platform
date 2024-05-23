@@ -82,7 +82,7 @@
 
                 {% comment %} tasks {% endcomment %}
                 <div class="tasks" id="TasksContent">
-                    <h2>📑 Course Program</h2>
+                    <div class="tasks__loader"></div>
                 </div>
 
                 {% comment %} reviews {% endcomment %}
@@ -114,15 +114,13 @@
             <div class="course__content__right">
 
                 {% comment %} Enroll / Drop in a course {% endcomment %}
-                <div class="course__content__right__place__spec"> 
-                    {% if request.user.is_authenticated %}
-                        {% if request.user in course.users_who_registered.all %}
-                            <a class='btn course__continue'>Continue</a>
-                            <button class="btn" id='EnrollInACourse'>Drop</button>
-                        {% else %}
-                            <a class="btn" id='EnrollInACourse'>Enroll in a course</a>
-                        {% endif %}
-                    {% endif %}
+                <div class="course__content__right__place__spec">
+                    <a class='btn course__continue'
+                       id="CourseContinue"
+                       style='display:none'>Continue</a>
+                    <a
+                            class="btn"
+                            id='enrollDropInACourse'></a>
                </div>
 
                 {% comment %} share on social networks {% endcomment %}

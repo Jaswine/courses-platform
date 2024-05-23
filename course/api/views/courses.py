@@ -87,6 +87,14 @@ def courses_get_update_delete(request, id):
         return course
         
     if request.user.is_superuser:
+        if request.method == 'GET':
+            return JsonResponse({
+                'status': 'success',
+                'data': {
+                    'title': course.title,
+                    'user_registered': True if request.user in course.users_who_registered.all() else False
+                },
+            }, status=200)
         if request.method == 'PUT':
             course.title = request.POST.get('title', '')
             course.image = request.FILES.get('image', '')

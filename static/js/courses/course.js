@@ -2,6 +2,34 @@ document.addEventListener('DOMContentLoaded', () => {
       const UserId = document.querySelector('#UserId')
       const CourseId = document.querySelector('#CourseId').value
       const TasksContent = document.querySelector('#TasksContent')
+      const enrollDropInACourse = document.querySelector('#enrollDropInACourse')
+      var courseRegisterStatus = false
+
+      const fetchCourseInfo = async () => {
+            const response = await fetch(`/api/courses/${CourseId}`)
+            const data = await response.json()
+
+            if (data.status == 'success') {
+                  RenderButtons(data.data.user_registered)
+            }
+      }
+
+      const RenderButtons = (user_registered) => {
+            courseRegisterStatus = user_registered
+            let courseContinue = document.querySelector('#CourseContinue')
+
+            if (courseRegisterStatus) {
+                  enrollDropInACourse.classList.remove('btn')
+                  enrollDropInACourse.innerHTML = 'Drop'
+
+                  courseContinue.style.display = 'block'
+            } else {
+                  enrollDropInACourse.classList.add('btn')
+                  enrollDropInACourse.innerHTML = 'Enroll in a course'
+
+                  courseContinue.style.display = 'none'
+            }
+      }
 
       const fetchTitleTasks = async () => {
             const response = await fetch(`/api/courses/${CourseId}/titles/`)
@@ -10,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const renderTitleTasks = (titles) => {
-            console.log(titles)
+            TasksContent.innerHTML = '<h2>📑 Course Program</h2>'
             titles.forEach(title => {
                   renderTitle(title)
             });
@@ -37,13 +65,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         const div_task__right = document.createElement('div')
                         div_task__right.classList.add('task__left')
-
-                        const div_task_type = document.createElement('span')
-                        div_task_type.classList.add('task__done')
-                        task.completed_status ? 
-                              div_task_type.style.backgroundColor = 'rgb(234, 182, 225)' : 
-                              div_task_type.style.backgroundColor = 'transparent'
-                        div_task__right.appendChild(div_task_type)
+                        
+                        if (courseRegisterStatus) {
+                              const div_task_type = document.createElement('span')
+                              div_task_type.classList.add('task__done')
+                              task.completed_status ? 
+                                    div_task_type.style.backgroundColor = 'rgb(234, 182, 225)' : 
+                                    div_task_type.style.backgroundColor = 'transparent'
+                              div_task__right.appendChild(div_task_type)
+                        }
 
                         let image_type = ""
                         switch (task.type) {
@@ -90,6 +120,22 @@ document.addEventListener('DOMContentLoaded', () => {
                   TasksContent.appendChild(div)
             }
       }
- 
+      
+      fetchCourseInfo()
       fetchTitleTasks()
+
+      enrollDropInACourse.addEventListener('click', () => {
+            fetch(`/api/courses-like/${CourseId}/add-to-course`, {
+                  method: 'POST',
+              })
+                  .then(response => response.json())
+                  .then(data => {
+                        console.log(data)
+                        courseRegisterStatus ? RenderButtons(false) : RenderButtons(true)
+                        fetchTitleTasks()
+                  })
+                  .catch(error => {
+                        console.log(error.message)
+                  })
+      })
 })
