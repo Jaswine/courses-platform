@@ -5,12 +5,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const enrollDropInACourse = document.querySelector('#enrollDropInACourse')
       var courseRegisterStatus = false
 
+      const CourseLessonsCount = document.querySelector('#CourseLessonsCount')
+      const CourseVideosCount = document.querySelector('#CourseVideosCount')
+      const CourseExerciesesCount = document.querySelector('#CourseExerciesesCount')
+      const CourseProjectsCount = document.querySelector('#CourseProjectsCount')
+
+
       const fetchCourseInfo = async () => {
             const response = await fetch(`/api/courses/${CourseId}`)
             const data = await response.json()
 
             if (data.status == 'success') {
                   RenderButtons(data.data.user_registered)
+                  RenderCourseInfo(data.data)
             }
       }
 
@@ -29,6 +36,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                   courseContinue.style.display = 'none'
             }
+      }
+
+      const RenderCourseInfo = (data) => {
+            console.log('Status: ', data)
+            CourseLessonsCount.innerHTML = `${data.lessons_count} Lessons`
+            CourseVideosCount.innerHTML = data.videos_count + " Videos"
+            CourseExerciesesCount.innerHTML = data.exercises_count + " Exercises"
+            CourseProjectsCount.innerHTML = data.projects_count + " Projects"
       }
 
       const fetchTitleTasks = async () => {

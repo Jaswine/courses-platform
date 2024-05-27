@@ -93,6 +93,23 @@ def courses_get_update_delete(request, id):
             response_data['title'] = course.title
             response_data['user_registered'] =  True if request.user in course.users_who_registered.all() else False
 
+            lessons_count, videos_count, exercises_count, projects_count = 0, 0, 0, 0
+
+            for title in course.course_titles.all():
+                for task in title.tasks.all():
+                    lessons_count += 1
+                    if task.type == 'TaskVideo':
+                        videos_count += 1
+                    elif task.type == 'TaskProject':
+                        projects_count += 1
+                    elif task.type == 'TaskQuestions' or task.type == 'TaskCode':
+                        exercises_count += 1
+
+            response_data['lessons_count'] = lessons_count
+            response_data['videos_count'] = videos_count
+            response_data['exercises_count'] = exercises_count
+            response_data['projects_count'] = projects_count
+
             return JsonResponse({
                 'status': 'success',
                 'data': response_data
