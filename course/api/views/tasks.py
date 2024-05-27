@@ -53,7 +53,7 @@ def task_create(request, id):
 
 
 @csrf_exempt
-def task_update_delete(request, id, task_id):
+def task_get_update_delete(request, id, task_id):
     if request.user.is_superuser:
         course = get_element_or_404(Course, id)
 
@@ -64,6 +64,14 @@ def task_update_delete(request, id, task_id):
 
         if isinstance(task, JsonResponse):
             return task
+
+        if request.method == 'GET':
+            return JsonResponse({
+                'title': task.title,
+                'type': task.type,
+                'points': task.points,
+                'public': task.public
+            }, status=200)
 
         if request.method == 'POST':
             title = request.POST.get('task_title', '')

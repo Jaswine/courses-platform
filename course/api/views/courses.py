@@ -88,12 +88,14 @@ def courses_get_update_delete(request, id):
         
     if request.user.is_superuser:
         if request.method == 'GET':
+            response_data = dict()
+
+            response_data['title'] = course.title
+            response_data['user_registered'] =  True if request.user in course.users_who_registered.all() else False
+
             return JsonResponse({
                 'status': 'success',
-                'data': {
-                    'title': course.title,
-                    'user_registered': True if request.user in course.users_who_registered.all() else False
-                },
+                'data': response_data
             }, status=200)
         if request.method == 'PUT':
             course.title = request.POST.get('title', '')

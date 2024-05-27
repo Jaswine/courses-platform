@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const renderTitleTasks = (titles) => {
             TasksContent.innerHTML = '<h2>📑 Course Program</h2>'
+            console.log(titles)
             titles.forEach(title => {
                   renderTitle(title)
             });
@@ -66,10 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         const div_task__right = document.createElement('div')
                         div_task__right.classList.add('task__left')
                         
-                        if (courseRegisterStatus) {
+                        if (task.completed_status) {
                               const div_task_type = document.createElement('span')
                               div_task_type.classList.add('task__done')
-                              task.completed_status ? 
+                              task.completed_status == 'Completed' ? 
                                     div_task_type.style.backgroundColor = 'rgb(234, 182, 225)' : 
                                     div_task_type.style.backgroundColor = 'transparent'
                               div_task__right.appendChild(div_task_type)
@@ -97,13 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         const div_task_type_a = document.createElement('a')
                         div_task_type_a.innerHTML = task.title
-                        courseRegisterStatus ? div_task_type_a.href=`/courses/${CourseId}/${task.id}/` : ''
+                        task.completed_status ? div_task_type_a.href=`/courses/${CourseId}/${task.id}/` : ''
                         div_task__right.appendChild(div_task_type_a)
 
                         const div_task__left = document.createElement('div')
                         div_task__left.classList.add('task__right')
                         div_task__left.innerHTML = `
-                              <a ${courseRegisterStatus ? `href='/courses/${CourseId}/${task.id}/'` : ''}>
+                              <a ${task.completed_status ? `href='/courses/${CourseId}/${task.id}/'` : ''}>
                                     <svg width="13.25" height="23.75" viewBox="0 0 13.25 23.75" fill="none" xmlns="http://www.w3.org/2000/svg">
                                           <path d="M1.26761 1.25L11.8734 11.8558" stroke="#202020" stroke-width="2.5" stroke-linecap="round"/>
                                           <path d="M1.25 22.4146L11.8558 11.8088" stroke="#202020" stroke-width="2.5" stroke-linecap="round"/>

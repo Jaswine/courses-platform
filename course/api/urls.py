@@ -22,5 +22,5 @@ urlpatterns = [
     path('courses/titles/<int:id>/', titles.title_update_delete, name='title-update-delete'),
     path('courses/<int:id>/titles/<int:TitleID>/places/<int:NewOrder>/', titles.title_change_place, name='title-change-place'),
 
-    path('courses/<int:id>/tasks/<int:task_id>/', tasks.task_update_delete, name='task-update-delete'),
+    path('courses/<int:id>/tasks/<int:task_id>/', tasks.task_get_update_delete, name='task-update-delete'),
 ]

@@ -30,17 +30,24 @@ def title_list_create(request, id):
 
                     tasks_orders = TaskOrder.objects.filter(title_id=title.id).order_by('order')
                     tasks = [task_order.task for task_order in tasks_orders]
-                    
-                    tasks = [{
-                        "id": task.id,
-                        "title": task.title,
-                        "points": task.points,
-                        "type": task.type,
-                        "public": task.public,
-                        "completed_status": True if request.user in task.users_who_completed.all() else False
-                    } for task in tasks]
+                    present_tasks = []
 
-                    title_data['tasks'] = tasks
+                    for task in tasks:
+                        t = dict()
+                        t['id'] = task.id
+                        t['title'] = task.title
+                        t['points'] = task.points
+                        t['type'] = task.type
+                        t['public'] = task.public
+
+                        if request.user in course.users_who_registered.all():
+                            t['completed_status'] =  'Completed' if request.user in task.users_who_completed.all() else 'Uncompleted'
+                        else:
+                            t['completed_status'] = None
+
+                        present_tasks.append(t)
+
+                    title_data['tasks'] = present_tasks
 
                     data.append(title_data)
 

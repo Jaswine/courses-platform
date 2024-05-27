@@ -40,30 +40,30 @@ def profile(request, username):
     courses = []
     courses_base = user.users_who_registered.all()
     
-    for course in courses_base:
-        completed_tasks_count = 0
-        status = ''
-        task_orders = TaskOrder.objects.filter(course_id=course.id).order_by('order')
-        tasks = [task_order.task for task_order in task_orders]
+    # for course in courses_base:
+        # completed_tasks_count = 0
+        # status = ''
+        # task_orders = TaskOrder.objects.filter(course_id=course.id).order_by('order')
+        # tasks = [task_order.task for task_order in task_orders]
         
-        for task in tasks:
-            if user in task.users_who_completed.all():
-                completed_tasks_count += 1
+        # for task in tasks:
+        #     if user in task.users_who_completed.all():
+        #         completed_tasks_count += 1
                 
-        if completed_tasks_count == 0:
-            status = 'Began'
-        elif completed_tasks_count == len(tasks):
-            status = 'Completed'
-        else:
-            status = 'Progress'
+        # if completed_tasks_count == 0:
+        #     status = 'Began'
+        # elif completed_tasks_count == len(tasks):
+        #     status = 'Completed'
+        # else:
+        #     status = 'Progress'
         
-        courses.append({
-            'id': course.id,
-            'title': course.title,
-            'points_earned': completed_tasks_count,
-            'points_all': len(tasks),
-            'status': status,
-        })
+        # courses.append({
+        #     'id': course.id,
+        #     'title': course.title,
+        #     'points_earned': completed_tasks_count,
+        #     'points_all': len(tasks),
+        #     'status': status,
+        # })
     
     return render(request, 'auth/profile.html', {
         'user': user,

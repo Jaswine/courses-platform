@@ -243,6 +243,7 @@ h2 {
 } 
 .course__about .text p {
     margin-bottom: 6px;
+    text-align: justify;
 }
 .course__content__right__place .line {
     display: flex;

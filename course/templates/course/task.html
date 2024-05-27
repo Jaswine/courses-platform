@@ -3,81 +3,68 @@
 
 {% block title %}
     <link rel="stylesheet" href="/static/css/courses/task.css">
+    <link rel="stylesheet" href="/static/css/components/tasks__loader.css">
+
     <title>Task</title>
 {% endblock title %}
 
 {% block content %}
-<div class="task">
-    <input type="hidden" name="" value="{{ course.id }}" id="CourseId"/>
-    <input type="hidden" name="" value="{{ course.title }}" id="CourseTitle"/>
-    <input type="hidden" name="" value="{{ task.id }}" id="TaskId"/>
-    <input type="hidden" id="UserId" value="{{ request.user.id }}" />
 
-    <div class="task__left" id='TaskList'></div>
-    <div class="task__right">
-        <div class="task__content">
-            <div class="task__right__header">
-                <div class="task__right__header__left">
-                    {% if task.type == 'video' %}
-                        <img src="/static/media/icons/VideoCall.svg" alt="VideoCall" class="task__type"/>
-                    {% else %}
-                        <img src="/static/media/icons/News.svg" alt="Text" class="task__type" />
-                    {% endif %}
-                    <h2>{{ task.title }}</h2>
-                </div>
-                <div class="task__right__header__right">
-                    <button id="ShareLesson">
-                        <svg width="22" height="20" viewBox="0 0 73 81" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="60.5" cy="12.5" r="12.5" fill="#202020"/>
-                            <circle cx="12.5" cy="40.5" r="12.5" fill="#202020"/>
-                            <circle cx="60.5" cy="68.5" r="12.5" fill="#202020"/>
-                            <line x1="20.8141" y1="45.0068" x2="53.8141" y2="65.0068" stroke="#202020" stroke-width="7"/>
-                            <line x1="20.1859" y1="36.0078" x2="53.1853" y2="16.0069" stroke="#202020" stroke-width="7"/>
-                        </svg>                            
-                    </button>
-                    <button id="FullScreen">
-                        <svg width="22" height="20" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <line x1="4" y1="24" x2="40" y2="24" stroke="#202020" stroke-width="8" stroke-linecap="round"/>
-                            <line x1="40" y1="60" x2="40" y2="24" stroke="#202020" stroke-width="8" stroke-linecap="round"/>
-                            <line x1="24" y1="4" x2="60" y2="4" stroke="#202020" stroke-width="8" stroke-linecap="round"/>
-                            <line x1="60" y1="40" x2="60" y2="4" stroke="#202020" stroke-width="8" stroke-linecap="round"/>
-                        </svg>                            
-                    </button>
+<input type="hidden" name="" value="{{ course.id }}" id="CourseId"/>
+<input type="hidden" name="" value="{{ course.title }}" id="CourseTitle"/>
+<input type="hidden" name="" value="{{ task.id }}" id="TaskId"/>
+<input type="hidden" id="UserId" value="{{ request.user.id }}" />
+
+<div class="task__page">
+    <div class="task__page__left">
+        <div class="task__page__left__top">
+            <a href='{% url 'course:courses' %}'>
+                <span>Courses</span>
+            </a>/
+            <a href='{% url 'course:course' course.id %}'>
+                <b>{{ course.title }}</b>
+            </a>
+        </div>
+        <div class="task__page__left__header">
+            <div class="task__page__left__header__left">
+                <h2>{{task.title}}</h2>
+            </div>
+            <div class="task__page__left__header__right">
+                
+                <div class="task__page__left__header__buttons">
+                    <a>
+                        <svg width="13.25" height="23.75" viewBox="0 0 13.25 23.75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.26761 1.25L11.8734 11.8558" 
+                                    stroke="#202020" 
+                                    stroke-width="2.5" 
+                                    stroke-linecap="round"/>
+                            <path d="M1.25 22.4146L11.8558 11.8088" 
+                                    stroke="#202020" 
+                                    stroke-width="2.5" 
+                                    stroke-linecap="round"/>
+                      </svg>
+                    </a>
+                    <a>
+                        <svg width="13.25" height="23.75" viewBox="0 0 13.25 23.75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.26761 1.25L11.8734 11.8558" stroke="#202020" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M1.25 22.4146L11.8558 11.8088" stroke="#202020" stroke-width="2.5" stroke-linecap="round"/>
+                      </svg>
+                    </a>
                 </div>
             </div>
-            <div class="task__right__content">
-                {% if task.type == 'video' %}
-                <video src="/static/{{ task.video.url }}"></video>
-                {% else %}
-                    {% autoescape off %}
-                        {{ task.text }}
-                    {% endautoescape %}
-                {% endif %}
-                <div class="task__right__content__footer">
-                    <div class="">
-                        {% if tasks.has_previous %}
-                            <a class="btn btn--primary" href="/courses/{{ course.id }}/?tasks={{ tasks.previous_page_number }}">Prev lesson</a>
-                        {% endif %}
-                    </div>
-                    {% if tasks.has_next %}
-                    <a class="btn" href="/courses/{{ course.id }}/?tasks={{ tasks.next_page_number }}">Next lesson</a>
-                    {% endif %}
-                </div>
-                <div class="task__comments">
-                    <div class="task__comments__header">
-                        <h3>📌 Comments</h3>
-                    </div>
-                    <form action="" method="POST" id="TaskCommentsForm">
-                        {% csrf_token %}
-                        <textarea name="text" placeholder="Enter your comment..."></textarea>
-                        <div class="">
-                            <span class=""></span>
-                            <button class="btn">Send</button>
-                        </div>
-                    </form>
-                    <div class="task__comments__content" id="TaskComments"></div>
-                </div>
-            </div>
+        </div>
+        <div class="task__page__left__content">
+            {% if task.text  %}
+                {% autoescape off %}
+                    {{ task.text }}
+                {% endautoescape %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="task__page__right">
+        <h3>{{ course.title }}</h3>
+        <div class="task__page__right__context" id="taskList">
+            <div class="tasks__loader"></div>
         </div>
     </div>
 </div>

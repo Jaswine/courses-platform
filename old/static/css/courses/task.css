@@ -121,6 +121,9 @@ select {
 .task__content__header__show__menu {
    display: none;
 }
+.task__right__content p {
+   font-size: 16px;
+}
 .redactor__left__bottom, .redactor__left__header {
    width: 100%;
    display: flex;
@@ -204,7 +207,6 @@ select {
    }
 
 }  
-
 
 .task__menu__component__selected {
    background-color: black;
