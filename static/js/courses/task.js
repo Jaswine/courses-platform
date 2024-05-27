@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const taskList = document.querySelector('#taskList')
       const CourseId = document.querySelector('#CourseId').value
       const TaskId = document.querySelector('#TaskId').value
-
-
+      var PrevTask = 0
+      var NextTask = 0
 
       const getTasks = async () => {
             const response = await fetch(`/api/courses/${CourseId}/titles/`)   
@@ -33,6 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
                   div_header.appendChild(div_h3)
                   div.appendChild(div_header)
 
+                  // let 
+
                   title.tasks.forEach((task, index) => {
                         const div_task = document.createElement('div')
                         div_task.classList.add('task')
@@ -52,16 +54,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         div_task_type_a.href=`/courses/${CourseId}/${task.id}/`
                         div_task__right.appendChild(div_task_type_a)
 
+                        if (task.id == TaskId) {
+                              div_task_type_a.style.color = '#202020'
+                        }
+
                         const div_task__left = document.createElement('div')
                         div_task__left.classList.add('task__right')
                         div_task__left.innerHTML = `
                               <a href='/courses/${CourseId}/${task.id}/'>
-                                    <svg width="13.25" height="23.75" viewBox="0 0 13.25 23.75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg style = "opacity:${task.id == TaskId ? '1': ''} "
+                                          width="13.25" 
+                                          height="23.75" 
+                                          viewBox="0 0 13.25 23.75" fill="none" xmlns="http://www.w3.org/2000/svg">
                                           <path d="M1.26761 1.25L11.8734 11.8558" stroke="#202020" stroke-width="2.5" stroke-linecap="round"/>
                                           <path d="M1.25 22.4146L11.8558 11.8088" stroke="#202020" stroke-width="2.5" stroke-linecap="round"/>
                                     </svg>
                               </a>
-                        
                         `
 
                         div_task.appendChild(div_task__right)

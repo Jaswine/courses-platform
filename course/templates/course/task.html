@@ -59,6 +59,13 @@
                     {{ task.text }}
                 {% endautoescape %}
             {% endif %}
+
+            {% if task.video %}
+                <video src={{ task.video.url }} 
+                class='task__page__left__content__video'
+                controls
+                ></video>
+            {% endif %}
         </div>
     </div>
     <div class="task__page__right">

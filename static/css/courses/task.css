@@ -80,6 +80,11 @@
 .task__page__left__content {
       text-align: justify;
 }
+.task__page__left__content__video {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+}
 .task__page__left__content p {
       margin-bottom: 10px;
 }
@@ -178,8 +183,8 @@
       opacity: .5;
 }
 .task:hover .task__left a {
-      color: #202020;
+      color: rgb(20, 20, 20, .9);
 }
 .task:hover .task__right a svg {
-      opacity: 1;
+      opacity: .9;
 }
