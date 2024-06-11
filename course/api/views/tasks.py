@@ -11,21 +11,21 @@ def task_create(request, id):
 
         if isinstance(course_title, JsonResponse):
             return course_title
-        
+
         if request.method == 'POST':
             title = request.POST.get('title', '')
-            type = request.POST.get('type','text')
+            type = request.POST.get('type', 'text')
             points = request.POST.get('points', 0)
 
             if 0 < len(title) < 255:
                 task = Task.objects.create(
-                    title = title,
-                    type = type,
-                    points = points,
-                    public = False
+                    title=title,
+                    type=type,
+                    points=points,
+                    public=False
                 )
                 task.save()
-            
+
                 order = course_title.tasks.count() + 1
                 TaskOrder.objects.create(title=title, task=task, order=order)
                 title.tasks.add(title)
@@ -39,8 +39,8 @@ def task_create(request, id):
                     'status': 'error',
                     'message': ' The subject cannot be less than 0 or more than 255 characters.'
                 }, status=400)
-            
-        else: 
+
+        else:
             return JsonResponse({
                 'status': 'error',
                 'message': 'Method not allowed'
@@ -108,7 +108,6 @@ def task_get_update_delete(request, id, task_id):
                 }, status=200)
         if request.method == 'DELETE':
             task.delete()
-
             return JsonResponse({}, status=204)
 
         else:
@@ -121,3 +120,31 @@ def task_get_update_delete(request, id, task_id):
             'status': 'error',
             'message': 'User is not a superuser'
         }, status=403)
+
+    def task_add_remove_experiense(request, id, task_id):
+        if request.user.is_authenticated:
+            course = get_element_or_404(Course, id)
+
+            if isinstance(course, JsonResponse):
+                return course
+
+            task = get_element_or_404(Task, task_id)
+
+            if isinstance(task, JsonResponse):
+                return task
+
+            if request.method == 'POST':
+                if task.users_who_completed.filter(id=request.user.id).exists():
+                    task.users_who_completed.remove(request.user.id)
+                else:
+                    task.users_who_completed.add(request.user.id)
+                task.save()
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Task updated successfully!'
+                }, status=200)
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'User is not authenticated'
+            }, status=403)

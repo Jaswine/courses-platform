@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from user.models import Profile
 
 from django.contrib import messages
 
@@ -27,6 +28,7 @@ def sign_in(request):
                 
     return render(request, 'auth/auth.html', {'type': 'Sign In'})
 
+
 def sign_up(request):    
     if request.user.is_authenticated:
         return redirect('/')
@@ -38,9 +40,14 @@ def sign_up(request):
       
       if form.is_valid():
          new_user = form.save(commit=False)
+         profile = Profile(user=new_user)
+
          new_user.save()
+         profile.save()
                   
-         login(request, new_user, backend='django.contrib.auth.backends.ModelBackend' )
+         login(request,
+               new_user,
+               backend='django.contrib.auth.backends.ModelBackend')
          return redirect('/')
      
     return render(request, 'auth/auth.html', {

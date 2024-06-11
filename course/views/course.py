@@ -23,9 +23,7 @@ def create_course(request):
             if form.is_valid():
                 course = form.save(commit=False)
                 course.user = request.user
-                print(course.title)
-            
-                form.save()
+                course.save()
                 return redirect('/')
             else:
                 messages.error(request, 'Form is not valid')

@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
 from datetime import datetime
 
-from ...models import Course, CourseReview, TaskOrder, TaskComment
+from ...models import Course, CourseReview, TaskOrder
 from ..utils import get_element_or_404
 
 @csrf_exempt
@@ -35,7 +35,7 @@ def courses_list_create(request):
                 courses = Course.objects.filter(tags__name__icontains=filter_by_tag)
                 
         if query:
-            courses =  Course.objects.filter(title__icontains=query).order_by('-updated')
+            courses = Course.objects.filter(title__icontains=query).order_by('-updated')
                 
         data = [{
                 'id': course.id, 

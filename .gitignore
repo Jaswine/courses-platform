@@ -8,8 +8,9 @@ venv/
 .env
 *.env
 
-/media/courses
 /media/courses/
+/media/profiles/
+
 
 .sqlite
 *.sqlite

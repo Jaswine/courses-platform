@@ -8,7 +8,6 @@ Django==5.0.6
 django-allauth==0.54.0
 django-ckeditor==6.7.1
 django-js-asset==2.2.0
-django-multiselectfield==0.1.12
 idna==3.7
 oauthlib==3.2.2
 pillow==10.3.0

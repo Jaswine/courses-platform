@@ -1,5 +1,4 @@
 from django.db import models
-from multiselectfield import MultiSelectField
 from ckeditor.fields import RichTextField
 
 from django.contrib.auth.models import User
@@ -10,7 +9,7 @@ class Skill(models.Model):
     
     def __str__(self):
         return self.name
-    
+
 class Interest(models.Model):
     name = models.CharField(max_length=200)
     
@@ -126,9 +125,6 @@ class Profile(models.Model):
     Telegram = models.CharField(max_length=1000, blank=True)
     website = models.URLField(blank=True)
     
-    # skills = MultiSelectField(choices=SKILLS, max_length=100, null=True, blank=True)
-    # interests = MultiSelectField(choices=INTERESTS, max_length=100, null=True, blank=True)
-
     skills = models.ManyToManyField(Skill, blank=True, null=True)
     interests = models.ManyToManyField(Interest, blank=True, null=True)
 

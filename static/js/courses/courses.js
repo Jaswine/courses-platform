@@ -137,29 +137,31 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const filtersButton = document.querySelector('#filtersButton', '')
     const ShowFilters = document.querySelector('#ShowFilters', '')
-    
+
     if (filtersButton) {
-        filtersButton.addEventListener('click', (e) => {
+        const changeIsOpenFilterButton = () => {
             if (ShowFilters.style.opacity == 0) {
-    
-                ShowFilters.style.display = 'flex'
-                
-                setTimeout(() => {
-                    ShowFilters.style.opacity = 1
-                    ShowFilters.classList.add('animationFormClass')
-                }, 200)
-    
-            } else {
-    
-                ShowFilters.style.opacity = 0
-                ShowFilters.classList.remove('animationFormClass')
-    
-                setTimeout(() => {
-                    ShowFilters.style.display = 'none'
-                }, 200)
-    
-            }
-        })
+
+                    ShowFilters.style.display = 'flex'
+
+                    setTimeout(() => {
+                        ShowFilters.style.opacity = 1
+                        ShowFilters.classList.add('animationFormClass')
+                    }, 200)
+
+                } else {
+                    ShowFilters.style.opacity = 0
+                    ShowFilters.classList.remove('animationFormClass')
+
+                    setTimeout(() => {
+                        ShowFilters.style.display = 'none'
+                    }, 200)
+
+                }
+        }
+        changeIsOpenFilterButton()
+
+        filtersButton.addEventListener('click', changeIsOpenFilterButton)
     }
 
     if (ShowFilters) {
