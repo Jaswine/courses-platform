@@ -12,6 +12,9 @@
     padding: 10px 0;
     padding-bottom: 20%;
 }
+.django-ckeditor-widget {
+    width: 100%;
+}
 .form__field {
     display: flex;
     justify-content: start;

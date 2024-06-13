@@ -78,7 +78,6 @@ def course_delete(request, id):
         
         return render(request, 'course/delete_course.html', {
             'course': course,
-            'url': '/courses'
         })
     else:
         messages.error(request, '')
@@ -195,7 +194,7 @@ def course_task_update(request, id, task_id):
         return redirect('/')
     
 @login_required(login_url='auth:sign-in')
-def course_task_delete(request, id, task_id):    
+def course_task_delete(request, id: int, task_id: int):
     if request.user.is_superuser:
         course = get_object_or_404(Course, pk=id)
         task = get_object_or_404(Task, pk=task_id)
@@ -211,9 +210,10 @@ def course_task_delete(request, id, task_id):
     else:
         messages.error(request, '')
         return redirect('/')
-            
+
+
 @login_required(login_url='auth:sign-in')
-def course_task(request, id, task_id):
+def course_task(request, id: int, task_id: int):
     course = get_object_or_404(Course, pk=id)
     task = get_object_or_404(Task, pk=task_id)
     

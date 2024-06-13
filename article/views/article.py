@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from article.models import Article
 from article.forms import ArticleForm
@@ -15,6 +17,7 @@ def article_list(request):
     })
 
 
+@login_required(login_url='auth:sign-in')
 def create_article(request):
     """
         Создание статьи
@@ -23,7 +26,7 @@ def create_article(request):
         form = ArticleForm()
 
         if request.method == 'POST':
-            form = ArticleForm(request.POST)
+            form = ArticleForm(request.POST, request.FILES)
 
             if form.is_valid():
                 article = form.save(commit=False)
@@ -33,10 +36,11 @@ def create_article(request):
                 return redirect('article:article_list')
 
         return render(request, 'article/article_form.html', {
+            'status': 'Create',
             'form': form,
         })
-    else:
-        return redirect('dashboard')
+
+    return redirect('article:article_list')
 
 
 def article_detail(request, id: int):
@@ -50,23 +54,44 @@ def article_detail(request, id: int):
     })
 
 
+@login_required(login_url='auth:sign-in')
 def update_article(request, id: int):
     """
         Обновление статьи
     """
-    article = get_object_or_404(Article, pk=id)
-    form = ArticleForm(instance=article)
+    if request.user.is_authenticated:
+        article = get_object_or_404(Article, pk=id)
+        form = ArticleForm(instance=article)
 
-    return render(request, 'article/article_form.html', {
-        'form': form,
-    })
+        if request.method == 'POST':
+            form = ArticleForm(request.POST, request.FILES, instance=article)
+
+            if form.is_valid():
+                form.save()
+
+                return redirect('article:article_list')
+
+        return render(request, 'article/article_form.html', {
+            'article': article,
+            'status': 'Update',
+            'form': form,
+        })
+
+    return redirect('article:article_list')
 
 
+@login_required(login_url='auth:sign-in')
 def delete_article(request, id: int):
     """
         Удаление статьи
     """
     article = get_object_or_404(Article, pk=id)
+
+    if request.method == 'POST':
+        article.delete()
+
+        messages.success(request, 'Article deleted successfully!')
+        return redirect('article:article_list')
 
     return render(request, 'article/article_delete.html', {
         'article': article,

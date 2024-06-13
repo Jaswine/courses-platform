@@ -1,0 +1,70 @@
+@import "./../../variables.css";
+
+.course__about {
+    width: 100%;
+    max-width: 100%;
+}
+.course__about h1,
+.course__about h2,
+.course__about h3,
+.course__about h4,
+.course__about h5,
+.course__about h6 {
+    font-family: var(--roboto);
+}
+.course__about h1 {
+    font-size: 28px;
+    margin: 24px 0;
+}
+.course__about h2 {
+    font-size: 24px;
+    margin: 14px 0;
+}
+.course__about h3 {
+    font-size: 22px;
+    margin: 10px 0;
+}
+.course__about h4 {
+    font-size: 20px;
+    margin: 8px 0;
+}
+.course__about h5 {
+    font-size: 19px;
+    margin: 8px 0;
+}
+.course__about h6 {
+    font-size: 19px;
+    margin: 8px 0;
+}
+.course__about img {
+    margin: 14px 0 10px;
+}
+.course__about p {
+    margin: 8px 0;
+}
+.course__about div {
+    margin: 10px 0;
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+}
+.course__about pre {
+    font-size: 16px;
+    background-color: #202020;
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    position: relative;
+}
+.course__about pre::before {
+    display: block;
+    content: "";
+    width: 100%;
+    height: 8px;
+    background-color: var(--violet);
+    position: absolute;
+    top: -4px;
+    border-radius: 6px 6px 0 0;
+    left: 0;
+    right: 0;
+}

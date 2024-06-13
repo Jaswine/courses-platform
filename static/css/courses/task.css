@@ -64,8 +64,8 @@
 
 }
 .task__page__left__header__buttons a:last-child  {
-      background-color: var(--pink);
-      border-color: var(--pink);
+      background-color: var(--violet);
+      border-color: var(--violet);
 }
 .task__page__left__header__buttons a:last-child  svg {
       opacity: 1;

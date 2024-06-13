@@ -3,7 +3,11 @@
 
 {% block title %}
     <link rel="stylesheet" href="/static/css/courses/create_courses.css">
-    <title>Create a new course</title>
+    {% if status == 'Create' %}
+        <title>Create a new article</title>
+    {% else %}
+        <title>Edit "{{ article.title }}"</title>
+    {% endif %}
 {% endblock title %}
 
 {% block content %}
@@ -13,7 +17,11 @@
         {% csrf_token %}
         <div class="page__content__main">
             <div class="page__content__header">
-                <h2>Add New Article &#128221;</h2>
+                {% if status == 'Create' %}
+                    <h2>Add New Article &#128221;</h2>
+                {% else %}
+                    <h2>Edit &#128221;</h2>
+                {% endif %}
                 <div class=""></div>
             </div>
             <div class="page__content__form" id='CreateCourseForm'>
@@ -23,12 +31,17 @@
                 </div>
 
                 <div class="form__field">
+                    <label for="{{ form.image.id_for_label }}">Image:</label>
+                    {{ form.image }}
+                </div>
+
+                <div class="form__field">
                     <label for="{{ form.tags.id_for_label }}">Tags:</label>
                     {{ form.tags }}
                     <p><b>Can't see your tags? </b><a href='{% url "course:tags" %}'>Add more tags</a></p>
                 </div>
 
-                <div class="form__field">
+                <div class="form__field" style="width: 100%">
                     <label for="{{ form.content.id_for_label }}">Content:</label>
                     {% autoescape off %}
                         {{ form.media }}

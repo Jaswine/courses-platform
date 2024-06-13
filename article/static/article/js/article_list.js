@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtersButton = document.querySelector('#filtersButton')
     const showFilters = document.querySelector('#ShowFilters');
     const user__status = document.querySelector('.user__status', 'None')
+    const csrfTokenElement = document.querySelector('[name="csrfmiddlewaretoken"]');
 
 
     const getAllArticles = async (
@@ -59,14 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Добавления внутренностей для курса
         div.innerHTML = `
             <div class='course__header'>
-                <a href='/article/${article.id}'>${article.title}</a>
+                <a href='/articles/${article.id}'>${article.title}</a>
                 ${user__status? user__status.value == 'True' ? `
                     <img src='/static/media/icons/MenuVertical.svg' 
                         alt='MenuVertical' 
                         class='course__header__menu' />
                     <div class='course__header__options'>
-                        <a href='/article/${article.id}/edit'>Edit</a>
-                        <a href='/article/${article.id}/delete'>Delete</a>
+                        <a href='/articles/${article.id}/edit'>Edit</a>
+                        <a href='/articles/${article.id}/delete'>Delete</a>
                     </div>
                 `: '' : ""}
             </div>
@@ -82,15 +83,15 @@ document.addEventListener('DOMContentLoaded', () => {
         courseTagsContainer.classList.add('course__tags')
 
         // Взятие всех тегов и добавления их к карточки курса
-        article.tags.forEach(tag => {
+        article.tags.forEach((tag, index) => {
             const span = document.createElement('a')
 
             span.id = `tag${tag.id}`
             span.classList.add('course__tag')
 
-            if (tag.id % 3 == 0) {
+            if (index % 3 == 0) {
                 span.style.backgroundColor = 'rgb(208,162,200,60%)'
-            } else if (tag.id % 2 == 0) {
+            } else if (index % 2 == 0) {
                 span.style.backgroundColor = 'rgb(242,230,217,60%)'
             } else {
                 span.style.backgroundColor = 'rgb(187,168,253,60%)'
@@ -132,10 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
     showAllCourses.addEventListener('click', (e) => {
         if (e.target.classList.contains('heart')) {
             //
-            let course = e.target.parentNode.parentNode.parentNode.parentNode;
+            let article = e.target.parentNode.parentNode.parentNode.parentNode;
 
-            fetch(`/api/courses-like/${course.id}`, {
-                method: 'POST'
+            fetch(`/api/article/article-list/${article.id}/likes`, {
+                method: 'POST',
             })
                 .then(response => response.json())
                 .then(data => {
@@ -143,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         let heart = e.target
                         let span = heart.parentNode.querySelector('span')
 
-                        if (data.message == 'User like removed successfully') {
+                        if (data.message == 'Like removed successfully!') {
                             heart.style.color = '#202020'
                             span.innerHTML = parseInt(span.innerHTML) - 1
                         } else {
@@ -163,12 +164,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch(error => {
                    console.log(error)
                 })
-
         }
 
         if (e.target.classList.contains('course__header__menu')) {
-            let course = e.target.parentNode.parentNode
-            let menu = course.querySelector('.course__header__options')
+            let article = e.target.parentNode.parentNode
+            let menu = article.querySelector('.course__header__options')
 
             if (menu.style.opacity == 1) {
                 menu.style.opacity = 0

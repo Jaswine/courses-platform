@@ -239,7 +239,7 @@ a, button, input, textarea, select, textarea {
 }
 ::-webkit-scrollbar-thumb {
     background-color: var(--violet);
-    border-radius: 10px;
+    border-radius: 4px;
 }
 .page__content__header {
     display: flex;

@@ -1,0 +1,101 @@
+{% include 'main.html' %}
+
+{% block title %}
+    <link rel="stylesheet" href="/static/css/courses/course.css">
+    <link rel="stylesheet" href="/static/article/css/article.css">
+    <title>Articles</title>
+{% endblock title %}
+
+{% block content %}
+<input type="hidden" name="user_status" class="user__status" value="{{ request.user.is_superuser }}" />
+<div class="page">
+    {% if request.user.is_authenticated %}
+        {% include "header.html" %}
+    {% endif %}
+    <div class="course__item"
+        {% if request.user.is_authenticated %}
+            style="margin-left: 200px;"
+        {% else %}
+            style="margin-left: 0px"
+        {% endif %}
+    >
+        <div class="course__header">
+            <div class="course__header__image"
+                {% if article.image %}style="background-image: url('{{ article.image.url }}');"{% else %}style="background-color: url('https://images.unsplash.com/photo-1519327128442-131d250b06b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fG5vdCUyMGZvdW5kfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60')"{% endif %}></div>
+            <div class="course__header__mask"></div>
+            <div class="course__header__item">
+                <div class="course__header__title">
+                    <h2>{{ article.title }}</h2>
+                    <span id="course__favorite"></span>
+                </div>
+                <div class="course__header__info">
+                    <div class="course__header__info__left">
+                        <a href="/users/{{ article.user.username }}">{{ article.user.username }}</a>
+                    </div>
+                    <div class="course__header__info__right">
+                        {% for tag in article.tags.all %}
+                        <div class="course__tag" style="background-color: {% if forloop.counter|divisibleby:3 %}#BBA8FD{% elif forloop.counter|divisibleby:2 %}#EAB6E1{% else %}#F2E6D9{% endif %}">
+                                {{ tag.name }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="course__content">
+            <div class="course__content__left">
+                {% comment %} about {% endcomment %}
+                <div class="course__about">
+                    {% autoescape off %}
+                        <div class="text">
+                            {{ article.content }}
+                        </div>
+                        {% endautoescape %}
+                </div>
+
+                {% comment %} reviews {% endcomment %}
+                <div class="course__reviews">
+                    <h2>📌 Comments</h2>
+                    {% if request.user.is_authenticated %}
+                        <form action="" id="CourseReviewsForm">
+                            {% csrf_token %}
+                            <textarea name="message" placeholder="What did you like? What have you learned in this course? What was new to you?"></textarea>
+                            <div class="">
+                                <p></p>
+                                <button class="btn">Send comment</button>
+                            </div>
+                        </form>
+                    {% endif %}
+                    <div class="course__reviews__filters">
+                        <div class="stars"></div>
+                        <div class="show__count__reviews">
+                            <span class="course__reviews__filters__count"></span>
+                            comments
+                        </div>
+                    </div>
+                    <div class="course__reviews__all" id="CourseReviews"></div>
+                </div>
+
+            </div>
+
+
+            <div class="course__content__right">
+
+                {% comment %} share on social networks {% endcomment %}
+                <div class="course__content__right__place">
+                    <b>Share on social networks:</b>
+                    <div class="line">
+                        <a class="fa-brands fa-square-facebook" href=""></a>
+                        <a class="fa-brands fa-square-instagram" href=""></a>
+                        <a class="fa-brands fa-square-x-twitter" href=""></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="/static/article/js/article.js"></script>
+</div>
+{% endblock content %}

@@ -10,6 +10,7 @@ class Article(models.Model):
         Статья
     """
     title = models.CharField(max_length=150)
+    image = models.ImageField(upload_to="article/%Y/%m/%d", blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag, blank=True)
     content = RichTextField()

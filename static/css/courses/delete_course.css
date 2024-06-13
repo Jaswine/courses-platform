@@ -1,0 +1,22 @@
+@import "./../variables.css";
+
+.page__content__main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    margin: 10vh 0;
+}
+.page__content__main h2 {
+    margin-bottom: 4vh;
+}
+.page__content__main .buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.page__content__main .buttons .link:hover {
+    color: var(--violet);
+}

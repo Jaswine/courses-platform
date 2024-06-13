@@ -11,15 +11,19 @@ def get_all_articles() -> list[Article]:
     return Article.objects.all()
 
 
-def filter_articles(q: str, tags: [Tag]) -> list[Article]:
+def filter_articles(is_superuser: bool, q: str, tags: [Tag]) -> list[Article]:
     """
         Фильтрация статей
 
-        :param  q: str           - строка для поиска
-        :param  tags: [Tag]      - строка для фильтрации по тегам
+        :param  is_superuser: bool  - пользователь
+        :param  q: str              - строка для поиска
+        :param  tags: [Tag]         - строка для фильтрации по тегам
         :return [Article]
     """
-    articles = Article.objects.filter(title__icontains=q, is_published=True)
+    articles = Article.objects.filter(title__icontains=q)
+
+    if not is_superuser:
+        articles.filter(is_published=True)
 
     valid_tags = [tag for tag in tags if tag]
 

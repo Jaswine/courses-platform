@@ -595,9 +595,6 @@ h2 {
     flex-direction: column;
     width: 100%;
 }
-.course__about * {
-    font-size: 18px;
-}
 .course__about strong {
     font-size: 20px;
     margin-bottom: 6px;

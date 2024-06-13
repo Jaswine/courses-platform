@@ -21,7 +21,7 @@
     {% endif %}>
         <div class="course__header">
             <div class="course__header__image" 
-                {% if course.image %}style="background-image: url('/media/{{ course.image }}');"{% else %}style="background-color: url('https://images.unsplash.com/photo-1519327128442-131d250b06b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fG5vdCUyMGZvdW5kfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60')"{% endif %}></div>
+                {% if course.image %}style="background-image: url('{{ course.image.url }}');"{% else %}style="background-color: url('https://images.unsplash.com/photo-1519327128442-131d250b06b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fG5vdCUyMGZvdW5kfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60')"{% endif %}></div>
             <div class="course__header__mask"></div>
             <div class="course__header__item">
                 <div class="course__header__title">
