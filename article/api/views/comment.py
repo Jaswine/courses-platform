@@ -18,7 +18,7 @@ def comment_create_view(request, article_id: int) -> JsonResponse:
 
         return JsonResponse({
             'status': 'success',
-            'data': comments
+            'comments': comments
         }, status=200)
 
     elif request.method == 'POST':
@@ -35,7 +35,7 @@ def comment_create_view(request, article_id: int) -> JsonResponse:
     }, status=405)
 
 
-def comment_update_delete(request, article_id, comment_id) -> JsonResponse:
+def comment_update_delete(request, article_id: int, comment_id: int) -> JsonResponse:
     article = get_object_or_404(Article, pk=article_id)
     comment = get_object_or_404(ArticleComment, pk=comment_id)
 

@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from ..utils.get_element_or_404 import get_element_or_404
 from ...models import Course, Title, TitleOrder, TaskOrder, Task
-from ..utils import get_element_or_404
 
 
 @csrf_exempt
@@ -41,8 +41,7 @@ def title_list_create(request, id):
                         t['public'] = task.public
 
                         if request.user in course.users_who_registered.all():
-                            t[
-                                'completed_status'] = 'Completed' if request.user in task.users_who_completed.all() else 'Uncompleted'
+                            t['completed_status'] = 'Completed' if request.user in task.users_who_completed.all() else 'Uncompleted'
                         else:
                             t['completed_status'] = None
 

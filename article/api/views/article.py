@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from article.api.services.article_service import filter_articles, sort_articles
 from django.views.decorators.csrf import csrf_exempt
 from article.models import ArticleComment, Article
-from course.api.utils import get_element_or_404
+from course.api.utils.get_element_or_404 import get_element_or_404
 
 
 def article_list(request):

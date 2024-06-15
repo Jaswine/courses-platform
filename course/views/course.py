@@ -21,13 +21,15 @@ def create_course(request):
             form = CourseForm(request.POST, request.FILES)
            
             if form.is_valid():
-                course = form.save(commit=False)
-                course.user = request.user
-                course.save()
+                new_course = form.save(commit=False)
+                new_course.user = request.user
+                new_course.save()
+
+                messages.success(request, 'Course has been created successfully!')
                 return redirect('/')
             else:
                 messages.error(request, 'Form is not valid')
-        
+
         return render(request, 'course/create_course.html', {
             'form': form
         })
@@ -55,7 +57,8 @@ def course_edit(request, id):
            
             if form.is_valid():
                 form.save()
-                
+
+                messages.success(request, 'Course has been updated successfully!')
                 return redirect('course:course-edit', course.id)
         
         return render(request, 'course/edit/edit_course.html', {
@@ -73,6 +76,7 @@ def course_delete(request, id):
                 
         if request.method == 'POST':
             course.delete()
+
             messages.success(request, 'Course deleted successfully!')   
             return redirect('course:course')
         

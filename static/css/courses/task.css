@@ -43,7 +43,7 @@
 }
 .task__page__left__header__buttons a {
       cursor: pointer;
-      border: 1.4px solid rgb(20,20,20,.1);
+      border: 1.8px solid rgb(20,20,20,.1);
       padding: 8px;
       display: flex;
       justify-content: center;
@@ -126,6 +126,7 @@
 }
 .tasks__title__header h4 {
       font-size: 16px;
+      font-weight: 500;
 }
 .task {
       width: 100%;
@@ -138,13 +139,16 @@
       transition: all .3s linear;
       margin-left: 6px;
       overflow-x: hidden;
-  }
+}
 .task__left {
       width: 85%;
       display: flex;
       justify-content: start;
       align-items: center;
       gap: 4%;
+}
+.task:hover .task__done {
+      border-color: rgb(20, 20, 20, .7);
 }
 .task__done {
       display: block;
@@ -153,7 +157,7 @@
       min-width: 20px;
       height: 20px;
       border-radius: 100%;
-      border: 2px solid rgb(20, 20, 20, .6);
+      border: 2px solid rgb(20, 20, 20, .4);
       transition: all .3s linear;
       position: relative;
 }
@@ -162,7 +166,7 @@
 }
 .task__left a {
       color: rgb(20, 20, 20, .6);
-      font-weight: 500;
+      font-weight: 400;
       font-size: 16px;
 }   
 .task__right {

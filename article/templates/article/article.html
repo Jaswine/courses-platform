@@ -8,6 +8,7 @@
 
 {% block content %}
 <input type="hidden" name="user_status" class="user__status" value="{{ request.user.is_superuser }}" />
+<input type="hidden" id="ArticleID" value="{{ article.id }}"/>
 <div class="page">
     {% if request.user.is_authenticated %}
         {% include "header.html" %}
@@ -59,29 +60,46 @@
                 <div class="course__reviews">
                     <h2>📌 Comments</h2>
                     {% if request.user.is_authenticated %}
-                        <form action="" id="CourseReviewsForm">
+                        <form method="POST" action="" id="ArticleCommentsForm">
                             {% csrf_token %}
-                            <textarea name="message" placeholder="What did you like? What have you learned in this course? What was new to you?"></textarea>
+                            <textarea name="message" placeholder="Enter your message..."></textarea>
                             <div class="">
                                 <p></p>
                                 <button class="btn">Send comment</button>
                             </div>
                         </form>
                     {% endif %}
-                    <div class="course__reviews__filters">
-                        <div class="stars"></div>
-                        <div class="show__count__reviews">
-                            <span class="course__reviews__filters__count"></span>
-                            comments
-                        </div>
-                    </div>
-                    <div class="course__reviews__all" id="CourseReviews"></div>
+{#                    <div class="course__reviews__filters">#}
+{#                        <div class="stars"></div>#}
+{#                        <div class="show__count__reviews">#}
+{#                            <span class="course__reviews__filters__count"></span>#}
+{#                            comments#}
+{#                        </div>#}
+{#                    </div>#}
+                    <div class="course__reviews__all" id="ArticleComments"></div>
                 </div>
 
             </div>
 
 
             <div class="course__content__right">
+
+                <div class="course__content__right__place">
+                    <div class="line">
+                         <div>
+                            <i class="fa-solid fa-eye"></i>
+                            <span>10</span>
+                        </div>
+                        <div>
+                            <i class="fa-solid fa-heart heart"></i>
+                            <span>10</span>
+                        </div>
+                        <div>
+                            <i class="fa-solid fa-message comment"></i>
+                            <span>10</span>
+                        </div>
+                    </div>
+                </div>
 
                 {% comment %} share on social networks {% endcomment %}
                 <div class="course__content__right__place">

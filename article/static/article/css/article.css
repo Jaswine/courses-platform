@@ -1,4 +1,3 @@
-@import "./../../variables.css";
 
 .course__about {
     width: 100%;
@@ -36,11 +35,14 @@
     font-size: 19px;
     margin: 8px 0;
 }
+.course__about .text {
+    margin: 0;
+}
 .course__about img {
     margin: 14px 0 10px;
 }
 .course__about p {
-    margin: 8px 0;
+    margin-bottom: 8px;
 }
 .course__about div {
     margin: 10px 0;

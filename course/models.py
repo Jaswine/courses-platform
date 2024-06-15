@@ -26,7 +26,6 @@ class Course(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
 
     #TODO: About this course
-    # about = models.TextField(max_length=2000, blank=True)
     about = RichTextField(blank=True)
     level = models.CharField(max_length=13, choices=LEVEL)
 
@@ -35,7 +34,6 @@ class Course(models.Model):
 
     #TODO: Like & Participants
     likes = models.ManyToManyField(User, blank=True, related_name='likes')
-    # participants = models.ManyToManyField(User, blank=True, related_name='participants')
 
     course_titles = models.ManyToManyField('Title', through='TitleOrder', blank=True, default=[],
                                            related_name='course_titles')
@@ -44,6 +42,9 @@ class Course(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created']
 
     def __str__(self):
         return self.title

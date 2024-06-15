@@ -25,9 +25,9 @@
                 </div>
             </div>
             <h2 class="page__content__others">My courses  🗂</h2>
-            {% if courses_before_3 > 0 %}
+            {% if courses|length > 0 %}
             <div class="page__content__popular">
-                {% for course in courses_before_3 %}
+                {% for course in courses %}
                     <div class="popular__course">
                         <div class="popular__course__back">
                             <div 
@@ -36,7 +36,7 @@
                             ></div>
                             <img 
                                 {% if course.image %}
-                                    src="/static{{ course.image.url }}"
+                                    src="{{ course.image.url }}"
                                 {% else %}
                                     src="https://images.unsplash.com/photo-1519327128442-131d250b06b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fG5vdCUyMGZvdW5kfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60"
                                 {% endif %}
@@ -57,14 +57,12 @@
                 {% endfor %}
                 </div>
                 {% else %}
-                <div class="page__content__notfound">
+                <div class="page__content__notfound" id="Sel">
                     Nothing found 🗑
                 </div>
                 <h2 class="page__content__others">Other Courses  📚</h2>
                 <div class="page__content__courses" id='ShowAllCourses'></div>
-
-                <script src='/static/js/courses/courses.js' ></script>
-                {% endif %}
+             {% endif %}
             <div class="page__content__courses">
                 {% comment %} <h2>Other Courses 😍</h2> {% endcomment %}
             </div>
@@ -78,4 +76,7 @@
         </div>
     </div>
 </div>
+
+<script src='/static/js/courses/courses.js'></script>
+
 {% endblock content %}

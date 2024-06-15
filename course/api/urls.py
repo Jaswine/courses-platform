@@ -24,5 +24,5 @@ urlpatterns = [
 
     # TODO: TASK
     path('courses/<int:id>/tasks/<int:task_id>/', tasks.task_get_update_delete, name='task-update-delete'),
-    # path('course/<int:id>/tasks/<int:task_id>/experiense/', tasks.task_add_remove_experiense, name='task_add_remove_person'),
+    path('courses/<int:id>/tasks/<int:task_id>/experiense/', tasks.task_add_experiense, name='task_add_experiense'),
 ]

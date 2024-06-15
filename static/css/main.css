@@ -229,7 +229,7 @@ a, button, input, textarea, select, textarea {
 }
 
 ::selection {
-    background-color: var(--violet);
+    background-color: var(--primary);
     color: var(--primary)
 }
 
@@ -238,8 +238,8 @@ a, button, input, textarea, select, textarea {
     background-color: rgb(20,20,20,.1);
 }
 ::-webkit-scrollbar-thumb {
-    background-color: var(--violet);
-    border-radius: 4px;
+    background-color: var(--primary);
+    border-radius: 2px;
 }
 .page__content__header {
     display: flex;

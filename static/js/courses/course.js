@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.status == 'success') {
                   RenderButtons(data.data.user_registered)
                   RenderCourseInfo(data.data)
+                  renderTitleTasks(data.data.titles)
+                  console.log(data.data)
             }
       }
 
@@ -46,11 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
             CourseProjectsCount.innerHTML = data.projects_count + " Projects"
       }
 
-      const fetchTitleTasks = async () => {
-            const response = await fetch(`/api/courses/${CourseId}/titles/`)
-            const data = await response.json()
-            renderTitleTasks(data.titles)
-      }
+      // const fetchTitleTasks = async () => {
+      //       const response = await fetch(`/api/courses/${CourseId}/titles/`)
+      //       const data = await response.json()
+      //       renderTitleTasks(data.titles)
+      // }
 
       const renderTitleTasks = (titles) => {
             TasksContent.innerHTML = '<h2>📑 Course Program</h2>'
@@ -139,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       
       fetchCourseInfo()
-      fetchTitleTasks()
+      // fetchTitleTasks()
 
       enrollDropInACourse.addEventListener('click', () => {
             fetch(`/api/courses-like/${CourseId}/add-to-course`, {

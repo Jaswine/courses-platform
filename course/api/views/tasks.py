@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from ..utils.get_element_or_404 import get_element_or_404
 from ...models import Title, Task, TaskOrder, Course
-from ..utils import get_element_or_404
 
 
 def task_create(request, id):
@@ -121,30 +121,39 @@ def task_get_update_delete(request, id, task_id):
             'message': 'User is not a superuser'
         }, status=403)
 
-    def task_add_remove_experiense(request, id, task_id):
-        if request.user.is_authenticated:
-            course = get_element_or_404(Course, id)
 
-            if isinstance(course, JsonResponse):
-                return course
+@csrf_exempt
+def task_add_experiense(request, id: int, task_id: int):
+    if request.user.is_authenticated:
+        course = get_element_or_404(Course, id)
 
-            task = get_element_or_404(Task, task_id)
+        if isinstance(course, JsonResponse):
+            return course
 
-            if isinstance(task, JsonResponse):
-                return task
+        task = get_element_or_404(Task, task_id)
 
-            if request.method == 'POST':
-                if task.users_who_completed.filter(id=request.user.id).exists():
-                    task.users_who_completed.remove(request.user.id)
-                else:
-                    task.users_who_completed.add(request.user.id)
-                task.save()
-                return JsonResponse({
-                    'status': 'success',
-                    'message': 'Task updated successfully!'
-                }, status=200)
-        else:
+        if isinstance(task, JsonResponse):
+            return task
+
+        if request.method == 'POST':
+            if task.users_who_completed.filter(id=request.user.id).exists():
+                task.users_who_completed.remove(request.user.id)
+            else:
+                task.users_who_completed.add(request.user.id)
+
+            task.save()
+
             return JsonResponse({
-                'status': 'error',
-                'message': 'User is not authenticated'
-            }, status=403)
+                'status': 'success',
+                'message': 'Task updated successfully!'
+            }, status=200)
+
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Method not allowed!'
+        }, status=405)
+    else:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'User is not authenticated'
+        }, status=403)

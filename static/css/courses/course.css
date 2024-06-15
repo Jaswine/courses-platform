@@ -636,3 +636,14 @@ h2 {
    50%   {transform:scaleY(-1) rotate(0deg)}
    100%  {transform:scaleY(-1) rotate(-135deg)}
  }
+
+.course__reviews__all {
+    width: 100%;
+}
+ .comments__not__found {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     width: 100%;
+     margin: 5vh 0;
+ }

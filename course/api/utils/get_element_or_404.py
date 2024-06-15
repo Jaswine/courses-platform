@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 
+
 def get_element_or_404(Model, id):
     try:
         return Model.objects.get(id=id)
