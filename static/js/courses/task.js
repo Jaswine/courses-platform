@@ -1,9 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
       const taskList = document.querySelector('#taskList')
+
       const CourseId = document.querySelector('#CourseId').value
       const TaskId = document.querySelector('#TaskId').value
+
       const TaskPrevElement = document.querySelector('#TaskPrevElement')
       const TaskNextElement = document.querySelector('#TaskNextElement')
+      const TaskContinue = document.querySelector('#TaskContinue')
+
       let current_task = {}
       let all_tasks = []
 
@@ -18,8 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
             titles.forEach(title => {
                   renderTitle(title)
             });
-
-            console.log(all_tasks)
 
             if (current_task.completed_status !== "Completed" && current_task.type == "TaskText") {
                   complete_task(CourseId, TaskId)
@@ -103,19 +105,31 @@ document.addEventListener('DOMContentLoaded', () => {
                   method: 'POST',
             })
             const data = await response.json()
-            console.log('DATA: ', data)
+            console.log('complete task', data)
       }
 
       const getPrevNextElements = (all_tasks, current_task) => {
             const index = all_tasks.findIndex(item => item.id === current_task.id);
 
             if (index == 0) {
-                  TaskNextElement.href = `/courses/${CourseId}/${all_tasks[index+1].id}/`
+                  let next_page_url = `/courses/${CourseId}/${all_tasks[index+1].id}/`
+
+                  TaskPrevElement.style.opacity = .5
+                  TaskNextElement.href = next_page_url
+                  TaskContinue.href = next_page_url
             } else if (index == all_tasks.length - 1) {
-                  TaskPrevElement.href = `/courses/${CourseId}/${all_tasks[index-1].id}/`
+                  let prev_page_url = `/courses/${CourseId}/${all_tasks[index-1].id}/`
+
+                  TaskPrevElement.href = prev_page_url
+                  TaskNextElement.style.opacity = .5
+                  TaskContinue.style.display = 'none'
             } else {
-                  TaskPrevElement.href = `/courses/${CourseId}/${all_tasks[index-1].id}/`
-                  TaskNextElement.href = `/courses/${CourseId}/${all_tasks[index+1].id}/`
+                  let next_page_url = `/courses/${CourseId}/${all_tasks[index+1].id}/`
+                  let prev_page_url = `/courses/${CourseId}/${all_tasks[index-1].id}/`
+
+                  TaskPrevElement.href = prev_page_url
+                  TaskNextElement.href = next_page_url
+                  TaskContinue.href = next_page_url
             }
       }
 })

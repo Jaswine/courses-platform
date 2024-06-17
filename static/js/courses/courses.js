@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const ShowAllCourses = document.querySelector('#ShowAllCourses')
     const searchForm = document.querySelector('#searchForm', '')
     const user__status = document.querySelector('.user__status', 'None')
-    console.log(user__status.value)
 
     // Взятие тэгов для фильтрации
     let search = ''

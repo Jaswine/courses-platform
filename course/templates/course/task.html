@@ -3,6 +3,7 @@
 
 {% block title %}
     <link rel="stylesheet" href="/static/css/courses/task.css">
+    <link rel="stylesheet" href="/static/css/courses/comment.css">
     <link rel="stylesheet" href="/static/css/components/tasks__loader.css">
 
     <title>Task</title>
@@ -17,6 +18,7 @@
 
 <div class="task__page">
     <div class="task__page__left">
+
         <div class="task__page__left__top">
             <a href='{% url 'course:courses' %}'>
                 <span>Courses</span>
@@ -25,6 +27,7 @@
                 <b>{{ course.title }}</b>
             </a>
         </div>
+
         <div class="task__page__left__header">
             <div class="task__page__left__header__left">
                 <h2>{{task.title}}</h2>
@@ -59,6 +62,7 @@
                 </div>
             </div>
         </div>
+
         <div class="task__page__left__content">
             {% if task.text  %}
                 {% autoescape off %}
@@ -73,6 +77,29 @@
                 ></video>
             {% endif %}
         </div>
+
+         <div class="task__page__left__header task__page__left__footer">
+            <div class="task__page__left__header__left">
+            </div>
+            <div class="task__page__left__header__right">
+                <a class="btn" id="TaskContinue">Continue <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+         </div>
+
+        <div class="task__page__left__comments comment" id="Comments">
+            <h2>📌 Comments</h2>
+            <form class="comment__form" method="POST" id="CreateTaskCommentForm">
+                {% csrf_token %}
+                <textarea name="message"
+                          placeholder="Enter your message"></textarea>
+                <div class="comment__form__footer">
+                    <div></div>
+                    <button class="btn">Send <i class="fa-regular fa-paper-plane"></i></button>
+                </div>
+            </form>
+            <div class="comment__list" id="TaskCommentList"></div>
+        </div>
+
     </div>
     <div class="task__page__right">
         <h3>{{ course.title }}</h3>
@@ -83,5 +110,6 @@
 </div>
 
 <script src='/static/js/courses/task.js'></script>
+<script src='/static/js/courses/comment.js'></script>
 
 {% endblock content %}

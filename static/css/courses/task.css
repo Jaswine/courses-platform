@@ -2,7 +2,7 @@
 
 .task__page {
       display: grid;
-      grid-template-columns: 3fr 1fr;
+      grid-template-columns: 3fr 1.1fr;
       height: 100vh;
       width: 100vw;
       overflow: hidden;
@@ -30,6 +30,9 @@
       align-items: center;
       width: 100%;
       margin-bottom: 2vh;
+}
+.task__page__left__footer {
+      margin: 4vh 0 2vh;
 }
 .task__page__left__header__right {
       display: flex;

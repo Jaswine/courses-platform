@@ -343,7 +343,7 @@ h2 {
 }
 .task__left a {
     color: rgb(20,20,20,.6);
-    font-weight: 600;
+    font-weight: 400;
 }
 .task__right a svg {
     opacity: .6;

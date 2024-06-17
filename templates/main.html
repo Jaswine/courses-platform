@@ -10,18 +10,16 @@
     {% block title %}{% endblock title %}
 </head>
 <body>
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div class='message'>
-                    {{message}}
-                    <span class="material-symbols-outlined close">
-                        close
-                    </span>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+    <div class="messages" id="MessageList">
+        {% for message in messages %}
+            <div class='message'>
+                {{message}}
+                <span class="material-symbols-outlined close">
+                    close
+                </span>
+            </div>
+        {% endfor %}
+    </div>
 
     {% block content %}{% endblock content %}
     

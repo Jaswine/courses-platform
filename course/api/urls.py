@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import courses, tags, titles, tasks
+from .views import courses, tags, titles, tasks, task_comment
 
 app_name = 'course'
 
@@ -25,4 +25,9 @@ urlpatterns = [
     # TODO: TASK
     path('courses/<int:id>/tasks/<int:task_id>/', tasks.task_get_update_delete, name='task-update-delete'),
     path('courses/<int:id>/tasks/<int:task_id>/experiense/', tasks.task_add_experiense, name='task_add_experiense'),
+
+    # TODO: TASK COMMENTS
+    path('courses/tasks/<int:task_id>/comments', task_comment.task_comment_list_create, name='task_comment_list_create'),
+    path('courses/tasks/<int:task_id>/comments/<int:comment_id>/delete', task_comment.task_comment_delete, name='task_comment_delete'),
+
 ]

@@ -28,6 +28,11 @@ a {
     color: var(--white);
     font-size: 18px;
     cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
 }
 .btn:hover {
     background-color: var(--white);
@@ -230,7 +235,7 @@ a, button, input, textarea, select, textarea {
 
 ::selection {
     background-color: var(--primary);
-    color: var(--primary)
+    color: var(--white)
 }
 
 ::-webkit-scrollbar {
