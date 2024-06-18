@@ -133,3 +133,24 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class Reaction(models.Model):
+    """
+        Реакция
+    """
+    REACTION_CHOICES = [
+        ('like', 'Like'),
+        ('dislike', 'Dislike'),
+        ('heart', 'Heart'),
+        ('unicorn', 'Unicorn'),
+        ('clap', 'Clap'),
+        ('fire', 'Fire'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reaction_type = models.CharField(max_length=20, choices=REACTION_CHOICES)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} reacted with {self.get_reaction_type_display()}"

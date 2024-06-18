@@ -88,15 +88,8 @@
 
         <div class="task__page__left__comments comment" id="Comments">
             <h2>📌 Comments</h2>
-            <form class="comment__form" method="POST" id="CreateTaskCommentForm">
-                {% csrf_token %}
-                <textarea name="message"
-                          placeholder="Enter your message"></textarea>
-                <div class="comment__form__footer">
-                    <div></div>
-                    <button class="btn">Send <i class="fa-regular fa-paper-plane"></i></button>
-                </div>
-            </form>
+
+            <div class="comment__pre__form" id="CreateTaskCommentForm"></div>
             <div class="comment__list" id="TaskCommentList"></div>
         </div>
 

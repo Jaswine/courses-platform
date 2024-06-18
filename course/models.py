@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField  #? RichTextUploadingField
 
+from user.models import Reaction
+
 
 #!: ______ TAG FOR COURSES & ARTICLES________
 class Tag(models.Model):
@@ -72,12 +74,16 @@ class Task(models.Model):
     title = models.CharField(max_length=255)
     type = models.CharField(max_length=20, choices=TYPE, blank=True)
     points = models.IntegerField(default=0)
+    reactions = models.ManyToManyField(Reaction,
+                                       default=[],
+                                       blank=True)
 
     video = models.FileField(upload_to=f'courses/tasks/videos', blank=True)
     text = RichTextField(default="", blank=True)
     urls = models.ManyToManyField("TaskURLField", default=[], blank=True)
     questions = models.ManyToManyField("Question", default=[], blank=True)
     code_tasks = models.ManyToManyField("CodeTask", default=[], blank=True)
+
 
     @classmethod
     def video_task(cls, text, video):
@@ -231,6 +237,9 @@ class TaskComment(models.Model):
                                             related_name='task_comment_children')
 
     text = models.TextField(max_length=1000)
+    reactions = models.ManyToManyField(Reaction,
+                                       default=[],
+                                       blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
