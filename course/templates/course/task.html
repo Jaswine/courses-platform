@@ -15,6 +15,7 @@
 <input type="hidden" name="" value="{{ course.title }}" id="CourseTitle"/>
 <input type="hidden" name="" value="{{ task.id }}" id="TaskId"/>
 <input type="hidden" id="UserId" value="{{ request.user.id }}" />
+{% csrf_token %}
 
 <div class="task__page">
     <div class="task__page__left">

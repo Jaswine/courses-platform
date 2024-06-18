@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from course.api.utils.get_element_or_404 import get_element_or_404
 from course.models import Task, TaskComment
@@ -68,7 +69,8 @@ def task_comment_list_create(request, task_id: int):
     }, status=401)
 
 
-def task_comment_delete(request, task_id: int, comment_id: int):
+@csrf_exempt
+def task_comment_update_delete(request, task_id: int, comment_id: int):
     """
         Удаление комментария к заданию
     """

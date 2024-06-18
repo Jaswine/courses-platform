@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
  const comments_form = document.querySelector('#CreateTaskCommentForm')
  const list = document.querySelector('#TaskCommentList')
  const messageList = document.querySelector('#MessageList')
+ const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]')
 
 const user__status = document.querySelector('.user__status', 'None')
 
@@ -13,7 +14,7 @@ const getTaskComments = async (path) => {
     const response = await fetch(path)
     const data = await response.json()
 
-    if (data.status == 'success') {
+    if (data.status === 'success') {
         renderTaskComments(data.comments)
     }
 }
@@ -59,6 +60,18 @@ const getTaskComments = async (path) => {
       const delete_comment_button = document.createElement('div')
       delete_comment_button.innerHTML = `<i class="fa-regular fa-trash-can"></i> Delete`
       div_header_right_menu.appendChild(delete_comment_button)
+
+      delete_comment_button.addEventListener('click', () => {
+          if (confirm("Do you want to delete this message?")) {
+              fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/delete`, {
+                  method: 'DELETE',
+              })
+                  .then(() =>  {
+                        createGlobalMessage("Message deleted successfully!")
+                        getTaskComments(`/api/courses/tasks/${TaskId}/comments`)
+                  })
+          }
+      })
 
       showHideElement(div_header_right, div_header_right_menu)
 
@@ -153,6 +166,11 @@ const getTaskComments = async (path) => {
           }
       })
 
+      const input_csrf_token = document.createElement('input')
+      input_csrf_token.type = 'hidden'
+      input_csrf_token.name = 'csrfmiddlewaretoken'
+      input_csrf_token.value = csrfToken.value
+
       const textarea = document.createElement('textarea')
       textarea.name = 'message'
       textarea.placeholder = 'Enter your message'
@@ -164,6 +182,7 @@ const getTaskComments = async (path) => {
         <button class="btn">Send <i class="fa-regular fa-paper-plane"></i></button>
       `
 
+      form.appendChild(input_csrf_token)
       form.appendChild(textarea)
       form.appendChild(form_div)
 

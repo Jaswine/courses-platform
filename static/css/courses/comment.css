@@ -187,6 +187,10 @@
 .comment_item__footer__left a {
     opacity: .6;
     cursor: pointer;
+    font-weight: 400;
+}
+.comment_item__footer__left a:hover {
+    opacity: 1;
 }
 .comment_item__footer span {
     opacity: .4;
@@ -194,14 +198,13 @@
 }
 .comment_item__footer__left__smile__button {
     border-radius: 100%;
-    padding: 4px;
-
     cursor: pointer;
 
     transition: all .3s ease-in-out;
+    opacity: .7;
 }
 .comment_item__footer__left__smile__button:hover {
-    background-color: rgba(20, 20, 20, .06);
+    opacity: 1;
 }
 .comment_item__footer__left__smile__menu {
     display: flex;
