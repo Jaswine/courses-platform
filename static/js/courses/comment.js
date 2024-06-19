@@ -61,16 +61,19 @@ const getTaskComments = async (path) => {
       delete_comment_button.innerHTML = `<i class="fa-regular fa-trash-can"></i> Delete`
       div_header_right_menu.appendChild(delete_comment_button)
 
-      delete_comment_button.addEventListener('click', () => {
-          if (confirm("Do you want to delete this message?")) {
-              fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/delete`, {
-                  method: 'DELETE',
-              })
-                  .then(() =>  {
-                        createGlobalMessage("Message deleted successfully!")
-                        getTaskComments(`/api/courses/tasks/${TaskId}/comments`)
+      delete_comment_button.addEventListener('click', async () => {
+          await confirmGlobalWindow("Do you want to delete this comment?").then(async (confirmed) => {
+            console.log("User's choice: ", confirmed);
+            if (confirmed) {
+                await fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/delete`, {
+                      method: 'DELETE',
                   })
-          }
+                      .then(() =>  {
+                            createGlobalMessage("Message deleted successfully!")
+                            getTaskComments(`/api/courses/tasks/${TaskId}/comments`)
+                      })
+                }
+            });
       })
 
       showHideElement(div_header_right, div_header_right_menu)
@@ -152,6 +155,16 @@ const getTaskComments = async (path) => {
       const form = document.createElement('form')
       form.classList.add('comment__form')
       form.method = 'POST'
+
+      const input_csrf_token = document.createElement('input')
+      input_csrf_token.type = 'hidden'
+      input_csrf_token.name = 'csrfmiddlewaretoken'
+      input_csrf_token.value = csrfToken.value
+
+      const textarea = document.createElement('textarea')
+      textarea.name = 'message'
+      textarea.placeholder = 'Enter your message'
+
       form.addEventListener('submit', (e) => {
           e.preventDefault()
 
@@ -163,17 +176,9 @@ const getTaskComments = async (path) => {
             let formData = new FormData(form)
 
             sendData(`/api/courses/tasks/${TaskId}/comments`, formData)
+            textarea.value = ''
           }
       })
-
-      const input_csrf_token = document.createElement('input')
-      input_csrf_token.type = 'hidden'
-      input_csrf_token.name = 'csrfmiddlewaretoken'
-      input_csrf_token.value = csrfToken.value
-
-      const textarea = document.createElement('textarea')
-      textarea.name = 'message'
-      textarea.placeholder = 'Enter your message'
 
       const form_div = document.createElement('div')
       form_div.classList.add('comment__form__footer')
@@ -234,14 +239,70 @@ const getTaskComments = async (path) => {
   const showHideElement = (button, element) => {
       button.addEventListener('click', () => {
           if (element.style.display === 'flex') {
-              element.style.display = 'none'
-              element.style.opacity = 0
+              showHideElementHide(element)
           } else {
-              element.style.opacity = 1
-              element.style.display = 'flex'
+              showHideElementShow(element)
           }
       })
   }
+
+  const showHideElementShow = (element) => {
+        element.style.display = 'flex'
+
+      setTimeout(() => {
+        element.style.opacity = 1
+      }, 300)
+  }
+
+  const showHideElementHide = (element) => {
+      element.style.opacity = 0
+
+      setTimeout(() => {
+        element.style.display = 'none'
+      }, 300)
+  }
+
+  const confirmGlobalWindow = async (message) => {
+     return new Promise((resolve) => {
+          const div = document.createElement('div')
+          div.classList.add('confirm__global__window')
+
+          const div_form = document.createElement('div')
+          div_form.classList.add('confirm__global__window__form')
+
+          const div_text = document.createElement('h2')
+          div_text.innerHTML = message
+          div_form.appendChild(div_text)
+
+          const div_buttons = document.createElement('div')
+          div_buttons.classList.add('confirm__global__window__buttons')
+
+          const yes_button = document.createElement('button')
+          yes_button.classList.add('btn')
+          yes_button.innerHTML = `<i class="fa-solid fa-check"></i> Yes`
+          yes_button.addEventListener('click', () => {
+              showHideElementHide(div_form)
+              showHideElementHide(div)
+              resolve(true)
+          })
+
+          const no_button = document.createElement('button')
+          no_button.classList.add('btn', 'btn--primary')
+          no_button.innerHTML = `<i class="fa-solid fa-ban"></i> Cancel`
+          no_button.addEventListener('click', () => {
+              showHideElementHide(div_form)
+              showHideElementHide(div)
+              resolve(false)
+          })
+
+          div_buttons.appendChild(no_button)
+          div_buttons.appendChild(yes_button)
+          div_form.appendChild(div_buttons)
+          div.appendChild(div_form)
+
+          document.body.appendChild(div)
+     })
+ }
 
   createTaskCommentForm(comments_form)
 

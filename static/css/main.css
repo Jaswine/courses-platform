@@ -59,8 +59,8 @@ a, button, input, textarea, select, textarea {
     background-color: var(--white);
     width: 100%;
     max-width: 50vw;
-    right: 25vw;
-    left: 25vw;
+    right: 40vw;
+    left: 10vw;
     top: 10vh;
     position: fixed;
     z-index: 10;
@@ -263,4 +263,68 @@ a, button, input, textarea, select, textarea {
     justify-content: center;
     align-items: center;
     gap: 10px;
+}
+
+/* Confirm window */
+.confirm__global__window {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    width: 100vw;
+    height: 100vh;
+
+    position: fixed;
+    z-index: 100;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.confirm__global__window::after {
+    display: block;
+    content: "";
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    z-index: -1;
+    backdrop-filter: blur(5px);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.confirm__global__window__form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    width: 60vw;
+    padding: 10%;
+    box-shadow: 0 0 10px rgba(20, 20, 20, .1);
+
+    background-color: var(--white);
+    border-radius: 6px;
+
+    transition: all .3s ease-in-out;
+}
+.confirm__global__window__form h2 {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 10%;
+    width: 100%;
+    text-align: left;
+}
+.confirm__global__window__buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+}
+.confirm__global__window__buttons .btn {
+    width: 150px;
 }

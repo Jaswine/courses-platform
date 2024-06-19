@@ -1,8 +1,10 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 from course.api.utils.get_element_or_404 import get_element_or_404
 from course.models import Task, TaskComment
+from user.models import Reaction
 
 
 def task_comment_list_create(request, task_id: int):
@@ -98,6 +100,69 @@ def task_comment_update_delete(request, task_id: int, comment_id: int):
             'status': 'error',
             'message': 'Method not allowed!'
         }, status=405)
+    return JsonResponse({
+        'status': 'error',
+        'message': 'User is not authenticated!'
+    }, status=401)
+
+
+@require_http_methods(["POST"])
+def task_comment_react(request, task_id: int, comment_id: int):
+    """
+        Реакция на комментарии
+    """
+    if request.user.is_authenticated:
+        task = get_element_or_404(Task, task_id)
+
+        if isinstance(task, JsonResponse):
+            return task
+
+        comment = TaskComment.objects.get(id=comment_id)
+
+        if isinstance(comment, JsonResponse):
+            return comment
+
+        if request.user != comment.user:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'This user is not allowed to delete this comment!'
+            }, status=403)
+
+        reaction_type = request.POST.get('reaction_type')
+
+        if reaction_type not in dict(Reaction.REACTION_CHOICES).keys():
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Invalid reaction type!'
+            }, status=400)
+
+        existing_reaction = comment.reactions.filter(user=request.user).first()
+
+        if existing_reaction:
+            if existing_reaction.reaction_type == reaction_type:
+                # If the reaction is the same as the existing one, remove it
+                comment.reactions.remove(existing_reaction)
+                existing_reaction.delete()
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Reaction removed!'
+                }, status=200)
+            else:
+                # If the reaction is different, update it
+                existing_reaction.reaction_type = reaction_type
+                existing_reaction.save()
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Reaction updated!'
+                }, status=200)
+        else:
+            # If there is no existing reaction, add a new one
+            new_reaction = Reaction.objects.create(user=request.user, reaction_type=reaction_type)
+            comment.reactions.add(new_reaction)
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Reaction added!'
+            }, status=201)
     return JsonResponse({
         'status': 'error',
         'message': 'User is not authenticated!'
