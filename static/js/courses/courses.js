@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class='course__header'>
                                 <a href='/courses/${course.id}'>${course.title}</a>
                                 ${user__status? user__status.value == 'True' ? `
-                                    <img src='/static/media/icons/MenuVertical.svg' 
+                                    <img src='/static/icons/MenuVertical.svg' 
                                         alt='MenuVertical' 
                                         class='course__header__menu' />
                                     <div class='course__header__options'>

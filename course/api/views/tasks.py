@@ -1,8 +1,10 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from ..services.TaskComment import get_comments_without_children_by_task
+from ..utils.generate_comment_list_util import generate_comment_list_util
 from ..utils.get_element_or_404 import get_element_or_404
-from ...models import Title, Task, TaskOrder, Course
+from ...models import Title, Task, TaskOrder, Course, TaskComment
 
 
 def task_create(request, id):
@@ -66,11 +68,30 @@ def task_get_update_delete(request, id, task_id):
             return task
 
         if request.method == 'GET':
+            content = dict()
+
+            # Task content
+            if task.type == 'TaskText':
+                content['text'] = task.text
+            elif task.type == 'TaskVideo':
+                content['video_path'] = task.video.url if task.video else None
+            elif task.type == 'TaskProject':
+                content['text'] = task.text
+
+            # Comments
+            comments = get_comments_without_children_by_task(task)
+            comment_list = generate_comment_list_util(comments, request.user)
+
             return JsonResponse({
-                'title': task.title,
-                'type': task.type,
-                'points': task.points,
-                'public': task.public
+                'status': 'success',
+                'data': {
+                    'title': task.title,
+                    'type': task.type,
+                    'points': task.points,
+                    'public': task.public,
+                    'content': content,
+                    'comments': comment_list,
+                }
             }, status=200)
 
         if request.method == 'POST':

@@ -8,8 +8,55 @@ document.addEventListener('DOMContentLoaded', () => {
       const TaskNextElement = document.querySelector('#TaskNextElement')
       const TaskContinue = document.querySelector('#TaskContinue')
 
+      const TaskContent = document.querySelector('#TaskContent')
+
       let current_task = {}
       let all_tasks = []
+
+      const getTaskContent = async () => {
+            const response = await fetch(`/api/courses/${CourseId}/tasks/${TaskId}/`)
+            const data = await response.json()
+            console.log(data)
+
+            renderTaskContent(TaskContent, data.data.type, data.data.content)
+      }
+
+      const renderTaskContent = (place, type, content) => {
+            /*
+            *     Рендеринг контента задания
+            */
+            place.innerHTML = ''
+            switch (type) {
+                  case 'TaskText':
+                        renderTextTaskContent(place, content.text)
+                        break
+                  case 'TaskVideo':
+                        renderVideoTaskContent(place, content.video_path)
+                        break
+                  default:
+                        console.log('Type not found!')
+            }
+      }
+
+      const renderTextTaskContent = (place, text) => {
+            /*
+            *     Рендеринг текстового задания
+            */
+            place.innerHTML = text
+      }
+
+       const renderVideoTaskContent = (place, video_path) => {
+            /*
+            *     Рендеринг видео задания
+            */
+            const video = document.createElement('video')
+            video.classList.add('task__page__left__content__video')
+            video.src = video_path
+            video.controls = true
+            place.appendChild(video)
+      }
+
+      getTaskContent()
 
       const getTasks = async () => {
             const response = await fetch(`/api/courses/${CourseId}/titles/`)   

@@ -74,9 +74,9 @@
                 <div class="form__field form__video" id="TaskVideo" style="display: none;">
                     <label>Video:</label>
                     {% if task.video %}
-                        <video src='/static{{ task.video.url }}' controls ></video>
+                        <video src='{{ task.video.url }}' controls ></video>
                         <p>
-                            Uploaded: <a href="/static{{ task.video.url }}" >{{ task.video.name }}</a>
+                            Uploaded: <a href="{{ task.video.url }}" >{{ task.video.name }}</a>
                         </p>
                     {% endif %}
                     <input type="file" name="video" />

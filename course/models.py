@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 
 from django.contrib.auth.models import User
@@ -78,7 +80,12 @@ class Task(models.Model):
                                        default=[],
                                        blank=True)
 
-    video = models.FileField(upload_to=f'courses/tasks/videos', blank=True)
+    def task_directory_path(instance, filename):
+        extension = filename.split('.')[-1]
+        new_filename = f'{instance.id}_document_{uuid.uuid4().hex[:10]}.{extension}'
+        return f'courses/tasks/{instance.id}/video/{new_filename}'
+
+    video = models.FileField(upload_to=task_directory_path, blank=True)
     text = RichTextField(default="", blank=True)
     urls = models.ManyToManyField("TaskURLField", default=[], blank=True)
     questions = models.ManyToManyField("Question", default=[], blank=True)
@@ -237,7 +244,7 @@ class TaskComment(models.Model):
 
     text = models.TextField(max_length=1000)
 
-    likes = models.ManyToManyField(User, related_name='articleLikes', blank=True)
+    likes = models.ManyToManyField(User, related_name='taskCommentLikes', blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

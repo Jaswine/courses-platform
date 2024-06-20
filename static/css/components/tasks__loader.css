@@ -1,4 +1,9 @@
-
+.pre__tasks__loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
 .tasks__loader {
     width: 50px;
     aspect-ratio: 1;

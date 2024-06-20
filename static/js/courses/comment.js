@@ -52,7 +52,7 @@ const getTaskComments = async (path) => {
 
       const div_header_right = document.createElement('img')
       div_header_right.classList.add('comment_item__header__icon')
-      div_header_right.src = '/static/media/icons/MenuVertical.svg'
+      div_header_right.src = '/static/icons/MenuVertical.svg'
       div_header_right.alt = 'MenuVertical'
 
       const div_header_right_menu = document.createElement('div')
