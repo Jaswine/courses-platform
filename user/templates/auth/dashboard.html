@@ -17,7 +17,7 @@
                 <h2>HI, {{ request.user.username }} 👋</h2>
                 <div class="">
                     <a class="btn btn--primary" href="{% url "course:courses" %}">
-                        <img src="/static/media/icons/Search.svg" alt="search">
+                        <img src="/static/icons/Search.svg" alt="search">
                     </a>
                     {% if request.user.is_superuser %}
                         <a href="{% url 'course:create_course' %}" class="btn">Add New Course</a>
@@ -70,7 +70,7 @@
         <div class="page__content__comments">
             <div class="page__content__header page__content__header"> 
                 <button class="btn btn--primary">
-                    <img src="/static/media/icons/Messaging.svg" alt="Messaging">
+                    <img src="/static/icons/Messaging.svg" alt="Messaging">
                 </button>   
             </div>
         </div>

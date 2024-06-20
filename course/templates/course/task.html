@@ -64,19 +64,8 @@
             </div>
         </div>
 
-        <div class="task__page__left__content">
-            {% if task.text  %}
-                {% autoescape off %}
-                    {{ task.text }}
-                {% endautoescape %}
-            {% endif %}
-
-            {% if task.video %}
-                <video src={{ task.video.url }} 
-                class='task__page__left__content__video'
-                controls
-                ></video>
-            {% endif %}
+        <div class="task__page__left__content" id="TaskContent">
+            <div class="tasks__loader"></div>
         </div>
 
          <div class="task__page__left__header task__page__left__footer">
@@ -98,7 +87,9 @@
     <div class="task__page__right">
         <h3>{{ course.title }}</h3>
         <div class="task__page__right__context" id="taskList">
-            <div class="tasks__loader"></div>
+            <div class="pre__tasks__loader">
+                <div class="tasks__loader"></div>
+            </div>
         </div>
     </div>
 </div>

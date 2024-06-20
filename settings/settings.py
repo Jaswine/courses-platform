@@ -135,7 +135,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-MEDIA_URL = 'icons/'
+MEDIA_URL = 'media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
@@ -211,7 +211,6 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-# CKEDITOR_BASEPATH = "/static/icons/ckeditor/ckeditor/"
 CKEDITOR_UPLOAD_PATH = "media/ckeditor/uploads/"
 CKEDITOR_RESTRICT_BY_USER = True
 CKEDITOR_STORAGE_BACKEND = True

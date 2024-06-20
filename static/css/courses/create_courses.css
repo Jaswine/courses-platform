@@ -83,7 +83,7 @@ input[type="file"] {
 }
 input[type="file"]::after {
     display: block;
-    content: url('/static/media/icons/EditImage.svg');
+    content: url('/static/icons/EditImage.svg');
     position: absolute;
     z-index: 1;
     top: -2px;
