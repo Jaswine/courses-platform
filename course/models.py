@@ -84,7 +84,6 @@ class Task(models.Model):
     questions = models.ManyToManyField("Question", default=[], blank=True)
     code_tasks = models.ManyToManyField("CodeTask", default=[], blank=True)
 
-
     @classmethod
     def video_task(cls, text, video):
         return Task.objects.create(
@@ -237,9 +236,8 @@ class TaskComment(models.Model):
                                             related_name='task_comment_children')
 
     text = models.TextField(max_length=1000)
-    reactions = models.ManyToManyField(Reaction,
-                                       default=[],
-                                       blank=True)
+
+    likes = models.ManyToManyField(User, related_name='articleLikes', blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

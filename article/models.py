@@ -3,6 +3,7 @@ from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
 
 from course.models import Tag
+from user.models import Reaction
 
 
 class Article(models.Model):
@@ -17,8 +18,11 @@ class Article(models.Model):
 
     is_published = models.BooleanField(default=False)
 
-    likes = models.ManyToManyField(User, related_name='articleLikes', blank=True)
     views = models.ManyToManyField(User, related_name='articleViews', blank=True)
+    reactions = models.ManyToManyField(Reaction,
+                                       related_name='articleReactions',
+                                       default=[],
+                                       blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -37,6 +41,8 @@ class ArticleComment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField(max_length=600)
+
+    likes = models.ManyToManyField(User, related_name='commentLikes', blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

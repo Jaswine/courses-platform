@@ -140,12 +140,12 @@ class Reaction(models.Model):
         Реакция
     """
     REACTION_CHOICES = [
-        ('like', 'Like'),
-        ('dislike', 'Dislike'),
-        ('heart', 'Heart'),
-        ('unicorn', 'Unicorn'),
-        ('clap', 'Clap'),
-        ('fire', 'Fire'),
+        ('Like', 'Like'),
+        ('Dislike', 'Dislike'),
+        ('Heart', 'Heart'),
+        ('Unicorn', 'Unicorn'),
+        ('Clap', 'Clap'),
+        ('Fire', 'Fire'),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)

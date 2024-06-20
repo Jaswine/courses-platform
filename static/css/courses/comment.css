@@ -218,7 +218,7 @@
     left: 0;
 
     background-color: var(--white);
-    box-shadow: 0 0 10px rgba(20, 20, 20, .06);
+    box-shadow: 0 0 10px rgba(20, 20, 20, .1);
     border-radius: 6px;
     padding: 8px;
     z-index: 1;

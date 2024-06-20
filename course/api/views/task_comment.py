@@ -18,17 +18,37 @@ def task_comment_list_create(request, task_id: int):
             """
                 Показ всех комментариев
             """
-            comments = TaskComment.objects.prefetch_related("task_comment_children").filter(task=task, task_comment_parent=None)
-            comment_list = [{
-                'id': comment.id,
-                'user': {
+            comments = TaskComment.objects.prefetch_related("task_comment_children").filter(task=task,
+                                                                                            task_comment_parent=None)
+            comment_list = []
+
+            for comment in comments:
+                data = dict()
+                data['id'] = comment.id
+                data['user'] = {
                     'username': comment.user.username,
                     'ava': comment.user.profile.image.url if comment.user.profile.image else None,
-                },
-                'message': comment.text,
-                'updated': comment.updated.strftime("%H:%M %d.%m.%Y"),
-                'created': comment.created.strftime("%H:%M %d.%m.%Y"),
-            } for comment in comments]
+                }
+                data['message'] = comment.text
+                data['created'] = comment.created.strftime("%H:%M %d.%m.%Y")
+                data['updated'] = comment.updated.strftime("%H:%M %d.%m.%Y")
+
+                data_reactions = dict(Reaction.REACTION_CHOICES)
+                for reaction in comment.reactions.all():
+                    for choice in data_reactions.keys():
+                        if reaction.reaction_type == choice:
+                            data_reactions[choice] = data_reactions[choice] + 1 if type(data_reactions[choice]) == int else 1
+
+                for reaction in data_reactions.keys():
+                    if type(data_reactions[reaction]) == str:
+                        data_reactions[reaction] = 0
+
+                my_data_reaction = comment.reactions.filter(user=request.user).first()
+                data_reactions['MyReaction'] = my_data_reaction.reaction_type if my_data_reaction else None
+
+                data['reactions'] = data_reactions
+
+                comment_list.append(data)
 
             return JsonResponse({
                 'status': 'success',
@@ -93,7 +113,6 @@ def task_comment_update_delete(request, task_id: int, comment_id: int):
                     'status': 'error',
                     'message': 'This user is not allowed to delete this comment!'
                 }, status=405)
-
             comment.delete()
             return JsonResponse({}, status=204)
         return JsonResponse({
@@ -112,6 +131,7 @@ def task_comment_react(request, task_id: int, comment_id: int):
         Реакция на комментарии
     """
     if request.user.is_authenticated:
+
         task = get_element_or_404(Task, task_id)
 
         if isinstance(task, JsonResponse):
@@ -128,12 +148,13 @@ def task_comment_react(request, task_id: int, comment_id: int):
                 'message': 'This user is not allowed to delete this comment!'
             }, status=403)
 
+        print(request.POST)
         reaction_type = request.POST.get('reaction_type')
 
         if reaction_type not in dict(Reaction.REACTION_CHOICES).keys():
             return JsonResponse({
                 'status': 'error',
-                'message': 'Invalid reaction type!'
+                'message': f'Invalid reaction type! {reaction_type} not found!'
             }, status=400)
 
         existing_reaction = comment.reactions.filter(user=request.user).first()

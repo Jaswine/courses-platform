@@ -7,6 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
  const list = document.querySelector('#TaskCommentList')
  const messageList = document.querySelector('#MessageList')
  const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]')
+ const BUTTON_SMILES = {
+          Like: '👍',
+          Dislike: '👎',
+          Heart: '❤️',
+          Unicorn: '🦄',
+          Clap: '👏',
+          Fire: '🔥',
+ }
 
 const user__status = document.querySelector('.user__status', 'None')
 
@@ -30,8 +38,8 @@ const getTaskComments = async (path) => {
   }
 
   const renderTaskComment = (comment) => {
-     const div = document.createElement('div')
-     div.classList.add('comment_item')
+      const div = document.createElement('div')
+      div.classList.add('comment_item')
 
       // TODO: Create comment's header
       const div_header = document.createElement('div')
@@ -63,17 +71,17 @@ const getTaskComments = async (path) => {
 
       delete_comment_button.addEventListener('click', async () => {
           await confirmGlobalWindow("Do you want to delete this comment?").then(async (confirmed) => {
-            console.log("User's choice: ", confirmed);
-            if (confirmed) {
-                await fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/delete`, {
+              console.log("User's choice: ", confirmed);
+              if (confirmed) {
+                  await fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/delete`, {
                       method: 'DELETE',
                   })
-                      .then(() =>  {
-                            createGlobalMessage("Message deleted successfully!")
-                            getTaskComments(`/api/courses/tasks/${TaskId}/comments`)
+                      .then(() => {
+                          createGlobalMessage("Message deleted successfully!")
+                          getTaskComments(`/api/courses/tasks/${TaskId}/comments`)
                       })
-                }
-            });
+              }
+          });
       })
 
       showHideElement(div_header_right, div_header_right_menu)
@@ -100,20 +108,41 @@ const getTaskComments = async (path) => {
       div_footer_left_smile_button.classList.add('material-symbols-outlined', 'comment_item__footer__left__smile__button')
       div_footer_left_smile_button.innerHTML = `sentiment_satisfied`
 
+    //   if (comment.reactions)
+    //       for (let [name, number] of Object.entries(comment.reactions)) {
+    //           console.log(name, number)
+    //           const div()
+    //       }
+    // }
+
       const div_footer_left_smile_menu = document.createElement('div')
       div_footer_left_smile_menu.classList.add('comment_item__footer__left__smile__menu')
 
       div_footer_left_smile_menu.style.opacity = 0
       div_footer_left_smile_menu.style.display = 'none'
 
-      const button_smiles = ['👍', '👎', '❤️', '🦄', '👏', '🔥']
-      button_smiles.forEach((smile, index) => {
-            const div_footer_left_smile_button = document.createElement('button')
-            div_footer_left_smile_button.classList.add('comment_item__footer__left__smile__button__icon')
-            div_footer_left_smile_button.id = `smileButton${index}`
-            div_footer_left_smile_button.innerHTML = smile
-            div_footer_left_smile_menu.appendChild(div_footer_left_smile_button)
-      })
+      // for (let [name, smile] of Object.entries(BUTTON_SMILES)) {
+      //       const div_footer_left_smile_button = document.createElement('button')
+      //       div_footer_left_smile_button.classList.add('comment_item__footer__left__smile__button__icon')
+      //       div_footer_left_smile_button.id = `smileButton${name}`
+      //       div_footer_left_smile_button.innerHTML = smile
+      //       div_footer_left_smile_button.addEventListener('click', () => {
+      //           const formData = new FormData()
+      //
+      //           formData.append('reaction_type', name)
+      //           formData.append(csrfToken.name, csrfToken.value)
+      //
+      //           fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/react`, {
+      //               method: 'POST',
+      //               body: formData
+      //           })
+      //               .then(response => response.json())
+      //               .then(data => {
+      //                   console.log('DATA: ', data)
+      //               })
+      //       })
+      //       div_footer_left_smile_menu.appendChild(div_footer_left_smile_button)
+      //  }
 
       showHideElement(div_footer_left_smile_button, div_footer_left_smile_menu)
 
