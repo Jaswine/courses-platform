@@ -77,9 +77,24 @@ def task_comment_list_create(request, task_id: int):
                 new_task_comment.task_comment_parent = TaskComment.objects.get(id=parent_id)
                 new_task_comment.save()
 
+            comment_data = dict()
+            comment_data['id'] = new_task_comment.id
+            comment_data['user'] = {
+                'username': new_task_comment.user.username,
+                'ava': new_task_comment.user.profile.image.url if new_task_comment.user.profile.image else None,
+            }
+            comment_data['likes'] = {
+                'count': new_task_comment.likes.count(),
+                'my': True if request.user in new_task_comment.likes.all() else False,
+            }
+            comment_data['message'] = new_task_comment.text
+            comment_data['created'] = new_task_comment.created.strftime("%H:%M %d.%m.%Y")
+            comment_data['updated'] = new_task_comment.updated.strftime("%H:%M %d.%m.%Y")
+
             return JsonResponse({
                 'status': 'success',
-                'message': 'Comment created successfully!'
+                'message': 'Comment created successfully!',
+                'comment': comment_data,
             }, status=201)
         return JsonResponse({
             'status': 'error',

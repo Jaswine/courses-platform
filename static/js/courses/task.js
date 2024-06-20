@@ -1,5 +1,8 @@
+import { renderTaskComments } from './comment.js'
+
 document.addEventListener('DOMContentLoaded', () => {
       const taskList = document.querySelector('#taskList')
+      const TaskContent = document.querySelector('#TaskContent')
 
       const CourseId = document.querySelector('#CourseId').value
       const TaskId = document.querySelector('#TaskId').value
@@ -7,8 +10,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const TaskPrevElement = document.querySelector('#TaskPrevElement')
       const TaskNextElement = document.querySelector('#TaskNextElement')
       const TaskContinue = document.querySelector('#TaskContinue')
+      const commentList = document.querySelector('#TaskCommentList')
 
-      const TaskContent = document.querySelector('#TaskContent')
+      const user__status = document.querySelector('.user__status', 'None')
+
+      const BUTTON_SMILES = {
+          Like: '👍',
+          Dislike: '👎',
+          Heart: '❤️',
+          Unicorn: '🦄',
+          Clap: '👏',
+          Fire: '🔥',
+      }
 
       let current_task = {}
       let all_tasks = []
@@ -19,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(data)
 
             renderTaskContent(TaskContent, data.data.type, data.data.content)
+            renderTaskComments(commentList, data.data.comments)
       }
 
       const renderTaskContent = (place, type, content) => {
