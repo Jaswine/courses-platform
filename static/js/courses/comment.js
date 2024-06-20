@@ -1,340 +1,319 @@
-document.addEventListener('DOMContentLoaded', () => {
- const CourseId = document.querySelector('#CourseId').value
- const TaskId = document.querySelector('#TaskId').value
- const Comments = document.querySelector('#Comments')
+const CourseId = document.querySelector('#CourseId').value
+const TaskId = document.querySelector('#TaskId').value
+const Comments = document.querySelector('#Comments')
 
- const comments_form = document.querySelector('#CreateTaskCommentForm')
- const list = document.querySelector('#TaskCommentList')
- const messageList = document.querySelector('#MessageList')
- const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]')
- const BUTTON_SMILES = {
-          Like: '👍',
-          Dislike: '👎',
-          Heart: '❤️',
-          Unicorn: '🦄',
-          Clap: '👏',
-          Fire: '🔥',
- }
+const comments_form = document.querySelector('#CreateTaskCommentForm')
+const TaskCommentList = document.querySelector('#TaskCommentList')
+const messageList = document.querySelector('#MessageList')
+const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]')
 
-const user__status = document.querySelector('.user__status', 'None')
 
-const getTaskComments = async (path) => {
-    const response = await fetch(path)
-    const data = await response.json()
+// const getTaskComments = async (path) => {
+//     const response = await fetch(path)
+//     const data = await response.json()
+//
+//     if (data.status === 'success') {
+//         renderTaskComments(data.comments)
+//     }
+// }
 
-    if (data.status === 'success') {
-        renderTaskComments(data.comments)
+export function renderTaskComments (list, comments) {
+    list.innerHTML = ''
+    if (comments.length > 0) {
+        comments.forEach(comment => {
+            console.log(comment)
+            renderTaskComment(comment, list)
+        })
     }
 }
 
- const renderTaskComments = (comments) => {
-    list.innerHTML = ''
-    if (comments.length > 0) {
-        comments.forEach((comment, index) => {
-            console.log(comment)
-            renderTaskComment(comment)
-        })
-    }
-  }
+const renderTaskComment = (comment, list) => {
+  const div = document.createElement('div')
+  div.classList.add('comment_item')
 
-  const renderTaskComment = (comment) => {
-      const div = document.createElement('div')
-      div.classList.add('comment_item')
+  // TODO: Create comment's header
+  const div_header = document.createElement('div')
+  div_header.classList.add('comment_item__header')
 
-      // TODO: Create comment's header
-      const div_header = document.createElement('div')
-      div_header.classList.add('comment_item__header')
+  const div_header_left = document.createElement('div')
+  div_header_left.classList.add('comment_item__header__left')
+  div_header_left.innerHTML += `<img src="${comment.user.ava}" alt="${comment.user.username}" />`
+  div_header_left.innerHTML += `<a href="/users/${comment.user.username}">${comment.user.username}</a>`
 
-      const div_header_left = document.createElement('div')
-      div_header_left.classList.add('comment_item__header__left')
-      div_header_left.innerHTML += `<img src="${comment.user.ava}" alt="${comment.user.username}" />`
-      div_header_left.innerHTML += `<a href="/users/${comment.user.username}">${comment.user.username}</a>`
+  const div_header_right = document.createElement('img')
+  div_header_right.classList.add('comment_item__header__icon')
+  div_header_right.src = '/static/icons/MenuVertical.svg'
+  div_header_right.alt = 'MenuVertical'
 
-      const div_header_right = document.createElement('img')
-      div_header_right.classList.add('comment_item__header__icon')
-      div_header_right.src = '/static/icons/MenuVertical.svg'
-      div_header_right.alt = 'MenuVertical'
+  const div_header_right_menu = document.createElement('div')
+  div_header_right_menu.classList.add('comment_item__header__menu')
 
-      const div_header_right_menu = document.createElement('div')
-      div_header_right_menu.classList.add('comment_item__header__menu')
+  div_header_right_menu.style.opacity = 0
+  div_header_right_menu.style.display = 'none'
 
-      div_header_right_menu.style.opacity = 0
-      div_header_right_menu.style.display = 'none'
+  const update_comment_button = document.createElement('div')
+  update_comment_button.innerHTML = `<i class="fa-regular fa-pen-to-square"></i> Update`
+  div_header_right_menu.appendChild(update_comment_button)
 
-      const update_comment_button = document.createElement('div')
-      update_comment_button.innerHTML = `<i class="fa-regular fa-pen-to-square"></i> Update`
-      div_header_right_menu.appendChild(update_comment_button)
+  const delete_comment_button = document.createElement('div')
+  delete_comment_button.innerHTML = `<i class="fa-regular fa-trash-can"></i> Delete`
+  div_header_right_menu.appendChild(delete_comment_button)
 
-      const delete_comment_button = document.createElement('div')
-      delete_comment_button.innerHTML = `<i class="fa-regular fa-trash-can"></i> Delete`
-      div_header_right_menu.appendChild(delete_comment_button)
-
-      delete_comment_button.addEventListener('click', async () => {
-          await confirmGlobalWindow("Do you want to delete this comment?").then(async (confirmed) => {
-              console.log("User's choice: ", confirmed);
-              if (confirmed) {
-                  await fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/delete`, {
-                      method: 'DELETE',
+  delete_comment_button.addEventListener('click', async () => {
+      await confirmGlobalWindow("Do you want to delete this comment?").then(async (confirmed) => {
+          console.log("User's choice: ", confirmed);
+          if (confirmed) {
+              await fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/delete`, {
+                  method: 'DELETE',
+              })
+                  .then(() => {
+                      createGlobalMessage("Message deleted successfully!")
+                      list.removeChild(div)
                   })
-                      .then(() => {
-                          createGlobalMessage("Message deleted successfully!")
-                          getTaskComments(`/api/courses/tasks/${TaskId}/comments`)
-                      })
-              }
-          });
-      })
+          }
+      });
+  })
 
-      showHideElement(div_header_right, div_header_right_menu)
+  showHideElement(div_header_right, div_header_right_menu)
 
-      div_header.appendChild(div_header_left)
-      div_header.appendChild(div_header_right)
-      div_header.appendChild(div_header_right_menu)
-      div.appendChild(div_header)
+  div_header.appendChild(div_header_left)
+  div_header.appendChild(div_header_right)
+  div_header.appendChild(div_header_right_menu)
+  div.appendChild(div_header)
 
-      // TODO: Create comment's text
-      const div_text = document.createElement('div')
-      div_text.classList.add('comment_item__text')
-      div_text.innerHTML = comment.message
-      div.appendChild(div_text)
+  // TODO: Create comment's text
+  const div_text = document.createElement('div')
+  div_text.classList.add('comment_item__text')
+  div_text.innerHTML = comment.message
+  div.appendChild(div_text)
 
-      // TODO: Create comment's footer
-      const div_footer = document.createElement('div')
-      div_footer.classList.add('comment_item__footer')
+  // TODO: Create comment's footer
+  const div_footer = document.createElement('div')
+  div_footer.classList.add('comment_item__footer')
 
-      const div_footer_left = document.createElement('div')
-      div_footer_left.classList.add('comment_item__footer__left')
+  const div_footer_left = document.createElement('div')
+  div_footer_left.classList.add('comment_item__footer__left')
 
-      const div_footer_left_smile_button = document.createElement('a')
-      div_footer_left_smile_button.classList.add('material-symbols-outlined', 'comment_item__footer__left__smile__button')
-      div_footer_left_smile_button.innerHTML = `sentiment_satisfied`
+  const div_footer_left_smile_button = document.createElement('a')
+  div_footer_left_smile_button.classList.add('material-symbols-outlined', 'comment_item__footer__left__smile__button')
+  div_footer_left_smile_button.innerHTML = `sentiment_satisfied`
 
-    //   if (comment.reactions)
-    //       for (let [name, number] of Object.entries(comment.reactions)) {
-    //           console.log(name, number)
-    //           const div()
-    //       }
-    // }
+  const div_footer_left_smile_menu = document.createElement('div')
+  div_footer_left_smile_menu.classList.add('comment_item__footer__left__smile__menu')
 
-      const div_footer_left_smile_menu = document.createElement('div')
-      div_footer_left_smile_menu.classList.add('comment_item__footer__left__smile__menu')
+  div_footer_left_smile_menu.style.opacity = 0
+  div_footer_left_smile_menu.style.display = 'none'
 
-      div_footer_left_smile_menu.style.opacity = 0
-      div_footer_left_smile_menu.style.display = 'none'
+  // for (let [name, smile] of Object.entries(BUTTON_SMILES)) {
+  //       const div_footer_left_smile_button = document.createElement('button')
+  //       div_footer_left_smile_button.classList.add('comment_item__footer__left__smile__button__icon')
+  //       div_footer_left_smile_button.id = `smileButton${name}`
+  //       div_footer_left_smile_button.innerHTML = smile
+  //       div_footer_left_smile_button.addEventListener('click', () => {
+  //           const formData = new FormData()
+  //
+  //           formData.append('reaction_type', name)
+  //           formData.append(csrfToken.name, csrfToken.value)
+  //
+  //           fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/react`, {
+  //               method: 'POST',
+  //               body: formData
+  //           })
+  //               .then(response => response.json())
+  //               .then(data => {
+  //                   console.log('DATA: ', data)
+  //               })
+  //       })
+  //       div_footer_left_smile_menu.appendChild(div_footer_left_smile_button)
+  //  }
 
-      // for (let [name, smile] of Object.entries(BUTTON_SMILES)) {
-      //       const div_footer_left_smile_button = document.createElement('button')
-      //       div_footer_left_smile_button.classList.add('comment_item__footer__left__smile__button__icon')
-      //       div_footer_left_smile_button.id = `smileButton${name}`
-      //       div_footer_left_smile_button.innerHTML = smile
-      //       div_footer_left_smile_button.addEventListener('click', () => {
-      //           const formData = new FormData()
-      //
-      //           formData.append('reaction_type', name)
-      //           formData.append(csrfToken.name, csrfToken.value)
-      //
-      //           fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/react`, {
-      //               method: 'POST',
-      //               body: formData
-      //           })
-      //               .then(response => response.json())
-      //               .then(data => {
-      //                   console.log('DATA: ', data)
-      //               })
-      //       })
-      //       div_footer_left_smile_menu.appendChild(div_footer_left_smile_button)
-      //  }
+  showHideElement(div_footer_left_smile_button, div_footer_left_smile_menu)
 
-      showHideElement(div_footer_left_smile_button, div_footer_left_smile_menu)
+  const div_footer_left_span = document.createElement('u')
 
-      const div_footer_left_span = document.createElement('u')
+  const div_footer_left_reply_button = document.createElement('a')
+  div_footer_left_reply_button.innerHTML = `Reply`
 
-      const div_footer_left_reply_button = document.createElement('a')
-      div_footer_left_reply_button.innerHTML = `Reply`
+  const div_form = document.createElement('div')
+  div_form.classList.add('comment_item__form')
+
+  const div_form_element = createTaskCommentForm(div_form)
+  div_form_element.style.opacity = 0
+  div_form_element.style.display = 'none'
+
+  showHideElement(div_footer_left_reply_button, div_form_element)
+
+  const div_footer_left_reply__form = document.createElement('form')
+  div_footer_left_reply__form.classList.add('comment_item__footer__left__reply__form')
+
+  div_footer_left.appendChild(div_footer_left_smile_button)
+  div_footer_left.appendChild(div_footer_left_smile_menu)
+  div_footer_left.appendChild(div_footer_left_span)
+  div_footer_left.appendChild(div_footer_left_reply_button)
+
+  const div_footer_right = document.createElement('span')
+  div_footer_right.innerHTML += comment.created
+
+  div_footer.appendChild(div_footer_left)
+  div_footer.appendChild(div_footer_right)
+  div.appendChild(div_footer)
+  div.appendChild(div_form)
+
+  list.appendChild(div)
+}
+
+
+const createTaskCommentForm = (place) => {
+  const form = document.createElement('form')
+  form.classList.add('comment__form')
+  form.method = 'POST'
+
+  const input_csrf_token = document.createElement('input')
+  input_csrf_token.type = 'hidden'
+  input_csrf_token.name = 'csrfmiddlewaretoken'
+  input_csrf_token.value = csrfToken.value
+
+  const textarea = document.createElement('textarea')
+  textarea.name = 'message'
+  textarea.placeholder = 'Enter your message'
+
+  form.addEventListener('submit', (e) => {
+      e.preventDefault()
+
+      if (form.querySelector('textarea').value.length < 4) {
+        createGlobalMessage('Message is too short!')
+      } else if (form.querySelector('textarea').value.length > 1000) {
+        createGlobalMessage('Message is too long!')
+      } else {
+        let formData = new FormData(form)
+
+        sendData(`/api/courses/tasks/${TaskId}/comments`, formData)
+        textarea.value = ''
+      }
+  })
+
+  const form_div = document.createElement('div')
+  form_div.classList.add('comment__form__footer')
+  form_div.innerHTML += `
+    <div></div>
+    <button class="btn">Send <i class="fa-regular fa-paper-plane"></i></button>
+  `
+
+  form.appendChild(input_csrf_token)
+  form.appendChild(textarea)
+  form.appendChild(form_div)
+
+  place.appendChild(form)
+
+  return form
+}
+
+const sendData = async (path, data) => {
+ await fetch(path, {
+        method: 'POST',
+        body: data
+    })
+        .then(response => response.json())
+        .then(d => {
+            console.log(d)
+            createGlobalMessage("Message created successfully!")
+            renderTaskComment(d.comment,TaskCommentList)
+        })
+        .catch(error => {
+            console.error('ERROR: \n\n', error)
+        })
+}
+
+const createGlobalMessage = (message) => {
+ const div = document.createElement('div')
+  div.classList.add('message')
+  div.innerHTML += message
+
+  const close_button = document.createElement('span')
+  close_button.classList.add('material-symbols-outlined', 'close')
+  close_button.innerHTML = 'close'
+
+  close_button.addEventListener('click', () => {
+      div.style.opacity = 0
+      messageList.removeChild(div)
+  })
+
+  setTimeout(() => {
+      div.style.opacity = 0
+      messageList.removeChild(div)
+  }, 3000)
+
+  div.appendChild(close_button)
+
+  messageList.appendChild(div)
+}
+
+const showHideElement = (button, element) => {
+  button.addEventListener('click', () => {
+      if (element.style.display === 'flex') {
+          showHideElementHide(element)
+      } else {
+          showHideElementShow(element)
+      }
+  })
+}
+
+const showHideElementShow = (element) => {
+    element.style.display = 'flex'
+
+  setTimeout(() => {
+    element.style.opacity = 1
+  }, 300)
+}
+
+const showHideElementHide = (element) => {
+  element.style.opacity = 0
+
+  setTimeout(() => {
+    element.style.display = 'none'
+  }, 300)
+}
+
+const confirmGlobalWindow = async (message) => {
+ return new Promise((resolve) => {
+      const div = document.createElement('div')
+      div.classList.add('confirm__global__window')
 
       const div_form = document.createElement('div')
-      div_form.classList.add('comment_item__form')
+      div_form.classList.add('confirm__global__window__form')
 
-      const div_form_element = createTaskCommentForm(div_form)
-      div_form_element.style.opacity = 0
-      div_form_element.style.display = 'none'
+      const div_text = document.createElement('h2')
+      div_text.innerHTML = message
+      div_form.appendChild(div_text)
 
-      showHideElement(div_footer_left_reply_button, div_form_element)
+      const div_buttons = document.createElement('div')
+      div_buttons.classList.add('confirm__global__window__buttons')
 
-      const div_footer_left_reply__form = document.createElement('form')
-      div_footer_left_reply__form.classList.add('comment_item__footer__left__reply__form')
+      const yes_button = document.createElement('button')
+      yes_button.classList.add('btn')
+      yes_button.innerHTML = `<i class="fa-solid fa-check"></i> Yes`
+      yes_button.addEventListener('click', () => {
+          showHideElementHide(div_form)
+          showHideElementHide(div)
+          resolve(true)
+      })
 
-      div_footer_left.appendChild(div_footer_left_smile_button)
-      div_footer_left.appendChild(div_footer_left_smile_menu)
-      div_footer_left.appendChild(div_footer_left_span)
-      div_footer_left.appendChild(div_footer_left_reply_button)
+      const no_button = document.createElement('button')
+      no_button.classList.add('btn', 'btn--primary')
+      no_button.innerHTML = `<i class="fa-solid fa-ban"></i> Cancel`
+      no_button.addEventListener('click', () => {
+          showHideElementHide(div_form)
+          showHideElementHide(div)
+          resolve(false)
+      })
 
-      const div_footer_right = document.createElement('span')
-      div_footer_right.innerHTML += comment.created
-
-      div_footer.appendChild(div_footer_left)
-      div_footer.appendChild(div_footer_right)
-      div.appendChild(div_footer)
+      div_buttons.appendChild(no_button)
+      div_buttons.appendChild(yes_button)
+      div_form.appendChild(div_buttons)
       div.appendChild(div_form)
 
-      list.appendChild(div)
-  }
+      document.body.appendChild(div)
+ })
+}
 
-
-  const createTaskCommentForm = (place) => {
-      const form = document.createElement('form')
-      form.classList.add('comment__form')
-      form.method = 'POST'
-
-      const input_csrf_token = document.createElement('input')
-      input_csrf_token.type = 'hidden'
-      input_csrf_token.name = 'csrfmiddlewaretoken'
-      input_csrf_token.value = csrfToken.value
-
-      const textarea = document.createElement('textarea')
-      textarea.name = 'message'
-      textarea.placeholder = 'Enter your message'
-
-      form.addEventListener('submit', (e) => {
-          e.preventDefault()
-
-          if (form.querySelector('textarea').value.length < 4) {
-            createGlobalMessage('Message is too short!')
-          } else if (form.querySelector('textarea').value.length > 1000) {
-            createGlobalMessage('Message is too long!')
-          } else {
-            let formData = new FormData(form)
-
-            sendData(`/api/courses/tasks/${TaskId}/comments`, formData)
-            textarea.value = ''
-          }
-      })
-
-      const form_div = document.createElement('div')
-      form_div.classList.add('comment__form__footer')
-      form_div.innerHTML += `
-        <div></div>
-        <button class="btn">Send <i class="fa-regular fa-paper-plane"></i></button>
-      `
-
-      form.appendChild(input_csrf_token)
-      form.appendChild(textarea)
-      form.appendChild(form_div)
-
-      place.appendChild(form)
-
-      return form
-  }
-
-  const sendData = async (path, data) => {
-     await fetch(path, {
-            method: 'POST',
-            body: data
-        })
-            .then(response => response.json())
-            .then(d => {
-                console.log(d)
-                createGlobalMessage("Message created successfully!")
-                getTaskComments(`/api/courses/tasks/${TaskId}/comments`)
-            })
-            .catch(error => {
-                console.error('ERROR: \n\n', error)
-            })
-  }
-
-  const createGlobalMessage = (message) => {
-     const div = document.createElement('div')
-      div.classList.add('message')
-      div.innerHTML += message
-
-      const close_button = document.createElement('span')
-      close_button.classList.add('material-symbols-outlined', 'close')
-      close_button.innerHTML = 'close'
-
-      close_button.addEventListener('click', () => {
-          div.style.opacity = 0
-          messageList.removeChild(div)
-      })
-
-      setTimeout(() => {
-          div.style.opacity = 0
-          messageList.removeChild(div)
-      }, 3000)
-
-      div.appendChild(close_button)
-
-      messageList.appendChild(div)
-  }
-
-  const showHideElement = (button, element) => {
-      button.addEventListener('click', () => {
-          if (element.style.display === 'flex') {
-              showHideElementHide(element)
-          } else {
-              showHideElementShow(element)
-          }
-      })
-  }
-
-  const showHideElementShow = (element) => {
-        element.style.display = 'flex'
-
-      setTimeout(() => {
-        element.style.opacity = 1
-      }, 300)
-  }
-
-  const showHideElementHide = (element) => {
-      element.style.opacity = 0
-
-      setTimeout(() => {
-        element.style.display = 'none'
-      }, 300)
-  }
-
-  const confirmGlobalWindow = async (message) => {
-     return new Promise((resolve) => {
-          const div = document.createElement('div')
-          div.classList.add('confirm__global__window')
-
-          const div_form = document.createElement('div')
-          div_form.classList.add('confirm__global__window__form')
-
-          const div_text = document.createElement('h2')
-          div_text.innerHTML = message
-          div_form.appendChild(div_text)
-
-          const div_buttons = document.createElement('div')
-          div_buttons.classList.add('confirm__global__window__buttons')
-
-          const yes_button = document.createElement('button')
-          yes_button.classList.add('btn')
-          yes_button.innerHTML = `<i class="fa-solid fa-check"></i> Yes`
-          yes_button.addEventListener('click', () => {
-              showHideElementHide(div_form)
-              showHideElementHide(div)
-              resolve(true)
-          })
-
-          const no_button = document.createElement('button')
-          no_button.classList.add('btn', 'btn--primary')
-          no_button.innerHTML = `<i class="fa-solid fa-ban"></i> Cancel`
-          no_button.addEventListener('click', () => {
-              showHideElementHide(div_form)
-              showHideElementHide(div)
-              resolve(false)
-          })
-
-          div_buttons.appendChild(no_button)
-          div_buttons.appendChild(yes_button)
-          div_form.appendChild(div_buttons)
-          div.appendChild(div_form)
-
-          document.body.appendChild(div)
-     })
- }
-
-  createTaskCommentForm(comments_form)
-
-  getTaskComments(`/api/courses/tasks/${TaskId}/comments`)
-
-})
+createTaskCommentForm(comments_form)
