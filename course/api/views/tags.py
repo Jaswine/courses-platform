@@ -1,50 +1,64 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from ..services.TagService import create_new_tag, get_all_tags, filter_tags_by_name, get_tag_by_id, delete_tag_by_id, \
+    update_tag
+from ..utils.extract_tag_data_util import extract_tag_data_util
 from ...models import Tag
-
 from ...utils import checking_slug, slug_generator
 
 
 @csrf_exempt
 def tags_list_create(request):
     if request.method == 'GET':
+        """
+            Показ всех тэгов
+        """
+        # Берем данные
         query = request.GET.get('q', '')
-        tags = Tag.objects.all()
+        tags = get_all_tags()
 
-        if query:
-            tags = Tag.objects.filter(name__icontains=query)
-
-        data = [{
-            'id': tag.id,
-            'name': tag.name,
-        } for tag in tags]
+        # Проверяем длину поисковой строки
+        if query and len(query) > 2:
+            # Фильтруем данные
+            tags = filter_tags_by_name(tags, query)
 
         return JsonResponse({
             'status': 'success',
-            'tags': data
-        }, safe=False)
-
-
+            'tags': extract_tag_data_util(tags)
+        }, safe=False, status=200)
     elif request.method == 'POST':
-        name = request.POST.get('name', '')
+        if request.user.is_superuser:
+            """
+                Создание нового тега
+            """
+            # Берем названия тэга
+            name = request.POST.get('name', '')
 
-        tag = Tag.objects.create(
-            name=name,
-        )
+            # Создаем новый тэг
+            tag = create_new_tag(name)
 
-        data = {'id': tag.id,
-                'name': tag.name}
-        return JsonResponse(data, status=201)
+            return JsonResponse({
+                'id': tag.id,
+                'name': tag.name
+            }, status=201)
+        else:
+            return JsonResponse({
+                "status": "error",
+                "message": "Access denied for this user: you don't have any permission to create a new tag."
+            }, status=403)
     else:
-        return JsonResponse({'error': 'Access denied for this method: This method seems to be illegal in this world.'},
-                            status=405)
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Access denied for this method: This method seems to be illegal in this world.',
+        }, status=405)
 
 
 @csrf_exempt
-def tags_get_update_delete(request, id):
+def tags_get_update_delete(request, id: int):
     try:
-        tag = Tag.objects.get(id=id)
+        # Берем тэг по id
+        tag = get_tag_by_id(id)
     except Tag.DoesNotExist:
         return JsonResponse({
             'status': 'error',
@@ -52,19 +66,32 @@ def tags_get_update_delete(request, id):
         }, status=404)
 
     if request.method == 'PUT':
-        tag.name = request.POST.get('name', '')
-        tag.save()
+        """
+            Обновление тэга
+        """
+        # Берем названия тэга
+        name = request.POST.get('name', '')
+
+        # Обновляем тэг
+        update_tag(tag, name)
 
         return JsonResponse({
             'status': 'success',
-            'message': 'Tag was successfully updated'
-        }, status=404)
+            'message': 'Tag updated successfully!'
+        }, status=200)
+
     elif request.method == 'DELETE':
-        tag.delete()
+        """
+            Удаление тэга
+        """
+        delete_tag_by_id(tag)
+
         return JsonResponse({
             'status': 'success',
-            'message': 'Tag was successfully deleted'
-        }, status=404)
+            'message': 'Tag deleted successfully!'
+        }, status=204)
     else:
-        return JsonResponse({'error': 'Access denied for this method: This method seems to be illegal in this world.'},
-                            status=405)
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Access denied for this method: This method seems to be illegal in this world.'
+        },status=405)

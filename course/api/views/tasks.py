@@ -1,8 +1,9 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ..services.TaskComment import get_comments_without_children_by_task
-from ..utils.generate_comment_list_util import generate_comment_list_util
+from user.models import Reaction
+from ..services.TaskCommentService import get_comments_without_children_by_task
+from ..utils.extract_comment_data_util import generate_comment_list_util
 from ..utils.get_element_or_404 import get_element_or_404
 from ...models import Title, Task, TaskOrder, Course, TaskComment
 

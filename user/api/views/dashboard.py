@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 
-from course.api.utils.generate_courses_list_util import generate_courses_list_util
+from course.api.utils.extract_course_data_util import generate_courses_list_util
 from course.models import Course
 
 

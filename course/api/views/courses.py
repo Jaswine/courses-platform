@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
 from datetime import datetime
 
-from ..utils.generate_courses_list_util import generate_courses_list_util
+from ..utils.extract_course_data_util import generate_courses_list_util
 from ..utils.get_element_or_404 import get_element_or_404
 from ...models import Course, CourseReview, TaskOrder, TitleOrder
 
