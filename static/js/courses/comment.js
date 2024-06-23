@@ -87,36 +87,27 @@ const renderTaskComment = (comment, list) => {
 
   const div_footer_left_smile_button = document.createElement('a')
   div_footer_left_smile_button.classList.add('material-symbols-outlined', 'comment_item__footer__left__smile__button')
-  div_footer_left_smile_button.innerHTML = `sentiment_satisfied`
+  div_footer_left_smile_button.innerHTML = `favorite`
+  changeLikeStyle(div_footer_left_smile_button, comment.is_liked)
+  div_footer_left_smile_button.addEventListener('click', () => {
+      fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/react/`, {
+          method: 'POST',
+      })
+          .then(response => response.json())
+          .then(data => {
+                  if (data.message == 'Like added successfully!') {
+                        changeLikeStyle(div_footer_left_smile_button, true)
+                  } else {
+                        changeLikeStyle(div_footer_left_smile_button, false)
+                  }
+            })
+  })
 
   const div_footer_left_smile_menu = document.createElement('div')
   div_footer_left_smile_menu.classList.add('comment_item__footer__left__smile__menu')
 
   div_footer_left_smile_menu.style.opacity = 0
   div_footer_left_smile_menu.style.display = 'none'
-
-  // for (let [name, smile] of Object.entries(BUTTON_SMILES)) {
-  //       const div_footer_left_smile_button = document.createElement('button')
-  //       div_footer_left_smile_button.classList.add('comment_item__footer__left__smile__button__icon')
-  //       div_footer_left_smile_button.id = `smileButton${name}`
-  //       div_footer_left_smile_button.innerHTML = smile
-  //       div_footer_left_smile_button.addEventListener('click', () => {
-  //           const formData = new FormData()
-  //
-  //           formData.append('reaction_type', name)
-  //           formData.append(csrfToken.name, csrfToken.value)
-  //
-  //           fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/react`, {
-  //               method: 'POST',
-  //               body: formData
-  //           })
-  //               .then(response => response.json())
-  //               .then(data => {
-  //                   console.log('DATA: ', data)
-  //               })
-  //       })
-  //       div_footer_left_smile_menu.appendChild(div_footer_left_smile_button)
-  //  }
 
   showHideElement(div_footer_left_smile_button, div_footer_left_smile_menu)
 
@@ -213,6 +204,14 @@ const sendData = async (path, data) => {
         .catch(error => {
             console.error('ERROR: \n\n', error)
         })
+}
+
+const changeLikeStyle = (button, status) => {
+    if (status) {
+        button.style.color = '#EAB6E1'
+    } else {
+        button.style.color = '#bcbcbc'
+    }
 }
 
 const showHideElement = (button, element) => {

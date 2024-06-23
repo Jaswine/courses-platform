@@ -140,6 +140,46 @@ def task_comment_update_delete(request, task_id: int, comment_id: int):
     }, status=401)
 
 
+@csrf_exempt
+@require_http_methods(["POST"])
+def task_comment_add_remove_like(request, task_id: int, comment_id: int):
+    """
+        Реакция на комментарии
+    """
+    if request.user.is_authenticated:
+        task = get_element_or_404(Task, task_id)
+
+        if isinstance(task, JsonResponse):
+            return task
+
+        comment = TaskComment.objects.get(id=comment_id)
+
+        if isinstance(comment, JsonResponse):
+            return comment
+
+        if request.user != comment.user:
+            return JsonResponse({
+                "status": "error",
+                "message": "This user is not allowed to like!"
+            })
+
+        if request.user in comment.likes.all():
+            comment.likes.remove(request.user)
+        else:
+            comment.likes.add(request.user)
+
+        comment.save()
+
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Like added successfully!' if request.user in comment.likes.all() else 'Like removed successfully!'
+        }, status=200)
+    return JsonResponse({
+        'status': 'error',
+        'message': 'User is not authenticated!'
+    }, status=401)
+
+
 # @require_http_methods(["POST"])
 # def task_comment_react(request, task_id: int, comment_id: int):
 #     """
