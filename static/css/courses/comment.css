@@ -203,6 +203,13 @@
     transition: all .3s ease-in-out;
     color: #bcbcbc;
 }
+.comment_item__footer__left__smile__button span {
+    font-size: 22px;
+}
+.comment_item__footer__left__smile__button i {
+    font-size: 16px;
+}
+
 .comment_item__footer__left__smile__button:hover {
     color: #7f7f7f;
 }
@@ -234,4 +241,10 @@
 }
 .comment_item__footer__left__smile__button__icon:hover {
     background-color: rgba(20, 20, 20, .04);
+}
+.comment_item__comments {
+    width: 100%;
+    margin-left: 14px;
+    display: flex;
+    flex-direction: column;
 }

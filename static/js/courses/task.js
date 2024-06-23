@@ -29,13 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
       let all_tasks = []
 
       const getTaskContent = async () => {
-            const response = await fetch(`/api/courses/${CourseId}/tasks/${TaskId}/`)
+            const getTaskURL = `/api/courses/${CourseId}/tasks/${TaskId}/`
+            const response = await fetch(getTaskURL)
             const data = await response.json()
-            console.log(data)
 
-            console.log(data)
             renderTaskContent(TaskContent, data.data.type, data.data.content)
-            renderTaskComments(commentList, data.data.comments)
+            renderTaskComments(commentList, data.data.comments, getTaskURL)
             renderTaskBookmark(taskBookmark, data.data.is_bookmarked)
       }
 

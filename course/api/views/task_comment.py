@@ -7,99 +7,55 @@ from course.models import Task, TaskComment
 from user.models import Reaction
 
 
+@require_http_methods(["POST"])
 def task_comment_list_create(request, task_id: int):
+    """
+       Создание нового комментария
+    """
     if request.user.is_authenticated:
         task = get_element_or_404(Task, task_id)
 
         if isinstance(task, JsonResponse):
             return task
 
-        if request.method == 'GET':
-            """
-                Показ всех комментариев
-            """
-            comments = TaskComment.objects.prefetch_related("task_comment_children").filter(task=task,
-                                                                                            task_comment_parent=None)
-            comment_list = []
+        message = request.POST.get('message')
+        parent_id = request.POST.get('parent_id')
 
-            # for comment in comments:
-            #     data = dict()
-            #     data['id'] = comment.id
-            #     data['user'] = {
-            #         'username': comment.user.username,
-            #         'ava': comment.user.profile.image.url if comment.user.profile.image else None,
-            #     }
-            #     data['message'] = comment.text
-            #     data['created'] = comment.created.strftime("%H:%M %d.%m.%Y")
-            #     data['updated'] = comment.updated.strftime("%H:%M %d.%m.%Y")
-            #
-            #     data_reactions = dict(Reaction.REACTION_CHOICES)
-            #     for reaction in comment.reactions.all():
-            #         for choice in data_reactions.keys():
-            #             if reaction.reaction_type == choice:
-            #                 data_reactions[choice] = data_reactions[choice] + 1 if type(data_reactions[choice]) == int else 1
-            #
-            #     for reaction in data_reactions.keys():
-            #         if type(data_reactions[reaction]) == str:
-            #             data_reactions[reaction] = 0
-            #
-            #     my_data_reaction = comment.reactions.filter(user=request.user).first()
-            #     data_reactions['MyReaction'] = my_data_reaction.reaction_type if my_data_reaction else None
-            #
-            #     data['reactions'] = data_reactions
-            #
-            #     comment_list.append(data)
-
+        if len(message) > 1000:
             return JsonResponse({
-                'status': 'success',
-                'comments': comment_list,
-            }, status=200)
-        elif request.method == 'POST':
-            """
-               Создание нового комментария
-           """
-            message = request.POST.get('message')
-            parent_id = request.POST.get('parent_id')
+                'status': 'error',
+                'message': 'Message is too long!'
+            }, status=400)
 
-            if len(message) > 1000:
-                return JsonResponse({
-                    'status': 'error',
-                    'message': 'Message is too long!'
-                }, status=400)
+        new_task_comment = TaskComment.objects.create(
+            task=task,
+            user=request.user,
+            text=message,
+        )
 
-            new_task_comment = TaskComment.objects.create(
-                task=task,
-                user=request.user,
-                text=message,
-            )
+        if parent_id:
+            new_task_comment.task_comment_parent = TaskComment.objects.get(id=parent_id)
+            new_task_comment.save()
 
-            if parent_id:
-                new_task_comment.task_comment_parent = TaskComment.objects.get(id=parent_id)
-                new_task_comment.save()
+        comment_data = dict()
+        comment_data['id'] = new_task_comment.id
+        comment_data['user'] = {
+            'username': new_task_comment.user.username,
+            'ava': new_task_comment.user.profile.image.url if new_task_comment.user.profile.image else None,
+        }
+        comment_data['likes'] = {
+            'count': new_task_comment.likes.count(),
+            'my': True if request.user in new_task_comment.likes.all() else False,
+        }
+        comment_data['message'] = new_task_comment.text
+        comment_data['created'] = new_task_comment.created.strftime("%H:%M %d.%m.%Y")
+        comment_data['updated'] = new_task_comment.updated.strftime("%H:%M %d.%m.%Y")
 
-            comment_data = dict()
-            comment_data['id'] = new_task_comment.id
-            comment_data['user'] = {
-                'username': new_task_comment.user.username,
-                'ava': new_task_comment.user.profile.image.url if new_task_comment.user.profile.image else None,
-            }
-            comment_data['likes'] = {
-                'count': new_task_comment.likes.count(),
-                'my': True if request.user in new_task_comment.likes.all() else False,
-            }
-            comment_data['message'] = new_task_comment.text
-            comment_data['created'] = new_task_comment.created.strftime("%H:%M %d.%m.%Y")
-            comment_data['updated'] = new_task_comment.updated.strftime("%H:%M %d.%m.%Y")
-
-            return JsonResponse({
-                'status': 'success',
-                'message': 'Comment created successfully!',
-                'comment': comment_data,
-            }, status=201)
         return JsonResponse({
-            'status': 'error',
-            'message': 'Method not allowed!'
-        }, status=405)
+            'status': 'success',
+            'message': 'Comment created successfully!',
+            'comment': comment_data,
+        }, status=201)
     return JsonResponse({
         'status': 'error',
         'message': 'User is not authenticated!'
