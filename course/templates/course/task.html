@@ -34,7 +34,6 @@
                 <h2>{{task.title}}</h2>
             </div>
             <div class="task__page__left__header__right">
-                
                 <div class="task__page__left__header__buttons">
                     <a id="TaskPrevElement">
                         <svg width="13.25" height="23.75" viewBox="0 0 13.25 23.75" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -70,6 +69,7 @@
 
          <div class="task__page__left__header task__page__left__footer">
             <div class="task__page__left__header__left">
+                <button class="fa-solid fa-bookmark btn--bookmark" id="taskBookmark"></button>
             </div>
             <div class="task__page__left__header__right">
                 <a class="btn" id="TaskContinue">Continue <i class="fa-solid fa-chevron-right"></i></a>
@@ -94,6 +94,6 @@
     </div>
 </div>
 
-<script  type="module" src='/static/js/courses/task.js'></script>
+<script type="module" src='/static/js/courses/task.js'></script>
 
 {% endblock content %}

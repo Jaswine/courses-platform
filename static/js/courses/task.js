@@ -1,4 +1,5 @@
 import { renderTaskComments } from './comment.js'
+import { createGlobalMessage } from './globalMessage.js'
 
 document.addEventListener('DOMContentLoaded', () => {
       const taskList = document.querySelector('#taskList')
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const TaskNextElement = document.querySelector('#TaskNextElement')
       const TaskContinue = document.querySelector('#TaskContinue')
       const commentList = document.querySelector('#TaskCommentList')
+      const taskBookmark = document.querySelector('#taskBookmark')
 
       const user__status = document.querySelector('.user__status', 'None')
 
@@ -31,8 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json()
             console.log(data)
 
+            console.log(data)
             renderTaskContent(TaskContent, data.data.type, data.data.content)
             renderTaskComments(commentList, data.data.comments)
+            renderTaskBookmark(taskBookmark, data.data.is_bookmarked)
       }
 
       const renderTaskContent = (place, type, content) => {
@@ -193,4 +197,30 @@ document.addEventListener('DOMContentLoaded', () => {
                   TaskContinue.href = next_page_url
             }
       }
+
+      const renderTaskBookmark = (button, status) => {
+            if (status) {
+                console.log(button, status)
+                button.style.color = '#bba8fd'
+            } else {
+                button.style.color = '#bcbcbc'
+            }
+      }
+
+      taskBookmark.addEventListener('click', () => {
+            fetch(`/api/courses/${CourseId}/tasks/${TaskId}/bookmarks/`, {
+                  method: 'POST'
+            })
+                .then(response => response.json())
+                .then(data => {
+                      if (data.message == 'Bookmark added successfully!') {
+                            renderTaskBookmark(taskBookmark, true)
+                            createGlobalMessage(data.message)
+                      } else {
+                            renderTaskBookmark(taskBookmark, false)
+                            createGlobalMessage(data.message)
+                      }
+                })
+      })
+
 })

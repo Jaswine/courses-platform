@@ -195,3 +195,13 @@
 .task:hover .task__right a svg {
       opacity: .9;
 }
+
+.btn--bookmark {
+      font-size: 22px;
+      background-color: transparent;
+      cursor: pointer;
+      color: #bcbcbc;
+}
+.btn--bookmark:hover {
+      color: #7f7f7f;
+}

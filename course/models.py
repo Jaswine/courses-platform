@@ -76,9 +76,7 @@ class Task(models.Model):
     title = models.CharField(max_length=255)
     type = models.CharField(max_length=20, choices=TYPE, blank=True)
     points = models.IntegerField(default=0)
-    reactions = models.ManyToManyField(Reaction,
-                                       default=[],
-                                       blank=True)
+    bookmarks = models.ManyToManyField(User, related_name='task_bookmarks', blank=True)
 
     def task_directory_path(instance, filename):
         extension = filename.split('.')[-1]
