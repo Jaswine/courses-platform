@@ -1,21 +1,12 @@
+import { createGlobalMessage } from './globalMessage.js'
+
 const CourseId = document.querySelector('#CourseId').value
 const TaskId = document.querySelector('#TaskId').value
 const Comments = document.querySelector('#Comments')
 
 const comments_form = document.querySelector('#CreateTaskCommentForm')
 const TaskCommentList = document.querySelector('#TaskCommentList')
-const messageList = document.querySelector('#MessageList')
 const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]')
-
-
-// const getTaskComments = async (path) => {
-//     const response = await fetch(path)
-//     const data = await response.json()
-//
-//     if (data.status === 'success') {
-//         renderTaskComments(data.comments)
-//     }
-// }
 
 export function renderTaskComments (list, comments) {
     list.innerHTML = ''
@@ -222,30 +213,6 @@ const sendData = async (path, data) => {
         .catch(error => {
             console.error('ERROR: \n\n', error)
         })
-}
-
-const createGlobalMessage = (message) => {
- const div = document.createElement('div')
-  div.classList.add('message')
-  div.innerHTML += message
-
-  const close_button = document.createElement('span')
-  close_button.classList.add('material-symbols-outlined', 'close')
-  close_button.innerHTML = 'close'
-
-  close_button.addEventListener('click', () => {
-      div.style.opacity = 0
-      messageList.removeChild(div)
-  })
-
-  setTimeout(() => {
-      div.style.opacity = 0
-      messageList.removeChild(div)
-  }, 3000)
-
-  div.appendChild(close_button)
-
-  messageList.appendChild(div)
 }
 
 const showHideElement = (button, element) => {

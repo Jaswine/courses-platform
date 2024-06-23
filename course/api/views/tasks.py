@@ -90,6 +90,7 @@ def task_get_update_delete(request, id, task_id):
                     'points': task.points,
                     'public': task.public,
                     'content': content,
+                    'is_bookmarked': True if request.user in task.bookmarks.all() else False,
                     'comments': comment_list,
                 }
             }, status=200)
@@ -173,8 +174,42 @@ def task_add_experiense(request, id: int, task_id: int):
             'status': 'error',
             'message': 'Method not allowed!'
         }, status=405)
-    else:
+    return JsonResponse({
+        'status': 'error',
+        'message': 'User is not authenticated'
+    }, status=403)
+
+
+@csrf_exempt
+def task_add_remove_bookmark(request, course_id: int, task_id: int):
+    if request.user.is_authenticated:
+        course = get_element_or_404(Course, course_id)
+
+        if isinstance(course, JsonResponse):
+            return course
+
+        task = get_element_or_404(Task, task_id)
+
+        if isinstance(task, JsonResponse):
+            return task
+
+        if request.method == 'POST':
+            if request.user in task.bookmarks.all():
+                task.bookmarks.remove(request.user)
+            else:
+                task.bookmarks.add(request.user)
+
+            task.save()
+
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Bookmark added successfully!' if request.user in task.bookmarks.all() else 'Bookmark removed successfully!'
+            }, status=200)
         return JsonResponse({
             'status': 'error',
-            'message': 'User is not authenticated'
-        }, status=403)
+            'message': 'Method not allowed!'
+        }, status=405)
+    return JsonResponse({
+        'status': 'error',
+        'message': 'User is not authenticated'
+    }, status=403)
