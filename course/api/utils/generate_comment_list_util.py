@@ -27,6 +27,7 @@ def generate_comment_list_util(comments: [TaskComment | ArticleComment], user: U
             'my': True if user in comment.likes.all() else False,
         },
         'message': comment.text,
+        'is_liked': True if user in comment.likes.all() else False,
         'created': comment.created.strftime("%H:%M %d.%m.%Y"),
         'updated': comment.updated.strftime("%H:%M %d.%m.%Y"),
     } for comment in comments]

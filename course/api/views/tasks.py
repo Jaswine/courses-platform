@@ -26,6 +26,7 @@ def task_create(request, id):
                     points=points,
                     public=False
                 )
+
                 task.save()
 
                 order = course_title.tasks.count() + 1
@@ -131,17 +132,14 @@ def task_get_update_delete(request, id, task_id):
         if request.method == 'DELETE':
             task.delete()
             return JsonResponse({}, status=204)
-
-        else:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Method not allowed'
-            }, status=402)
-    else:
         return JsonResponse({
             'status': 'error',
-            'message': 'User is not a superuser'
-        }, status=403)
+            'message': 'Method not allowed'
+        }, status=402)
+    return JsonResponse({
+        'status': 'error',
+        'message': 'User is not a superuser'
+    }, status=403)
 
 
 @csrf_exempt
@@ -212,4 +210,4 @@ def task_add_remove_bookmark(request, course_id: int, task_id: int):
     return JsonResponse({
         'status': 'error',
         'message': 'User is not authenticated'
-    }, status=403)
+    }, status=401)

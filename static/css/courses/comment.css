@@ -201,10 +201,10 @@
     cursor: pointer;
 
     transition: all .3s ease-in-out;
-    opacity: .7;
+    color: #bcbcbc;
 }
 .comment_item__footer__left__smile__button:hover {
-    opacity: 1;
+    color: #7f7f7f;
 }
 .comment_item__footer__left__smile__menu {
     display: flex;
