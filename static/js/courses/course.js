@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const CourseVideosCount = document.querySelector('#CourseVideosCount')
       const CourseExerciesesCount = document.querySelector('#CourseExerciesesCount')
       const CourseProjectsCount = document.querySelector('#CourseProjectsCount')
+      const CourseHeaderExperienceLine = document.querySelector('#CourseHeaderExperienceLine')
 
 
       const fetchCourseInfo = async () => {
@@ -41,11 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const RenderCourseInfo = (data) => {
-            console.log('Status: ', data)
             CourseLessonsCount.innerHTML = `${data.lessons_count} Lessons`
             CourseVideosCount.innerHTML = data.videos_count + " Videos"
             CourseExerciesesCount.innerHTML = data.exercises_count + " Exercises"
             CourseProjectsCount.innerHTML = data.projects_count + " Projects"
+
+            if (data.completed_tasks_count && data.exercises_count) {
+                  let completed_precent = data.completed_tasks_count * 100 / data.lessons_count
+                  CourseHeaderExperienceLine.style.width = completed_precent + '%'
+            }
       }
 
       // const fetchTitleTasks = async () => {
@@ -56,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const renderTitleTasks = (titles) => {
             TasksContent.innerHTML = '<h2>📑 Course Program</h2>'
-            console.log(titles)
             titles.forEach(title => {
                   renderTitle(title)
             });
@@ -66,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (title.public) {
                   const div = document.createElement('div')
                   div.classList.add('tasks__title')
-                  
+
                   const div_header = document.createElement('div')
                   div_header.classList.add('tasks__title__header')
 
@@ -83,12 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         const div_task__right = document.createElement('div')
                         div_task__right.classList.add('task__left')
-                        
+
                         if (task.completed_status) {
                               const div_task_type = document.createElement('span')
                               div_task_type.classList.add('task__done')
-                              task.completed_status == 'Completed' ? 
-                                    div_task_type.style.backgroundColor = 'rgb(234, 182, 225)' : 
+                              task.completed_status == 'Completed' ?
+                                    div_task_type.style.backgroundColor = 'rgb(234, 182, 225)' :
                                     div_task_type.style.backgroundColor = 'transparent'
                               div_task__right.appendChild(div_task_type)
                         }
@@ -132,14 +136,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         div_task.appendChild(div_task__right)
                         div_task.appendChild(div_task__left)
-                        
+
                         div.appendChild(div_task)
                   })
 
                   TasksContent.appendChild(div)
             }
       }
-      
+
       fetchCourseInfo()
       // fetchTitleTasks()
 
