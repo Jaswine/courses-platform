@@ -116,7 +116,7 @@
     width: 100%;
 }
 .page__content__courses h2 {
-    font-family: var(--PaytoneOne);
+
     font-size: 24px;
     font-weight: 400;
     height: 15vh;
@@ -143,6 +143,6 @@
     width: 100%;
     text-align: left;
     margin-bottom: 15px;
-    font-family: var(--PaytoneOne);
+
     font-size: 24px;
 }

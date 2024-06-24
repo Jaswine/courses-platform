@@ -122,7 +122,7 @@ a, button, input, textarea, select, textarea {
 }
 .page__header__user a {
     font-size: 22px;
-    font-family: var(--PaytoneOne);
+
     font-weight: 600;
 }
 .page__header__top {
@@ -207,7 +207,7 @@ a, button, input, textarea, select, textarea {
     justify-content: flex-end;
 }
 .page__content__header h2 {
-    font-family: var(--PaytoneOne);
+
     font-size: 28px;
     font-weight: 400;
 }
@@ -254,7 +254,7 @@ a, button, input, textarea, select, textarea {
     height: 15vh;
 }
 .page__content__header h2 {
-    font-family: var(--PaytoneOne);
+
     font-size: 28px;
     font-weight: 400;
 }

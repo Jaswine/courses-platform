@@ -8,7 +8,8 @@
 }
 h2 {
     font-size: 26px;
-    font-family: var(--PaytoneOne);
+    font-weight: bold;
+    /**/
 }
 .course__item {
     display: flex;
@@ -83,7 +84,7 @@ h2 {
     width: 100%;
 }
 .course__header__title h2 {
-    font-family: var(--PaytoneOne);
+    /**/
     font-size: 46px;
     margin-bottom: 14px;
 }
@@ -574,7 +575,7 @@ h2 {
 }
 .window__form h2 {
     font-size: 26px;
-    font-family: var(--PaytoneOne);
+
     margin-bottom: 5%;
 }
 .window__buttons {
@@ -604,7 +605,7 @@ h2 {
 }
 .course__about h2 {
     font-size: 26px;
-    font-family: var(--PaytoneOne);
+
     margin-bottom: 10px;
 }
 

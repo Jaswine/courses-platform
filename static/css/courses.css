@@ -218,7 +218,7 @@
 .courses__not_found h2 {
     font-size: 24px;
     color: rgb(20,20,20,.85);
-    font-family: var(--PaytoneOne);
+
 }
 /* Courses Sorting */
 .page__content__sorting form {
