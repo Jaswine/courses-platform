@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const CourseVideosCount = document.querySelector('#CourseVideosCount')
       const CourseExerciesesCount = document.querySelector('#CourseExerciesesCount')
       const CourseProjectsCount = document.querySelector('#CourseProjectsCount')
+      const CourseHeaderExperienceLine = document.querySelector('#CourseHeaderExperienceLine')
 
 
       const fetchCourseInfo = async () => {
@@ -41,11 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const RenderCourseInfo = (data) => {
-            console.log('Status: ', data)
             CourseLessonsCount.innerHTML = `${data.lessons_count} Lessons`
             CourseVideosCount.innerHTML = data.videos_count + " Videos"
             CourseExerciesesCount.innerHTML = data.exercises_count + " Exercises"
             CourseProjectsCount.innerHTML = data.projects_count + " Projects"
+
+            if (data.completed_tasks_count && data.exercises_count) {
+                  let completed_precent = data.completed_tasks_count * 100 / data.lessons_count
+                  CourseHeaderExperienceLine.style.width = completed_precent + '%'
+            }
       }
 
       // const fetchTitleTasks = async () => {
@@ -56,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const renderTitleTasks = (titles) => {
             TasksContent.innerHTML = '<h2>📑 Course Program</h2>'
-            console.log(titles)
             titles.forEach(title => {
                   renderTitle(title)
             });

@@ -45,7 +45,6 @@ def courses_list_create(request):
             'size': courses.count(),
             'courses': data
         }, safe=False)
-
     elif request.method == 'POST':
         if request.user.is_superuser:
             title = request.POST.get('title')
