@@ -7,60 +7,60 @@ from ...models import Course, Title, TitleOrder, TaskOrder, Task
 
 @csrf_exempt
 def title_list_create(request, id):
-    if request.user.is_superuser:
-        course = get_element_or_404(Course, id)
+    course = get_element_or_404(Course, id)
 
-        if isinstance(course, JsonResponse):
-            return course
+    if isinstance(course, JsonResponse):
+        return course
 
-        if request.method == 'GET':
-            titles = course.course_titles.order_by('taskorder__order')
-            title_orders = TitleOrder.objects.filter(course_id=id).order_by('order')
-            titles = [title_order.title for title_order in title_orders]
+    if request.method == 'GET':
+        titles = course.course_titles.order_by('taskorder__order')
+        title_orders = TitleOrder.objects.filter(course_id=id).order_by('order')
+        titles = [title_order.title for title_order in title_orders]
 
-            if len(titles) > 0:
-                data = []
-                for title in titles:
-                    title_data = {
-                        'id': title.id,
-                        'title': title.title,
-                        'public': title.public,
-                        'tasks': []
-                    }
+        if len(titles) > 0:
+            data = []
+            for title in titles:
+                title_data = {
+                    'id': title.id,
+                    'title': title.title,
+                    'public': title.public,
+                    'tasks': []
+                }
 
-                    tasks_orders = TaskOrder.objects.filter(title_id=title.id).order_by('order')
-                    tasks = [task_order.task for task_order in tasks_orders]
-                    present_tasks = []
+                tasks_orders = TaskOrder.objects.filter(title_id=title.id).order_by('order')
+                tasks = [task_order.task for task_order in tasks_orders]
+                present_tasks = []
 
-                    for task in tasks:
-                        t = dict()
-                        t['id'] = task.id
-                        t['title'] = task.title
-                        t['points'] = task.points
-                        t['type'] = task.type
-                        t['public'] = task.public
+                for task in tasks:
+                    t = dict()
+                    t['id'] = task.id
+                    t['title'] = task.title
+                    t['points'] = task.points
+                    t['type'] = task.type
+                    t['public'] = task.public
 
-                        if request.user in course.users_who_registered.all():
-                            t['completed_status'] = 'Completed' if request.user in task.users_who_completed.all() else 'Uncompleted'
-                        else:
-                            t['completed_status'] = None
+                    if request.user in course.users_who_registered.all():
+                        t['completed_status'] = 'Completed' if request.user in task.users_who_completed.all() else 'Uncompleted'
+                    else:
+                        t['completed_status'] = None
 
-                        present_tasks.append(t)
+                    present_tasks.append(t)
 
-                    title_data['tasks'] = present_tasks
+                title_data['tasks'] = present_tasks
 
-                    data.append(title_data)
+                data.append(title_data)
 
-                return JsonResponse({
-                    'size': len(data),
-                    'titles': data,
-                }, safe=False)
-            else:
-                return JsonResponse({
-                    'status': 'success',
-                    'message': 'Titles not found'
-                })
-        elif request.method == 'POST':
+            return JsonResponse({
+                'size': len(data),
+                'titles': data,
+            }, safe=False)
+        else:
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Titles not found'
+            })
+    elif request.method == 'POST':
+        if request.user.is_superuser:
             get_title = request.POST.get('title', '')
             if 255 > len(get_title) > 0:
                 title = Title.objects.create(title=get_title)
@@ -79,17 +79,14 @@ def title_list_create(request, id):
                     'status': 'error',
                     'message': ' The subject cannot be less than 0 or more than 255 characters.'
                 }, status=400)
-
-        else:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Method not allowed'
-            }, status=402)
-    else:
         return JsonResponse({
             'status': 'error',
             'message': 'User is not a superuser'
         }, status=403)
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Method not allowed'
+    }, status=402)
 
 
 @csrf_exempt

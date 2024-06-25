@@ -1,5 +1,5 @@
 from django.forms import ModelForm, CheckboxSelectMultiple
-from .models import Course, Tag, Task
+from .models import Course, Tag, Task, TaskCommentUserComplaint
 
 
 class CourseForm(ModelForm):
@@ -22,3 +22,9 @@ class TaskForm(ModelForm):
             'title',
             'text',
         ]
+
+
+class TaskCommentUserComplaintForm(ModelForm):
+    class Meta:
+        model = TaskCommentUserComplaint
+        fields = ['type', 'message']
