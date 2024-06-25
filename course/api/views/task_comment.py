@@ -1,14 +1,16 @@
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from course.api.utils.get_element_or_404 import get_element_or_404
-from course.models import Task, TaskComment
+from course.forms import TaskCommentUserComplaintForm
+from course.models import Task, TaskComment, TaskCommentUserComplaint
 from user.models import Reaction
 
 
 @require_http_methods(["POST"])
-def task_comment_list_create(request, task_id: int):
+def task_comment_create(request, task_id: int):
     """
        Создание нового комментария
     """
@@ -70,20 +72,14 @@ def task_comment_update_delete(request, task_id: int, comment_id: int):
     if request.user.is_authenticated:
         if request.method == 'DELETE':
             task = get_element_or_404(Task, task_id)
-
-            if isinstance(task, JsonResponse):
-                return task
-
             comment = TaskComment.objects.get(id=comment_id)
-
-            if isinstance(comment, JsonResponse):
-                return comment
 
             if request.user != comment.user:
                 return JsonResponse({
                     'status': 'error',
                     'message': 'This user is not allowed to delete this comment!'
-                }, status=405)
+                }, status=403)
+
             comment.delete()
             return JsonResponse({}, status=204)
         return JsonResponse({
@@ -108,16 +104,10 @@ def task_comment_add_remove_like(request, task_id: int, comment_id: int):
         if isinstance(task, JsonResponse):
             return task
 
-        comment = TaskComment.objects.get(id=comment_id)
+        comment = get_element_or_404(TaskComment, comment_id)
 
         if isinstance(comment, JsonResponse):
             return comment
-
-        if request.user != comment.user:
-            return JsonResponse({
-                "status": "error",
-                "message": "This user is not allowed to like!"
-            })
 
         if request.user in comment.likes.all():
             comment.likes.remove(request.user)
@@ -135,6 +125,52 @@ def task_comment_add_remove_like(request, task_id: int, comment_id: int):
         'message': 'User is not authenticated!'
     }, status=401)
 
+
+@require_http_methods(["POST"])
+def task_comment_add_complaint(request, task_id: int, comment_id: int):
+    """
+        Оставление жалобы на комментарий
+    """
+    if request.user.is_authenticated:
+        task = get_object_or_404(Task, id=task_id)
+        comment = get_object_or_404(TaskComment, id=comment_id)
+
+        comment_complaints = TaskCommentUserComplaint.objects.filter(user=request.user)
+
+        if comment_complaints.count() > 0:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Complaint already exists!'
+            }, status=400)
+
+        form = TaskCommentUserComplaintForm(request.POST)
+        if form.is_valid() and comment_complaints.count() == 0:
+            complaint = form.save(commit=False)
+            complaint.taskComment = comment
+            complaint.user = request.user
+            complaint.save()
+
+            if comment.complaints.count() >= 10:
+                comment.is_public = False
+                comment.save()
+
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Complaint added successfully! The message was hidden as complaints became 10 or more!'
+                }, status=201)
+
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Complaint added successfully!'
+            }, status=201)
+        return JsonResponse({
+            'status': 'error',
+            'errors': form.errors
+        }, status=400)
+    return JsonResponse({
+        'status': 'error',
+        'message': 'User is not authenticated!'
+    }, status=401)
 
 # @require_http_methods(["POST"])
 # def task_comment_react(request, task_id: int, comment_id: int):

@@ -57,49 +57,49 @@ def task_create(request, id):
 
 @csrf_exempt
 def task_get_update_delete(request, id, task_id):
-    if request.user.is_superuser:
-        course = get_element_or_404(Course, id)
+    course = get_element_or_404(Course, id)
 
-        if isinstance(course, JsonResponse):
-            return course
+    if isinstance(course, JsonResponse):
+        return course
+    task = get_element_or_404(Task, task_id)
 
-        task = get_element_or_404(Task, task_id)
+    if isinstance(task, JsonResponse):
+        return task
 
-        if isinstance(task, JsonResponse):
-            return task
+    if request.method == 'GET':
+        content = dict()
 
-        if request.method == 'GET':
-            content = dict()
+        # Task content
+        if task.type == 'TaskText':
+            content['text'] = task.text
+        elif task.type == 'TaskVideo':
+            content['video_path'] = task.video.url if task.video else None
+        elif task.type == 'TaskProject':
+            content['text'] = task.text
 
-            # Task content
-            if task.type == 'TaskText':
-                content['text'] = task.text
-            elif task.type == 'TaskVideo':
-                content['video_path'] = task.video.url if task.video else None
-            elif task.type == 'TaskProject':
-                content['text'] = task.text
+        # Comments
+        comments = get_comments_without_children_by_task(task)
+        comment_list = generate_comment_list_util(comments, request.user)
 
-            # Comments
-            comments = get_comments_without_children_by_task(task)
-            comment_list = generate_comment_list_util(comments, request.user)
+        return JsonResponse({
+            'status': 'success',
+            'data': {
+                'title': task.title,
+                'type': task.type,
+                'points': task.points,
+                'public': task.public,
+                'content': content,
+                'is_bookmarked': True if request.user in task.bookmarks.all() else False,
+                'comments': comment_list,
+            }
+        }, status=200)
 
-            return JsonResponse({
-                'status': 'success',
-                'data': {
-                    'title': task.title,
-                    'type': task.type,
-                    'points': task.points,
-                    'public': task.public,
-                    'content': content,
-                    'is_bookmarked': True if request.user in task.bookmarks.all() else False,
-                    'comments': comment_list,
-                }
-            }, status=200)
-
-        if request.method == 'POST':
+    elif request.method == 'POST':
+        if request.user.is_superuser:
             title = request.POST.get('task_title', '')
             public = request.POST.get('public', None)
             points = request.POST.get('points', None)
+            is_changed = False
 
             if 0 < len(title) < 255:
                 task.title = title
@@ -124,22 +124,27 @@ def task_get_update_delete(request, id, task_id):
                     'status': 'success',
                     'message': 'Task updated successfully!'
                 }, status=200)
-            else:
-                return JsonResponse({
-                    'status': 'success',
-                    'message': 'Task didn\'t change!'
-                }, status=200)
-        if request.method == 'DELETE':
+
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Task didn\'t change!'
+            }, status=200)
+        return JsonResponse({
+            'status': 'error',
+            'message': 'User is not a superuser'
+        }, status=403)
+    elif request.method == 'DELETE':
+        if request.user.is_superuser:
             task.delete()
             return JsonResponse({}, status=204)
         return JsonResponse({
             'status': 'error',
+            'message': 'User is not a superuser'
+        }, status=403)
+    return JsonResponse({
+            'status': 'error',
             'message': 'Method not allowed'
         }, status=402)
-    return JsonResponse({
-        'status': 'error',
-        'message': 'User is not a superuser'
-    }, status=403)
 
 
 @csrf_exempt

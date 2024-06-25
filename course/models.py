@@ -26,7 +26,7 @@ class Course(models.Model):
     title = models.CharField(max_length=250)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    image = models.ImageField(upload_to=f'courses', blank=True)
+    image = models.ImageField(upload_to='courses', blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
 
     #TODO: About this course
@@ -136,7 +136,9 @@ class Task(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return (self.title + ' - ' +
+                self.type + ' - ' +
+                str(self.points))
 
 
 # !:  _______________ Show Tasks __________________
@@ -243,6 +245,12 @@ class TaskComment(models.Model):
     text = models.TextField(max_length=1000)
 
     likes = models.ManyToManyField(User, related_name='taskCommentLikes', blank=True)
+    complaints = models.ManyToManyField(User, through='TaskCommentUserComplaint',
+                                        related_name='task_comment_complaints',
+                                        default=[], blank=True)
+    
+    is_public = models.BooleanField(default=True,
+                                    blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -251,4 +259,35 @@ class TaskComment(models.Model):
         ordering = ['-created']
 
     def __str__(self):
-        return self.task.title
+        return ('Задание: "' + self.task.title + '" - ' +
+                "Создатель: " + self.user.username + ' - ' +
+                "Сообщение: " + self.text)
+
+
+class TaskCommentUserComplaint(models.Model):
+    COMPLAINT_TYPES = (
+        ('Unwanted advertising or spam', 'Unwanted advertising or spam'),
+        ('Pornography or explicit sex scenes', 'Pornography or explicit sex scenes'),
+        ('Discriminatory language or naturalistic content', 'Discriminatory language or naturalistic content'),
+        ('Propaganda of terrorism', 'Propaganda of terrorism'),
+        ('Harassment or bullying', 'Harassment or bullying'),
+        ('Suicide or self-mutilation', 'Suicide or self-mutilation'),
+        ('False information', 'False information'),
+    )
+
+    taskComment = models.ForeignKey(TaskComment, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    type = models.CharField(max_length=100, choices=COMPLAINT_TYPES)
+    message = models.TextField(max_length=1500, blank=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['created']
+
+    def __str__(self):
+        return ('ID комментария: "' + str(self.taskComment.id) + '" - ' +
+                'Пользователь: "' + self.user.username + '" - ' +
+                'Тип: "' + self.type + '"')

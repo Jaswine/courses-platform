@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   renderTitle(title)
             });
 
-            if (current_task.completed_status !== "Completed" && current_task.type == "TaskText") {
+            if (current_task.completed_status !== "Completed" && current_task.type === "TaskText") {
                   complete_task(CourseId, TaskId)
             }
 
@@ -175,12 +175,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const getPrevNextElements = (all_tasks, current_task) => {
             const index = all_tasks.findIndex(item => item.id === current_task.id);
 
-            if (index == 0) {
-                  let next_page_url = `/courses/${CourseId}/${all_tasks[index+1].id}/`
+            if (index === 0) {
+                  if (all_tasks.length > 1) {
+                        let next_page_url = `/courses/${CourseId}/${all_tasks[index + 1].id}/`
 
-                  TaskPrevElement.style.opacity = .5
-                  TaskNextElement.href = next_page_url
-                  TaskContinue.href = next_page_url
+                        TaskPrevElement.style.opacity = .5
+                        TaskNextElement.href = next_page_url
+                        TaskContinue.href = next_page_url
+                  }
             } else if (index == all_tasks.length - 1) {
                   let prev_page_url = `/courses/${CourseId}/${all_tasks[index-1].id}/`
 

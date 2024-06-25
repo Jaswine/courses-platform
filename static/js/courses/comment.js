@@ -1,14 +1,26 @@
 import { createGlobalMessage } from './globalMessage.js'
+import {showHideElement} from './show_hide_element.js'
+import {confirmGlobalWindow} from './confirm_global_window.js'
+import {complaintGlobalWindow} from './complaint_global_window.js'
 
 const CourseId = document.querySelector('#CourseId').value
 const TaskId = document.querySelector('#TaskId').value
+const UserId = document.querySelector('#UserId')
 const Comments = document.querySelector('#Comments')
 
 const comments_form = document.querySelector('#CreateTaskCommentForm')
 const TaskCommentList = document.querySelector('#TaskCommentList')
 const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]')
 const commentList = document.querySelector('#TaskCommentList')
-var url = ''
+
+
+const getTaskContent = async () => {
+    const getTaskURL = `/api/courses/${CourseId}/tasks/${TaskId}/`
+    const response = await fetch(getTaskURL)
+    const data = await response.json()
+
+    renderTaskComments(commentList, data.data.comments, getTaskURL)
+}
 
 export function renderTaskComments(list, comments, url) {
     list.innerHTML = '';
@@ -19,13 +31,6 @@ export function renderTaskComments(list, comments, url) {
         list.appendChild(taskCommentElement); // Append each top-level comment to the list
     });
 }
-
- const getTaskComments = async (url) => {
-    const response = await fetch(url)
-    const data = await response.json()
-
-    renderTaskComments(commentList, data.data.comments)
- }
 
 // Recursive function to render a single comment and its children
 const renderTaskComment = (comment) => {
@@ -39,7 +44,7 @@ const renderTaskComment = (comment) => {
 
     const div_header_left = document.createElement('div');
     div_header_left.classList.add('comment_item__header__left');
-    div_header_left.innerHTML += `<img src="${comment.user.ava}" alt="${comment.user.username}" />`;
+    div_header_left.innerHTML += `<img src="${comment.user.ava ? comment.user.ava : '/static/index/ava.jpg'}" alt="${comment.user.username}" />`;
     div_header_left.innerHTML += `<a href="/users/${comment.user.username}">${comment.user.username}</a>`;
 
     const div_header_right = document.createElement('img');
@@ -52,27 +57,52 @@ const renderTaskComment = (comment) => {
     div_header_right_menu.style.opacity = 0;
     div_header_right_menu.style.display = 'none';
 
-    const update_comment_button = document.createElement('div');
-    update_comment_button.innerHTML = `<i class="fa-regular fa-pen-to-square"></i> Update`;
-    div_header_right_menu.appendChild(update_comment_button);
+    const complaint_comment_button = document.createElement('div')
+    complaint_comment_button.innerHTML = `<i class="fa-regular fa-flag"></i> Complaint`
+    complaint_comment_button.addEventListener('click', async () => {
+        // courses/tasks/<int:task_id>/comments/<int:comment_id>/complaint/
+        await complaintGlobalWindow(csrfToken, TaskId).then(async (formData) => {
+            console.log('formData: ', formData)
+            if (formData !== false) {
+                await fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/complaint/`, {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        createGlobalMessage(data.message);
 
-    const delete_comment_button = document.createElement('div');
-    delete_comment_button.innerHTML = `<i class="fa-regular fa-trash-can"></i> Delete`;
-    div_header_right_menu.appendChild(delete_comment_button);
-
-    delete_comment_button.addEventListener('click', async () => {
-        await confirmGlobalWindow("Do you want to delete this comment?").then(async (confirmed) => {
-            console.log("User's choice: ", confirmed);
-            if (confirmed) {
-                await fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/delete`, {
-                    method: 'DELETE',
-                }).then(() => {
-                    createGlobalMessage("Message deleted successfully!");
-                    div.remove();
-                });
+                        if (data.message === 'Complaint added successfully! The message was hidden as complaints became 10 or more!') {
+                            getTaskContent()
+                        }
+                    })
             }
         });
-    });
+    })
+    div_header_right_menu.appendChild(complaint_comment_button)
+
+    if (UserId && UserId.value == comment.user.id) {
+        const update_comment_button = document.createElement('div');
+        update_comment_button.innerHTML = `<i class="fa-regular fa-pen-to-square"></i> Update`;
+        div_header_right_menu.appendChild(update_comment_button);
+
+        const delete_comment_button = document.createElement('div');
+        delete_comment_button.innerHTML = `<i class="fa-regular fa-trash-can"></i> Delete`;
+        div_header_right_menu.appendChild(delete_comment_button);
+
+        delete_comment_button.addEventListener('click', async () => {
+            await confirmGlobalWindow("Do you want to delete this comment?").then(async (confirmed) => {
+                if (confirmed) {
+                    await fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/delete`, {
+                        method: 'DELETE',
+                    }).then(() => {
+                        createGlobalMessage("Message deleted successfully!");
+                        getTaskContent()
+                    });
+                }
+            });
+        });
+    }
 
     showHideElement(div_header_right, div_header_right_menu);
 
@@ -113,16 +143,14 @@ const renderTaskComment = (comment) => {
 
                 if (data.message === 'Like added successfully!') {
                     if (like_count_place) {
-                        like_count_place.innerHTML = like_count+1
+                        like_count_place.innerHTML = like_count + 1
+                        changeLikeStyle(div_footer_left_smile_button, true);
                     }
-
-                    changeLikeStyle(div_footer_left_smile_button, true);
                 } else {
                      if (like_count_place) {
-                        like_count_place.innerHTML = like_count-1
+                        like_count_place.innerHTML = like_count - 1
+                         changeLikeStyle(div_footer_left_smile_button, false);
                     }
-
-                    changeLikeStyle(div_footer_left_smile_button, false);
                 }
             });
     });
@@ -194,12 +222,11 @@ const createTaskCommentForm = (place) => {
       } else {
         let formData = new FormData(form)
 
-        console.log('FORM DATA: ', formData)
         let commentItem = e.target.parentNode.parentNode
 
         if (commentItem.id) {
             let commentItem_list = commentItem.id.split('-')
-            if (commentItem_list[0] == 'comment') {
+            if (commentItem_list[0] === 'comment') {
                 formData.append('parent_id', parseInt(commentItem_list[1]))
             }
         }
@@ -235,7 +262,7 @@ const sendData = async (path, data) => {
             console.log(d)
             createGlobalMessage("Message created successfully!")
             // renderTaskComment(d.comment,TaskCommentList)
-            getTaskComments(url)
+            getTaskContent()
         })
         .catch(error => {
             console.error('ERROR: \n\n', error)
@@ -250,72 +277,5 @@ const changeLikeStyle = (button, status) => {
     }
 }
 
-const showHideElement = (button, element) => {
-  button.addEventListener('click', () => {
-      if (element.style.display === 'flex') {
-          showHideElementHide(element)
-      } else {
-          showHideElementShow(element)
-      }
-  })
-}
-
-const showHideElementShow = (element) => {
-    element.style.display = 'flex'
-
-  setTimeout(() => {
-    element.style.opacity = 1
-  }, 300)
-}
-
-const showHideElementHide = (element) => {
-  element.style.opacity = 0
-
-  setTimeout(() => {
-    element.style.display = 'none'
-  }, 300)
-}
-
-const confirmGlobalWindow = async (message) => {
- return new Promise((resolve) => {
-      const div = document.createElement('div')
-      div.classList.add('confirm__global__window')
-
-      const div_form = document.createElement('div')
-      div_form.classList.add('confirm__global__window__form')
-
-      const div_text = document.createElement('h2')
-      div_text.innerHTML = message
-      div_form.appendChild(div_text)
-
-      const div_buttons = document.createElement('div')
-      div_buttons.classList.add('confirm__global__window__buttons')
-
-      const yes_button = document.createElement('button')
-      yes_button.classList.add('btn')
-      yes_button.innerHTML = `<i class="fa-solid fa-check"></i> Yes`
-      yes_button.addEventListener('click', () => {
-          showHideElementHide(div_form)
-          showHideElementHide(div)
-          resolve(true)
-      })
-
-      const no_button = document.createElement('button')
-      no_button.classList.add('btn', 'btn--primary')
-      no_button.innerHTML = `<i class="fa-solid fa-ban"></i> Cancel`
-      no_button.addEventListener('click', () => {
-          showHideElementHide(div_form)
-          showHideElementHide(div)
-          resolve(false)
-      })
-
-      div_buttons.appendChild(no_button)
-      div_buttons.appendChild(yes_button)
-      div_form.appendChild(div_buttons)
-      div.appendChild(div_form)
-
-      document.body.appendChild(div)
- })
-}
 
 createTaskCommentForm(comments_form)

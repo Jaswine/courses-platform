@@ -78,76 +78,76 @@ def courses_get_update_delete(request, id):
     if isinstance(course, JsonResponse):
         return course
 
-    if request.user.is_superuser:
-        if request.method == 'GET':
-            response_data = dict()
-            lessons_count, videos_count, exercises_count, projects_count = 0, 0, 0, 0
-            completed_tasks_count = 0
+    if request.method == 'GET':
+        response_data = dict()
+        lessons_count, videos_count, exercises_count, projects_count = 0, 0, 0, 0
+        completed_tasks_count = 0
 
-            title_orders = TitleOrder.objects.filter(course_id=id).order_by('order')
-            titles = [title_order.title for title_order in title_orders]
-            title_list = []
+        title_orders = TitleOrder.objects.filter(course_id=id).order_by('order')
+        titles = [title_order.title for title_order in title_orders]
+        title_list = []
 
-            response_data['title'] = course.title
-            response_data['user_registered'] = True if request.user in course.users_who_registered.all() else False
+        response_data['title'] = course.title
+        response_data['user_registered'] = True if request.user in course.users_who_registered.all() else False
 
-            if len(titles) > 0:
-                for title in titles:
-                    title_data = {
-                        'id': title.id,
-                        'title': title.title,
-                        'public': title.public,
-                        'tasks': []
-                    }
+        if len(titles) > 0:
+            for title in titles:
+                title_data = {
+                    'id': title.id,
+                    'title': title.title,
+                    'public': title.public,
+                    'tasks': []
+                }
 
-                    tasks_orders = TaskOrder.objects.filter(title_id=title.id).order_by('order')
-                    tasks = [task_order.task for task_order in tasks_orders]
-                    present_tasks = []
+                tasks_orders = TaskOrder.objects.filter(title_id=title.id).order_by('order')
+                tasks = [task_order.task for task_order in tasks_orders]
+                present_tasks = []
 
-                    for task in tasks:
-                        if task.public:
-                            t = dict()
+                for task in tasks:
+                    if task.public:
+                        t = dict()
 
-                            t['id'] = task.id
-                            t['title'] = task.title
-                            t['points'] = task.points
-                            t['type'] = task.type
-                            t['public'] = task.public
+                        t['id'] = task.id
+                        t['title'] = task.title
+                        t['points'] = task.points
+                        t['type'] = task.type
+                        t['public'] = task.public
 
-                            if request.user in course.users_who_registered.all():
-                                if request.user in task.users_who_completed.all():
-                                    completed_tasks_count += 1
-                                    t['completed_status'] = 'Completed'
-                                else:
-                                    t['completed_status'] = 'Uncompleted'
+                        if request.user in course.users_who_registered.all():
+                            if request.user in task.users_who_completed.all():
+                                completed_tasks_count += 1
+                                t['completed_status'] = 'Completed'
                             else:
-                                t['completed_status'] = None
+                                t['completed_status'] = 'Uncompleted'
+                        else:
+                            t['completed_status'] = None
 
-                            lessons_count += 1
-                            if task.type == 'TaskVideo':
-                                videos_count += 1
-                            elif task.type == 'TaskProject':
-                                projects_count += 1
-                            elif task.type == 'TaskQuestions' or task.type == 'TaskCode':
-                                exercises_count += 1
+                        lessons_count += 1
+                        if task.type == 'TaskVideo':
+                            videos_count += 1
+                        elif task.type == 'TaskProject':
+                            projects_count += 1
+                        elif task.type == 'TaskQuestions' or task.type == 'TaskCode':
+                            exercises_count += 1
 
-                            present_tasks.append(t)
+                        present_tasks.append(t)
 
-                    title_data['tasks'] = present_tasks
-                    title_list.append(title_data)
-                response_data['titles'] = title_list
+                title_data['tasks'] = present_tasks
+                title_list.append(title_data)
+            response_data['titles'] = title_list
 
-            response_data['lessons_count'] = lessons_count
-            response_data['videos_count'] = videos_count
-            response_data['exercises_count'] = exercises_count
-            response_data['projects_count'] = projects_count
-            response_data['completed_tasks_count'] = completed_tasks_count
+        response_data['lessons_count'] = lessons_count
+        response_data['videos_count'] = videos_count
+        response_data['exercises_count'] = exercises_count
+        response_data['projects_count'] = projects_count
+        response_data['completed_tasks_count'] = completed_tasks_count
 
-            return JsonResponse({
-                'status': 'success',
-                'data': response_data
-            }, status=200)
-        if request.method == 'PUT':
+        return JsonResponse({
+            'status': 'success',
+            'data': response_data
+        }, status=200)
+    elif request.method == 'PUT':
+        if request.user.is_authenticated:
             course.title = request.POST.get('title', '')
             course.image = request.FILES.get('image', '')
             course.about = request.POST.get('about', '')
@@ -156,22 +156,25 @@ def courses_get_update_delete(request, id):
             return JsonResponse({
                 'status': 'success',
                 'message': 'Course was successfully updated'
-            }, status=404)
-        elif request.method == 'DELETE':
-            return JsonResponse({
-                'status': 'success',
-                'message': 'Course was successfully deleted'
-            }, status=404)
-        else:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Access denied for this method: This method seems to be illegal in this world.'
-            }, status=405)
-    else:
+            }, status=200)
         return JsonResponse({
             'status': 'error',
             'message': "Only brothers of the Night's Watch can pass. You will have to find another way."
         }, status=403)
+    elif request.method == 'DELETE':
+        if request.user.is_authenticated:
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Course was successfully deleted'
+            }, status=200)
+        return JsonResponse({
+            'status': 'error',
+            'message': "Only brothers of the Night's Watch can pass. You will have to find another way."
+        }, status=403)
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Access denied for this method: This method seems to be illegal in this world.'
+    }, status=405)
 
 
 @csrf_exempt

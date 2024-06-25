@@ -18,17 +18,28 @@ urlpatterns = [
     path('reviews/<int:id>', courses.course_reviews_delete, name='course_reviews_delete'),
 
     # TODO: TITLE
-    path('courses/<int:id>/titles/', titles.title_list_create, name='title-list-create'),
-    path('courses/titles/<int:id>/', titles.title_update_delete, name='title-update-delete'),
-    path('courses/<int:id>/titles/<int:TitleID>/places/<int:NewOrder>/', titles.title_change_place, name='title-change-place'),
+    path('courses/<int:id>/titles/',
+         titles.title_list_create, name='title-list-create'),
+    path('courses/titles/<int:id>/',
+         titles.title_update_delete, name='title-update-delete'),
+    path('courses/<int:id>/titles/<int:TitleID>/places/<int:NewOrder>/',
+         titles.title_change_place, name='title-change-place'),
 
     # TODO: TASK
-    path('courses/<int:id>/tasks/<int:task_id>/', tasks.task_get_update_delete, name='task-update-delete'),
-    path('courses/<int:id>/tasks/<int:task_id>/experiense/', tasks.task_add_experiense, name='task_add_experiense'),
-    path('courses/<int:course_id>/tasks/<int:task_id>/bookmarks/', tasks.task_add_remove_bookmark, name='task_add_remove_bookmark'),
+    path('courses/<int:id>/tasks/<int:task_id>/',
+         tasks.task_get_update_delete, name='task-update-delete'),
+    path('courses/<int:id>/tasks/<int:task_id>/experiense/',
+         tasks.task_add_experiense, name='task_add_experiense'),
+    path('courses/<int:course_id>/tasks/<int:task_id>/bookmarks/',
+         tasks.task_add_remove_bookmark, name='task_add_remove_bookmark'),
 
     # TODO: TASK COMMENTS
-    path('courses/tasks/<int:task_id>/comments', task_comment.task_comment_list_create, name='task_comment_list_create'),
-    path('courses/tasks/<int:task_id>/comments/<int:comment_id>/delete', task_comment.task_comment_update_delete, name='task_comment_update_delete'),
-    path('courses/tasks/<int:task_id>/comments/<int:comment_id>/react/', task_comment.task_comment_add_remove_like, name='task_comment_add_remove_like'),
+    path('courses/tasks/<int:task_id>/comments',
+         task_comment.task_comment_create, name='task_comment_list_create'),
+    path('courses/tasks/<int:task_id>/comments/<int:comment_id>/delete',
+         task_comment.task_comment_update_delete, name='task_comment_update_delete'),
+    path('courses/tasks/<int:task_id>/comments/<int:comment_id>/react/',
+         task_comment.task_comment_add_remove_like, name='task_comment_add_remove_like'),
+    path('courses/tasks/<int:task_id>/comments/<int:comment_id>/complaint/',
+         task_comment.task_comment_add_complaint, name='task_comment_add_complaint')
 ]
