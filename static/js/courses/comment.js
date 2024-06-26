@@ -25,6 +25,7 @@ const getTaskContent = async () => {
 export function renderTaskComments(list, comments, url) {
     list.innerHTML = '';
     url = url
+    console.log(comments)
 
     comments.forEach(comment => {
         const taskCommentElement = renderTaskComment(comment);
@@ -183,6 +184,13 @@ const renderTaskComment = (comment) => {
     // Recursive rendering of child comments
     const div_comments = document.createElement('div');
     div_comments.classList.add('comment_item__comments');
+    let comments_depth = comment.depth * 2
+    if (comments_depth > 0) {
+        console.log("COMMENT id: ", comment.id, 'comments_depth: ', comments_depth)
+        div_comments.style.width = 100 - comments_depth + '%'
+        div_comments.style.marginLeft = comments_depth + '%'
+        console.log(div_comments.style.width, div_comments.style.marginLeft)
+    }
 
     if (comment.children && comment.children.length > 0) {
         comment.children.forEach(childComment => {

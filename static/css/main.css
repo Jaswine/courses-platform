@@ -304,7 +304,7 @@ a, button, input, textarea, select, textarea {
 
     width: 60vw;
     padding: 10%;
-    box-shadow: 0 0 10px rgba(20, 20, 20, .1);
+    box-shadow: 0 0 10px rgba(20, 20, 20, .16);
 
     background-color: var(--white);
     border-radius: 6px;
@@ -329,6 +329,12 @@ a, button, input, textarea, select, textarea {
     width: 150px;
 }
 
+/*
+    Complaint
+ */
+.complaint__global__window__form {
+    padding: 6% 10%;
+}
 .confirm__complaints_selections {
     display: flex;
     justify-content: start;

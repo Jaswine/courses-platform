@@ -37,7 +37,7 @@ export async function complaintGlobalWindow(csrfToken, TaskId) {
       div.appendChild(input_csrf_token)
 
       const div_form = document.createElement('div')
-      div_form.classList.add('confirm__global__window__form')
+      div_form.classList.add('confirm__global__window__form', 'complaint__global__window__form')
 
       const div_text = document.createElement('h2')
       div_text.innerHTML = 'Cause of complaint'
