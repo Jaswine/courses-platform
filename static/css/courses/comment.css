@@ -243,8 +243,8 @@
     background-color: rgba(20, 20, 20, .04);
 }
 .comment_item__comments {
-    width: 97%;
-    margin-left: 3%;
+    width: 98%;
+    margin-left: 2%;
     display: flex;
     flex-direction: column;
 }

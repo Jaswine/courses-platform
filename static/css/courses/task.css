@@ -2,11 +2,11 @@
 
 .task__page {
       display: grid;
-      grid-template-columns: 3fr 1.1fr;
+      grid-template-columns: 3fr 1fr;
       height: 100vh;
       width: 100vw;
       overflow: hidden;
-      padding: 0 2vw;
+      /*padding: 0 2vw;*/
 }
 .task__page__left {
       width: 100%;
@@ -16,13 +16,17 @@
 }
 .task__page__left__top {
       display: flex;
-      justify-content: start;
+      justify-content: space-between;
       align-items: center;
       padding: 3vh 0;
       gap: 4px;
 }
-.task__page__left__top {
-      
+.task__page__left__top div {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      gap: 4px;
+
 }
 .task__page__left__header {
       display: flex;
@@ -88,25 +92,73 @@
       height: auto;
       border-radius: 6px;
 }
+
+/*
+      Text
+*/
 .task__page__left__content p {
       margin-bottom: 10px;
 }
-.task__page__left__content ol {
+.task__page__left__content h1 {
+      margin-top: 6px;
+      margin-bottom: 18px;
+}
+.task__page__left__content h2, h3 {
+      margin-top: 6px;
+      margin-bottom: 14px;
+}
+.task__page__left__content h4, h5, h6 {
+      margin-top: 4px;
+      margin-bottom: 10px;
+}
+.task__page__left__content img {
+      border-radius: 4px;
+}
+.task__page__left__content ol, .task__page__left__content ul {
       margin-top: 6px;
 }
 .task__page__left__content li {
       margin-left: 20px;
       margin-bottom: 10px;
 }
+.task__page__left__content .marker {
+      background-color: var(--pink);
+}
+.task__page__left__content table {
+      margin: 10px 0;
+}
+.task__page__left__content tr {
+
+}
+.task__page__left__content td {
+      padding: 6px;
+      border: 1.4px solid rgba(20, 20, 20,.1);
+}
+.task__page__left__content td img {
+      max-width: 100%;
+}
+blockquote {
+      padding: 10px;
+      border-left: 4px solid rgba(20, 20, 20, .1);
+      color: rgba(20, 20, 20, .6);
+      font-style: italic;
+}
+
+
 .task__page__right {
       width: 100%;
-      padding: 2vw 0 2vw 2vw;
+      padding: 2vw 2vw 2vw 2vw;
       border-left: 1.5px solid rgb(20,20,20,.1);
       display: flex;
       justify-content: start;
       align-items: start;
       flex-direction: column;
       overflow-y: auto;
+      position: relative;
+
+      transition: all .3s ease-in-out;
+      background-color: white;
+      overflow-x: hidden;
 }
 .task__page__right h3 {
       margin-bottom: 10px;
@@ -204,4 +256,20 @@
 }
 .btn--bookmark:hover {
       color: #7f7f7f;
+}
+
+.task__page__right__thumbtack {
+      position: relative;
+      /*top: 3vh;*/
+      /*right: 28%;*/
+      font-size: 18px;
+      background-color: white;
+      z-index: 3;
+      cursor: pointer;
+      color: rgba(20, 20, 20, .4);
+
+      transition: all .3s ease-in-out;
+}
+.task__page__right__thumbtack:hover {
+      color: var(--primary);
 }

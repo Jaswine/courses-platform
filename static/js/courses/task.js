@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const commentList = document.querySelector('#TaskCommentList')
       const taskBookmark = document.querySelector('#taskBookmark')
 
+      const showHideTitleTaskList = document.querySelector('#ShowHideTitleTaskList')
+      const TaskPage = document.querySelector('#TaskPage')
+      const TaskPageRight = document.querySelector('#TaskPageRight')
+
       const user__status = document.querySelector('.user__status', 'None')
 
       const BUTTON_SMILES = {
@@ -169,19 +173,21 @@ document.addEventListener('DOMContentLoaded', () => {
                   method: 'POST',
             })
             const data = await response.json()
-            console.log('complete task', data)
       }
 
       const getPrevNextElements = (all_tasks, current_task) => {
             const index = all_tasks.findIndex(item => item.id === current_task.id);
 
             if (index === 0) {
+                  TaskPrevElement.style.opacity = .5
+
                   if (all_tasks.length > 1) {
                         let next_page_url = `/courses/${CourseId}/${all_tasks[index + 1].id}/`
 
-                        TaskPrevElement.style.opacity = .5
                         TaskNextElement.href = next_page_url
                         TaskContinue.href = next_page_url
+                  } else {
+                        TaskNextElement.style.opacity = .5
                   }
             } else if (index == all_tasks.length - 1) {
                   let prev_page_url = `/courses/${CourseId}/${all_tasks[index-1].id}/`
@@ -201,7 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const renderTaskBookmark = (button, status) => {
             if (status) {
-                console.log(button, status)
                 button.style.color = '#bba8fd'
             } else {
                 button.style.color = '#bcbcbc'
@@ -222,6 +227,28 @@ document.addEventListener('DOMContentLoaded', () => {
                             createGlobalMessage(data.message)
                       }
                 })
+      })
+
+      showHideTitleTaskList.addEventListener('click', () => {
+            let menu = TaskPage.querySelector('.task__page__right')
+
+            if (TaskPage.style.gridTemplateColumns === '3fr 1fr'){
+                  menu.style.opacity = '0'
+                  showHideTitleTaskList.style.rotate = '-90deg'
+
+                  setTimeout(() => {
+                        TaskPage.style.gridTemplateColumns = '3fr'
+                        menu.style.display = 'none'
+                  }, 300)
+            } else {
+                  TaskPage.style.gridTemplateColumns = '3fr 1fr'
+                  menu.style.display = 'flex'
+
+                  setTimeout(() => {
+                        menu.style.opacity = '1'
+                        showHideTitleTaskList.style.rotate = '0deg'
+                  }, 100)
+            }
       })
 
 })
