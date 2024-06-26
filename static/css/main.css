@@ -235,7 +235,7 @@ a, button, input, textarea, select, textarea {
 
 ::selection {
     background-color: var(--primary);
-    color: var(--white)
+    color: var(--white);
 }
 
 ::-webkit-scrollbar {

@@ -63,7 +63,6 @@ const renderTaskComment = (comment) => {
     complaint_comment_button.addEventListener('click', async () => {
         // courses/tasks/<int:task_id>/comments/<int:comment_id>/complaint/
         await complaintGlobalWindow(csrfToken, TaskId).then(async (formData) => {
-            console.log('formData: ', formData)
             if (formData !== false) {
                 await fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/complaint/`, {
                     method: 'POST',
@@ -186,10 +185,8 @@ const renderTaskComment = (comment) => {
     div_comments.classList.add('comment_item__comments');
     let comments_depth = comment.depth * 2
     if (comments_depth > 0) {
-        console.log("COMMENT id: ", comment.id, 'comments_depth: ', comments_depth)
         div_comments.style.width = 100 - comments_depth + '%'
         div_comments.style.marginLeft = comments_depth + '%'
-        console.log(div_comments.style.width, div_comments.style.marginLeft)
     }
 
     if (comment.children && comment.children.length > 0) {
@@ -267,7 +264,6 @@ const sendData = async (path, data) => {
     })
         .then(response => response.json())
         .then(d => {
-            console.log(d)
             createGlobalMessage("Message created successfully!")
             // renderTaskComment(d.comment,TaskCommentList)
             getTaskContent()

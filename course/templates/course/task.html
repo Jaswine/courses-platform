@@ -17,16 +17,21 @@
 <input type="hidden" value="{{ request.user.id }}" id="UserId"  />
 {% csrf_token %}
 
-<div class="task__page">
+<div class="task__page" id="TaskPage" style="grid-template-columns: 3fr 1fr; ">
     <div class="task__page__left">
 
         <div class="task__page__left__top">
-            <a href='{% url 'course:courses' %}'>
-                <span>Courses</span>
-            </a>/
-            <a href='{% url 'course:course' course.id %}'>
-                <b>{{ course.title }}</b>
-            </a>
+            <div>
+                <a href='{% url 'course:courses' %}'>
+                    <span>Courses</span>
+                </a> /
+                <a href='{% url 'course:course' course.id %}'>
+                    <b>{{ course.title }}</b>
+                </a>
+            </div>
+            <button class="task__page__right__thumbtack" id="ShowHideTitleTaskList">
+                <i class="fa-solid fa-thumbtack"></i>
+            </button>
         </div>
 
         <div class="task__page__left__header">
@@ -84,7 +89,7 @@
         </div>
 
     </div>
-    <div class="task__page__right">
+    <div class="task__page__right" id="TaskPageRight" style="width: 100%; display: flex;">
         <h3>{{ course.title }}</h3>
         <div class="task__page__right__context" id="taskList">
             <div class="pre__tasks__loader">
