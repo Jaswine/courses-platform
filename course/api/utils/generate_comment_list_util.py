@@ -6,7 +6,7 @@ from article.models import ArticleComment
 from course.models import TaskComment
 
 
-def generate_comment_list_util(comments: [TaskComment | ArticleComment], user: User) -> list[
+def generate_comment_list_util(comments: [TaskComment | ArticleComment], user: User, depth=0) -> list[
     dict[str, dict[str, Any | None] | dict[str, bool | Any] | Any]]:
     """
         Генерация списка с словарями данных комментариев
@@ -16,10 +16,10 @@ def generate_comment_list_util(comments: [TaskComment | ArticleComment], user: U
         :return [dict[str, bool | None | list[dict[str, Any]] | Any]] - Список
             с словарями комментариев
     """
-    return generate_comment_util(comments, user)
+    return generate_comment_util(comments, user, depth)
 
 
-def generate_comment_util(comments, user):
+def generate_comment_util(comments, user, depth):
     comment_list = []
     for comment in comments:
         if comment.is_public:
@@ -40,9 +40,10 @@ def generate_comment_util(comments, user):
 
             data['created'] = comment.created.strftime("%H:%M %d.%m.%Y")
             data['updated'] = comment.updated.strftime("%H:%M %d.%m.%Y")
+            data['depth'] = depth
 
             if comment.task_comment_children.count() > 0:
-                data['children'] = generate_comment_list_util(comment.task_comment_children.all(), user)
+                data['children'] = generate_comment_list_util(comment.task_comment_children.all(), user, depth+1)
 
             comment_list.append(data)
 
