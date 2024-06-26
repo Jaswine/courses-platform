@@ -230,7 +230,7 @@ class CourseReview(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        self.course.title
+        return self.course.title
 
 
 class TaskComment(models.Model):

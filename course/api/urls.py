@@ -15,7 +15,7 @@ urlpatterns = [
     path('courses-like/<int:id>', courses.course_add_like, name='course_add_like'),
     path('courses-like/<int:id>/add-to-course', courses.user_add_to_course, name='user_add_to_course'),
     path('courses/<int:id>/reviews', courses.course_reviews_show_create, name='course_reviews_show_create'),
-    path('reviews/<int:id>', courses.course_reviews_delete, name='course_reviews_delete'),
+    path('courses/reviews/<int:id>/delete', courses.course_reviews_delete, name='course_reviews_delete'),
 
     # TODO: TITLE
     path('courses/<int:id>/titles/',

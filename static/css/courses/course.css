@@ -398,7 +398,7 @@ h2 {
     width: 100%;
     margin-top: 3%;
 }
-.course__reviews form {
+.course__review__form {
     display: flex;
     justify-content: start;
     align-items: start;
@@ -406,13 +406,13 @@ h2 {
     width: 100%;
     margin-top: 10px;
 }
-.course__reviews form input {
+.course__review__form input {
     border: 2px solid rgb(20, 20, 20, .1);
     border-radius: 10px;
     padding: 14px 16px;
     max-width: 100px;
 }
-.course__reviews form textarea {
+.course__review__form textarea {
     font-size: 16px;
     padding: 8px;
     border: 2px solid rgb(20, 20, 20, .1);
@@ -421,12 +421,25 @@ h2 {
     min-height: 100px;
     height: 100%;
 }
-.course__reviews form div {
+.course__review__form__bottom {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     margin-top: 6px;
+}
+.course__review__form__bottom__rating {
+    display: flex;
+    align-items: center;
+}
+.course__review__form__bottom__rating__star {
+    font-size: 24px;
+    border-radius: 2px;
+    color: rgba(20, 20, 20, .3);
+    cursor: pointer;
+}
+.star__pink {
+    color: var(--pink);
 }
 
 .course__reviews__filters {
@@ -435,7 +448,7 @@ h2 {
     align-items: center;
     width: 100%;
     padding: 8px 0;
-    margin-top: 6px;
+    margin-top: 12px;
     border-bottom: 2px solid rgb(20, 20, 20, .1);
 }
 .course__reviews__filters .stars {
