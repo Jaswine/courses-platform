@@ -101,6 +101,7 @@ def courses_get_update_delete(request, id):
 
                 tasks_orders = TaskOrder.objects.filter(title_id=title.id).order_by('order')
                 tasks = [task_order.task for task_order in tasks_orders]
+                first_uncompleted_task = None
                 present_tasks = []
 
                 for task in tasks:
