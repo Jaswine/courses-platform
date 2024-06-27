@@ -86,6 +86,10 @@
     align-items: center;
     gap: 10px;
 }
+.comment_item__header__left__star {
+    font-size: 18px;
+    color: var(--pink);
+}
 .comment_item__header__left img {
     width: 34px;
     height: 34px;

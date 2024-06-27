@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
-from datetime import datetime
+from statistics import median
 
 from ..utils.generate_courses_list_util import generate_courses_list_util
 from ..utils.get_element_or_404 import get_element_or_404
@@ -282,12 +282,9 @@ def course_reviews_show_create(request, id):
 
     if request.method == 'GET':
         reviews = CourseReview.objects.filter(course=course).order_by('-created')
-        medium__stars = 0
+        stars = [review.stars for review in reviews]
 
-        for review in reviews:
-            medium__stars += review.stars
-
-        medium__stars = medium__stars / len(reviews) if len(reviews) > 0 else 0
+        medium__stars = median(stars) if stars else 0
 
         review_list = [{
             'id': review.id,

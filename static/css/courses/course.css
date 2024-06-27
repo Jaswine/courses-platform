@@ -438,6 +438,15 @@ h2 {
     color: rgba(20, 20, 20, .3);
     cursor: pointer;
 }
+.course__reviews__filters__main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.course__reviews__filters__main__number {
+    font-size: 26px;
+    font-weight: bold;
+}
 .star__pink {
     color: var(--pink);
 }

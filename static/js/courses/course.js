@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const CourseHeaderExperienceLine = document.querySelector('#CourseHeaderExperienceLine')
       const courseReviewsForm = document.querySelector('#CourseReviewsForm')
       const CourseReviewsList = document.querySelector('#CourseReviews')
+      const reviewStarsCount = document.querySelector('#ReviewStarsCount')
 
 
       const fetchCourseInfo = async () => {
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             CourseExerciesesCount.innerHTML = data.exercises_count + " Exercises"
             CourseProjectsCount.innerHTML = data.projects_count + " Projects"
 
-            if (data.completed_tasks_count && data.exercises_count) {
+            if (data.completed_tasks_count && data.lessons_count) {
                   let completed_precent = data.completed_tasks_count * 100 / data.lessons_count
                   CourseHeaderExperienceLine.style.width = completed_precent + '%'
             }
@@ -206,13 +207,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (data.status === 'success') {
                 console.log(data)
+
+                let comment_stars = ``
+                for (let i = 1; i <= Math.round(data.data.medium__stars); i++) {
+                    comment_stars += '<span class="comment_item__header__left__star fas fa-star"></span>'
+                }
+
+                reviewStarsCount.innerHTML = `
+                    <div class="course__reviews__filters__main__number">${data.data.medium__stars}</div>
+                    <div class="course__review__form__bottom__rating">${comment_stars}</div>
+                `
+
                 renderCourseReviews(CourseReviewsList, data.data.reviews)
+
+                if (reviewSentStatus) {
+                    courseReviewsForm.style.display = 'flex'
+                } else {
+                    courseReviewsForm.style.display = 'none'
+                }
             }
       }
 
       const renderCourseReviews = (list, comments) => {
-          list.innerHTML = '';
-          ReviewListCount.innerHTML = comments.length
+          list.innerHTML = ''
+          ReviewListCount.innerHTML = comments.length + ' reviews'
 
           comments.forEach(comment => {
               const taskCommentElement = renderCourseReview(comment);
@@ -229,14 +247,21 @@ document.addEventListener('DOMContentLoaded', () => {
               reviewSentStatus = false
           }
 
-          // Create comment's header
           const div_header = document.createElement('div');
           div_header.classList.add('comment_item__header');
 
           const div_header_left = document.createElement('div');
           div_header_left.classList.add('comment_item__header__left');
           div_header_left.innerHTML += `<img src="${comment.user.ava ? comment.user.ava : '/static/index/ava.jpg'}" alt="${comment.user.username}" />`;
-          div_header_left.innerHTML += `<a href="/users/${comment.user.username}">${comment.user.username}</a>`;
+          div_header_left.innerHTML += `<a href="/users/${comment.user.username}">${comment.user.username}</a>`
+          div_header_left.innerHTML += ` - `
+
+          let comment_stars = ``
+          for (let i = 1; i <= Math.round(comment.stars); i++) {
+            comment_stars += '<span class="comment_item__header__left__star fas fa-star"></span>'
+          }
+          console.log('comment stars: ', comment_stars)
+          div_header_left.innerHTML += `<div class="course__review__form__bottom__rating">${comment_stars}</div>`;
 
           const div_header_right = document.createElement('img');
           div_header_right.classList.add('comment_item__header__icon');

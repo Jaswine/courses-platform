@@ -188,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         TaskContinue.href = next_page_url
                   } else {
                         TaskNextElement.style.opacity = .5
+                        TaskContinue.style.opacity = .3
                   }
             } else if (index == all_tasks.length - 1) {
                   let prev_page_url = `/courses/${CourseId}/${all_tasks[index-1].id}/`

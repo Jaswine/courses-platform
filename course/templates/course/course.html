@@ -91,7 +91,10 @@
                 <div class="course__reviews">
                     <h2>📌 Learners' reviews</h2>
                     {% if request.user.is_authenticated %}
-                        <form class="course__review__form" action="" id="CourseReviewsForm" method="POST">
+                        <form class="course__review__form"
+                              id="CourseReviewsForm"
+                              style="display: none"
+                              method="POST">
                             {% csrf_token %}
                             <textarea name="message" placeholder="What did you like? What have you learned in this course? What was new to you?"></textarea>
                             <div class="course__review__form__bottom">
@@ -107,10 +110,9 @@
                         </form>
                     {% endif %}
                     <div class="course__reviews__filters">
-                        <div class="stars"></div>
+                        <div class="course__reviews__filters__main" id="ReviewStarsCount"></div>
                         <div class="show__count__reviews">
                             <span class="course__reviews__filters__count" id="ReviewListCount"></span>
-                            reviews
                         </div>
                     </div>
                     <div class="course__reviews__all" id="CourseReviews"></div>
