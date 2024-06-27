@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
-from datetime import datetime
+from statistics import median
 
 from ..utils.generate_courses_list_util import generate_courses_list_util
 from ..utils.get_element_or_404 import get_element_or_404
@@ -282,69 +282,66 @@ def course_reviews_show_create(request, id):
 
     if request.method == 'GET':
         reviews = CourseReview.objects.filter(course=course).order_by('-created')
-        medium__stars = 0
+        stars = [review.stars for review in reviews]
 
-        for review in reviews:
-            medium__stars += review.stars
+        medium__stars = median(stars) if stars else 0
 
-        medium__stars = medium__stars / len(reviews) if len(reviews) > 0 else 0
-
-        data = [{
+        review_list = [{
             'id': review.id,
             'message': review.message,
             'stars': review.stars,
             'user': {
                 'id': review.user.id,
                 'username': review.user.username,
-                'image': 'https://images.unsplash.com/photo-1696509528129-c28dc0308733?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2663&q=80',
+                'ava': review.user.profile.image.url if review.user.profile.image else None,
             },
-            'updated': datetime.fromisoformat(str(review.updated).replace("Z", "+00:00")).strftime("%d.%m.%Y %H:%M")
+            'updated': review.updated.strftime("%H:%M %d.%m.%Y"),
+            'created': review.updated.strftime("%H:%M %d.%m.%Y")
         } for review in reviews]
 
-        if len(reviews) > 0:
-            return JsonResponse({
-                'status': 'success',
+        return JsonResponse({
+            'status': 'success',
+            'data': {
+                'reviews': review_list,
                 'medium__stars': round(medium__stars, 2),
-                'data': data
-            }, status=200)
-        else:
-            return JsonResponse({
-                'status': 'success',
-                'medium__stars': 0,
-            }, status=200)
-
+            }
+        }, status=200)
     elif request.method == 'POST':
         if request.user.is_authenticated:
-            message = request.POST.get('message')
-            stars_count = request.POST.get('stars_count')
-            print('message', message, stars_count)
+            user_reviews = CourseReview.objects.filter(course=course, user=request.user)
 
-            if stars_count and message:
-                review = CourseReview.objects.create(
-                    user=request.user,
-                    course=course,
-                    message=message,
-                    stars=stars_count
-                )
+            if user_reviews.count() == 0:
+                message = request.POST.get('message')
+                stars_count = request.POST.get('stars_count')
 
+                if stars_count and message:
+                    review = CourseReview.objects.create(
+                        user=request.user,
+                        course=course,
+                        message=message,
+                        stars=stars_count
+                    )
+
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'Review created successfully'
+                    }, status=201)
                 return JsonResponse({
-                    'status': 'success',
-                    'message': 'Review created successfully'
-                }, status=201)
+                    'status': 'error',
+                    'message': 'You need to choose some stars and write message'
+                }, status=400)
             return JsonResponse({
                 'status': 'error',
-                'message': 'You need to choose some stars and write message'
+                'message': 'Review has been created!'
             }, status=400)
-        else:
-            return JsonResponse({
-                'status': 'error',
-                'message': "No White Walkers allowed"
-            }, status=401)
-    else:
         return JsonResponse({
             'status': 'error',
-            'message': 'Access denied for this method: This method seems to be illegal in this world.'
-        })
+            'message': "No White Walkers allowed"
+        }, status=401)
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Access denied for this method: This method seems to be illegal in this world.'
+    })
 
 
 @csrf_exempt
@@ -361,13 +358,10 @@ def course_reviews_delete(request, id):
                 'status': 'error',
                 'message': f'Review with id {id} deleted successfully'
             })
-
-        else:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Access denied for this method: This method seems to be illegal in this world.'
-            })
-
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Access denied for this method: This method seems to be illegal in this world.'
+        })
     return JsonResponse({
         'status': 'error',
         'message': 'You can try, but this place is locked tighter than the Iron Throne.'

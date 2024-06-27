@@ -19,22 +19,21 @@ const getTaskContent = async () => {
     const response = await fetch(getTaskURL)
     const data = await response.json()
 
-    renderTaskComments(commentList, data.data.comments, getTaskURL)
+    renderTaskComments(commentList, data.data.comments)
 }
 
-export function renderTaskComments(list, comments, url) {
+export function renderTaskComments(list, comments) {
     list.innerHTML = '';
-    url = url
     console.log(comments)
 
     comments.forEach(comment => {
-        const taskCommentElement = renderTaskComment(comment);
+        const taskCommentElement = renderTaskComment(comment, 'comment');
         list.appendChild(taskCommentElement); // Append each top-level comment to the list
     });
 }
 
 // Recursive function to render a single comment and its children
-const renderTaskComment = (comment) => {
+export function renderTaskComment (comment, type) {
     const div = document.createElement('div');
     div.classList.add('comment_item');
     div.id = `comment-${comment.id}`;
@@ -200,7 +199,7 @@ const renderTaskComment = (comment) => {
     div.appendChild(div_comments);
 
     return div;
-};
+}
 
 
 const createTaskCommentForm = (place) => {
@@ -265,7 +264,6 @@ const sendData = async (path, data) => {
         .then(response => response.json())
         .then(d => {
             createGlobalMessage("Message created successfully!")
-            // renderTaskComment(d.comment,TaskCommentList)
             getTaskContent()
         })
         .catch(error => {

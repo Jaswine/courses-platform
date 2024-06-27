@@ -135,7 +135,7 @@ def task_comment_add_complaint(request, task_id: int, comment_id: int):
         task = get_object_or_404(Task, id=task_id)
         comment = get_object_or_404(TaskComment, id=comment_id)
 
-        comment_complaints = TaskCommentUserComplaint.objects.filter(user=request.user)
+        comment_complaints = TaskCommentUserComplaint.objects.filter(taskComment=comment, user=request.user)
 
         if comment_complaints.count() > 0:
             return JsonResponse({

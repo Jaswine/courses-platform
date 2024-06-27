@@ -3,6 +3,8 @@
 
 {% block title %}
     <link rel="stylesheet" href="/static/css/courses/course.css">
+    <link rel="stylesheet" href="/static/css/courses/comment.css">
+
     <title>{{ course.title }}</title>
 {% endblock title %}
 
@@ -89,20 +91,28 @@
                 <div class="course__reviews">
                     <h2>📌 Learners' reviews</h2>
                     {% if request.user.is_authenticated %}
-                        <form action="" id="CourseReviewsForm">
+                        <form class="course__review__form"
+                              id="CourseReviewsForm"
+                              style="display: none"
+                              method="POST">
                             {% csrf_token %}
                             <textarea name="message" placeholder="What did you like? What have you learned in this course? What was new to you?"></textarea>
-                            <div class="">
-                                <input type="number" name="stars_count" value="5" max="5" min="1">
+                            <div class="course__review__form__bottom">
+                                <div class="course__review__form__bottom__rating">
+                                     <i class="course__review__form__bottom__rating__star far fa-star"></i>
+                                     <i class="course__review__form__bottom__rating__star far fa-star"></i>
+                                     <i class="course__review__form__bottom__rating__star far fa-star"></i>
+                                     <i class="course__review__form__bottom__rating__star far fa-star"></i>
+                                     <i class="course__review__form__bottom__rating__star far fa-star"></i>
+                                </div>
                                 <button class="btn">Send review</button>
                             </div>
                         </form>
                     {% endif %}
                     <div class="course__reviews__filters">
-                        <div class="stars"></div>
+                        <div class="course__reviews__filters__main" id="ReviewStarsCount"></div>
                         <div class="show__count__reviews">
-                            <span class="course__reviews__filters__count"></span>
-                            reviews
+                            <span class="course__reviews__filters__count" id="ReviewListCount"></span>
                         </div>
                     </div>
                     <div class="course__reviews__all" id="CourseReviews"></div>
@@ -147,6 +157,6 @@
     </div>
 </div>
 
-<script src="/static/js/courses/course.js"></script>
+<script src="/static/js/courses/course.js" type="module"></script>
 
 {% endblock content %}
