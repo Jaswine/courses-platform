@@ -57,28 +57,30 @@ export function renderTaskComment (comment, type) {
     div_header_right_menu.style.opacity = 0;
     div_header_right_menu.style.display = 'none';
 
-    const complaint_comment_button = document.createElement('div')
-    complaint_comment_button.innerHTML = `<i class="fa-regular fa-flag"></i> Complaint`
-    complaint_comment_button.addEventListener('click', async () => {
-        // courses/tasks/<int:task_id>/comments/<int:comment_id>/complaint/
-        await complaintGlobalWindow(csrfToken, TaskId).then(async (formData) => {
-            if (formData !== false) {
-                await fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/complaint/`, {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        createGlobalMessage(data.message);
-
-                        if (data.message === 'Complaint added successfully! The message was hidden as complaints became 10 or more!') {
-                            getTaskContent()
-                        }
+    if (UserId && UserId.value != comment.user.id) {
+        const complaint_comment_button = document.createElement('div')
+        complaint_comment_button.innerHTML = `<i class="fa-regular fa-flag"></i> Complaint`
+        complaint_comment_button.addEventListener('click', async () => {
+            // courses/tasks/<int:task_id>/comments/<int:comment_id>/complaint/
+            await complaintGlobalWindow(csrfToken, TaskId).then(async (formData) => {
+                if (formData !== false) {
+                    await fetch(`/api/courses/tasks/${TaskId}/comments/${comment.id}/complaint/`, {
+                        method: 'POST',
+                        body: formData
                     })
-            }
-        });
-    })
-    div_header_right_menu.appendChild(complaint_comment_button)
+                        .then(response => response.json())
+                        .then(data => {
+                            createGlobalMessage(data.message);
+
+                            if (data.message === 'Complaint added successfully! The message was hidden as complaints became 10 or more!') {
+                                getTaskContent()
+                            }
+                        })
+                }
+            });
+        })
+        div_header_right_menu.appendChild(complaint_comment_button)
+    }
 
     if (UserId && UserId.value == comment.user.id) {
         const update_comment_button = document.createElement('div');

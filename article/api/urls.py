@@ -9,5 +9,4 @@ urlpatterns = [
 
     path('article-list/<int:article_id>/comments', comment.comment_create_view, name='api-comment-create-list'),
     path('article-list/<int:article_id>/comments/<int:comment_id>/', comment.comment_update_delete, name='api-comment-update-delete'),
-
 ]
