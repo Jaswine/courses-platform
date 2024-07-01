@@ -37,6 +37,7 @@
     align-items: center;
     width: 100%;
     max-width: 240px;
+    font-weight: bold;
 }
 .page__content__header form a {
     width: 100%;
@@ -244,6 +245,8 @@
     }
 }
 .page__content__sorting form select {
+    display: flex;
+    align-items: center;
     width: 100%;
     
     border-radius: 10px; 
@@ -252,20 +255,37 @@
 
     color: rgb(20,20,20,.85);
     background-color: rgb(20,20,20, .05);
+    position: relative;
     /* border: 2px solid rgb(20, 20, 20, .45); */
+    appearance: none;
 }
 .page__content__sorting form select option {
     font-size: 16px;
     padding: 4px;
-    appearance: none;
 }
 .page__content__sorting form select:focus option:checked {
     background-color: var(--violet);
     color: var(--white);
 }
-.page__content__sorting form select:focus {
-    background-color: rgb(20,20,20, .15);
+.page__content__sorting form select:focus option:focus {
+    background-color: var(--violet);
+    color: var(--white);
 }
+.page__content__sorting form select::-webkit-scrollbar-thumb {
+    background-color: var(--violet);
+}
+.page__content__sorting form select option:checked {
+    background-color: var(--violet) !important;
+    color: var(--white) !important;
+}
+
+.page__content__sorting form select option:hover {
+    background-color: rgba(187, 168, 253, .5) !important;
+    color: var(--white) !important;
+    cursor: pointer;
+}
+
+
 .course__header__menu {
     opacity: .6;
     width: 25px;

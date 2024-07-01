@@ -1,3 +1,5 @@
+import {showHideElement, showHideElementShow} from '/static/js/courses/show_hide_element.js'
+
 document.addEventListener('DOMContentLoaded', () => {
     const showAllCourses = document.querySelector('#ShowAllCourses');
     const searchForm = document.querySelector('#searchForm');
@@ -16,7 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
         *   Get All articles
         */
         try {
-            const response = await fetch(`/api/article/article-list?q=${search}&sort_by=${sort_by}&tags=${tags}`);
+            let url = `/api/article/article-list?q=${search}&sort_by=${sort_by}&tags=${tags}`
+            console.log(url)
+            const response = await fetch(url);
             const data = await response.json()
 
             if (data.status === 'success') {
@@ -31,12 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
         /*
         *   Render Articles
         * */
-        showAllCourses.innerHTML = ''
 
         if (articles.length > 0) {
-            articles.forEach((article, index) => {
-                renderArticle(article)
-            })
+            const fragment = document.createDocumentFragment();
+
+            articles.forEach(article => {
+                fragment.appendChild(renderArticle(article));
+            });
+
+            // Очищаем содержимое контейнера и добавляем новые статьи
+            showAllCourses.innerHTML = '';
+            showAllCourses.appendChild(fragment);
         } else {
             // Если статьи не найдены выводить, что они не найдены
             showAllCourses.innerHTML = `
@@ -109,13 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class='course__footer'>
             <div class='course__footer__left'>
                 <div>
-                    <i class="fa-solid fa-eye"></i>
-                    <span>${article.views_count}</span>
-                </div>
-                <form>
                     <i class="fa-solid fa-heart heart" style="${article.liked_for_this_user ? 'color: #EAB6E1': 'color: #202020'}"></i>
                     <span>${article.likes_count}</span>
-                </form>
+                </div>
                 <div>
                     <i class="fa-solid fa-message comment"></i>
                     <span>${article.comments_count}</span>
@@ -127,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         `
 
-        showAllCourses.appendChild(div)
+        return div
     }
 
     showAllCourses.addEventListener('click', (e) => {
@@ -181,4 +186,86 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     getAllArticles()
+
+    const renderSelectTags = async (select) => {
+        const response = await fetch('/api/tags')
+        const data = await response.json()
+
+        if (data.status == 'success') {
+            data.tags.forEach(tag => {
+                const option = document.createElement('option')
+                option.value = tag.id
+                option.innerHTML = tag.name
+                select.appendChild(option)
+            })
+        }
+    }
+
+    const createArticleFilters = (place) => {
+        const select = document.createElement('select')
+        const tags_select = document.createElement('select')
+
+        select.name = 'sort_by'
+        tags_select.name = 'tags'
+
+        select.id = 'SortedBy'
+        tags_select.id = 'TagsFilter'
+        tags_select.multiple = true
+
+        const option_values = ['Newest', 'Oldest', 'Popular', 'Unpopular']
+        option_values.forEach((option, index) => {
+            const element = document.createElement('option')
+            element.value = option
+            element.innerHTML = option
+            select.appendChild(element)
+        })
+
+        const tags_all_option = document.createElement('option')
+        tags_all_option.value = ''
+        tags_all_option.innerHTML = 'All'
+        tags_select.appendChild(tags_all_option)
+
+        renderSelectTags(tags_select)
+
+        select.addEventListener('change', () => sendFilters(searchForm.querySelector('input'),
+            select, tags_select))
+        tags_select.addEventListener('change', () => sendFilters(searchForm.querySelector('input'),
+            select, tags_select))
+
+        place.appendChild(select)
+        place.appendChild(tags_select)
+    }
+
+    function sendFilters(search, select, tags_select) {
+        console.log(search, select, tags_select)
+        const selectedTagOptions = Array.from(tags_select.selectedOptions);
+        const selectedTagValues = selectedTagOptions.map(option => option.value);
+        const selectedSortOption = select.selectedOptions[0].value
+        const q = search.value
+        getAllArticles(q, selectedSortOption, selectedTagValues)
+    }
+
+    if (searchForm.querySelector('input')) {
+        const input = searchForm.querySelector('input')
+
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault()
+            sendFilters(input, showFilters.querySelector('#SortedBy'),
+                showFilters.querySelector('#TagsFilter'))
+        })
+
+        input.addEventListener('input', (e) => {
+              e.preventDefault()
+              if (input.value.length > 1) {
+                sendFilters(input, showFilters.querySelector('#SortedBy'),
+                        showFilters.querySelector('#TagsFilter'))
+              }
+        })
+    }
+
+
+    createArticleFilters(showFilters)
+
+    showHideElement(filtersButton, showFilters)
+    showHideElementShow(showFilters)
 })

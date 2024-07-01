@@ -15,7 +15,8 @@ def article_list(request):
         sorted_by = request.GET.get('sort_by', '')
         tag_list = request.GET.get('tags', '')
 
-        articles = sort_articles(sorted_by, filter_articles(request.user.is_superuser, search, tag_list.split('||')))
+        print(tag_list)
+        articles = sort_articles(sorted_by, filter_articles(request.user.is_superuser, search, tag_list.split(',')))
 
         articles = [{
             'id': article.id,
@@ -26,9 +27,7 @@ def article_list(request):
                 'name': tag.name,
             } for tag in article.tags.all()],
             'user': article.user.username,
-            'likes_count': article.likes.count(),
-            'views_count': article.views.count(),
-            'liked_for_this_user': True if request.user in article.likes.all() else False,
+            'likes_count': article.reactions.count(),
             'comments_count': ArticleComment.objects.filter(article=article).count(),
             'created': article.created.strftime('%d.%m.%Y'),
             'updated': article.updated.strftime('%d.%m.%Y'),

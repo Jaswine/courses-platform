@@ -77,8 +77,8 @@ def course_delete(request, id):
         if request.method == 'POST':
             course.delete()
 
-            messages.success(request, 'Course deleted successfully!')   
-            return redirect('course:course')
+            messages.success(request, 'Course deleted successfully!')
+            return redirect('course:courses`')
         
         return render(request, 'course/delete_course.html', {
             'course': course,

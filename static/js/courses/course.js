@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const RenderButtons = (user_registered) => {
             courseRegisterStatus = user_registered
             let courseContinue = document.querySelector('#CourseContinue')
+            courseContinue.href = `/courses/${CourseId}/`
 
             if (courseRegisterStatus) {
                   enrollDropInACourse.classList.remove('btn')
@@ -60,6 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.completed_tasks_count && data.lessons_count) {
                   let completed_precent = data.completed_tasks_count * 100 / data.lessons_count
                   CourseHeaderExperienceLine.style.width = completed_precent + '%'
+            } else {
+                  CourseHeaderExperienceLine.style.width = 0
             }
 
             if (data.lessons_count !== data.completed_tasks_count) {
@@ -160,10 +163,10 @@ document.addEventListener('DOMContentLoaded', () => {
                   method: 'POST',
               })
                   .then(response => response.json())
-                  .then(data => {
-                        console.log(data)
+                  .then(() => {
                         courseRegisterStatus ? RenderButtons(false) : RenderButtons(true)
-                        fetchTitleTasks()
+                        fetchCourseInfo()
+                        getReviews()
                   })
                   .catch(error => {
                         console.log(error.message)
@@ -206,9 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await  response.json()
 
             if (data.status === 'success') {
-                console.log(data)
-
-                let comment_stars = ``
+                let comment_stars = ''
                 for (let i = 1; i <= Math.round(data.data.medium__stars); i++) {
                     comment_stars += '<span class="comment_item__header__left__star fas fa-star"></span>'
                 }
@@ -222,8 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (reviewSentStatus) {
                     courseReviewsForm.style.display = 'flex'
-                } else {
-                    courseReviewsForm.style.display = 'none'
                 }
             }
       }

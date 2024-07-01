@@ -1,3 +1,5 @@
+from django.db.models import Count
+
 from article.models import Article
 from course.models import Tag
 
@@ -43,12 +45,12 @@ def sort_articles(sort: str, articles: list[Article]) -> list[Article]:
     """
 
     if sort == 'Newest':
-        articles.sort(key=lambda article: article.created_at, reverse=True)
+        articles = articles.order_by('-created')
     elif sort == 'Oldest':
-        articles.sort(key=lambda article: article.created_at, reverse=False)
+        articles = articles.order_by('created')
     elif sort == 'Popular':
-        articles.sort(key=lambda article: article.likes.count(), reverse=True)
+        articles = articles.annotate(likes_count=Count('reactions')).order_by('-likes_count')
     elif sort == 'Unpopular':
-        articles.sort(key=lambda article: article.likes.count(), reverse=False)
+        articles = articles.annotate(likes_count=Count('reactions')).order_by('likes_count')
 
     return articles
