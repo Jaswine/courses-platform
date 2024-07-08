@@ -19,7 +19,7 @@ def find_articles_by_user_status(user_status: bool) -> list[Article]:
     """
         Взятие статей взависимости от типа пользователя
 
-        :return [Article]
+        :return [Article] - список статей
     """
     return Article.objects.all() if user_status else Article.objects.filter(is_published=True)
 
@@ -29,6 +29,7 @@ def search_articles_by_title(q: str, articles: list[Article]) -> list[Article]:
         Поиск статей
 
         :param  q: str              - строка для поиска
+        :param  articles: list[Article]   - список статей
         :return list[Article]       - список статей
     """
     return articles.filter(Q(title__icontains=q))
@@ -38,12 +39,15 @@ def filter_articles_by_tags(tags: [Tag], articles: list[Article]) -> list[Articl
     """
         Фильтрация статей
 
-        :param  tags: [Tag]         - строка для фильтрации по тегам
-        :return [Article]
+        :param  tags: [Tag]               - строка для фильтрации по тегам
+        :param  articles: list[Article]   - список статей
+        :return [Article]                 - список статей
     """
     valid_tags = [tag for tag in tags if tag]
 
-    return articles.filter(tags__in=valid_tags).distinct()
+    if valid_tags:
+        return articles.filter(tags__in=valid_tags).distinct()
+    return articles
 
 
 def sort_articles(sort: str, articles: list[Article]) -> list[Article]:

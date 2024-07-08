@@ -4,6 +4,9 @@ from course.models import Course, Tag
 
 
 def dashboard(request):
+    """
+        Панель управления
+    """
     if request.user.is_authenticated:
         courses = []
 
@@ -25,18 +28,7 @@ def dashboard(request):
 
 @login_required(login_url='auth:sign-in')
 def favorites(request):
-    courses = Course.objects.filter(likes=request.user)
-    
-    context = {
-        'courses': courses,
-    }
-    return render(request, 'auth/lowers.html', context)
-
-@login_required(login_url='auth:sign-in')
-def courses(request):
-    # courses = UserCourseProgress.objects.filter(user=request.user, public=True)
-    
-    context = {
-        # 'courses': courses,
-    }
-    return render(request, 'auth/dashboard.html', context)
+    """
+        Лайкнутые курсы и статьи
+    """
+    return render(request, 'auth/lowers.html')

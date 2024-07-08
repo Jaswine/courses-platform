@@ -23,7 +23,8 @@ def article_list(request):
         tag_list = request.GET.get('tags', '')
 
         articles = find_articles_by_user_status(request.user.is_superuser)
-        articles = filter_articles_by_tags(tag_list.split(','), search_articles_by_title(search, articles))
+        articles = search_articles_by_title(search, articles)
+        articles = filter_articles_by_tags(tag_list.split(','), articles)
         articles = sort_articles(sorted_by, articles)
 
         articles = collect_article_data_utils(articles)
