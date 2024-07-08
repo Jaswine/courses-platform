@@ -1,5 +1,8 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+
+from article.api.services.api_article_comment_service import filter_comments_by_article
+from article.api.utils.collect_comment_data_util import collect_comment_data_util
 from article.models import Article, ArticleComment
 
 
@@ -10,11 +13,8 @@ def comment_create_view(request, article_id: int) -> JsonResponse:
         """
             Вывод всех комментариев
         """
-        comments = ArticleComment.objects.filter(article=article)
-        comments = [{
-            'id': comment.id,
-            'message': comment.message,
-        } for comment in comments]
+        comments = filter_comments_by_article(article)
+        comments = collect_comment_data_util(comments)
 
         return JsonResponse({
             'status': 'success',

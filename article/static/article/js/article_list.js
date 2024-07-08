@@ -145,11 +145,11 @@ document.addEventListener('DOMContentLoaded', () => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status == 'success') {
+                    if (data.status === 'success') {
                         let heart = e.target
                         let span = heart.parentNode.querySelector('span')
 
-                        if (data.message == 'Like removed successfully!') {
+                        if (data.message === 'Like removed successfully!') {
                             heart.style.color = '#202020'
                             span.innerHTML = parseInt(span.innerHTML) - 1
                         } else {
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch('/api/tags')
         const data = await response.json()
 
-        if (data.status == 'success') {
+        if (data.status === 'success') {
             data.tags.forEach(tag => {
                 const option = document.createElement('option')
                 option.value = tag.id

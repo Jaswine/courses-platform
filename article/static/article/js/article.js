@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch(`/api/article/article-list/${articleId.value}/comments`)
         const data = await response.json()
 
-        if (response.status == 200) {
+        if (response.status === 200) {
             console.log('DATA: ', data)
             renderComments(data.comments)
         }
