@@ -1,9 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from article.models import Article
-from article.forms import ArticleForm
-from article.services.article_form_service import delete_article, update_article, create_article
+from ..models import Article
+from ..forms import ArticleForm
+from ..services.article_form_service import delete_article, update_article, create_article
 from course.services.tag_service import get_all_tags
 
 
