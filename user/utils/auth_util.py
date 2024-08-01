@@ -8,9 +8,9 @@ def authenticate(email: str, password: str) -> User | None:
     """
         Аутентификация пользователя
 
-       :param: email: str     - электронная почта
-       :param: password: str  - пароль
-       :return: User or None  - Пользователь
+       :param email: str     - электронная почта
+       :param password: str  - пароль
+       :return User or None  - Пользователь
     """
     user = get_user_by_email(email)
 

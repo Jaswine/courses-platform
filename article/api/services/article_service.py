@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.db.models import Count
 from django.db.models import Q
 
@@ -19,6 +18,7 @@ def find_articles_by_user_status(user_status: bool) -> list[Article]:
     """
         Взятие статей взависимости от типа пользователя
 
+        :param user_status: bool  - статус пользователя
         :return [Article] - список статей
     """
     return Article.objects.all() if user_status else Article.objects.filter(is_published=True)

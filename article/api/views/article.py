@@ -1,12 +1,12 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
-from article.api.services.api_article_reaction_service import get_first_existing_reactions, toggle_reaction
-from article.api.services.api_article_service_test import (sort_articles, find_articles_by_user_status,
-                                                           search_articles_by_title, filter_articles_by_tags)
 from django.views.decorators.csrf import csrf_exempt
 
-from article.api.services.api_article_view_service import add_view_to_article
+from article.api.services.article_reaction_service import toggle_reaction
+from article.api.services.article_service import find_articles_by_user_status, search_articles_by_title, \
+    filter_articles_by_tags, sort_articles
+from article.api.services.article_view_service import add_view_to_article
 from article.api.utils.collect_article_data_util import collect_article_data_utils
 from article.models import Article
 from course.api.utils.get_element_or_404 import get_element_or_404

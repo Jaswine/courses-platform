@@ -8,8 +8,8 @@ def get_user_by_email(email: str) -> User | None:
     """
         Взятие пользователя по электронной почте
 
-        :param: email: str    - Электронная почта
-        :return: User | None   - Пользователь или None
+        :param email: str    - Электронная почта
+        :return User | None   - Пользователь или None
     """
     try:
         return User.objects.get(email=email)
@@ -21,8 +21,8 @@ def get_user_by_username(username: str) -> User | None:
     """
         Взятие пользователя по имени пользователя
 
-        :param: username: str    - Имя пользователя
-        :return: User | None   - Пользователь или None
+        :param username: str    - Имя пользователя
+        :return User | None   - Пользователь или None
     """
     try:
         return User.objects.get(username=username)
@@ -34,8 +34,8 @@ def create_user_and_profile_by_form(form: CreateUserForm) -> User | None:
     """
         Создание пользователя с его профиля, используя форму
 
-        :param: form: CreateUserForm  - Форма для создания пользователя
-        :return: User     - Пользователь
+        :param form: CreateUserForm  - Форма для создания пользователя
+        :return User     - Пользователь
     """
     if form.is_valid():
         new_user = form.save(commit=False)
@@ -52,9 +52,9 @@ def update_user_and_profile_by_forms(formUser: UpdateUserForm,
     """
         Обновление информации о пользователе и его профиле
 
-        :param: formUser: UpdateUserForm       - Форма для обновления пользователя
-        :param: formProfile: UpdateProfileForm - Форма профиля пользователя
-        :return: bool               - Состояние, обновлен ли пользователь или нет
+        :param formUser: UpdateUserForm       - Форма для обновления пользователя
+        :param formProfile: UpdateProfileForm - Форма профиля пользователя
+        :return bool               - Состояние, обновлен ли пользователь или нет
     """
     if formUser.is_valid() and formProfile.is_valid():
         formUser.save()

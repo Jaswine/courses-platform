@@ -12,7 +12,7 @@ def test_get_first_existing_reactions(published_article, user, user_reaction):
     reaction = get_first_existing_reactions(published_article, user)
 
     assert reaction is not None
-    assert reaction == reaction
+    assert reaction == user_reaction
 
 
 @mark.django_db

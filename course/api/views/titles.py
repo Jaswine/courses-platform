@@ -1,190 +1,118 @@
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.status import (HTTP_404_NOT_FOUND,
+                                   HTTP_400_BAD_REQUEST, HTTP_200_OK,
+                                   HTTP_201_CREATED, HTTP_403_FORBIDDEN, HTTP_204_NO_CONTENT)
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
 
-from ..utils.get_element_or_404 import get_element_or_404
-from ...models import Course, Title, TitleOrder, TaskOrder, Task
+from ..serializers.title_serializers import TitleListSerializer
+from ..services.course_service import get_course_by_id
+from ..services.title_service import create_course_title, delete_course_title, \
+    filter_course_titles_by_id, get_course_title_by_id, update_course_title_name, update_course_title_public
 
 
-@csrf_exempt
-def title_list_create(request, id):
-    course = get_element_or_404(Course, id)
-
-    if isinstance(course, JsonResponse):
-        return course
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def title_list_create(request, id: int):
+    """
+        Вывод списка тем и создание новой темы
+    """
+    # Берем курс по идентификатору
+    course = get_course_by_id(id)
+    if not course:
+        return Response({'detail': f'Course with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        titles = course.course_titles.order_by('taskorder__order')
-        title_orders = TitleOrder.objects.filter(course_id=id).order_by('order')
-        titles = [title_order.title for title_order in title_orders]
+        # Берем все темы
+        titles = filter_course_titles_by_id(id)
+        # Выводим темы
+        serializer = TitleListSerializer(titles, many=True,
+                                         context={'user': request.user, 'course': course})
+        return Response(serializer.data, status=HTTP_200_OK)
 
-        if len(titles) > 0:
-            data = []
-            for title in titles:
-                title_data = {
-                    'id': title.id,
-                    'title': title.title,
-                    'public': title.public,
-                    'tasks': []
-                }
-
-                tasks_orders = TaskOrder.objects.filter(title_id=title.id).order_by('order')
-                tasks = [task_order.task for task_order in tasks_orders]
-                present_tasks = []
-
-                for task in tasks:
-                    t = dict()
-                    t['id'] = task.id
-                    t['title'] = task.title
-                    t['points'] = task.points
-                    t['type'] = task.type
-                    t['public'] = task.public
-
-                    if request.user in course.users_who_registered.all():
-                        t['completed_status'] = 'Completed' if request.user in task.users_who_completed.all() else 'Uncompleted'
-                    else:
-                        t['completed_status'] = None
-
-                    present_tasks.append(t)
-
-                title_data['tasks'] = present_tasks
-
-                data.append(title_data)
-
-            return JsonResponse({
-                'size': len(data),
-                'titles': data,
-            }, safe=False)
-        else:
-            return JsonResponse({
-                'status': 'success',
-                'message': 'Titles not found'
-            })
     elif request.method == 'POST':
         if request.user.is_superuser:
-            get_title = request.POST.get('title', '')
-            if 255 > len(get_title) > 0:
-                title = Title.objects.create(title=get_title)
-                title.save()
-
-                order = course.course_titles.count() + 1
-                TitleOrder.objects.create(course=course, title=title, order=order)
-                course.course_titles.add(title)
-
-                return JsonResponse({
-                    'status': 'success',
-                    'message': ' The subject created successfully!'
-                }, status=201)
-            else:
-                return JsonResponse({
-                    'status': 'error',
-                    'message': ' The subject cannot be less than 0 or more than 255 characters.'
-                }, status=400)
-        return JsonResponse({
-            'status': 'error',
-            'message': 'User is not a superuser'
-        }, status=403)
-    return JsonResponse({
-        'status': 'error',
-        'message': 'Method not allowed'
-    }, status=402)
-
-
-@csrf_exempt
-def title_update_delete(request, id):
-    if request.user.is_superuser:
-        course_title = get_element_or_404(Title, id)
-
-        if isinstance(course_title, JsonResponse):
-            return course_title
-
-        if request.method == 'POST':
+            # Берем данные
             title = request.POST.get('title', '')
-            public = request.POST.get('public', None)
-            is_changed = False
 
-            if 0 < len(title) < 255:
-                course_title.title = title
-                is_changed = True
-                course_title.save()
+            # Проверяем их
+            if len(title) < 3 or 255 < len(title):
+                return Response({'detail': 'The subject cannot be less than 0 or more than 255 characters'}, status=HTTP_400_BAD_REQUEST)
 
-            if public:
-                print('public', public)
-                if public == 'true':
-                    course_title.public = False
-                else:
-                    course_title.public = True
-                is_changed = True
-                course_title.save()
+            # Создаем новую тему
+            title = create_course_title(course, title)
 
-            if is_changed:
-                return JsonResponse({
-                    'status': 'success',
-                    'message': 'Title updated successfully!'
-                }, status=200)
-            else:
-                return JsonResponse({
-                    'status': 'success',
-                    'message': 'Title didn\'t change!'
-                }, status=200)
-
-        if request.method == 'DELETE':
-            course_title.delete()
-
-            return JsonResponse({}, status=204)
-
-        else:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Method not allowed'
-            }, status=402)
-
-    else:
-        return JsonResponse({
-            'status': 'error',
-            'message': 'User is not a superuser'
-        }, status=403)
+            # Проверяем то, что тема создана успешно и выводим результат
+            if title:
+                return Response({'detail': 'Title created successfully'}, status=HTTP_201_CREATED)
+            return Response({'detail': 'Title creation failed'}, status=HTTP_400_BAD_REQUEST)
+        return Response({'detail': 'You don\'n have enough permissions'}, status=HTTP_403_FORBIDDEN)
 
 
-def title_change_place(request, CourseID, TitleID, NewOrder):
-    if request.user.is_superuser:
-        course = get_element_or_404(Course, CourseID)
-        if isinstance(course, JsonResponse):
-            return course
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def title_delete(request, title_id: int):
+    """
+        Удаление темы
+    """
+    # Берем задание к курсу по его идентификатору
+    course_title = get_course_title_by_id(title_id)
+    if not course_title:
+        return Response({'detail': f'Title with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
 
-        title = get_element_or_404(Title, TitleID)
-        if isinstance(title, JsonResponse):
-            return title
+    # Удаляем тему
+    delete_course_title(course_title)
+    return Response({}, status=HTTP_204_NO_CONTENT)
 
-        if request.method == 'PUT':
-            order_1 = TitleOrder.objects.get(course=course, title=title)
-            order_2 = TitleOrder.objects.get(course=course, task=NewOrder)
 
-            if NewOrder is not None:
-                order1_place = order_1.order
+@api_view(['PATCH'])
+@permission_classes([IsAdminUser])
+def title_update_name(request, title_id: int):
+    """
+        Обновление названия темы
+    """
+    # Берем задание к курсу по его идентификатору
+    course_title = get_course_title_by_id(title_id)
+    if not course_title:
+        return Response({'detail': f'Title with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
 
-                order_1.order = order_2.order
-                order_2.order = order1_place
+    title = request.POST.get('title', '')
 
-                order_1.save()
-                order_2.save()
+    # Обновляем название темы
+    message = update_course_title_name(course_title, title)
+    return Response({'detail': message}, status=HTTP_200_OK)
 
-                return JsonResponse({
-                    'status': 'success',
-                    'message': 'Title\' place changed successfully!'
-                }, status=200)
-            else:
-                return JsonResponse({
-                    'status': 'error',
-                    'message': 'New order not provided'
-                })
-        else:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Method not allowed'
-            }, status=402)
 
-    else:
-        return JsonResponse({
-            'status': 'error',
-            'message': 'User is not a superuser'
-        }, status=403)
+@api_view(['PATCH'])
+@permission_classes([IsAdminUser])
+def title_update_public(request, title_id: int):
+    """
+        Обновление публичности темы
+    """
+    # Берем задание к курсу по его идентификатору
+    course_title = get_course_title_by_id(title_id)
+    if not course_title:
+        return Response({'detail': f'Title with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+
+    public = request.POST.get('public', '')
+
+    # Обновляем статус публичности темы
+    message = update_course_title_public(course_title, public)
+    return Response({'detail': message}, status=HTTP_200_OK)
+
+# @api_view(['PATCH'])
+# @permission_classes([IsAdminUser])
+# def title_change_place(request, CourseID: int, TitleID: int, NewOrder: int):
+#     # Берем курс по идентификатору
+#     course = get_course_by_id(id)
+#     if not course:
+#         return Response({'detail': f'Course with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+#
+#     # Берем задание курса по его идентификатору
+#     title = get_course_title_by_id(id)
+#     if not title:
+#         return Response({'detail': f'Title with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+#
+#
+#         return Response({'detail': 'Title\' place changed successfully!'}, status=HTTP_200_OK)
+#     return Response({'detail': 'New order not provided'}, status=HTTP_400_BAD_REQUEST)

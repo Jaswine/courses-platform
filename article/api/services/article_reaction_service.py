@@ -9,9 +9,9 @@ def get_first_existing_reactions(article: Article, user: User) -> Reaction:
     """
         Взятие первой существующей реакции
 
-        :param: article: Article    - Статья
-        :param: user: User          - Пользователь
-        :return:  Reaction           - Список реакций
+        :param article: Article    - Статья
+        :param user: User          - Пользователь
+        :return  Reaction           - Список реакций
     """
     return article.reactions.filter(user=user).first()
 
@@ -20,10 +20,10 @@ def toggle_reaction(article: Article, user: User, reaction_type: str) -> str:
     """
         Добавление / изменение / удаление реакции
 
-        :param: article: Article    - Статья
-        :param: user: User          - Пользователь
-        :param: reaction_type: str  - Наименование реакции
-        :return: str                - Сообщение
+        :param article: Article    - Статья
+        :param user: User          - Пользователь
+        :param reaction_type: str  - Наименование реакции
+        :return str                - Сообщение
     """
     existing_reaction = get_first_existing_reactions(article, user)
     if existing_reaction:

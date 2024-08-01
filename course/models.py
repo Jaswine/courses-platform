@@ -40,7 +40,7 @@ class Course(models.Model):
     likes = models.ManyToManyField(User, blank=True, related_name='likes')
 
     course_titles = models.ManyToManyField('Title', through='TitleOrder', blank=True, default=[],
-                                           related_name='course_titles')
+                                           related_name='courses')
 
     users_who_registered = models.ManyToManyField(User, related_name='users_who_registered', blank=True)
 
@@ -58,7 +58,7 @@ class Title(models.Model):
     title = models.CharField(max_length=255)
     public = models.BooleanField(default=False)
 
-    tasks = models.ManyToManyField('Task', through='TaskOrder', blank=True, default=[], related_name='tasks')
+    title_tasks = models.ManyToManyField('Task', through='TaskOrder', blank=True, default=[], related_name='titles')
 
     def __str__(self):
         return self.title
@@ -162,7 +162,6 @@ class Question(models.Model):
     type = models.CharField(max_length=100, choices=QUESTION_TYPES)
 
     answers_to_choose = models.ManyToManyField("QuestionAnswersToChoose", blank=True)
-
     correct_answer = models.CharField(max_length=200)
 
     @classmethod
@@ -228,6 +227,9 @@ class CourseReview(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created']
 
     def __str__(self):
         return self.course.title

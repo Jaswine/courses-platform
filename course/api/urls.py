@@ -5,41 +5,46 @@ app_name = 'course'
 
 urlpatterns = [
     # TODO: Tags
-    path('tags', tags.tags_list_create, name='tags_list_create'),
+    path('tags/', tags.tag_create_list, name='tags_list_create'),
     path('tags/<int:id>/', tags.tags_get_update_delete, name='tags_get_update_delete'),
 
     # TODO: Courses
-    path('courses', courses.courses_list_create, name='courses_list_create'),
-    path('courses/<int:id>/tasks', courses.course_show_tasks, name='course_show_tasks'),
-    path('courses/<int:id>', courses.courses_get_update_delete, name='courses_get_update_delete'),
-    path('courses-like/<int:id>', courses.course_add_like, name='course_add_like'),
-    path('courses-like/<int:id>/add-to-course', courses.user_add_to_course, name='user_add_to_course'),
-    path('courses/<int:id>/reviews', courses.course_reviews_show_create, name='course_reviews_show_create'),
-    path('courses/reviews/<int:id>/delete', courses.course_reviews_delete, name='course_reviews_delete'),
+    path('courses/', courses.courses_list, name='courses_list_create'),
+    path('courses/<int:id>/', courses.courses_get, name='courses_get_update_delete'),
+    path('courses/<int:id>/like/', courses.course_add_remove_like, name='course_add_remove_like'),
+    path('courses/<int:id>/user/', courses.course_add_remove_user, name='course_add_remove_user'),
+    path('courses/<int:id>/reviews/', courses.course_review_create_list, name='course_review_create_list'),
+    path('courses/reviews/<int:id>/delete/', courses.course_reviews_delete, name='course_reviews_delete'),
 
-    # TODO: TITLE
+    # TODO: Title
     path('courses/<int:id>/titles/',
          titles.title_list_create, name='title-list-create'),
-    path('courses/titles/<int:id>/',
-         titles.title_update_delete, name='title-update-delete'),
-    path('courses/<int:id>/titles/<int:TitleID>/places/<int:NewOrder>/',
-         titles.title_change_place, name='title-change-place'),
+    path('courses/titles/<int:title_id>/',
+         titles.title_delete, name='title-delete'),
+    path('courses/titles/<int:title_id>/update-title/',
+         titles.title_update_name, name='title-update-name'),
+    path('courses/titles/<int:title_id>/update-public/',
+         titles.title_update_public, name='title-update-public'),
+    # path('courses/<int:id>/titles/<int:TitleID>/places/<int:NewOrder>/',
+    #      titles.title_change_place, name='title-change-place'),
 
     # TODO: TASK
-    path('courses/<int:id>/tasks/<int:task_id>/',
+    path('courses/titles/<int:id>/tasks/',
+         tasks.task_create, name='task-create'),
+    path('courses/<int:id>/titles/tasks/<int:task_id>/',
          tasks.task_get_update_delete, name='task-update-delete'),
-    path('courses/<int:id>/tasks/<int:task_id>/experiense/',
-         tasks.task_add_experiense, name='task_add_experiense'),
-    path('courses/<int:course_id>/tasks/<int:task_id>/bookmarks/',
+    path('courses/<int:id>/titles/tasks/<int:task_id>/experience/',
+         tasks.task_add_experience, name='task_add_experiense'),
+    path('courses/<int:course_id>/titles/tasks/<int:task_id>/bookmark/',
          tasks.task_add_remove_bookmark, name='task_add_remove_bookmark'),
 
     # TODO: TASK COMMENTS
-    path('courses/tasks/<int:task_id>/comments',
-         task_comment.task_comment_create, name='task_comment_list_create'),
-    path('courses/tasks/<int:task_id>/comments/<int:comment_id>/delete',
+    path('courses/titles/tasks/<int:task_id>/comments/',
+         task_comment.task_comment_list_create, name='task_comment_list_create'),
+    path('courses/titles/tasks/<int:task_id>/comments/<int:comment_id>/delete/',
          task_comment.task_comment_update_delete, name='task_comment_update_delete'),
-    path('courses/tasks/<int:task_id>/comments/<int:comment_id>/react/',
+    path('courses/titles/tasks/<int:task_id>/comments/<int:comment_id>/react/',
          task_comment.task_comment_add_remove_like, name='task_comment_add_remove_like'),
-    path('courses/tasks/<int:task_id>/comments/<int:comment_id>/complaint/',
+    path('courses/titles/tasks/<int:task_id>/comments/<int:comment_id>/complaint/',
          task_comment.task_comment_add_complaint, name='task_comment_add_complaint')
 ]

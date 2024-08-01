@@ -15,11 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
             tags = '',
     ) => {
         /*
-        *   Get All articles
+        *   Взятие всех статей
         */
         try {
             let url = `/api/article/article-list?q=${search}&sort_by=${sort_by}&tags=${tags}`
-            console.log(url)
             const response = await fetch(url);
             const data = await response.json()
 

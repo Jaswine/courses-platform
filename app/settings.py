@@ -26,33 +26,32 @@ SECRET_KEY = 'django-insecure-bzqkqqkxwl+^x9t9(m&zons6*$0ctom+-gwa!(ut0pa04ynl5x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    '*'
-]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'article',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    'course',
-    'user',
-
     'django.contrib.sites',
-    
-    'ckeditor',
-    
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+
+    'ckeditor',
+
+    'rest_framework',
+
+    'course',
+    'user',
+    'article',
 ]
 
 MIDDLEWARE = [
@@ -215,3 +214,5 @@ CKEDITOR_UPLOAD_PATH = "media/ckeditor/uploads/"
 CKEDITOR_RESTRICT_BY_USER = True
 CKEDITOR_STORAGE_BACKEND = True
 CKEDITOR_FORCE_JPEG_COMPRESSION = True
+
+PAGE_SIZE = 10

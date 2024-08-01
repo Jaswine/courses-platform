@@ -1,218 +1,119 @@
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.status import (HTTP_404_NOT_FOUND,
+                                   HTTP_400_BAD_REQUEST, HTTP_200_OK,
+                                   HTTP_201_CREATED, HTTP_403_FORBIDDEN, HTTP_204_NO_CONTENT)
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
 
-from ..services.TaskComment import get_comments_without_children_by_task
-from ..utils.generate_comment_list_util import generate_comment_list_util
-from ..utils.get_element_or_404 import get_element_or_404
-from ...models import Title, Task, TaskOrder, Course, TaskComment
-
-
-def task_create(request, id):
-    if request.user.is_superuser:
-        course_title = get_element_or_404(Title, id)
-
-        if isinstance(course_title, JsonResponse):
-            return course_title
-
-        if request.method == 'POST':
-            title = request.POST.get('title', '')
-            type = request.POST.get('type', 'text')
-            points = request.POST.get('points', 0)
-
-            if 0 < len(title) < 255:
-                task = Task.objects.create(
-                    title=title,
-                    type=type,
-                    points=points,
-                    public=False
-                )
-
-                task.save()
-
-                order = course_title.tasks.count() + 1
-                TaskOrder.objects.create(title=title, task=task, order=order)
-                title.tasks.add(title)
-
-                return JsonResponse({
-                    'status': 'success',
-                    'message': ' The subject created successfully!'
-                }, status=201)
-            else:
-                return JsonResponse({
-                    'status': 'error',
-                    'message': ' The subject cannot be less than 0 or more than 255 characters.'
-                }, status=400)
-
-        else:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Method not allowed'
-            }, status=402)
-    else:
-        return JsonResponse({
-            'status': 'error',
-            'message': 'User is not a superuser'
-        }, status=403)
+from ..serializers.task_serializers import TaskOneSerializer
+from ..services.course_service import get_course_by_id
+from ..services.task_service import create_task, update_task, delete_task, add_remove_task_experience, \
+    add_remove_task_bookmark, get_task_by_id
+from ..services.title_service import get_course_title_by_id
 
 
-@csrf_exempt
-def task_get_update_delete(request, id, task_id):
-    course = get_element_or_404(Course, id)
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def task_create(request, id: int):
+    """
+        Создание задания
+    """
+    # Берем тему задания к курсу по его идентификатору
+    course_title = get_course_title_by_id(id)
+    if not course_title:
+        return Response({'detail': f'Title with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
 
-    if isinstance(course, JsonResponse):
-        return course
-    task = get_element_or_404(Task, task_id)
+    # Берем данные
+    title = request.POST.get('title', '')
+    task_type = request.POST.get('type', 'text')
+    points = request.POST.get('points', 0)
 
-    if isinstance(task, JsonResponse):
-        return task
+    # Создаем таск
+    task = create_task(course_title, title, task_type, points)
+
+    # Проверяем, что таск создан успешно и выводи сообщение
+    if task:
+        return Response({'detail': 'The subject created successfully!'}, status=HTTP_201_CREATED)
+    return Response({'detail': 'Task creation failed'}, status=HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def task_get_update_delete(request, id: int, task_id: int):
+    """
+        Вывод, обновление и удаление задания
+    """
+    # Берем курс по его идентификатору
+    course = get_course_by_id(id)
+    if not course:
+        return Response({'detail': f'Course with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+
+    # Берем задание по его идентификатору
+    task = get_task_by_id(task_id)
+    if not task:
+        return Response({'detail': f'Task with ID: {task_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        content = dict()
+        serializer = TaskOneSerializer(task, many=False, context={'user': request.user})
+        return JsonResponse(serializer.data, status=200)
 
-        # Task content
-        if task.type == 'TaskText':
-            content['text'] = task.text
-        elif task.type == 'TaskVideo':
-            content['video_path'] = task.video.url if task.video else None
-        elif task.type == 'TaskProject':
-            content['text'] = task.text
+    if not request.user.is_superuser:
+        return Response({'detail': 'User does not have sufficient rights'}, status=HTTP_403_FORBIDDEN)
 
-        # Comments
-        comments = get_comments_without_children_by_task(task)
-        comment_list = generate_comment_list_util(comments, request.user)
-
-        return JsonResponse({
-            'status': 'success',
-            'data': {
-                'title': task.title,
-                'type': task.type,
-                'points': task.points,
-                'public': task.public,
-                'content': content,
-                'is_bookmarked': True if request.user in task.bookmarks.all() else False,
-                'comments': comment_list,
-            }
-        }, status=200)
-
-    elif request.method == 'POST':
-        if request.user.is_superuser:
+    elif request.method == 'PUT':
+            # Берем данные
             title = request.POST.get('task_title', '')
-            public = request.POST.get('public', None)
-            points = request.POST.get('points', None)
-            is_changed = False
+            public = request.POST.get('public', 'false')
+            points = request.POST.get('points', 0)
 
-            if 0 < len(title) < 255:
-                task.title = title
-                is_changed = True
-                task.save()
-
-            if public:
-                if public == 'true':
-                    task.public = False
-                else:
-                    task.public = True
-                is_changed = True
-                task.save()
-
-            if points:
-                task.points = points
-                is_changed = True
-                task.save()
-
-            if is_changed:
-                return JsonResponse({
-                    'status': 'success',
-                    'message': 'Task updated successfully!'
-                }, status=200)
-
-            return JsonResponse({
-                'status': 'success',
-                'message': 'Task didn\'t change!'
-            }, status=200)
-        return JsonResponse({
-            'status': 'error',
-            'message': 'User is not a superuser'
-        }, status=403)
+            # Обновляем задание
+            if update_task(task, title, public, points):
+                return Response({'detail': 'Task updated successfully!'}, status=HTTP_200_OK)
+            return Response({'detail': 'Task updation failed'}, status=HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
-        if request.user.is_superuser:
-            task.delete()
-            return JsonResponse({}, status=204)
-        return JsonResponse({
-            'status': 'error',
-            'message': 'User is not a superuser'
-        }, status=403)
-    return JsonResponse({
-            'status': 'error',
-            'message': 'Method not allowed'
-        }, status=402)
+        # Удаляем задание
+        delete_task(task)
+        return Response({}, status=HTTP_204_NO_CONTENT)
 
 
-@csrf_exempt
-def task_add_experiense(request, id: int, task_id: int):
-    if request.user.is_authenticated:
-        course = get_element_or_404(Course, id)
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def task_add_experience(request, id: int, task_id: int):
+    """
+        Добавление / удаление опыта
+    """
+    # Берем курс по его идентификатору
+    course = get_course_by_id(id)
+    if not course:
+        return Response({'detail': f'Course with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
 
-        if isinstance(course, JsonResponse):
-            return course
+    # Берем задание по его идентификатору
+    task = get_task_by_id(task_id)
+    if not task:
+        return Response({'detail': f'Task with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
 
-        task = get_element_or_404(Task, task_id)
-
-        if isinstance(task, JsonResponse):
-            return task
-
-        if request.method == 'POST':
-            if task.users_who_completed.filter(id=request.user.id).exists():
-                task.users_who_completed.remove(request.user.id)
-            else:
-                task.users_who_completed.add(request.user.id)
-
-            task.save()
-
-            return JsonResponse({
-                'status': 'success',
-                'message': 'Task updated successfully!'
-            }, status=200)
-
-        return JsonResponse({
-            'status': 'error',
-            'message': 'Method not allowed!'
-        }, status=405)
-    return JsonResponse({
-        'status': 'error',
-        'message': 'User is not authenticated'
-    }, status=403)
+    # Добавляем или удаляем опыт к заданию
+    message = add_remove_task_experience(task, request.user)
+    return Response({'detail': message}, status=HTTP_200_OK)
 
 
-@csrf_exempt
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
 def task_add_remove_bookmark(request, course_id: int, task_id: int):
-    if request.user.is_authenticated:
-        course = get_element_or_404(Course, course_id)
+    """
+        Добавление / удаление из закладок
+    """
+    # Берем курс по его идентификатору
+    course = get_course_by_id(course_id)
+    if not course:
+        return Response({'detail': f'Course with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
 
-        if isinstance(course, JsonResponse):
-            return course
+    # Берем задание по его идентификатору
+    task = get_task_by_id(task_id)
+    if not task:
+        return Response({'detail': f'Task with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
 
-        task = get_element_or_404(Task, task_id)
-
-        if isinstance(task, JsonResponse):
-            return task
-
-        if request.method == 'POST':
-            if request.user in task.bookmarks.all():
-                task.bookmarks.remove(request.user)
-            else:
-                task.bookmarks.add(request.user)
-
-            task.save()
-
-            return JsonResponse({
-                'status': 'success',
-                'message': 'Bookmark added successfully!' if request.user in task.bookmarks.all() else 'Bookmark removed successfully!'
-            }, status=200)
-        return JsonResponse({
-            'status': 'error',
-            'message': 'Method not allowed!'
-        }, status=405)
-    return JsonResponse({
-        'status': 'error',
-        'message': 'User is not authenticated'
-    }, status=401)
+    # Добавляем или удаляем закладку к заданию
+    message = add_remove_task_bookmark(task, request.user)
+    return Response({'detail': message}, status=HTTP_200_OK)

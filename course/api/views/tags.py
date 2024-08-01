@@ -1,70 +1,82 @@
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.status import (HTTP_200_OK,
+                                   HTTP_400_BAD_REQUEST,
+                                   HTTP_404_NOT_FOUND,
+                                   HTTP_405_METHOD_NOT_ALLOWED,
+                                   HTTP_403_FORBIDDEN, HTTP_201_CREATED,
+                                   HTTP_204_NO_CONTENT)
+from rest_framework.response import Response
 
-from ...models import Tag
+from ..serializers.tag_serializers import TagSerializer
+from ..services.tag_service import find_tags_by_name, create_tag, get_tag_by_id, delete_tag, update_tag_name
 
-from ...utils import checking_slug, slug_generator
 
-
-@csrf_exempt
-def tags_list_create(request):
+@api_view(['GET', 'POST'])
+def tag_create_list(request):
+    """
+        TODO: Вывод списка тэгов и создание нового тэга
+    """
     if request.method == 'GET':
+        # Берем запрос для поиска
         query = request.GET.get('q', '')
-        tags = Tag.objects.all()
+        # Берем все тэги
+        tags = find_tags_by_name(query)
+        # Выводим тэги
+        serializer = TagSerializer(tags, many=True)
+        return Response(serializer.data,
+                        status=HTTP_200_OK)
 
-        if query:
-            tags = Tag.objects.filter(name__icontains=query)
-
-        data = [{
-            'id': tag.id,
-            'name': tag.name,
-        } for tag in tags]
-
-        return JsonResponse({
-            'status': 'success',
-            'tags': data
-        }, safe=False)
-
-
-    elif request.method == 'POST':
-        name = request.POST.get('name', '')
-
-        tag = Tag.objects.create(
-            name=name,
-        )
-
-        data = {'id': tag.id,
-                'name': tag.name}
-        return JsonResponse(data, status=201)
-    else:
-        return JsonResponse({'error': 'Access denied for this method: This method seems to be illegal in this world.'},
-                            status=405)
+    if request.method == 'POST':
+        if request.user.is_superuser:
+            # Берем название тэга
+            name = request.POST.get('name', '')
+            # Проверяем тэг на существование
+            if find_tags_by_name(name):
+                return Response({'detail': 'Tag already exists'}, status=HTTP_400_BAD_REQUEST)
+            # Создаем новый тэг
+            tag = create_tag(name)
+            # Выводим тэг
+            serializer = TagSerializer(tag, many=False)
+            return Response(serializer.data,
+                            status=HTTP_201_CREATED)
+        return Response({'detail': 'User doesn\'t have sufficient rights'}, status=HTTP_403_FORBIDDEN)
+    return Response({'detail': 'Method not allowed'}, status=HTTP_405_METHOD_NOT_ALLOWED)
 
 
-@csrf_exempt
-def tags_get_update_delete(request, id):
-    try:
-        tag = Tag.objects.get(id=id)
-    except Tag.DoesNotExist:
-        return JsonResponse({
-            'status': 'error',
-            'message': f'Name tag: {id} not found.'
-        }, status=404)
+@api_view(['GET', 'PATCH', 'DELETE'])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def tags_get_update_delete(request, id: int):
+    """
+        Просмотр, обновление и удаление тэга
+    """
+    tag = get_tag_by_id(id)
 
-    if request.method == 'PUT':
-        tag.name = request.POST.get('name', '')
-        tag.save()
+    if not tag:
+        return Response({'detail': f'Tag with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
 
-        return JsonResponse({
-            'status': 'success',
-            'message': 'Tag was successfully updated'
-        }, status=404)
-    elif request.method == 'DELETE':
-        tag.delete()
-        return JsonResponse({
-            'status': 'success',
-            'message': 'Tag was successfully deleted'
-        }, status=404)
-    else:
-        return JsonResponse({'error': 'Access denied for this method: This method seems to be illegal in this world.'},
-                            status=405)
+    if request.method == 'GET':
+        # Выводим тэг
+        serializer = TagSerializer(tag)
+        return Response(serializer.data, status=HTTP_200_OK)
+
+    if not request.user.is_superuser:
+        return Response({'detail': 'You don\'t have enough privileges'}, status=HTTP_403_FORBIDDEN)
+
+    if request.method == 'PATCH':
+        # Берем новое название тэга
+        tag_name = request.POST.get('name', '')
+        # Проверяем на существование
+        if not tag_name or find_tags_by_name(tag_name):
+            return Response({'detail': 'Tag already exists'}, status=HTTP_400_BAD_REQUEST)
+        # Обновляем
+        update_tag_name(tag_name, tag)
+        return Response({'detail': 'Tag updated successfully'}, status=HTTP_200_OK)
+
+    if request.method == 'DELETE':
+        # Удаляем тэг
+        delete_tag(tag)
+        return Response({}, status=HTTP_204_NO_CONTENT)
+
+    return Response({'detail': 'Method not allowed'}, status=HTTP_405_METHOD_NOT_ALLOWED)
+

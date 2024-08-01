@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
-from article.api.services.api_article_comment_service import filter_comments_by_article
+from article.api.services.article_comment_service import filter_comments_by_article
 from article.api.utils.collect_comment_data_util import collect_comment_data_util
 from article.models import Article, ArticleComment
 

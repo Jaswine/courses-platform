@@ -10,7 +10,7 @@ def collect_article_data_utils(articles: list[Article]) -> list[
 
         :param   articles: list[Article] - список статей
         :return  list[dict[str, None | str | int | list[dict[str, Any]] | Any]] - Список
-            с словарями данных курсов
+            с словарями данных статей
     """
     return [{
         'id': article.id,

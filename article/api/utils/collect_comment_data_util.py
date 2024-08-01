@@ -8,8 +8,8 @@ def collect_comment_data_util(comments: list[ArticleComment]) -> (
     """
         Генерация списка с словарями статей
 
-        :param: comments: list[ArticleComment]   - Список комментариев
-        :return:  list[dict[str, str | int]]     - Список с словарями данных коммент
+        :param comments: list[ArticleComment]   - Список комментариев
+        :return  list[dict[str, str | int]]     - Список с словарями данных коммент
     """
     return [{
         'id': comment.id,

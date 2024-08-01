@@ -1,6 +1,4 @@
 from django.http import JsonResponse
-
-from course.api.utils.generate_courses_list_util import generate_courses_list_util
 from course.models import Course
 
 
@@ -11,11 +9,11 @@ def registered_courses(request):
     if request.user.is_authenticated:
         courses = Course.objects.filter(users_who_registered=request.user)
 
-        data = generate_courses_list_util(request.user, courses)
+        # data = generate_courses_list_util(request.user, courses)
 
         return JsonResponse({
             'status': 'success',
-            'courses': data,
+            # 'courses': data,
         }, status=200)
 
     return JsonResponse({

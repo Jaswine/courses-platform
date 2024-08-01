@@ -8,9 +8,9 @@ def create_article(form: ArticleForm, user: User) -> Article | None:
     """
         Создание статьи
 
-        :param: form: ArticleForm  - Заполненая форма статьи
-        :param: user: User         - Пользователь
-        :return: Article | None    - Статья или None
+        :param form: ArticleForm  - Заполненая форма статьи
+        :param user: User         - Пользователь
+        :return Article | None    - Статья или None
     """
     if form.is_valid():
         article = form.save(commit=False)
@@ -24,8 +24,8 @@ def update_article(form: ArticleForm) -> Article | None:
     """
         Обновление статьи
 
-        :param: form: ArticleForm  - Заполненая форма статьи
-        :return: Article | None    - Статья или None
+        :param form: ArticleForm  - Заполненая форма статьи
+        :return Article | None    - Статья или None
     """
     if form.is_valid():
         article = form.save()
@@ -37,6 +37,6 @@ def delete_article(article: Article):
     """
         Удаление статьи
 
-        :param: article: Article  - статья
+        :param article: Article  - статья
     """
     article.delete()
