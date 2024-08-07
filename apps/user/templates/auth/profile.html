@@ -1,0 +1,92 @@
+{% include 'main.html' %}
+{% comment %} {% load socialaccount account static %} {% endcomment %}
+
+{% block title %}
+    <link rel="stylesheet" href="/css/user/profile.css">
+
+    <title>{{ user.username }}</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page">
+    {% include "header.html" %}
+    <div class="page__content">
+        {% if profile.backImage %}
+            <img src="{{ profile.backImage.url }}" alt="{{ profile.user.username }}" class="profile__back" />
+        {% else %}
+            <img src="https://images.unsplash.com/photo-1715942163364-5aa9e6d66bb4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNnx8fGVufDB8fHx8fA%3D%3D" alt="{{ profile.user.username }}" class="profile__back" />
+        {% endif %}
+        <div class="profile__header">
+            <div class="profile__header__left">
+                {% if profile.image %}
+                <img src="{{ profile.image.url }}" alt="{{ profile.user.username }}" />
+                {% else %}
+                <img
+                    src="https://images.pexels.com/photos/17886484/pexels-photo-17886484/free-photo-of-patio-of-a-restaurant.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load"
+                    alt="{{ profile.user.username }}" />
+                {% endif %}
+                <a class="btn">+ Follow</a>
+                <a class="btn btn--primary">+ Write a message</a>
+            </div>
+            <div class="profile__header__right">
+                <h3>{{ profile.user.username }}</h3>
+                <div>
+                    {% if profile.location %}
+                        <span>{{ profile.location }} - </span>
+                    {% endif %}
+                    {% if profile.website %} <a href="{{ proprofile__header__leftfile.website }}">Website</a> - {% endif %}
+                    {% if profile.Twitter %} <a href="{{ profile.Twitter }}">Twitter</a> - {% endif %}
+                    {% if profile.GitHub %} <a href="{{ profile.GitHub }}">GitHub</a> - {% endif %}
+                    {% if profile.GitLub %} <a href="{{ profile.GitLub }}">GitLub</a> - {% endif %}
+                    {% if profile.Linkedin %} <a href="{{ profile.Linkedin }}">Linkedin</a> - {% endif %}
+                    {% if profile.Telegram %} <a href="{{ profile.Telegram }}">Telegram</a> - {% endif %}
+                </div>
+                {% if profile.skills.count > 0 %}
+                    <div class="profile__tags">
+                        ###Skills:
+                        {% for skill in profile.skills.all %}
+                            <a>{{ skill }}</a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if profile.skills.count > 0 %}
+                <div class="profile__tags">
+                    ###Interests:
+                    {% for skill in profile.interests.all %}
+                        <a>{{ skill}}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if profile.bio %}
+                <div class="profile__description">
+                    {% autoescape off %}
+                    {{ profile.bio }}
+                    {% endautoescape %}
+                </div>
+                {% endif  %}
+            </div>
+        </div>
+        <div class="profile__menu">
+            <a href="/users/{{ user.username }}" class="profile__menu__link {% if status == 'profile' %}profile__menu__activate{% endif %}">Profile</a>
+            <a href="/users/{{ user.username }}/certificates" class="profile__menu__link {% if status == 'certificates' %}profile__menu__activate{% endif %}">Certificates</a>
+        </div>
+       {% if status == 'profile' %}
+        <div class="profile__courses">
+            {% for course in courses %}
+                <div class="profile__course">
+                    <a href="/courses/{{ course.id }}">
+                        {{ course.title }}
+                    </a>
+                    <span>{{ course.points_earned }} / {{ course.points_all }}</span>
+                    <span style="{% if course.status == 'Began' %} background-color: rgb(242, 230, 217, .2); color:  rgb(242, 230, 217); {% elif course.status == 'Completed' %} background-color: rgb(187, 168, 253, .2); color: #BBA8FD;{% else %} background-color: rgb(208, 162, 200, .2); color: #D0A2C8; {% endif  %}">{{ course.status }}</span>
+                </div>
+            {% endfor %}
+        </div>
+       {% else %}
+        <div class="profile__courses">
+            
+        </div>
+       {% endif %}
+    </div>
+</div>
+{% endblock content %}
