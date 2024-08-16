@@ -1,5 +1,6 @@
 from pytest import mark
-from article.api.services.api_article_comment_service import filter_comments_by_article
+
+from apps.article.api.services.article_comment_service import filter_comments_by_article
 
 
 @mark.django_db

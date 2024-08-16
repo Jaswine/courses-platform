@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from course.models import Course
+from apps.course.models import Course
 
 
 def registered_courses(request):

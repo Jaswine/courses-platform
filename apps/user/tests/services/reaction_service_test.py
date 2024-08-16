@@ -1,5 +1,5 @@
 from pytest import mark
-from user.services.reaction_service import create_reaction
+from apps.user.services.reaction_service import create_reaction
 
 
 @mark.django_db

@@ -1,5 +1,6 @@
 from pytest import mark
-from article.api.services.api_article_reaction_service import get_first_existing_reactions, toggle_reaction
+
+from apps.article.api.services.article_reaction_service import get_first_existing_reactions, toggle_reaction
 
 
 @mark.django_db

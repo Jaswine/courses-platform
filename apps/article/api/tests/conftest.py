@@ -4,9 +4,9 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from pytest import fixture
 
-from article.models import Article, ArticleComment
-from course.models import Tag
-from user.models import Reaction
+from apps.article.models import Article, ArticleComment
+from apps.course.models import Tag
+from apps.user.models import Reaction
 
 
 @fixture

@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User
 from pytest import mark, fixture
 
-from user.forms import UpdateUserForm, CreateUserForm, UpdateProfileForm
-from user.models import Profile
-from user.services.user_service import get_user_by_email, get_user_by_username, create_user_and_profile_by_form, \
+from apps.user.forms import UpdateUserForm, CreateUserForm, UpdateProfileForm
+from apps.user.models import Profile
+from apps.user.services.user_service import get_user_by_email, get_user_by_username, create_user_and_profile_by_form, \
     update_user_and_profile_by_forms
 
 

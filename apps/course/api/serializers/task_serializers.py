@@ -2,7 +2,7 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
 from apps.course.api.services.course_service import is_user_registered_to_course
 from apps.course.api.services.task_service import task_bookmark_is_exists, is_user_completed_task
-from apps.course.models import Task, TaskComment
+from apps.course.models import Task
 
 
 class TaskSerializer(ModelSerializer):

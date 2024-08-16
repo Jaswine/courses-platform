@@ -6,16 +6,20 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField  #? RichTextUploadingField
 
 
-#!: ______ TAG FOR COURSES & ARTICLES________
 class Tag(models.Model):
+    """
+        Тэг
+    """
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
 
-#!: ____________ COURSE _____________
 class Course(models.Model):
+    """
+        Курс
+    """
     LEVEL = (
         ('Beginner', 'Beginner'),
         ('Intermediate', 'Intermediate'),
@@ -27,14 +31,11 @@ class Course(models.Model):
     image = models.ImageField(upload_to='courses', blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
 
-    #TODO: About this course
     about = RichTextField(blank=True)
     level = models.CharField(max_length=13, choices=LEVEL)
 
-    #TODO: Public or Unpublic
     public = models.BooleanField(default=False)
 
-    #TODO: Like & Participants
     likes = models.ManyToManyField(User, blank=True, related_name='likes')
 
     course_titles = models.ManyToManyField('Title', through='TitleOrder', blank=True, default=[],
@@ -53,6 +54,9 @@ class Course(models.Model):
 
 
 class Title(models.Model):
+    """
+        Тема
+    """
     title = models.CharField(max_length=255)
     public = models.BooleanField(default=False)
 
@@ -63,6 +67,9 @@ class Title(models.Model):
 
 
 class Task(models.Model):
+    """
+        Задание
+    """
     TYPE = (
         ('TaskText', 'TaskText'),
         ('TaskVideo', 'TaskVideo'),
@@ -139,8 +146,6 @@ class Task(models.Model):
                 str(self.points))
 
 
-# !:  _______________ Show Tasks __________________
-# ?: Add Link on repo
 class TaskURLField(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     url_on_repo = models.URLField()
@@ -149,7 +154,6 @@ class TaskURLField(models.Model):
         return self.url_on_repo
 
 
-# ?: Question
 class Question(models.Model):
     QUESTION_TYPES = (
         ("No answer choice", "No answer choice"),
@@ -195,7 +199,6 @@ class CodeTask(models.Model):
         return self.title
 
 
-# !: ____________ ORDERS _____________
 class TitleOrder(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     title = models.ForeignKey(Title, on_delete=models.CASCADE)
@@ -213,8 +216,6 @@ class TaskOrder(models.Model):
     class Meta:
         ordering = ['order']
 
-    #!: ____________ COMMENTS _____________
-
 
 class CourseReview(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -230,7 +231,7 @@ class CourseReview(models.Model):
         ordering = ['-created']
 
     def __str__(self):
-        return self.course.title
+        return f'{self.user.username}: {self.stars} - {self.message}'
 
 
 class TaskComment(models.Model):

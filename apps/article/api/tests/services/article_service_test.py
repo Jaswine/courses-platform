@@ -1,5 +1,7 @@
 from pytest import mark
-from article.api.services.api_article_service_test import *
+
+from apps.article.api.services.article_service import get_all_articles, find_articles_by_user_status, \
+    search_articles_by_title, filter_articles_by_tags, sort_articles
 
 
 @mark.django_db

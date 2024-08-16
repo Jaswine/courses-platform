@@ -1,5 +1,5 @@
 from unittest.mock import patch
-from user.utils.auth_util import authenticate
+from apps.user.utils.auth_util import authenticate
 
 
 @patch('user.services.user_service.get_user_by_email')

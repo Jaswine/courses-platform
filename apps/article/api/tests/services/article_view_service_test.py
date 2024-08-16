@@ -1,5 +1,6 @@
 from pytest import mark
-from article.api.services.api_article_view_service import add_view_to_article
+
+from apps.article.api.services.article_view_service import add_view_to_article
 
 
 @mark.django_db

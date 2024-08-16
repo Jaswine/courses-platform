@@ -2,7 +2,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from pytest import fixture
 
-from user.models import Profile
+from apps.user.models import Profile
 
 
 @fixture

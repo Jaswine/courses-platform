@@ -1,5 +1,4 @@
-from rest_framework.serializers import ModelSerializer, DateTimeField, SerializerMethodField, ImageField
-from django.contrib.auth.models import User
+from rest_framework.serializers import ModelSerializer, DateTimeField
 
 from apps.course.models import CourseReview
 from apps.user.api.serializers.user_serializers import UserSimpleSerializer

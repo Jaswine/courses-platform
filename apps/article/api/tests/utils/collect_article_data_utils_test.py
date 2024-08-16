@@ -1,7 +1,7 @@
 from pytest import mark
 from pytest import fixture
 
-from article.api.utils.collect_article_data_util import collect_article_data_utils
+from apps.article.api.utils.collect_article_data_util import collect_article_data_utils
 from datetime import datetime
 
 

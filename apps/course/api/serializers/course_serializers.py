@@ -2,10 +2,8 @@ from rest_framework.serializers import (ModelSerializer,
                                         SerializerMethodField, DateTimeField)
 
 from apps.course.api.serializers.tag_serializers import TagSerializer
-from apps.course.api.serializers.title_serializers import TitleListSerializer
 from apps.course.api.services.course_review_service import get_course_reviews_count
 from apps.course.api.services.course_service import is_user_registered_to_course
-from apps.course.api.services.title_service import get_course_titles_by_course_id
 from apps.course.models import Course, Title, Task
 from apps.user.api.serializers.user_serializers import UserSimpleSerializer
 
@@ -13,8 +11,8 @@ from apps.user.api.serializers.user_serializers import UserSimpleSerializer
 class CourseSerializer(ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     user = UserSimpleSerializer(read_only=True)
-    updated = DateTimeField(format="%Y.%m.%d")
-    created = DateTimeField(format="%Y.%m.%d")
+    updated = DateTimeField(format="%Y.%m.%d", read_only=True)
+    created = DateTimeField(format="%Y.%m.%d", read_only=True)
 
     class Meta:
         model = Course
@@ -50,7 +48,7 @@ class CourseListSerializer(CourseSerializer):
 
 class CourseOneSerializer(CourseSerializer):
     user_registered = SerializerMethodField()
-    titles = SerializerMethodField()
+    # titles = SerializerMethodField()
     lessons_count = SerializerMethodField()
     videos_count = SerializerMethodField()
     exercises_count = SerializerMethodField()
@@ -58,7 +56,7 @@ class CourseOneSerializer(CourseSerializer):
     completed_tasks_count = SerializerMethodField()
 
     class Meta(CourseSerializer.Meta):
-        fields = CourseSerializer.Meta.fields + ('user_registered', 'titles',
+        fields = CourseSerializer.Meta.fields + ('user_registered',
                                                  'lessons_count', 'videos_count',
                                                  'exercises_count', 'projects_count',
                                                  'completed_tasks_count')
@@ -67,10 +65,10 @@ class CourseOneSerializer(CourseSerializer):
         user = self.context.get('user')
         return is_user_registered_to_course(obj, user)
 
-    def get_titles(self, obj: Course) -> list[Title]:
-        user = self.context.get('user')
-        titles = get_course_titles_by_course_id(obj.id)
-        return TitleListSerializer(titles, many=True, context={'user': user, 'course': obj}).data
+    # def get_titles(self, obj: Course) -> list[Title]:
+    #     user = self.context.get('user')
+    #     titles = get_course_titles_by_course_id(obj.id)
+    #     return TitleListSerializer(titles, many=True, context={'user': user, 'course': obj}).data
 
     def __get_task_count_by_type(self, obj: Course, task_type: str = None) -> int:
         if task_type:
