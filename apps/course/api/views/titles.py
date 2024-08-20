@@ -8,7 +8,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from ..serializers.title_serializers import TitleListSerializer
 from ..services.course_service import get_course_by_id
 from ..services.title_service import create_course_title, delete_course_title, \
-    filter_course_titles_by_id, get_course_title_by_id, update_course_title_name, update_course_title_public
+    filter_course_titles_by_id, get_course_title_by_id, update_course_title_name, update_course_title_public, \
+    update_titles_places
 
 
 @api_view(['GET', 'POST'])
@@ -33,7 +34,7 @@ def title_list_create(request, id: int):
     elif request.method == 'POST':
         if request.user.is_superuser:
             # Берем данные
-            title = request.POST.get('title', '')
+            title = request.data.get('title')
 
             # Проверяем их
             if len(title) < 3 or 255 < len(title):
@@ -58,7 +59,7 @@ def title_delete(request, title_id: int):
     # Берем задание к курсу по его идентификатору
     course_title = get_course_title_by_id(title_id)
     if not course_title:
-        return Response({'detail': f'Title with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+        return Response({'detail': f'Title with ID: {title_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     # Удаляем тему
     delete_course_title(course_title)
@@ -74,9 +75,14 @@ def title_update_name(request, title_id: int):
     # Берем задание к курсу по его идентификатору
     course_title = get_course_title_by_id(title_id)
     if not course_title:
-        return Response({'detail': f'Title with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+        return Response({'detail': f'Title with ID: {title_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
-    title = request.POST.get('title', '')
+    title = request.data.get('title', '')
+
+    # Проверяем
+    if len(title) < 3 or 255 < len(title):
+        return Response({'detail': 'The subject cannot be less than 0 or more than 255 characters'},
+                        status=HTTP_400_BAD_REQUEST)
 
     # Обновляем название темы
     message = update_course_title_name(course_title, title)
@@ -89,30 +95,45 @@ def title_update_public(request, title_id: int):
     """
         Обновление публичности темы
     """
-    # Берем задание к курсу по его идентификатору
+    # Берем тему к курсу по его идентификатору
     course_title = get_course_title_by_id(title_id)
     if not course_title:
-        return Response({'detail': f'Title with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+        return Response({'detail': f'Title with ID: {title_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
-    public = request.POST.get('public', '')
+    public = request.data.get('public')
 
+    # Проверяем
+    if public: return Response({'detail': 'Public not found'}, status=HTTP_400_BAD_REQUEST)
     # Обновляем статус публичности темы
     message = update_course_title_public(course_title, public)
     return Response({'detail': message}, status=HTTP_200_OK)
 
-# @api_view(['PATCH'])
-# @permission_classes([IsAdminUser])
-# def title_change_place(request, CourseID: int, TitleID: int, NewOrder: int):
-#     # Берем курс по идентификатору
-#     course = get_course_by_id(id)
-#     if not course:
-#         return Response({'detail': f'Course with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
-#
-#     # Берем задание курса по его идентификатору
-#     title = get_course_title_by_id(id)
-#     if not title:
-#         return Response({'detail': f'Title with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
-#
-#
-#         return Response({'detail': 'Title\' place changed successfully!'}, status=HTTP_200_OK)
-#     return Response({'detail': 'New order not provided'}, status=HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+@permission_classes([IsAdminUser])
+def title_change_titles_place(request, course_id: int, title1_id: int, title2_id: int):
+    """
+        Смена тем местами
+    """
+    # Берем курс по идентификатору
+    course = get_course_by_id(course_id)
+    if not course:
+        return Response({'detail': f'Course with ID: {course_id} not found.'}, status=HTTP_404_NOT_FOUND)
+
+    # Берем первую тему курса по ее идентификатору
+    course_title1 = get_course_title_by_id(title1_id)
+    if not course_title1:
+        return Response({'detail': f'The first title with ID: {title1_id} not found.'}, status=HTTP_404_NOT_FOUND)
+
+    # Берем вторую тему курса по ее идентификатору
+    course_title2 = get_course_title_by_id(title2_id)
+    if not course_title2:
+        return Response({'detail': f'The second title with ID: {title2_id} not found.'}, status=HTTP_404_NOT_FOUND)
+
+    # Обновляем данные
+    if update_titles_places(course, course_title1, course_title2):
+        return Response({'detail': 'Title\'s order changed successfully!'}, status=HTTP_200_OK)
+    return Response({'detail': 'Title\'s order changed failed'}, status=HTTP_400_BAD_REQUEST)
+
+
+
