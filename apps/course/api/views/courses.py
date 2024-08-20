@@ -12,7 +12,7 @@ from ..services.course_review_service import get_course_reviews, filter_course_r
 from ..services.course_service import find_courses_by_user_status, search_courses, filter_courses_by_tags, sort_courses, \
     add_remove_like_to_course, add_remove_registration_to_course, get_course_by_id, delete_course
 from ..utils.calculate_median_stars_util import calculate_median_stars_util
-from ..utils.course_utils import create_course_by_serializer
+from ..utils.course_utils import create_course_by_serializer, update_course_by_serializer
 
 
 @api_view(['GET', 'POST'])
@@ -39,13 +39,14 @@ def courses_list_create(request):
         serializer = CourseListSerializer(courses, many=True, context={'user': request.user})
         return Response(serializer.data, status=HTTP_200_OK)
     if request.method == 'POST':
+        # Создаем новый курс
         _, errors = create_course_by_serializer(request.data, request.user)
-        if errors:
-            return Response(errors, status=HTTP_400_BAD_REQUEST)
+        # Проверяем на наличие ошибок
+        if errors: return Response(errors, status=HTTP_400_BAD_REQUEST)
         return Response({'message': 'Course created successfully!'}, status=HTTP_201_CREATED)
 
 
-@api_view(['GET', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticatedOrReadOnly])
 def courses_show_delete(request, id: int):
     """
@@ -60,6 +61,12 @@ def courses_show_delete(request, id: int):
         # Возвращаем курс
         serializer = CourseOneSerializer(course, many=False, context={'user': request.user})
         return Response(serializer.data, status=HTTP_200_OK)
+    elif request.method == 'PUT':
+        # Обновляем данные курса
+        data, errors = update_course_by_serializer(course, request.data)
+        # Проверяем на наличие ошибок
+        if errors: return Response(errors, status=HTTP_400_BAD_REQUEST)
+        return Response(data, status=HTTP_200_OK)
     elif request.method == 'DELETE':
         # Удаляем курс
         delete_course(course)
