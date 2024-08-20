@@ -48,7 +48,6 @@ class CourseListSerializer(CourseSerializer):
 
 class CourseOneSerializer(CourseSerializer):
     user_registered = SerializerMethodField()
-    # titles = SerializerMethodField()
     lessons_count = SerializerMethodField()
     videos_count = SerializerMethodField()
     exercises_count = SerializerMethodField()
@@ -56,7 +55,8 @@ class CourseOneSerializer(CourseSerializer):
     completed_tasks_count = SerializerMethodField()
 
     class Meta(CourseSerializer.Meta):
-        fields = CourseSerializer.Meta.fields + ('user_registered',
+        fields = CourseSerializer.Meta.fields + ('image', 'about',
+                                                 'user_registered',
                                                  'lessons_count', 'videos_count',
                                                  'exercises_count', 'projects_count',
                                                  'completed_tasks_count')
@@ -64,11 +64,6 @@ class CourseOneSerializer(CourseSerializer):
     def get_user_registered(self, obj: Course) -> bool:
         user = self.context.get('user')
         return is_user_registered_to_course(obj, user)
-
-    # def get_titles(self, obj: Course) -> list[Title]:
-    #     user = self.context.get('user')
-    #     titles = get_course_titles_by_course_id(obj.id)
-    #     return TitleListSerializer(titles, many=True, context={'user': user, 'course': obj}).data
 
     def __get_task_count_by_type(self, obj: Course, task_type: str = None) -> int:
         if task_type:
@@ -100,3 +95,10 @@ class CourseOneSerializer(CourseSerializer):
             titles__courses=obj,
             users_who_completed__username=user.username
         ).distinct().count()
+
+
+class CreateCourseSerializer(CourseSerializer):
+    class Meta(CourseSerializer.Meta):
+        fields = CourseSerializer.Meta.fields + ('image', 'about',
+                                                 'public')
+

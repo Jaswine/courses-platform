@@ -13,4 +13,4 @@ venv/
 
 
 .sqlite
-*.sqlite
+*.sqlite!/apps/course/api/serializers/course_serializers.py

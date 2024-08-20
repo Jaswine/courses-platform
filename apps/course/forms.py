@@ -7,8 +7,7 @@ class CourseForm(ModelForm):
         model = Course
         fields = [
             'title', 'image',
-            'tags', 'about',
-            'level', 'public',
+            'tags', 'about', 'public',
         ]
         widgets = {
             'tags': CheckboxSelectMultiple,

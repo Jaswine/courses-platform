@@ -101,7 +101,6 @@ def title_list(db, title, title_is_public):
 def course_is_public(db, user_is_superuser, tag1, user_is_not_superuser, title_is_public):
     course = Course.objects.create(title='Course1',
                                    user=user_is_superuser,
-                                   level='Beginner',
                                    public=True,
                                    image=None,
                                    created=datetime.now() - timedelta(days=2),
@@ -117,7 +116,6 @@ def course_is_public(db, user_is_superuser, tag1, user_is_not_superuser, title_i
 def course_is_not_public(db, user_is_superuser, tag2):
     course = Course.objects.create(title='Course2',
                                    user=user_is_superuser,
-                                   level='Beginner',
                                    created=datetime.now() - timedelta(days=2),
                                    updated=datetime.now() - timedelta(days=2))
     course.tags.add(tag2)

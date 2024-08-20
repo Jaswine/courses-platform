@@ -20,11 +20,6 @@ class Course(models.Model):
     """
         Курс
     """
-    LEVEL = (
-        ('Beginner', 'Beginner'),
-        ('Intermediate', 'Intermediate'),
-        ('Expert', 'Expert'),
-    )
     title = models.CharField(max_length=250)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -32,7 +27,6 @@ class Course(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
 
     about = RichTextField(blank=True)
-    level = models.CharField(max_length=13, choices=LEVEL)
 
     public = models.BooleanField(default=False)
 
