@@ -1,4 +1,6 @@
 from django.urls import path
+from setuptools.extern import names
+
 from .views import courses, tags, titles, tasks, task_comment
 
 app_name = 'course'
@@ -22,8 +24,8 @@ urlpatterns = [
          titles.title_update_name, name='title-update-name'),
     path('courses/titles/<int:title_id>/update-public/',
          titles.title_update_public, name='title-update-public'),
-    # path('courses/<int:id>/titles/<int:TitleID>/places/<int:NewOrder>/',
-    #      titles.title_change_place, name='title-change-place'),
+    path('courses/<int:course_id>/titles/<int:title1_id>/change-place/<int:title2_id>/',
+         titles.title_change_titles_place, name='title-change-titles-place'),
 
     path('courses/titles/<int:id>/tasks/',
          tasks.task_create, name='task-create'),
