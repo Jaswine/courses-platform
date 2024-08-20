@@ -1,9 +1,11 @@
 from rest_framework.serializers import (ModelSerializer,
-                                        SerializerMethodField, DateTimeField)
+                                        SerializerMethodField, DateTimeField,
+                                        PrimaryKeyRelatedField)
 
 from apps.course.api.serializers.tag_serializers import TagSerializer
 from apps.course.api.services.course_review_service import get_course_reviews_count
 from apps.course.api.services.course_service import is_user_registered_to_course
+from apps.course.api.services.tag_service import get_all_tags
 from apps.course.models import Course, Title, Task
 from apps.user.api.serializers.user_serializers import UserSimpleSerializer
 
@@ -98,6 +100,8 @@ class CourseOneSerializer(CourseSerializer):
 
 
 class CreateCourseSerializer(CourseSerializer):
+    tags = PrimaryKeyRelatedField(many=True, queryset=get_all_tags())
+
     class Meta(CourseSerializer.Meta):
         fields = CourseSerializer.Meta.fields + ('image', 'about',
                                                  'public')
