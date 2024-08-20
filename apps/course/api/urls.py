@@ -41,7 +41,7 @@ urlpatterns = [
     # TODO: TASK COMMENTS
     path('courses/titles/tasks/<int:task_id>/comments/',
          task_comment.task_comment_list_create, name='task_comment_list_create'),
-    path('courses/titles/tasks/<int:task_id>/comments/<int:comment_id>/delete/',
+    path('courses/titles/tasks/<int:task_id>/comments/<int:comment_id>/',
          task_comment.task_comment_delete, name='task_comment_delete'),
     path('courses/titles/tasks/<int:task_id>/comments/<int:comment_id>/react/',
          task_comment.task_comment_add_remove_like, name='task_comment_add_remove_like'),

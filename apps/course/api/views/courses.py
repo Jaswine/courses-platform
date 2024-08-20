@@ -1,3 +1,4 @@
+from django.core.serializers import serialize
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_403_FORBIDDEN,
@@ -5,38 +6,47 @@ from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CO
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
 
 from ..serializers.course_review_serializers import CourseReviewListSerializer
-from ..serializers.course_serializers import CourseListSerializer, CourseOneSerializer
+from ..serializers.course_serializers import CourseListSerializer, CourseOneSerializer, CreateCourseSerializer
 from ..services.course_review_service import get_course_reviews, filter_course_reviews_by_user, create_course_review, \
     delete_course_review, get_course_review_by_id
 from ..services.course_service import find_courses_by_user_status, search_courses, filter_courses_by_tags, sort_courses, \
     add_remove_like_to_course, add_remove_registration_to_course, get_course_by_id
 from ..utils.calculate_median_stars_util import calculate_median_stars_util
+from ..utils.course_utils import create_course_by_serializer
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def courses_list(request):
     """
-        Список курсов
+        Список курсов и создание нового курса
     """
-    # Берем параметры для фильтрации и сортировки
-    query = request.GET.get('q', '')
-    order_by_date = request.GET.get('order_by_data', '')
-    filter_by_tag = request.GET.get('filter_by_tag', '')
+    if request.method == 'GET':
+        # Берем параметры для фильтрации и сортировки
+        query = request.GET.get('q', '')
+        order_by_date = request.GET.get('order_by_data', '')
+        filter_by_tag = request.GET.get('filter_by_tag', '')
 
-    # Ищем курсы по статусу пользователя
-    courses = find_courses_by_user_status(request.user)
-    # Ищем курсы
-    courses = search_courses(query, courses)
-    # Фильтруем курсы по тэгам
-    courses = filter_courses_by_tags(filter_by_tag.split(','), courses)
-    # Сортируем курсы
-    courses = sort_courses(order_by_date, courses)
-    # Возвращаем курсы
-    serializer = CourseListSerializer(courses, many=True, context={'user': request.user})
-    return Response(serializer.data, status=HTTP_200_OK)
+        # Ищем курсы по статусу пользователя
+        courses = find_courses_by_user_status(request.user)
+        # Ищем курсы
+        courses = search_courses(query, courses)
+        # Фильтруем курсы по тэгам
+        courses = filter_courses_by_tags(filter_by_tag.split(','), courses)
+        # Сортируем курсы
+        courses = sort_courses(order_by_date, courses)
+        # Возвращаем курсы
+        serializer = CourseListSerializer(courses, many=True, context={'user': request.user})
+        return Response(serializer.data, status=HTTP_200_OK)
+    if request.method == 'POST':
+        data, errors = create_course_by_serializer(request.data, request.user)
+        if errors:
+            return Response(errors, status=HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Course created successfully!'}, status=HTTP_201_CREATED)
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def courses_get(request, id: int):
     """
         Показ информации курса по идентификатору

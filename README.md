@@ -5,14 +5,12 @@
 ## Для всех пользователей
 
 - ### Главная страница
-- ### Регистрация / Вход в аккаунт
-- ### Восстановление пароля по email
 - ### Все курсы
   - **Поиск**
   - **Фильтрация**
   - **Сортировка**
 - ### Один курс
-  - **Описания курса**
+  - **Описание курса**
   - **Просмотр прогресса**
   - **Просмотр заданий и их завершенность**
   - **Возможность лайкнуть**
@@ -24,6 +22,7 @@
   - **Комментарии и возможность оставить свой комментарий**
   - **Возможность поделиться**
   - **Возможность лайкать**
+
 - ### Все статьи
   - **Поиск**
   - **Фильтрация**
@@ -34,6 +33,9 @@
   - **Возможность поделиться**
   - **Комментарии и возможность оставить свой комментарий**
   - **Похожие статьи**
+
+- ### Регистрация / Вход в аккаунт
+- ### Восстановление пароля по email
 - ### Пользовательский профиль
   - **Главная информация**
   - **Детальная информация**
@@ -45,7 +47,7 @@
 ## Для зарегистрированных пользователей
 
 - ### Страница быстрого доступа (dashboard)
-  - **Топ 3 последних курсов с погрессом**
+  - **Топ 3 последних курса с погрессом**
 - ### Настройки
 - ### Лайкнутые курсы и статьи
 
@@ -53,7 +55,7 @@
 
 - Создание курса
 - Обновление курса
-- Просмотр статистики и отзывов
+- Просмотр статистики и управление отзывами
 - Панель для управления темами и заданиями
 - Создание нового задания
 - Обновление информации задания
@@ -72,61 +74,65 @@
 
 ## API
 
-## Курс
+### Курс
 
-- ### Список курсов с возможностями поиска, сортировки и фильтрации по тэгам:  `GET /api/courses?q=;order_by_data=;filter_by_tag=;`
-- ### Показ информации курса по идентификатору: `GET /api/courses/:id/`
-- ### Добавление и удаление лайка к курсу: `PATCH /api/courses/:id/like/`
-- ### Регистрация и удаление пользователя к курсу: `PATCH /api/courses/:id/user/`
-- ### Вывод всех отзывов к курсу: `GET /api/courses/:id/reviews/`
-- ### Создание нового отзыва к курсу: `POST /api/courses/:id/reviews`
-- ### Удаление отзыва `DELETE /api/courses/reviews/:id/delete/`
+- [x] Список курсов с возможностями поиска, сортировки и фильтрации по тэгам:  `GET /api/courses?q=;order_by_data=;filter_by_tag=;`
+- [ ] Создание нового курса: `POST /api/courses/`
+- [x] Показ информации курса по идентификатору: `GET /api/courses/:id/`
+- [ ] Обновление информации курса по идентификатору: `PUT /api/courses/:id/`
+- [ ] Удаление курса по идентификатору: `DELETE /api/courses/:id/`
+- [x] Добавление и удаление лайка к курсу: `PATCH /api/courses/:id/like/`
+- [x] Регистрация и удаление пользователя к курсу: `PATCH /api/courses/:id/user/`
+- [x] Вывод всех отзывов к курсу: `GET /api/courses/:id/reviews/`
+- [x] Создание нового отзыва к курсу: `POST /api/courses/:id/reviews`
+- [x] Удаление отзыва `DELETE /api/courses/reviews/:id/delete/`
 
 ## Тема
 
-- ### Вывод всех тем с заданиями: `GET /api/courses/:id/titles/`
-- ### Создание новой темы: `POST /api/courses/:id/titles/`
-- ### Удаление темы: `DELETE /api/courses/titles/:title_id/`
-- ### Обновление названия темы: `PATCH /api/courses/titles/:title_id/update-title/`
-- ### Обновление типа публичности темы: `PATCH /api/courses/titles/:title_id/update-public/`
-- ### Возможность менять темы местами: `PATCH /api/courses/:id/titles/:first_title_id/:second_title_id`
+- [x] Вывод всех тем с заданиями: `GET /api/courses/:id/titles/`
+- [x] Создание новой темы: `POST /api/courses/:id/titles/`
+- [x] Удаление темы: `DELETE /api/courses/titles/:title_id/`
+- [x] Обновление названия темы: `PATCH /api/courses/titles/:title_id/update-title/`
+- [x] Обновление типа публичности темы: `PATCH /api/courses/titles/:title_id/update-public/`
+- [ ] Возможность менять темы местами: `PATCH /api/courses/:id/titles/:first_title_id/:second_title_id`
 
 ## Задание
 
-- ### Создание нового задания: `POST /api/courses/titles/:id/tasks/`
-- ### Вывод задания: `GET /api/courses/:id/titles/tasks/:task_id/`
-- ### Обновление задания: `PUT /api/courses/:id/titles/tasks/:task_id/`
-- ### Удаления задания: `DELETE /api/courses/:id/titles/tasks/:task_id/`
-- ### Возможность менять задания местами: `PATCH /api/courses/:id/titles/tasks/:first_task_id/:second_task_id`
-- ### Добавление / удаление опыта к заданию: `PATCH /api/courses/:id/titles/tasks/:task_id/experience/`
-- ### Добавление / удаление закладки к заданию: `PATCH /api/courses/:id/titles/tasks/:task_id/bookmark/`
+- [x] Создание нового задания: `POST /api/courses/titles/:id/tasks/`
+- [x] Вывод задания: `GET /api/courses/:id/titles/tasks/:task_id/`
+- [x] Обновление задания: `PUT /api/courses/:id/titles/tasks/:task_id/`
+- [x] Удаление задания: `DELETE /api/courses/:id/titles/tasks/:task_id/`
+- [ ] Возможность менять задания местами: `PATCH /api/courses/:id/titles/tasks/:first_task_id/:second_task_id`
+- [x] Добавление / удаление опыта к заданию: `PATCH /api/courses/:id/titles/tasks/:task_id/experience/`
+- [x] Добавление / удаление закладки к заданию: `PATCH /api/courses/:id/titles/tasks/:task_id/bookmark/`
 
 ## Комментарии к заданию
 
-- ### Показ всех комментариев: `GET /api/courses/titles/tasks/:task_id/comments/`
-- ### Создание нового комментария: `POST /api/courses/titles/tasks/:task_id/comments/`
-- ### Удаление комментария: `DELETE /api/courses/titles/tasks/:task_id/comments/:comment_id/delete/`
-- ### Реакция на комментарии: `PATCH /api/courses/titles/tasks/:task_id/comments/:comment_id/react/`
-- ### Оставление жалобы на комментарий: `POST /api/courses/titles/tasks/:task_id/comments/:comment_id/complaint/`
+- [x] Показ всех комментариев: `GET /api/courses/titles/tasks/:task_id/comments/`
+- [x] Создание нового комментария: `POST /api/courses/titles/tasks/:task_id/comments/`
+- [ ] Обновление текста комментария: `PATCH /api/courses/titles/tasks/:task_id/comments/:comment_id/text`
+- [x] Удаление комментария: `DELETE /api/courses/titles/tasks/:task_id/comments/:comment_id/`
+- [x] Добавление / Удаление лайка комментариям: `PATCH /api/courses/titles/tasks/:task_id/comments/:comment_id/react/`
+- [x] Оставление жалобы на комментарий: `POST /api/courses/titles/tasks/:task_id/comments/:comment_id/complaint/`
 
 ## Пользователь
 
-- ### Вывод главной информации о пользователе: `GET /api/user/:username/`
-- ### Вывод подробной информации о пользователе: `GET /api/user/:username/detail/`
-- ### Вывод курсов и процент прогресса в них: `GET /api/user/:username/experience/`
-- ### Вывод сертификатов за окончание курсов: `GET /api/user/:username/certificates/`
-- ### Вывод лайкнутых курсов: `GET /api/user/:username/favorites/`
-- ### Вывод списка достижений пользователя: `GET /api/user/:username/achivements/`
-- ### Блокировка пользователя: `PATCH /api/user/:username/block/`
-- ### Показ всех пользователей с поиском: `GET /api/users/?q=;`
+- [ ] Вывод главной информации о пользователе: `GET /api/user/:username/`
+- [ ] Вывод подробной информации о пользователе: `GET /api/user/:username/detail/`
+- [ ] Вывод курсов и процент прогресса в них: `GET /api/user/:username/experience/`
+- [ ] Вывод сертификатов за окончание курсов: `GET /api/user/:username/certificates/`
+- [ ] Вывод лайкнутых курсов: `GET /api/user/:username/favorites/`
+- [ ] Вывод списка достижений пользователя: `GET /api/user/:username/achivements/`
+- [ ] Блокировка пользователя: `PATCH /api/user/:username/block/`
+- [ ] Показ всех пользователей с поиском и фильтрацией: `GET /api/users/?q=;`
 
 ## Достижения
 
-- ### Вывод всех достижений: `GET /api/achivements/`
-- ### Создание нового достижения: `POST /api/achivements/`
-- ### Обновление достижения: `PUT /api/achivements/:id/`
-- ### Удаление достижения: `DELETE /api/achivements/:id/`
-- ### Добавление / удаление пользователя к достижению: `PATCH /api/achivements/:id/users/`
+- [ ] Вывод всех достижений: `GET /api/achivements/`
+- [ ] Создание нового достижения: `POST /api/achivements/`
+- [ ] Обновление достижения: `PUT /api/achivements/:id/`
+- [ ] Удаление достижения: `DELETE /api/achivements/:id/`
+- [ ] Добавление / удаление пользователя к достижению: `PATCH /api/achivements/:id/users/`
 
 
 # Design
