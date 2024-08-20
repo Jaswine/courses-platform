@@ -10,14 +10,14 @@ from ..serializers.course_serializers import CourseListSerializer, CourseOneSeri
 from ..services.course_review_service import get_course_reviews, filter_course_reviews_by_user, create_course_review, \
     delete_course_review, get_course_review_by_id
 from ..services.course_service import find_courses_by_user_status, search_courses, filter_courses_by_tags, sort_courses, \
-    add_remove_like_to_course, add_remove_registration_to_course, get_course_by_id
+    add_remove_like_to_course, add_remove_registration_to_course, get_course_by_id, delete_course
 from ..utils.calculate_median_stars_util import calculate_median_stars_util
 from ..utils.course_utils import create_course_by_serializer
 
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticatedOrReadOnly])
-def courses_list(request):
+def courses_list_create(request):
     """
         Список курсов и создание нового курса
     """
@@ -39,25 +39,31 @@ def courses_list(request):
         serializer = CourseListSerializer(courses, many=True, context={'user': request.user})
         return Response(serializer.data, status=HTTP_200_OK)
     if request.method == 'POST':
-        data, errors = create_course_by_serializer(request.data, request.user)
+        _, errors = create_course_by_serializer(request.data, request.user)
         if errors:
             return Response(errors, status=HTTP_400_BAD_REQUEST)
         return Response({'message': 'Course created successfully!'}, status=HTTP_201_CREATED)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'DELETE'])
 @permission_classes([IsAuthenticatedOrReadOnly])
-def courses_get(request, id: int):
+def courses_show_delete(request, id: int):
     """
         Показ информации курса по идентификатору
     """
-    # Берем курс по идентификатору
+    # Берем курс по идентификатору и проверяем
     course = get_course_by_id(id)
     if not course:
         return Response({'detail': f'Course with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
-    # Возвращаем курс
-    serializer = CourseOneSerializer(course, many=False, context={'user': request.user})
-    return Response(serializer.data, status=HTTP_200_OK)
+
+    if request.method == 'GET':
+        # Возвращаем курс
+        serializer = CourseOneSerializer(course, many=False, context={'user': request.user})
+        return Response(serializer.data, status=HTTP_200_OK)
+    elif request.method == 'DELETE':
+        # Удаляем курс
+        delete_course(course)
+        return Response({}, status=HTTP_204_NO_CONTENT)
 
 
 @api_view(['PATCH'])

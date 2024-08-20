@@ -124,3 +124,12 @@ def is_user_registered_to_course(course: Course, user: User) -> bool:
          :return bool - Статус
     """
     return user in course.users_who_registered.all()
+
+
+def delete_course(course: Course):
+    """
+        Удаление курса
+
+        :param course: Course - Курс
+    """
+    course.delete()
