@@ -1,12 +1,9 @@
 from django.urls import path
 
-from .views import user
+from .views.user import UserInfoView
 
 app_name = 'user'
 
 urlpatterns = [
-    path('<str:username>/',
-         user.user_main_info, name='user-main-info'),
-    path('<str:username>/detail/',
-         user.user_detail_info, name='user-detail-info'),
+    path('<str:username>/<str:info_type>/', UserInfoView.as_view(), name='user-info'),
 ]
