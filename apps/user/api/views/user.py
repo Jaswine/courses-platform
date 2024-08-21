@@ -8,9 +8,10 @@ from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CO
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 
-from apps.course.api.serializers.course_serializers import CourseSerializer, CourseListSerializer
+from apps.course.api.serializers.course_serializers import CourseSerializer, CourseListSerializer, \
+    CourseProgressSerializer
 from apps.user.api.serializers.user_serializers import UserSerializer, ProfileSerializer
-from apps.user.api.services.user_service import find_user_liked_courses
+from apps.user.api.services.user_service import find_user_liked_courses, find_user_registered_courses
 from apps.user.services.user_service import get_user_by_username
 
 
@@ -34,6 +35,11 @@ class UserInfoView(APIView):
             # Лайкнутые курсы
             courses = find_user_liked_courses(user)
             serializer = CourseListSerializer(courses, many=True)
+        elif info_type == 'courses-progress':
+            # Прогресс по курсам
+            courses = find_user_registered_courses(user)
+            serializer = CourseProgressSerializer(courses, many=True,
+                                                  context={'user': user})
         else:
             return Response({"detail": "Page not found"}, status=HTTP_404_NOT_FOUND)
 

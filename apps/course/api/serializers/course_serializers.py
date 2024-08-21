@@ -106,3 +106,25 @@ class CreateCourseSerializer(CourseSerializer):
         fields = CourseSerializer.Meta.fields + ('image', 'about',
                                                  'public')
 
+
+class CourseProgressSerializer(CourseSerializer):
+    progress = SerializerMethodField()
+    image = SerializerMethodField()
+
+    class Meta(CourseSerializer.Meta):
+        fields = CourseSerializer.Meta.fields + ('image', 'progress')
+
+    def get_image(self, obj):
+        return obj.image.url if obj.image else None
+
+    def get_progress(self, obj):
+        user = self.context.get('user')
+
+        tasks_count = Task.objects.filter(titles__courses=obj,
+                                          public=True).distinct().count()
+        completed_tasks_count = Task.objects.filter(titles__courses=obj,
+                                                    users_who_completed__username=user.username
+                                                    ).distinct().count()
+
+        return '{}%'.format(completed_tasks_count * 100 / tasks_count
+                            if tasks_count != 0 and completed_tasks_count != 0 else 0)
