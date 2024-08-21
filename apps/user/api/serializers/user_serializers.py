@@ -1,6 +1,8 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from django.contrib.auth.models import User
 
+from apps.user.models import Profile
+
 
 class UserSimpleSerializer(ModelSerializer):
     ava = SerializerMethodField()
@@ -22,3 +24,13 @@ class UserSerializer(UserSimpleSerializer):
 
     def get_scores(self, obj) -> int:
         return obj.profile.scores
+
+
+class ProfileSerializer(ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('scores',
+                  'image', 'backImage',
+                  'bio', 'location',
+                  'Twitter', 'GitHub', 'GitLub', 'Linkedin', 'Telegram', 'website',
+                  'skills', 'interests')
