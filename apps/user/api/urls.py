@@ -1,6 +1,10 @@
 from django.urls import path
-from apps.user.api.views import dashboard
+
+from .views import user
+
+app_name = 'user'
 
 urlpatterns = [
-    path('dashboard/', dashboard.registered_courses, name='dashboard'),
+    path('<str:username>/',
+         user.user_main_info, name='user-main-info'),
 ]
