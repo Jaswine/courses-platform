@@ -210,6 +210,12 @@ class TaskOrder(models.Model):
     class Meta:
         ordering = ['order']
 
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            last_order = TaskOrder.objects.filter(title=self.title).count()
+            self.order = last_order + 1
+        super().save(*args, **kwargs)
+
 
 class CourseReview(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)

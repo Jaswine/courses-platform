@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 
-from apps.course.models import TaskOrder, Task, Title
+from apps.course.api.services.title_service import get_title_order_by_course_id_and_title_id
+from apps.course.models import TaskOrder, Task, Title, Course
 
 
 def get_tasks_by_title_id(title_id: int) -> list[Task]:
@@ -69,7 +70,7 @@ def create_task(course_title: Title,
 
     if task and create_task_order(course_title, task):
         return task
-    return None
+    return task
 
 
 def update_task(task: Task,
@@ -155,3 +156,51 @@ def add_remove_task_bookmark(task: Task, user: User) -> str:
     else:
         task.bookmarks.add(user)
         return 'Bookmark added successfully!'
+
+
+def get_task_order_by_title_id_and_task_id(title_id: int, task_id: int) -> TaskOrder:
+    """
+        Взятие места задания в списке тем курса
+
+        :param title_id: int - Идентификатор курса
+        :param task_id: int - Идентификатор темы курса
+        :return TaskOrder - Место темы
+    """
+    try:
+        return TaskOrder.objects.get(title_id=title_id, task_id=task_id)
+    except TaskOrder.DoesNotExist:
+        return None
+
+
+def update_tasks_places(task1: Task, task2: Task) -> bool:
+    """
+        Смена заданий местами
+
+        :param task1: Task - Задание 1
+        :param task2: Task - Задание 2
+        :return bool - Статус
+    """
+    try:
+        # Retrieve the first TaskOrder object for each task
+        task1_order = TaskOrder.objects.filter(task=task1).first()
+        task2_order = TaskOrder.objects.filter(task=task2).first()
+
+        if task1_order and task2_order:
+            # Swap the order values
+            task1_order.order, task2_order.order = task2_order.order, task1_order.order
+
+            # Swap the titles as well if they belong to different titles
+            if task1_order.title != task2_order.title:
+                task1_order.title, task2_order.title = task2_order.title, task1_order.title
+
+            # Save the updated TaskOrder objects
+            task1_order.save()
+            task2_order.save()
+
+            return True
+        else:
+            print("One of the tasks does not have an associated TaskOrder.")
+            return False
+    except Exception as e:
+        print(f"Error swapping tasks: {e}")
+        return False
