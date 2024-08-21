@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from ..serializers.task_serializers import TaskOneSerializer
 from ..services.course_service import get_course_by_id
 from ..services.task_service import create_task, update_task, delete_task, add_remove_task_experience, \
-    add_remove_task_bookmark, get_task_by_id
+    add_remove_task_bookmark, get_task_by_id, update_tasks_places
 from ..services.title_service import get_course_title_by_id
 
 
@@ -25,9 +25,9 @@ def task_create(request, id: int):
         return Response({'detail': f'Title with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     # Берем данные
-    title = request.POST.get('title', '')
-    task_type = request.POST.get('type', 'text')
-    points = request.POST.get('points', 0)
+    title = request.data.get('title', '')
+    task_type = request.data.get('type', 'text')
+    points = request.data.get('points', 0)
 
     # Создаем таск
     task = create_task(course_title, title, task_type, points)
@@ -63,9 +63,9 @@ def task_get_update_delete(request, id: int, task_id: int):
 
     elif request.method == 'PUT':
             # Берем данные
-            title = request.POST.get('task_title', '')
-            public = request.POST.get('public', 'false')
-            points = request.POST.get('points', 0)
+            title = request.data.get('task_title', '')
+            public = request.data.get('public', 'false')
+            points = request.data.get('points', 0)
 
             # Обновляем задание
             if update_task(task, title, public, points):
@@ -107,13 +107,41 @@ def task_add_remove_bookmark(request, course_id: int, task_id: int):
     # Берем курс по его идентификатору
     course = get_course_by_id(course_id)
     if not course:
-        return Response({'detail': f'Course with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+        return Response({'detail': f'Course with ID: {course_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     # Берем задание по его идентификатору
     task = get_task_by_id(task_id)
     if not task:
-        return Response({'detail': f'Task with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+        return Response({'detail': f'Task with ID: {task_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     # Добавляем или удаляем закладку к заданию
     message = add_remove_task_bookmark(task, request.user)
     return Response({'detail': message}, status=HTTP_200_OK)
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAdminUser])
+def task_change_titles_tasks_places(request, course_id: int, task1_id: int, task2_id: int):
+    """
+        Смена тем местами
+    """
+    # Берем курс по идентификатору
+    course = get_course_by_id(course_id)
+    if not course:
+        return Response({'detail': f'Course with ID: {course_id} not found.'}, status=HTTP_404_NOT_FOUND)
+
+    # Берем первое задание по его идентификатору
+    task1 = get_task_by_id(task1_id)
+    if not task1:
+        return Response({'detail': f'Task with ID: {task1_id} not found.'}, status=HTTP_404_NOT_FOUND)
+
+    # Берем второе задание по его идентификатору
+    task2 = get_task_by_id(task2_id)
+    if not task2:
+        return Response({'detail': f'Task with ID: {task2_id} not found.'}, status=HTTP_404_NOT_FOUND)
+
+    # Обновляем данные
+    if update_tasks_places(task1, task2):
+        return Response({'detail': 'Task\'s order changed successfully!'}, status=HTTP_200_OK)
+    return Response({'detail': 'Task\'s order changed failed'}, status=HTTP_400_BAD_REQUEST)
+

@@ -35,6 +35,8 @@ urlpatterns = [
          tasks.task_add_experience, name='task_add_experiense'),
     path('courses/<int:course_id>/titles/tasks/<int:task_id>/bookmark/',
          tasks.task_add_remove_bookmark, name='task_add_remove_bookmark'),
+    path('courses/<int:course_id>/titles/tasks/<int:task1_id>/change-place/<int:task2_id>/',
+         tasks.task_change_titles_tasks_places, name='task_change_titles_tasks_places'),
 
     path('courses/titles/tasks/<int:task_id>/comments/',
          task_comment.task_comment_list_create, name='task_comment_list_create'),
