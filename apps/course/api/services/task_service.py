@@ -125,9 +125,13 @@ def add_remove_task_experience(task: Task, user: User) -> str:
     """
     if task.users_who_completed.filter(id=user.id).exists():
         task.users_who_completed.remove(user.id)
+        user.profile.scores -= task.points
+        user.profile.save()
         return 'Removed task experience successfully!'
     else:
         task.users_who_completed.add(user.id)
+        user.profile.scores += task.points
+        user.profile.save()
         return 'Added task experience successfully!'
 
 
