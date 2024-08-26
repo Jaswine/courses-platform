@@ -19,7 +19,8 @@ class UserSerializer(UserSimpleSerializer):
     scores = SerializerMethodField()
 
     class Meta(UserSimpleSerializer.Meta):
-        fields = UserSimpleSerializer.Meta.fields + ('email', 'is_superuser',
+        fields = UserSimpleSerializer.Meta.fields + ('email',
+                                                     'is_superuser', 'is_active',
                                                      'scores')
 
     def get_scores(self, obj) -> int:

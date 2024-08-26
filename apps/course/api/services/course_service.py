@@ -80,7 +80,6 @@ def sort_courses(sort: str, courses: list[Course]) -> list[Course]:
         courses = courses.annotate(likes_count=Count('reactions')).order_by('-likes_count')
     elif sort == 'Unpopular':
         courses = courses.annotate(likes_count=Count('reactions')).order_by('likes_count')
-
     return courses
 
 
