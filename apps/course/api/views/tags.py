@@ -30,7 +30,7 @@ def tag_create_list(request):
     if request.method == 'POST':
         if request.user.is_superuser:
             # Берем название тэга
-            name = request.POST.get('name', '')
+            name = request.data.get('name', '')
             # Проверяем тэг на существование
             if find_tags_by_name(name):
                 return Response({'detail': 'Tag already exists'}, status=HTTP_400_BAD_REQUEST)
@@ -65,7 +65,7 @@ def tags_get_update_delete(request, id: int):
 
     if request.method == 'PATCH':
         # Берем новое название тэга
-        tag_name = request.POST.get('name', '')
+        tag_name = request.data.get('name', '')
         # Проверяем на существование
         if not tag_name or find_tags_by_name(tag_name):
             return Response({'detail': 'Tag already exists'}, status=HTTP_400_BAD_REQUEST)

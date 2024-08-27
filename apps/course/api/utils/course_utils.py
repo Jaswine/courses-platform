@@ -1,9 +1,8 @@
 from typing import Dict, List
 
-from django.contrib.auth.models import User
-
 from apps.course.api.serializers.course_serializers import CreateCourseSerializer
 from apps.course.models import Course
+from apps.user.models import User
 
 
 def create_course_by_serializer(data: dict, user: User) -> (Dict | None, List | None):

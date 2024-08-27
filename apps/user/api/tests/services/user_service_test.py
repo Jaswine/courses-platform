@@ -1,8 +1,8 @@
-from django.contrib.auth.models import User
 from pytest import mark
 
 from apps.user.api.services.user_service import find_all_users, search_users, filter_users_by_is_active, \
-    filter_users_by_is_superuser, sort_users, filter_search_sort_users
+    filter_users_by_is_superuser, sort_users, filter_search_sort_users, block_user
+from apps.user.models import User
 
 
 @mark.django_db
@@ -19,7 +19,7 @@ def test_find_all_users(user_list):
 
 @mark.django_db
 @mark.parametrize("search_field", ['username', 'first_name', 'last_name', 'email'])
-def test_search_users_by_username(user_list, search_field):
+def  test_search_users_by_username(user_list, search_field):
     """
         Сортировка пользователей, пользователь найден
     """
@@ -113,3 +113,16 @@ def test_filter_search_sort_users(user_list):
     # Сортировка по наибольшему количеству очков
     users = filter_search_sort_users(order_by="Many points")
     assert users[0].username == user_list[len(user_list) - 1].username
+
+
+@mark.django_db
+def test_block_user(user_list):
+    # Блокировка пользователя
+    message = block_user(user_list[1])
+    assert message is not None
+    assert message == 'Пользователь успешно заблокирован'
+
+    # Разблокировка пользователя
+    message = block_user(user_list[0])
+    assert message is not None
+    assert message == 'Пользователь успешно разблокирован'

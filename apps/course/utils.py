@@ -1,4 +1,3 @@
-from functools import wraps
 from .models import Course
 
 import random
@@ -10,7 +9,7 @@ def slug_generator(string):
 def checking_slug(slug):
    tournaments = Course.objects.filter(slug=slug)
    
-   if (tournaments.count() > 0):
+   if tournaments.count() > 0:
       slug += str(random.randrange(10000))
       return slug 
    else:

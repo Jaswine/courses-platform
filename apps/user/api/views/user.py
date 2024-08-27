@@ -5,9 +5,9 @@ from rest_framework.permissions import (IsAuthenticatedOrReadOnly,
                                         IsAuthenticated, IsAdminUser)
 
 from apps.course.api.serializers.course_serializers import CourseListSerializer, CourseProgressSerializer
-from apps.user.api.serializers.user_serializers import UserSerializer, ProfileSerializer
+from apps.user.api.serializers.user_serializers import UserSerializer
 from apps.user.api.services.user_service import (find_user_liked_courses,
-                                                 find_user_registered_courses, filter_search_sort_users)
+                                                 find_user_registered_courses, filter_search_sort_users, block_user)
 from apps.user.services.user_service import get_user_by_username
 
 
@@ -36,9 +36,6 @@ def user_view(request, username: str, info_type: str):
     if info_type == 'main':
         # Главная информация о пользователе
         serializer = UserSerializer(user, many=False)
-    elif info_type == 'detail':
-        # Детальная информация о пользователе
-        serializer = ProfileSerializer(user.profile, many=False)
     elif info_type == 'liked-courses':
         # Лайкнутые курсы
         courses = find_user_liked_courses(user)
@@ -49,7 +46,20 @@ def user_view(request, username: str, info_type: str):
         serializer = CourseProgressSerializer(courses, many=True,
                                               context={'user': user})
     else:
-        return Response({"detail": "Page not found"}, status=HTTP_404_NOT_FOUND)
+        return Response({'detail': 'Page not found'}, status=HTTP_404_NOT_FOUND)
 
     return Response(serializer.data, status=HTTP_200_OK)
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def user_add_remove_block_status(request, username: str):
+    # Взятие пользователя
+    user = get_user_by_username(username)
+    if user is None:
+        return Response({'detail': f'User with username: {username} not found.'},
+                        status=HTTP_404_NOT_FOUND)
+    # Блокировка пользователя и отправка сообщения
+    message = block_user(user)
+    return Response({'detail': message}, status=HTTP_200_OK)
 

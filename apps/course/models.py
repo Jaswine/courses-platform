@@ -1,9 +1,8 @@
 import uuid
-
 from django.db import models
+from ckeditor.fields import RichTextField
 
-from django.contrib.auth.models import User
-from ckeditor.fields import RichTextField  #? RichTextUploadingField
+from apps.user.models import User
 
 
 class Tag(models.Model):

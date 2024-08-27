@@ -1,7 +1,8 @@
-from django.contrib.auth.models import User
+
 from django.db.models import Q, Count
 
 from apps.course.models import Course, Tag
+from apps.user.models import User
 
 
 def get_all_courses() -> list[Course]:

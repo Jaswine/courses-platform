@@ -1,10 +1,10 @@
-from django.contrib.auth.models import User
 from pytest import fixture, mark
 
 from apps.article.forms import ArticleForm
 from apps.article.models import Article
 from apps.article.services.article_form_service import create_article, update_article, delete_article
 from apps.course.models import Tag
+from apps.user.models import User
 
 
 @fixture
