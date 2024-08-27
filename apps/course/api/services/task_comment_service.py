@@ -1,7 +1,8 @@
-from django.contrib.auth.models import User
+
 
 from apps.course.forms import TaskCommentUserComplaintForm
 from apps.course.models import TaskComment, Task
+from apps.user.models import User
 
 
 def get_comments_without_children_by_task(task: Task) -> [TaskComment]:

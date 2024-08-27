@@ -1,7 +1,6 @@
-from django.contrib.auth.models import User
 
 from apps.article.models import Article
-from apps.user.models import Reaction
+from apps.user.models import Reaction, User
 from apps.user.services.reaction_service import create_reaction
 
 

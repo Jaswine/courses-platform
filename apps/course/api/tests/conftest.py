@@ -1,11 +1,10 @@
 from datetime import datetime, timedelta
 
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import User
 from pytest import fixture
 
 from apps.course.models import Tag, Course, CourseReview, Title, Task
-from apps.user.models import Profile
+from apps.user.models import User
 
 
 @fixture
@@ -29,7 +28,6 @@ def user_is_superuser(db):
                                email='user1@example.com',
                                password=make_password('password'),
                                is_superuser=True)
-    Profile.objects.create(user=user)
     return user
 
 
@@ -38,7 +36,6 @@ def user_is_not_superuser(db):
     user = User.objects.create(username='user2',
                                email='user2@example.com',
                                password=make_password('password'))
-    Profile.objects.create(user=user)
     return user
 
 

@@ -1,7 +1,7 @@
-from django.contrib.auth.models import User
 
 from apps.course.api.services.title_service import get_title_order_by_course_id_and_title_id
 from apps.course.models import TaskOrder, Task, Title, Course
+from apps.user.models import User
 
 
 def get_tasks_by_title_id(title_id: int) -> list[Task]:
@@ -125,13 +125,13 @@ def add_remove_task_experience(task: Task, user: User) -> str:
     """
     if task.users_who_completed.filter(id=user.id).exists():
         task.users_who_completed.remove(user.id)
-        user.profile.scores -= task.points
-        user.profile.save()
+        user.scores -= task.points
+        user.save()
         return 'Removed task experience successfully!'
     else:
         task.users_who_completed.add(user.id)
-        user.profile.scores += task.points
-        user.profile.save()
+        user.scores += task.points
+        user.save()
         return 'Added task experience successfully!'
 
 

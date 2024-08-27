@@ -1,6 +1,4 @@
-from django.contrib.auth.models import User
-
-from apps.user.models import Reaction
+from apps.user.models import Reaction, User
 
 
 def create_reaction(user: User, reaction_type: str) -> Reaction:

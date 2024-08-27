@@ -1,6 +1,5 @@
-from django.contrib.auth.models import User
-
 from apps.course.models import Course, CourseReview
+from apps.user.models import User
 
 
 def get_course_reviews(course: Course) -> list[CourseReview]:

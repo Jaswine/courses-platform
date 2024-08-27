@@ -1,8 +1,8 @@
-from django.contrib.auth.models import User
 from pytest import mark
 
 from apps.course.api.serializers.task_serializers import TaskSerializer, TaskOneSerializer
 from apps.course.models import Task
+from apps.user.models import User
 
 
 @mark.django_db

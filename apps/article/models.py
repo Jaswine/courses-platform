@@ -1,9 +1,8 @@
 from django.db import models
 from ckeditor.fields import RichTextField
-from django.contrib.auth.models import User
 
 from apps.course.models import Tag
-from apps.user.models import Reaction
+from apps.user.models import Reaction, User
 
 
 class Article(models.Model):

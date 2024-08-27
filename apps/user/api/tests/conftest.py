@@ -1,8 +1,7 @@
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import User
 from pytest import fixture
 
-from apps.user.models import Profile
+from apps.user.models import User
 
 
 @fixture
@@ -16,9 +15,10 @@ def user_list(db):
             first_name=f'First{i}',
             last_name=f'Last{i}',
             is_active=True if i % 2 == 0 else False,
+            is_blocked=True if i % 2 == 0 else False,
             is_superuser=True if i % 2 == 0 else False,
+            scores=10 * i,
         )
-        Profile.objects.create(user=user, scores=i*10)
         users.append(user)
     return users
 

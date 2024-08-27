@@ -1,8 +1,8 @@
 from typing import List
 
-from django.contrib.auth.models import User
 from django.db.models import Q
 
+from apps.user.models import User
 from apps.course.models import Course
 
 
@@ -57,7 +57,7 @@ def filter_users_by_is_active(users: List[User], status: bool) -> List[User]:
         :param: status: bool - Статус
         :return: List[User] - Список пользователей
     """
-    return users.filter(is_active=status)
+    return users.filter(is_blocked=status)
 
 
 def filter_users_by_is_superuser(users: List[User], status: bool) -> List[User]:
@@ -84,9 +84,9 @@ def sort_users(users: List[User], order_by: str) -> List[User]:
         case 'Oldest':
             return users.order_by('date_joined')
         case 'Many points':
-            return users.order_by('-profile__scores')
+            return users.order_by('-scores')
         case 'Few points':
-            return users.order_by('profile__scores')
+            return users.order_by('scores')
         case _:
             return users
 
@@ -116,3 +116,21 @@ def filter_search_sort_users(search: str = '',
         users = sort_users(users, order_by)
 
     return users
+
+
+def block_user(user: User) -> str:
+    """
+        Блокировка / Разблокировка пользователя
+
+        :param user: User - Пользователь
+        :return str - Сообщение
+    """
+    message = ''
+    if user.is_blocked:
+        user.is_blocked = False
+        message += 'Пользователь успешно разблокирован'
+    else:
+        user.is_blocked = True
+        message += 'Пользователь успешно заблокирован'
+    user.save()
+    return message
