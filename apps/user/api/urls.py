@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import user
+from .views import user, achievement
 
 app_name = 'user'
 
@@ -10,4 +10,6 @@ urlpatterns = [
          user.user_add_remove_block_status, name='user-add-remove-block-status'),
     path('<str:username>/<str:info_type>/',
          user.user_view, name='user-view'),
+    path('achievement-list/',
+         achievement.achievement_list_create, name='achievement-list-create'),
 ]
