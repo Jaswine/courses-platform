@@ -1,6 +1,6 @@
 from pytest import mark
 
-from apps.user.api.services.user_service import find_all_users, search_users, filter_users_by_is_active, \
+from apps.user.api.services.user_services import find_all_users, search_users, filter_users_by_is_active, \
     filter_users_by_is_superuser, sort_users, filter_search_sort_users, block_user
 from apps.user.models import User
 
