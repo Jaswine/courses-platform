@@ -1,12 +1,12 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED,
+from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT,
                                    HTTP_404_NOT_FOUND, HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST)
 from rest_framework.permissions import (IsAuthenticatedOrReadOnly,
                                         IsAuthenticated, IsAdminUser)
 
 from apps.user.api.serializers.achievement_serializers import AchievementSerializer
-from apps.user.api.services.achievement_services import find_all_achievements, get_achievement_by_id
+from apps.user.api.services.achievement_services import find_all_achievements, get_achievement_by_id, delete_achievement
 from apps.user.models import Achievement
 
 
@@ -17,7 +17,7 @@ def achievement_list_create(request):
         achievements = find_all_achievements()
         serializer = AchievementSerializer(achievements, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
-    if request.method == 'POST':
+    elif request.method == 'POST':
         if request.user.is_superuser:
             serializer = AchievementSerializer(data=request.data)
             if serializer.is_valid():
@@ -28,7 +28,7 @@ def achievement_list_create(request):
                         status=HTTP_403_FORBIDDEN)
 
 
-@api_view(['PUT'])
+@api_view(['PUT', 'DELETE'])
 @permission_classes([IsAuthenticatedOrReadOnly])
 def achievement_update(request, achievement_id):
     # Взятие достижения по его идентификатору
@@ -37,9 +37,14 @@ def achievement_update(request, achievement_id):
         return Response({'detail': f'Achievement with id: {achievement_id} not found.'},
                         status=HTTP_404_NOT_FOUND)
 
-    serializer = AchievementSerializer(achievement, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=HTTP_200_OK)
-    return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+    if request.method == 'PUT':
+        serializer = AchievementSerializer(achievement, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=HTTP_200_OK)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        delete_achievement(achievement)
+        return Response({}, status=HTTP_204_NO_CONTENT)
+
 

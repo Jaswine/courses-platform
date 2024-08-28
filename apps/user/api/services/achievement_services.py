@@ -23,3 +23,12 @@ def get_achievement_by_id(achievement_id: int) -> Achievement:
         return Achievement.objects.get(id=achievement_id)
     except Achievement.DoesNotExist:
         return None
+
+
+def delete_achievement(achievement: Achievement):
+    """
+        Удаление достижения по его идентификатору
+
+        :param achievement: Achievement -  Достижение
+    """
+    achievement.delete()

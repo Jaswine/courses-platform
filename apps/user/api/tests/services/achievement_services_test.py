@@ -18,7 +18,7 @@ def test_find_all_achievements(achievement_list):
 
 @mark.django_db
 def test_get_achievement_by_id(achievement_list):
-    """
+    """test_get_achievement_by_id
         Взятие достижения по его идентификатору
     """
     element = achievement_list[0]
