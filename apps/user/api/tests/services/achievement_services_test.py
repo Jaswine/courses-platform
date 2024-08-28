@@ -1,6 +1,6 @@
 from pytest import mark
 
-from apps.user.api.services.achievement_services import find_all_achievements
+from apps.user.api.services.achievement_services import find_all_achievements, get_achievement_by_id
 
 
 @mark.django_db
@@ -14,3 +14,16 @@ def test_find_all_achievements(achievement_list):
     assert len(achievement_list) == len(achievements)
     assert achievements[0] in achievement_list
     assert achievements[1] in achievement_list
+
+
+@mark.django_db
+def test_get_achievement_by_id(achievement_list):
+    """
+        Взятие достижения по его идентификатору
+    """
+    element = achievement_list[0]
+    achievement = get_achievement_by_id(element.id)
+
+    assert achievement is not None
+    assert achievement.id == element.id
+    assert achievement.title == element.title

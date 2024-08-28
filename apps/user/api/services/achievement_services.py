@@ -10,3 +10,16 @@ def find_all_achievements() -> List[Achievement]:
         :return List[Achievement] - Список достижений
     """
     return Achievement.objects.all()
+
+
+def get_achievement_by_id(achievement_id: int) -> Achievement:
+    """
+        Взятие достижения по его идентификатору
+
+        :param achievement_id: int - Идентификатор достижения
+        :return Achievement -  Достижение
+    """
+    try:
+        return Achievement.objects.get(id=achievement_id)
+    except Achievement.DoesNotExist:
+        return None
