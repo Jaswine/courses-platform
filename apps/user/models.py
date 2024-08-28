@@ -63,16 +63,17 @@ class Achievement(models.Model):
         Достижение
     """
     ACHIEVEMENT_TYPES = (
-        ('courses', 'Courses Completed'),
-        ('tasks', 'Tasks Completed'),
-        ('comments', 'Comments Made'),
-        ('days', 'Days Active'),
+        ('COURSE', 'Courses Completed'),
+        ('TASK', 'Tasks Completed'),
+        ('COMMENT', 'Comments Made'),
+        ('DAY', 'Days Active'),
     )
 
     title = models.CharField(max_length=150)
     description = models.TextField(max_length=1000, default='', blank=True)
     type = models.CharField(max_length=10, choices=ACHIEVEMENT_TYPES)
     target_value = models.PositiveIntegerField()
+    points = models.PositiveIntegerField(default=0)
 
     def achievement_image_path(self, filename):
         extension = filename.split('.')[-1]
