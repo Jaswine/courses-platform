@@ -6,7 +6,7 @@ from apps.user.models import Achievement
 class AchievementSerializer(ModelSerializer):
     class Meta:
         model = Achievement
-        fields = ('title', 'description', 'image',
+        fields = ('id', 'title', 'description', 'image',
                   'type', 'target_value', 'points',
                   'created')
 
