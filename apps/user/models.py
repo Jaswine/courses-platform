@@ -94,7 +94,7 @@ class Achievement(models.Model):
 
 class UserAchievement(models.Model):
     """
-        Прогресс пользователя за достижение
+        Прогресс пользователя к достижению
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                              related_name='achievements')
