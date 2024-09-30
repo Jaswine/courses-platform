@@ -2,19 +2,17 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_403_FORBIDDEN,
                                    HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND)
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
-from django.core.cache import cache
-
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from config import settings
 from ..serializers.course_review_serializers import CourseReviewListSerializer
-from ..serializers.course_serializers import CourseListSerializer, CourseOneSerializer, CreateCourseSerializer
-from ..services.cache_service import set_cache, get_cache, delete_cache_by_keys
+from ..serializers.course_serializers import CourseListSerializer, CourseOneSerializer
+from ..services.cache_service import set_cache, get_cache, delete_cache_by_pattern
 from ..services.course_review_service import get_course_reviews, filter_course_reviews_by_user, create_course_review, \
     delete_course_review, get_course_review_by_id
 from ..services.course_service import find_courses_by_user_status, search_courses, filter_courses_by_tags, sort_courses, \
     add_remove_like_to_course, add_remove_registration_to_course, get_course_by_id, delete_course
 from ..utils.calculate_median_stars_util import calculate_median_stars_util
-from ..utils.course_utils import create_course_by_serializer, update_course_by_serializer
+from ..utils.course_utils import update_course_by_serializer
 from ..utils.paginator_utils import create_paginator
 from ..utils.validators_utils import full_number_validator
 
@@ -72,7 +70,7 @@ def courses_list_create(request):
         # Создаем новый курс
         # _, errors = create_course_by_serializer(request.data, request.user)
         # Удаляем весь кэш для курсов
-        delete_cache_by_keys('courses_list')
+        delete_cache_by_pattern('courses_list')
         # Проверяем на наличие ошибок
         # if errors: return Response(errors, status=HTTP_400_BAD_REQUEST)
         return Response({'message': 'Course created successfully!'}, status=HTTP_201_CREATED)
@@ -97,7 +95,7 @@ def courses_show_delete(request, id: int):
         # Обновляем данные курса
         data, errors = update_course_by_serializer(course, request.data)
         # Удаляем весь кэш для курсов
-        delete_cache_by_keys('courses_list')
+        delete_cache_by_pattern('courses_list')
         # Проверяем на наличие ошибок
         if errors: return Response(errors, status=HTTP_400_BAD_REQUEST)
         return Response(data, status=HTTP_200_OK)
@@ -105,7 +103,7 @@ def courses_show_delete(request, id: int):
         # Удаляем курс
         delete_course(course)
         # Удаляем весь кэш для курсов
-        delete_cache_by_keys('courses_list')
+        delete_cache_by_pattern('courses_list')
         return Response({}, status=HTTP_204_NO_CONTENT)
 
 
@@ -123,7 +121,7 @@ def course_add_remove_like(request, id: int):
     # Добавляем или удаляем лайк для курса
     message = add_remove_like_to_course(course, request.user)
     # Удаляем весь кэш для курсов
-    delete_cache_by_keys('courses_list')
+    delete_cache_by_pattern('courses_list')
     # Возвращаем сообщение
     return Response({'detail': message}, status=HTTP_200_OK)
 
