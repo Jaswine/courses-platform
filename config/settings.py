@@ -173,8 +173,8 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': ['profile', 'email'],
         'AUTH_PARAMS': {'access_type': 'online'},
         'APP': {
-            'client_id': '728039268958-1fu5ia6no08bht637bq0oqeg45h3q6u6.apps.googleusercontent.com',
-            'secret': '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',
+            'client_id': '',
+            'secret': '',
             'key': ''
         }
     },
@@ -226,3 +226,18 @@ CKEDITOR_STORAGE_BACKEND = True
 CKEDITOR_FORCE_JPEG_COMPRESSION = True
 
 PAGE_SIZE = 10
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "SOCKET_CONNECT_TIMEOUT": 5, # Время ожидания подключения
+            "SOCKET_TIMEOUT": 5, # Время ожидания чтения
+        },
+        "TIMEOUT": 3600, # 1 час по умолчанию
+    }
+}
+
+COURSES_CACHE_TIMEOUT = 3600 * 24 * 5
