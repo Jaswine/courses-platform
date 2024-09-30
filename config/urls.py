@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('accounts/', include('allauth.urls')),
     
-    path('api/', include('apps.course.api.urls')),
+    path('api/courses/', include('apps.course.api.urls')),
     path('api/article/', include('apps.article.api.urls')),
     path('api/user/', include('apps.user.api.urls')),
 ]

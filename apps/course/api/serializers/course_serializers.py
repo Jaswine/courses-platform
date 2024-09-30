@@ -29,7 +29,7 @@ class CourseListSerializer(CourseSerializer):
     liked_for_this_user = SerializerMethodField()
 
     class Meta(CourseSerializer.Meta):
-        fields = CourseSerializer.Meta.fields + ('image', 'comments_count',
+        fields = CourseSerializer.Meta.fields + ('image', 'reviews_count',
                                                  'likes', 'liked_for_this_user',)
 
     def get_image(self, obj):
