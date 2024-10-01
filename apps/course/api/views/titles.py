@@ -1,3 +1,6 @@
+from http.client import responses
+
+from django.conf import settings
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.status import (HTTP_404_NOT_FOUND,
@@ -6,6 +9,7 @@ from rest_framework.status import (HTTP_404_NOT_FOUND,
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
 
 from ..serializers.title_serializers import TitleListSerializer
+from ..services.cache_service import get_cache, set_cache
 from ..services.course_service import get_course_by_id
 from ..services.title_service import create_course_title, delete_course_title, \
     filter_course_titles_by_id, get_course_title_by_id, update_course_title_name, update_course_title_public, \
@@ -24,25 +28,28 @@ def title_list_create(request, id: int):
         return Response({'detail': f'Course with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
+        # Генерируем ключ для кэша на основе параметров запроса
+        cache_key = f"course_titles_and_tasks_list_{request.user.username}"
+        # Берем данные из кэша
+        cache_data = get_cache(cache_key)
+        if cache_data:
+            return Response(cache_data, status=HTTP_200_OK)
         # Берем все темы
         titles = filter_course_titles_by_id(id)
-        # Выводим темы
         serializer = TitleListSerializer(titles, many=True,
                                          context={'user': request.user, 'course': course})
+        # Кешируем данные
+        set_cache(cache_key, serializer.data, timeout=settings.COURSE_TITLE_AND_TASK_LIST_CACHE_TIMEOUT)
         return Response(serializer.data, status=HTTP_200_OK)
-
     elif request.method == 'POST':
         if request.user.is_superuser:
             # Берем данные
             title = request.data.get('title')
-
             # Проверяем их
             if len(title) < 3 or 255 < len(title):
                 return Response({'detail': 'The subject cannot be less than 0 or more than 255 characters'}, status=HTTP_400_BAD_REQUEST)
-
             # Создаем новую тему
             title = create_course_title(course, title)
-
             # Проверяем то, что тема создана успешно и выводим результат
             if title:
                 return Response({'detail': 'Title created successfully'}, status=HTTP_201_CREATED)
