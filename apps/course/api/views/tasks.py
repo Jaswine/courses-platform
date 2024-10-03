@@ -7,6 +7,7 @@ from rest_framework.status import (HTTP_404_NOT_FOUND,
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
 
 from ..serializers.task_serializers import TaskOneSerializer
+from ..services.cache_service import delete_cache_by_pattern, delete_cache_by_key
 from ..services.course_service import get_course_by_id
 from ..services.task_service import create_task, update_task, delete_task, add_remove_task_experience, \
     add_remove_task_bookmark, get_task_by_id, update_tasks_places
@@ -15,14 +16,19 @@ from ..services.title_service import get_course_title_by_id
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
-def task_create(request, id: int):
+def task_create(request, course_id: int, title_id: int):
     """
         Создание задания
     """
+    # Берем курс по идентификатору
+    course = get_course_by_id(course_id)
+    if not course:
+        return Response({'detail': f'Course with ID: {course_id} not found.'}, status=HTTP_404_NOT_FOUND)
+
     # Берем тему задания к курсу по его идентификатору
-    course_title = get_course_title_by_id(id)
+    course_title = get_course_title_by_id(title_id)
     if not course_title:
-        return Response({'detail': f'Title with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+        return Response({'detail': f'Title with ID: {title_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     # Берем данные
     title = request.data.get('title', '')
@@ -34,20 +40,22 @@ def task_create(request, id: int):
 
     # Проверяем, что таск создан успешно и выводи сообщение
     if task:
+        # Удаляем весь кэш для пользователей
+        delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}', async_mode=True)
         return Response({'detail': 'The subject created successfully!'}, status=HTTP_201_CREATED)
     return Response({'detail': 'Task creation failed'}, status=HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticatedOrReadOnly])
-def task_get_update_delete(request, id: int, task_id: int):
+def task_get_update_delete(request, course_id: int, task_id: int):
     """
         Вывод, обновление и удаление задания
     """
     # Берем курс по его идентификатору
-    course = get_course_by_id(id)
+    course = get_course_by_id(course_id)
     if not course:
-        return Response({'detail': f'Course with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+        return Response({'detail': f'Course with ID: {course_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     # Берем задание по его идентификатору
     task = get_task_by_id(task_id)
@@ -69,32 +77,38 @@ def task_get_update_delete(request, id: int, task_id: int):
 
             # Обновляем задание
             if update_task(task, title, public, points):
+                # Удаляем весь кэш для пользователей
+                delete_cache_by_pattern('course_titles_and_tasks_list_history', async_mode=True)
                 return Response({'detail': 'Task updated successfully!'}, status=HTTP_200_OK)
             return Response({'detail': 'Task updation failed'}, status=HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
         # Удаляем задание
         delete_task(task)
+        # Удаляем весь кэш для пользователей
+        delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}')
         return Response({}, status=HTTP_204_NO_CONTENT)
 
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
-def task_add_experience(request, id: int, task_id: int):
+def task_add_experience(request, course_id: int, task_id: int):
     """
         Добавление / удаление опыта
     """
     # Берем курс по его идентификатору
-    course = get_course_by_id(id)
+    course = get_course_by_id(course_id)
     if not course:
-        return Response({'detail': f'Course with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+        return Response({'detail': f'Course with ID: {course_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     # Берем задание по его идентификатору
     task = get_task_by_id(task_id)
     if not task:
-        return Response({'detail': f'Task with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+        return Response({'detail': f'Task with ID: {task_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     # Добавляем или удаляем опыт к заданию
     message = add_remove_task_experience(task, request.user)
+    # Удаляем весь кэш для текущего пользователя
+    delete_cache_by_key(f'course_titles_and_tasks_list_history_{course_id}_{request.user.username}')
     return Response({'detail': message}, status=HTTP_200_OK)
 
 
@@ -116,6 +130,8 @@ def task_add_remove_bookmark(request, course_id: int, task_id: int):
 
     # Добавляем или удаляем закладку к заданию
     message = add_remove_task_bookmark(task, request.user)
+    # Удаляем весь кэш для текущего пользователя
+    delete_cache_by_key(f'course_titles_and_tasks_list_history_{course_id}_{request.user.username}')
     return Response({'detail': message}, status=HTTP_200_OK)
 
 
@@ -142,6 +158,8 @@ def task_change_titles_tasks_places(request, course_id: int, task1_id: int, task
 
     # Обновляем данные
     if update_tasks_places(task1, task2):
+        # Удаляем весь кэш для пользователей
+        delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}', async_mode=True)
         return Response({'detail': 'Task\'s order changed successfully!'}, status=HTTP_200_OK)
     return Response({'detail': 'Task\'s order changed failed'}, status=HTTP_400_BAD_REQUEST)
 

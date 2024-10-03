@@ -12,5 +12,5 @@ def create_paginator(courses: list[Course] = list, /, *, page: int = 1) -> list:
         :param page: int - Страница
         :return Курсы
     """
-    paginator = Paginator(courses, settings.PAGE_SIZE)
+    paginator = Paginator(courses, settings.PAGINATOR_PAGE_SIZE)
     return paginator.get_page(page)

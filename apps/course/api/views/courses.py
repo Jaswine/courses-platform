@@ -12,7 +12,7 @@ from ..services.course_review_service import get_course_reviews, filter_course_r
 from ..services.course_service import find_courses_by_user_status, search_courses, filter_courses_by_tags, sort_courses, \
     add_remove_like_to_course, add_remove_registration_to_course, get_course_by_id, delete_course
 from ..utils.calculate_median_stars_util import calculate_median_stars_util
-from ..utils.course_utils import update_course_by_serializer
+from ..utils.course_utils import update_course_by_serializer, create_course_by_serializer
 from ..utils.paginator_utils import create_paginator
 from ..utils.validators_utils import full_number_validator
 
@@ -29,17 +29,12 @@ def courses_list_create(request):
         order_by_data = request.GET.get('order_by_data', '')
         filter_by_tag = request.GET.get('filter_by_tag', '')
         page = full_number_validator(request.GET.get('page', 1))
-
         # Генерируем ключ для кэша на основе параметров запроса
         cache_key = f"courses_list_{query}_{order_by_data}_{filter_by_tag}_{page}"
-        print("cache_key: ", cache_key)
-
         # Берем данные из кэша
-        response_data = get_cache(cache_key)
-        print("response data:", response_data)
-        if response_data:
-            return Response(response_data, status=HTTP_200_OK)
-
+        cache_data = get_cache(cache_key)
+        if cache_data:
+            return Response(cache_data, status=HTTP_200_OK)
         # Ищем курсы по статусу пользователя
         courses = find_courses_by_user_status(request.user)
         # Ищем курсы
@@ -52,27 +47,23 @@ def courses_list_create(request):
             courses = sort_courses(order_by_data, courses)
         # Создаем пагинатор
         courses = create_paginator(courses, page=page)
-
-        # Возвращаем курсы
         serializer = CourseListSerializer(courses, many=True, context={'user': request.user})
+        # Создаем ответные данные
         response_data = {
             "page": page,
             "size": len(courses),
             "courses": serializer.data,
         }
-
-        # Сохраняем данные в кэше Redis на 10 минут
-        set_cache(cache_key, response_data,
-                  timeout=settings.COURSES_CACHE_TIMEOUT)
-
+        # Кешируем данные
+        set_cache(cache_key, response_data, timeout=settings.COURSE_LIST_CACHE_TIMEOUT)
         return Response(response_data, status=HTTP_200_OK)
     if request.method == 'POST':
         # Создаем новый курс
-        # _, errors = create_course_by_serializer(request.data, request.user)
+        _, errors = create_course_by_serializer(request.data, request.user)
         # Удаляем весь кэш для курсов
-        delete_cache_by_pattern('courses_list')
+        delete_cache_by_pattern('courses_list', async_mode=True)
         # Проверяем на наличие ошибок
-        # if errors: return Response(errors, status=HTTP_400_BAD_REQUEST)
+        if errors: return Response(errors, status=HTTP_400_BAD_REQUEST)
         return Response({'message': 'Course created successfully!'}, status=HTTP_201_CREATED)
 
 
@@ -103,7 +94,7 @@ def courses_show_delete(request, id: int):
         # Удаляем курс
         delete_course(course)
         # Удаляем весь кэш для курсов
-        delete_cache_by_pattern('courses_list')
+        delete_cache_by_pattern('courses_list', async_mode=True)
         return Response({}, status=HTTP_204_NO_CONTENT)
 
 
@@ -121,7 +112,7 @@ def course_add_remove_like(request, id: int):
     # Добавляем или удаляем лайк для курса
     message = add_remove_like_to_course(course, request.user)
     # Удаляем весь кэш для курсов
-    delete_cache_by_pattern('courses_list')
+    delete_cache_by_pattern('courses_list', async_mode=True)
     # Возвращаем сообщение
     return Response({'detail': message}, status=HTTP_200_OK)
 
