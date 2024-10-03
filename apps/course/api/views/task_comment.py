@@ -30,13 +30,12 @@ def task_comment_list_create(request, task_id: int):
         # Берем комментарии
         comments = get_comments_without_children_by_task(task)
         # Добавляем пагинатор
-        paginator = Paginator(comments, settings.PAGE_SIZE)
+        paginator = Paginator(comments, settings.PAGINATOR_PAGE_SIZE)
         page_obj = paginator.get_page(page_number)
         # Возвращаем список комментариев
         serializer = TaskCommentListSerializer(page_obj, many=True, context={'user': request.user})
         return Response({
             'page': page_number,
-            'size': settings.PAGE_SIZE,
             'comments': serializer.data
         }, status=HTTP_200_OK)
     if request.method == 'POST':

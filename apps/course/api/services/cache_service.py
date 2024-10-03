@@ -36,7 +36,7 @@ def delete_cache_by_key(cache_key: str) -> None:
     """
     cache.delete(cache_key)
 
-# @shared_task
+@shared_task
 def delete_cache_by_pattern_async(pattern: str) -> None:
     """
         Асинхронное удаление данных из кэша по паттерну ключа.
@@ -44,10 +44,11 @@ def delete_cache_by_pattern_async(pattern: str) -> None:
     """
     cache.delete_pattern(f"{pattern}*")
 
-def delete_cache_by_pattern(pattern: str, async_mode: bool = False) -> None:
+def delete_cache_by_pattern(pattern: str, /, *, async_mode: bool = False) -> None:
     """
         Удаление данных из кэша по паттерну ключа (началу ключа)
         :param pattern: str - Паттерн ключа
+        :param async_mode: bool - Включение асинхронного режима (по умолчанию False)
     """
     pattern = f"{pattern}*"
     if async_mode:
