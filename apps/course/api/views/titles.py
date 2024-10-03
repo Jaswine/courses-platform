@@ -1,15 +1,13 @@
-from http.client import responses
-
 from django.conf import settings
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.status import (HTTP_404_NOT_FOUND,
                                    HTTP_400_BAD_REQUEST, HTTP_200_OK,
                                    HTTP_201_CREATED, HTTP_403_FORBIDDEN, HTTP_204_NO_CONTENT)
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 
 from ..serializers.title_serializers import TitleListSerializer
-from ..services.cache_service import get_cache, set_cache
+from ..services.cache_service import get_cache, set_cache, delete_cache_by_pattern
 from ..services.course_service import get_course_by_id
 from ..services.title_service import create_course_title, delete_course_title, \
     filter_course_titles_by_id, get_course_title_by_id, update_course_title_name, update_course_title_public, \
@@ -29,7 +27,7 @@ def title_list_create(request, id: int):
 
     if request.method == 'GET':
         # Генерируем ключ для кэша на основе параметров запроса
-        cache_key = f"course_titles_and_tasks_list_{request.user.username}"
+        cache_key = f"course_titles_and_tasks_list_history_{request.user.username}"
         # Берем данные из кэша
         cache_data = get_cache(cache_key)
         if cache_data:
@@ -50,6 +48,8 @@ def title_list_create(request, id: int):
                 return Response({'detail': 'The subject cannot be less than 0 or more than 255 characters'}, status=HTTP_400_BAD_REQUEST)
             # Создаем новую тему
             title = create_course_title(course, title)
+            # Удаляем весь кэш для пользователей
+            delete_cache_by_pattern('course_titles_and_tasks_list_history')
             # Проверяем то, что тема создана успешно и выводим результат
             if title:
                 return Response({'detail': 'Title created successfully'}, status=HTTP_201_CREATED)
@@ -67,9 +67,10 @@ def title_delete(request, title_id: int):
     course_title = get_course_title_by_id(title_id)
     if not course_title:
         return Response({'detail': f'Title with ID: {title_id} not found.'}, status=HTTP_404_NOT_FOUND)
-
     # Удаляем тему
     delete_course_title(course_title)
+    # Удаляем весь кэш для пользователей
+    delete_cache_by_pattern('course_titles_and_tasks_list_history')
     return Response({}, status=HTTP_204_NO_CONTENT)
 
 
@@ -85,7 +86,6 @@ def title_update_name(request, title_id: int):
         return Response({'detail': f'Title with ID: {title_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     title = request.data.get('title', '')
-
     # Проверяем
     if len(title) < 3 or 255 < len(title):
         return Response({'detail': 'The subject cannot be less than 0 or more than 255 characters'},
@@ -93,6 +93,8 @@ def title_update_name(request, title_id: int):
 
     # Обновляем название темы
     message = update_course_title_name(course_title, title)
+    # Удаляем весь кэш для пользователей
+    delete_cache_by_pattern('course_titles_and_tasks_list_history')
     return Response({'detail': message}, status=HTTP_200_OK)
 
 
@@ -108,11 +110,12 @@ def title_update_public(request, title_id: int):
         return Response({'detail': f'Title with ID: {title_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     public = request.data.get('public')
-
     # Проверяем
     if public: return Response({'detail': 'Public not found'}, status=HTTP_400_BAD_REQUEST)
     # Обновляем статус публичности темы
     message = update_course_title_public(course_title, public)
+    # Удаляем весь кэш для пользователей
+    delete_cache_by_pattern('course_titles_and_tasks_list_history')
     return Response({'detail': message}, status=HTTP_200_OK)
 
 
@@ -139,8 +142,7 @@ def title_change_titles_place(request, course_id: int, title1_id: int, title2_id
 
     # Обновляем данные
     if update_titles_places(course, course_title1, course_title2):
+        # Удаляем весь кэш для пользователей
+        delete_cache_by_pattern('course_titles_and_tasks_list_history')
         return Response({'detail': 'Title\'s order changed successfully!'}, status=HTTP_200_OK)
     return Response({'detail': 'Title\'s order changed failed'}, status=HTTP_400_BAD_REQUEST)
-
-
-

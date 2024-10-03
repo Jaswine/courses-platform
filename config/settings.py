@@ -233,7 +233,7 @@ CACHES = {
         "LOCATION": "redis://127.0.0.1:6379/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "SOCKET_CONNECT_TIMEOUT": 5, # Время ожидания подключения
+            "SOCK53ET_CONNECT_TIMEOUT": 5, # Время ожидания подключения
             "SOCKET_TIMEOUT": 5, # Время ожидания чтения
         },
         "TIMEOUT": 3600, # 1 час по умолчанию
@@ -243,5 +243,5 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
-COURSE_LIST_CACHE_TIMEOUT = 3600 * 24 * 5
-COURSE_TITLE_AND_TASK_LIST_CACHE_TIMEOUT = 600
+COURSE_LIST_CACHE_TIMEOUT = 3600 * 24 * 5           # 5 дней
+COURSE_TITLE_AND_TASK_LIST_CACHE_TIMEOUT = 3600     # 1 час

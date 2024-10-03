@@ -7,6 +7,7 @@ from rest_framework.status import (HTTP_404_NOT_FOUND,
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
 
 from ..serializers.task_serializers import TaskOneSerializer
+from ..services.cache_service import delete_cache_by_pattern, delete_cache_by_key
 from ..services.course_service import get_course_by_id
 from ..services.task_service import create_task, update_task, delete_task, add_remove_task_experience, \
     add_remove_task_bookmark, get_task_by_id, update_tasks_places
@@ -34,6 +35,8 @@ def task_create(request, id: int):
 
     # Проверяем, что таск создан успешно и выводи сообщение
     if task:
+        # Удаляем весь кэш для пользователей
+        delete_cache_by_pattern('course_titles_and_tasks_list_history')
         return Response({'detail': 'The subject created successfully!'}, status=HTTP_201_CREATED)
     return Response({'detail': 'Task creation failed'}, status=HTTP_400_BAD_REQUEST)
 
@@ -69,11 +72,15 @@ def task_get_update_delete(request, id: int, task_id: int):
 
             # Обновляем задание
             if update_task(task, title, public, points):
+                # Удаляем весь кэш для пользователей
+                delete_cache_by_pattern('course_titles_and_tasks_list_history')
                 return Response({'detail': 'Task updated successfully!'}, status=HTTP_200_OK)
             return Response({'detail': 'Task updation failed'}, status=HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
         # Удаляем задание
         delete_task(task)
+        # Удаляем весь кэш для пользователей
+        delete_cache_by_pattern('course_titles_and_tasks_list_history')
         return Response({}, status=HTTP_204_NO_CONTENT)
 
 
@@ -95,6 +102,8 @@ def task_add_experience(request, id: int, task_id: int):
 
     # Добавляем или удаляем опыт к заданию
     message = add_remove_task_experience(task, request.user)
+    # Удаляем весь кэш для текущего пользователя
+    delete_cache_by_key(f'course_titles_and_tasks_list_history_{request.user.username}')
     return Response({'detail': message}, status=HTTP_200_OK)
 
 
@@ -116,6 +125,8 @@ def task_add_remove_bookmark(request, course_id: int, task_id: int):
 
     # Добавляем или удаляем закладку к заданию
     message = add_remove_task_bookmark(task, request.user)
+    # Удаляем весь кэш для текущего пользователя
+    delete_cache_by_key(f'course_titles_and_tasks_list_history_{request.user.username}')
     return Response({'detail': message}, status=HTTP_200_OK)
 
 
@@ -142,6 +153,8 @@ def task_change_titles_tasks_places(request, course_id: int, task1_id: int, task
 
     # Обновляем данные
     if update_tasks_places(task1, task2):
+        # Удаляем весь кэш для пользователей
+        delete_cache_by_pattern('course_titles_and_tasks_list_history')
         return Response({'detail': 'Task\'s order changed successfully!'}, status=HTTP_200_OK)
     return Response({'detail': 'Task\'s order changed failed'}, status=HTTP_400_BAD_REQUEST)
 
