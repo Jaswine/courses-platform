@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import logging
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -263,6 +264,47 @@ CKEDITOR_UPLOAD_PATH = 'media/ckeditor/uploads/'
 CKEDITOR_RESTRICT_BY_USER = True
 CKEDITOR_STORAGE_BACKEND = True
 CKEDITOR_FORCE_JPEG_COMPRESSION = True
+
+# Logging configuration
+# https://docs.djangoproject.com/en/5.1/topics/logging/
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {  # Вывод в консоль
+            'class': 'logging.StreamHandler',
+        },
+        'file': {  # Вывод в файл
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'debug.log'),
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': { # Логи самого Django
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': True,
+        },
+        'apps': { # Логи приложений
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        }
+    },
+}
 
 # Other settings & constants
 
