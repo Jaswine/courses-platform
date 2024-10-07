@@ -14,9 +14,11 @@ class TaskSerializer(ModelSerializer):
 class TaskOneSerializer(ModelSerializer):
     content = SerializerMethodField(read_only=True)
     is_bookmarked = SerializerMethodField(read_only=True)
+    is_completed = SerializerMethodField(read_only=True)
 
     class Meta(TaskSerializer.Meta):
-        fields = TaskSerializer.Meta.fields + ('content', 'is_bookmarked', )
+        fields = TaskSerializer.Meta.fields + ('content',
+                                               'is_bookmarked', 'is_completed')
 
     def get_content(self, obj: Task) -> dict:
         """
@@ -35,11 +37,17 @@ class TaskOneSerializer(ModelSerializer):
 
     def get_is_bookmarked(self, obj: Task) -> bool:
         """
-            Проверяет, помечен ли курс или нет
+            Проверяет, помечено ли задание или нет
         """
         user = self.context.get('user')
         return task_bookmark_is_exists(obj, user)
 
+    def get_is_completed(self, obj: Task) -> bool:
+        """
+            Проверяет, прошел ли пользователь задание или нет
+        """
+        user = self.context.get('user')
+        return True if is_user_completed_task(obj, user) else False
 
 class TaskSimpleSerializer(TaskSerializer):
     completed_status = SerializerMethodField(read_only=True)

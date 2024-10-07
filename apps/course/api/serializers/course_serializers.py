@@ -25,7 +25,7 @@ class CourseSerializer(ModelSerializer):
 class CourseListSerializer(CourseSerializer):
     image = SerializerMethodField()
     likes = SerializerMethodField()
-    comments_count = SerializerMethodField()
+    reviews_count = SerializerMethodField()
     liked_for_this_user = SerializerMethodField()
 
     class Meta(CourseSerializer.Meta):
@@ -38,7 +38,7 @@ class CourseListSerializer(CourseSerializer):
     def get_likes(self, obj):
         return obj.likes.count()
 
-    def get_comments_count(self, obj):
+    def get_reviews_count(self, obj):
         return get_course_reviews_count(obj)
 
     def get_liked_for_this_user(self, obj):

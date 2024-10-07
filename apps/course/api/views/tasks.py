@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -7,7 +8,7 @@ from rest_framework.status import (HTTP_404_NOT_FOUND,
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
 
 from ..serializers.task_serializers import TaskOneSerializer
-from ..services.cache_service import delete_cache_by_pattern, delete_cache_by_key
+from ..services.cache_service import delete_cache_by_pattern, delete_cache_by_key, get_cache, set_cache
 from ..services.course_service import get_course_by_id
 from ..services.task_service import create_task, update_task, delete_task, add_remove_task_experience, \
     add_remove_task_bookmark, get_task_by_id, update_tasks_places
@@ -41,7 +42,7 @@ def task_create(request, course_id: int, title_id: int):
     # Проверяем, что таск создан успешно и выводи сообщение
     if task:
         # Удаляем весь кэш для пользователей
-        delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}', async_mode=True)
+        delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}')
         return Response({'detail': 'The subject created successfully!'}, status=HTTP_201_CREATED)
     return Response({'detail': 'Task creation failed'}, status=HTTP_400_BAD_REQUEST)
 
@@ -57,14 +58,30 @@ def task_get_update_delete(request, course_id: int, task_id: int):
     if not course:
         return Response({'detail': f'Course with ID: {course_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
+    # Генерируем ключ для кэша на основе параметров запроса
+    cache_key_patten = f"course_task_history_{task_id}"
+
+    if request.method == 'GET':
+        cache_key = f'{cache_key_patten}_{request.user.username}'
+        # Берем данные из кэша
+        cache_data = get_cache(cache_key)
+        if cache_data:
+            return Response(cache_data, status=HTTP_200_OK)
+
+        # Берем задание по его идентификатору
+        task = get_task_by_id(task_id)
+        if not task:
+            return Response({'detail': f'Task with ID: {task_id} not found.'}, status=HTTP_404_NOT_FOUND)
+
+        serializer = TaskOneSerializer(task, many=False, context={'user': request.user})
+        # Кешируем данные
+        set_cache(cache_key, serializer.data, timeout=settings.COURSE_TITLE_AND_TASK_LIST_CACHE_TIMEOUT)
+        return JsonResponse(serializer.data, status=200)
+
     # Берем задание по его идентификатору
     task = get_task_by_id(task_id)
     if not task:
         return Response({'detail': f'Task with ID: {task_id} not found.'}, status=HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = TaskOneSerializer(task, many=False, context={'user': request.user})
-        return JsonResponse(serializer.data, status=200)
 
     if not request.user.is_superuser:
         return Response({'detail': 'User does not have sufficient rights'}, status=HTTP_403_FORBIDDEN)
@@ -78,7 +95,8 @@ def task_get_update_delete(request, course_id: int, task_id: int):
             # Обновляем задание
             if update_task(task, title, public, points):
                 # Удаляем весь кэш для пользователей
-                delete_cache_by_pattern('course_titles_and_tasks_list_history', async_mode=True)
+                delete_cache_by_pattern('course_titles_and_tasks_list_history')
+                delete_cache_by_pattern(cache_key_patten)
                 return Response({'detail': 'Task updated successfully!'}, status=HTTP_200_OK)
             return Response({'detail': 'Task updation failed'}, status=HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
@@ -86,6 +104,7 @@ def task_get_update_delete(request, course_id: int, task_id: int):
         delete_task(task)
         # Удаляем весь кэш для пользователей
         delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}')
+        delete_cache_by_pattern(cache_key_patten)
         return Response({}, status=HTTP_204_NO_CONTENT)
 
 
@@ -109,6 +128,7 @@ def task_add_experience(request, course_id: int, task_id: int):
     message = add_remove_task_experience(task, request.user)
     # Удаляем весь кэш для текущего пользователя
     delete_cache_by_key(f'course_titles_and_tasks_list_history_{course_id}_{request.user.username}')
+    delete_cache_by_key(f'course_task_history_{task_id}_{request.user.username}')
     return Response({'detail': message}, status=HTTP_200_OK)
 
 
@@ -132,6 +152,7 @@ def task_add_remove_bookmark(request, course_id: int, task_id: int):
     message = add_remove_task_bookmark(task, request.user)
     # Удаляем весь кэш для текущего пользователя
     delete_cache_by_key(f'course_titles_and_tasks_list_history_{course_id}_{request.user.username}')
+    delete_cache_by_key(f'course_task_history_{task_id}_{request.user.username}')
     return Response({'detail': message}, status=HTTP_200_OK)
 
 
@@ -159,7 +180,7 @@ def task_change_titles_tasks_places(request, course_id: int, task1_id: int, task
     # Обновляем данные
     if update_tasks_places(task1, task2):
         # Удаляем весь кэш для пользователей
-        delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}', async_mode=True)
+        delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}')
         return Response({'detail': 'Task\'s order changed successfully!'}, status=HTTP_200_OK)
     return Response({'detail': 'Task\'s order changed failed'}, status=HTTP_400_BAD_REQUEST)
 

@@ -61,7 +61,7 @@ def courses_list_create(request):
         # Создаем новый курс
         _, errors = create_course_by_serializer(request.data, request.user)
         # Удаляем весь кэш для курсов
-        delete_cache_by_pattern('courses_list', async_mode=True)
+        delete_cache_by_pattern('courses_list')
         # Проверяем на наличие ошибок
         if errors: return Response(errors, status=HTTP_400_BAD_REQUEST)
         return Response({'message': 'Course created successfully!'}, status=HTTP_201_CREATED)
@@ -94,7 +94,7 @@ def courses_show_delete(request, id: int):
         # Удаляем курс
         delete_course(course)
         # Удаляем весь кэш для курсов
-        delete_cache_by_pattern('courses_list', async_mode=True)
+        delete_cache_by_pattern('courses_list')
         return Response({}, status=HTTP_204_NO_CONTENT)
 
 
@@ -112,7 +112,7 @@ def course_add_remove_like(request, id: int):
     # Добавляем или удаляем лайк для курса
     message = add_remove_like_to_course(course, request.user)
     # Удаляем весь кэш для курсов
-    delete_cache_by_pattern('courses_list', async_mode=True)
+    delete_cache_by_pattern('courses_list')
     # Возвращаем сообщение
     return Response({'detail': message}, status=HTTP_200_OK)
 
