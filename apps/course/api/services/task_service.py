@@ -114,7 +114,6 @@ def delete_task(task: Task):
     """
     task.delete()
 
-
 def add_remove_task_experience(task: Task, user: User) -> str:
     """
         Добавление / удаление опыта к заданию

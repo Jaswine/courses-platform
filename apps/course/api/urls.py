@@ -31,7 +31,7 @@ urlpatterns = [
     path('<int:course_id>/titles/tasks/<int:task_id>/',
          tasks.task_get_update_delete, name='task-update-delete'),
     path('<int:course_id>/titles/tasks/<int:task_id>/experience/',
-         tasks.task_add_experience, name='task_add_experiense'),
+         tasks.task_add_experience, name='task_add_experience'),
     path('<int:course_id>/titles/tasks/<int:task_id>/bookmark/',
          tasks.task_add_remove_bookmark, name='task_add_remove_bookmark'),
     path('<int:course_id>/titles/tasks/<int:task1_id>/change-place/<int:task2_id>/',

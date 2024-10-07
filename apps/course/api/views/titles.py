@@ -49,7 +49,7 @@ def title_list_create(request, course_id: int):
             # Создаем новую тему
             title = create_course_title(course, title)
             # Удаляем весь кэш для пользователей
-            delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}', async_mode=True)
+            delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}')
             # Проверяем то, что тема создана успешно и выводим результат
             if title:
                 return Response({'detail': 'Title created successfully'}, status=HTTP_201_CREATED)
@@ -75,7 +75,7 @@ def title_delete(request, course_id: int, title_id: int):
     # Удаляем тему
     delete_course_title(course_title)
     # Удаляем весь кэш для пользователей
-    delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}', async_mode=True)
+    delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}')
     return Response({}, status=HTTP_204_NO_CONTENT)
 
 
@@ -104,7 +104,7 @@ def title_update_name(request, course_id: int, title_id: int):
     # Обновляем название темы
     message = update_course_title_name(course_title, title)
     # Удаляем весь кэш для пользователей
-    delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}', async_mode=True)
+    delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}')
     return Response({'detail': message}, status=HTTP_200_OK)
 
 
@@ -130,7 +130,7 @@ def title_update_public(request, course_id: int, title_id: int):
     # Обновляем статус публичности темы
     message = update_course_title_public(course_title, public)
     # Удаляем весь кэш для пользователей
-    delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}', async_mode=True)
+    delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}')
     return Response({'detail': message}, status=HTTP_200_OK)
 
 
@@ -158,6 +158,6 @@ def title_change_titles_place(request, course_id: int, title1_id: int, title2_id
     # Обновляем данные
     if update_titles_places(course, course_title1, course_title2):
         # Удаляем весь кэш для пользователей
-        delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}', async_mode=True)
+        delete_cache_by_pattern(f'course_titles_and_tasks_list_history_{course_id}')
         return Response({'detail': 'Title\'s order changed successfully!'}, status=HTTP_200_OK)
     return Response({'detail': 'Title\'s order changed failed'}, status=HTTP_400_BAD_REQUEST)
