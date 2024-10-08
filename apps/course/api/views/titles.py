@@ -20,11 +20,6 @@ def title_list_create(request, course_id: int):
     """
         Вывод списка тем и создание новой темы
     """
-    # Берем курс по идентификатору
-    course = get_course_by_id(course_id)
-    if not course:
-        return Response({'detail': f'Course with ID: {course_id} not found.'}, status=HTTP_404_NOT_FOUND)
-
     if request.method == 'GET':
         # Генерируем ключ для кэша на основе параметров запроса
         cache_key = f"course_titles_and_tasks_list_history_{course_id}_{request.user.username}"
@@ -32,6 +27,10 @@ def title_list_create(request, course_id: int):
         cache_data = get_cache(cache_key)
         if cache_data:
             return Response(cache_data, status=HTTP_200_OK)
+        # Берем курс по идентификатору
+        course = get_course_by_id(course_id)
+        if not course:
+            return Response({'detail': f'Course with ID: {course_id} not found.'}, status=HTTP_404_NOT_FOUND)
         # Берем все темы
         titles = filter_course_titles_by_id(course_id)
         serializer = TitleListSerializer(titles, many=True,
@@ -41,6 +40,10 @@ def title_list_create(request, course_id: int):
         return Response(serializer.data, status=HTTP_200_OK)
     elif request.method == 'POST':
         if request.user.is_superuser:
+            # Берем курс по идентификатору
+            course = get_course_by_id(course_id)
+            if not course:
+                return Response({'detail': f'Course with ID: {course_id} not found.'}, status=HTTP_404_NOT_FOUND)
             # Берем данные
             title = request.data.get('title')
             # Проверяем их

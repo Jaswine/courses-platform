@@ -127,6 +127,7 @@ SESSION_CACHE_ALIAS = 'default'
 
 COURSE_LIST_CACHE_TIMEOUT = 3600 * 24 * 5           # 5 дней
 COURSE_TITLE_AND_TASK_LIST_CACHE_TIMEOUT = 3600     # 1 час
+COURSE_TASK_COMMENT_LIST_HISTORY = 600              # 10 минут
 
 # Celery configuration
 # https://docs.celeryq.dev/en/stable/django/first-steps-with-django.html
@@ -134,10 +135,11 @@ COURSE_TITLE_AND_TASK_LIST_CACHE_TIMEOUT = 3600     # 1 час
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
 
-CELERY_TIMEZONE = 'UTC'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Almaty'
+CELERY_ENABLE_UTS = True
 
 
 # Password validation
@@ -164,7 +166,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Almaty'
 
 USE_I18N = True
 

@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.status import (HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_403_FORBIDDEN,
@@ -136,24 +137,37 @@ def course_add_remove_user(request, id: int):
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticatedOrReadOnly])
-def course_review_create_list(request, id):
+def course_review_create_list(request, course_id: int):
     """
         Вывод всех отзывов и создание нового
     """
     # Берем курс по идентификатору
-    course = get_course_by_id(id)
+    course = get_course_by_id(course_id)
     if not course:
-        return Response({'detail': f'Course with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+        return Response({'detail': f'Course with ID: {course_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
+        page_number = full_number_validator(request.GET.get('page', 1))
+        # Генерируем ключ для кэша на основе параметров запроса
+        cache_key = f"course_review_list_history_{course_id}_{page_number}"
+        # Берем данные из кэша
+        cache_data = get_cache(cache_key)
+        if cache_data:
+            return Response(cache_data, status=HTTP_200_OK)
         # Берем все отзывы для конкретного курса
         reviews = get_course_reviews(course)
+        # Добавляем пагинатор
+        paginator = Paginator(reviews, settings.PAGINATOR_PAGE_SIZE)
+        page_obj = paginator.get_page(page_number)
         # Вычисляем среднюю оценку курса
         medium__stars = calculate_median_stars_util(reviews)
-
         # Выводим отзывы
-        serializer = CourseReviewListSerializer(reviews, many=True)
+        serializer = CourseReviewListSerializer(page_obj, many=True)
+        # Кешируем данные
+        set_cache(cache_key, serializer.data, timeout=settings.COURSE_TASK_COMMENT_LIST_HISTORY)
         return Response({
+            'page': page_number,
+            'total': paginator.num_pages,
             'reviews': serializer.data,
             'medium__stars': medium__stars,
         }, status=HTTP_200_OK)
@@ -163,8 +177,8 @@ def course_review_create_list(request, id):
             return Response({'detail': 'Review already exists!'}, status=HTTP_400_BAD_REQUEST)
 
         # Берем данные
-        message = request.POST.get('message', '')
-        stars_count = request.POST.get('stars_count', 0)
+        message = request.data.get('message', '')
+        stars_count = request.data.get('stars_count', 0)
 
         # Валидируем данные
         if not (1 <= stars_count <= 5) or not message or len(message) < 6:
@@ -178,18 +192,20 @@ def course_review_create_list(request, id):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def course_reviews_delete(request, id):
+def course_reviews_delete(request, course_id: int, review_id: int):
     """
         Удаление отзыва
     """
     # Берем отзыв к курсу по идентификатору
-    review = get_course_review_by_id(id)
+    review = get_course_review_by_id(review_id)
     if not review:
-        return Response({'detail': f'Course review with ID: {id} not found.'}, status=HTTP_404_NOT_FOUND)
+        return Response({'detail': f'Course review with ID: {review_id} not found.'}, status=HTTP_404_NOT_FOUND)
 
     # Проверяем, что текущий пользователь тот же, что и тот, кто создал отзыв
     if request.user.id == review.user.id:
         # Удаляем отзыв
         delete_course_review(review)
+        # Удаляем весь кэш для пользователей
+        delete_cache_by_pattern(f'course_review_list_history_{course_id}')
         return Response({'detail': f'Review with id {id} deleted successfully'}, status=HTTP_204_NO_CONTENT)
     return Response({'detail': 'User does not have sufficient rights'}, status=HTTP_403_FORBIDDEN)

@@ -18,7 +18,8 @@ class TaskOneSerializer(ModelSerializer):
 
     class Meta(TaskSerializer.Meta):
         fields = TaskSerializer.Meta.fields + ('content',
-                                               'is_bookmarked', 'is_completed')
+                                               'is_bookmarked', 'is_completed'
+                                               )
 
     def get_content(self, obj: Task) -> dict:
         """
