@@ -49,7 +49,7 @@ def article_comment_react(request, article_id: int):
         if isinstance(article, JsonResponse):
             return article
 
-        reaction_type = request.POST.get('reaction_type')
+        reaction_type = request.data.get('reaction_type')
 
         if reaction_type not in dict(Reaction.REACTION_CHOICES).keys():
             return JsonResponse({

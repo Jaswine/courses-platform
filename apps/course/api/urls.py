@@ -12,8 +12,8 @@ urlpatterns = [
     path('<int:id>/', courses.courses_show_delete, name='courses_get_update_delete'),
     path('<int:id>/like/', courses.course_add_remove_like, name='course_add_remove_like'),
     path('<int:id>/user/', courses.course_add_remove_user, name='course_add_remove_user'),
-    path('<int:id>/reviews/', courses.course_review_create_list, name='course_review_create_list'),
-    path('reviews/<int:id>/delete/', courses.course_reviews_delete, name='course_reviews_delete'),
+    path('<int:course_id>/reviews/', courses.course_review_create_list, name='course_review_create_list'),
+    path('<int:course_id>/reviews/<int:review_id>/delete/', courses.course_reviews_delete, name='course_reviews_delete'),
 
     path('<int:course_id>/titles/',
          titles.title_list_create, name='title-list-create'),

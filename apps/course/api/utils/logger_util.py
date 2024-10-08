@@ -3,7 +3,6 @@ import logging, inspect
 from celery import shared_task
 
 
-@shared_task
 def logger(message: str, message_type: str = 'debug') -> None:
     """
         Логирование сообщений
