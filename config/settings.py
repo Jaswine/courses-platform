@@ -2,6 +2,7 @@
 Django settings for settings project.
 '''
 import logging
+from datetime import timedelta
 from pathlib import Path
 import os
 
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'ckeditor',
 
     'rest_framework',
+    'rest_framework_simplejwt',
 
     'apps.user',
     'apps.course',
@@ -159,6 +161,21 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
 
 
 # Internationalization
