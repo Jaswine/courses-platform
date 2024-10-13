@@ -1,10 +1,16 @@
 from django.urls import path
+from rest_framework_simplejwt.views import TokenRefreshView
 
-from .views import user, achievement
+from .views import user, achievement, auth
+
 
 app_name = 'user'
 
 urlpatterns = [
+    path('sign-in/', auth.sign_in, name='sign-in'),
+    path('sign-up/', auth.sign_up, name='sign-up'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
     path('achievement-list/',
          achievement.achievement_list_create, name='achievement-list-create'),
     path('achievement-list/<int:achievement_id>/',

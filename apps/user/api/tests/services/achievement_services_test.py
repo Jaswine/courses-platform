@@ -1,6 +1,6 @@
 from pytest import mark
 
-from apps.user.api.services.achievement_services import find_all_achievements, get_achievement_by_id
+from apps.user.api.services.achievement_service import find_all_achievements, get_achievement_by_id
 
 
 @mark.django_db

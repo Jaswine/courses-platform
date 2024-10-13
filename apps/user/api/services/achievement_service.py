@@ -12,7 +12,7 @@ def find_all_achievements() -> List[Achievement]:
     return Achievement.objects.all()
 
 
-def get_achievement_by_id(achievement_id: int) -> Achievement:
+def get_achievement_by_id(achievement_id: int) -> Achievement | None:
     """
         Взятие достижения по его идентификатору
 

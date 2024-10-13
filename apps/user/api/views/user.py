@@ -5,9 +5,9 @@ from rest_framework.permissions import (IsAuthenticatedOrReadOnly,
                                         IsAuthenticated, IsAdminUser)
 
 from apps.course.api.serializers.course_serializers import CourseListSerializer, CourseProgressSerializer
-from apps.user.api.serializers.user_serializers import UserSerializer
-from apps.user.api.services.user_services import (find_user_liked_courses,
-                                                  find_user_registered_courses, filter_search_sort_users, block_user)
+from apps.user.api.serializers.user_serializers import UserProfileSerializer
+from apps.user.api.services.user_service import (find_user_liked_courses,
+                                                 find_user_registered_courses, filter_search_sort_users, block_user)
 from apps.user.services.user_service import get_user_by_username
 
 
@@ -20,7 +20,7 @@ def user_list(request):
     order_by = request.GET.get('order_by')
 
     users = filter_search_sort_users(q, is_superuser, is_active, order_by)
-    serializer = UserSerializer(users, many=True)
+    serializer = UserProfileSerializer(users, many=True)
     return Response(serializer.data)
 
 
@@ -35,7 +35,7 @@ def user_view(request, username: str, info_type: str):
 
     if info_type == 'main':
         # Главная информация о пользователе
-        serializer = UserSerializer(user, many=False)
+        serializer = UserProfileSerializer(user, many=False)
     elif info_type == 'liked-courses':
         # Лайкнутые курсы
         courses = find_user_liked_courses(user)

@@ -6,7 +6,7 @@ from rest_framework.permissions import (IsAuthenticatedOrReadOnly,
                                         IsAuthenticated, IsAdminUser)
 
 from apps.user.api.serializers.achievement_serializers import AchievementSerializer
-from apps.user.api.services.achievement_services import find_all_achievements, get_achievement_by_id, delete_achievement
+from apps.user.api.services.achievement_service import find_all_achievements, get_achievement_by_id, delete_achievement
 from apps.user.models import Achievement
 
 
