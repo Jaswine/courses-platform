@@ -6,6 +6,9 @@ from apps.course.models import Task
 
 
 class TaskSerializer(ModelSerializer):
+    """
+       Главный сериалайзер
+    """
     class Meta:
         model = Task
         fields = ('id', 'title', 'type', 'points', )
@@ -51,6 +54,9 @@ class TaskOneSerializer(ModelSerializer):
         return True if is_user_completed_task(obj, user) else False
 
 class TaskSimpleSerializer(TaskSerializer):
+    """
+       Сериалайзер задания со отметкой завершенности
+    """
     completed_status = SerializerMethodField(read_only=True)
 
     class Meta(TaskSerializer.Meta):
